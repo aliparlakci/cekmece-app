@@ -1,1 +1,3 @@
 # Çekmece App
+
+- Ali Parlakçı
