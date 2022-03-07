@@ -2,5 +2,6 @@
 
 - Ali Parlakçı
 - Ahmet Ömer Kayabaşı
-- Doğukan Yıldırım
 - Batuhan Soydeğer
+- Doğukan Yıldırım
+- Elif Özçelik
