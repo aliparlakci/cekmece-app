@@ -5,3 +5,4 @@
 - Batuhan Soydeğer
 - Doğukan Yıldırım
 - Elif Özçelik
+- Jeren Annagurbanova
