@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:cekmece_mobile/models/user/UserClass.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -11,13 +12,12 @@ part 'user_event.dart';
 part 'user_state.dart';
 
 class UserBloc extends Bloc<UserEvent, UserState> {
-  UserBloc() : super(NotLoggedIn()) {
+  BuildContext context;
+  UserBloc({required this.context}) : super(NotLoggedIn()) {
     on<AppStarted>((event, emit) async {
-      //Check if a user is stored locally
       User? user = await FirebaseAuth.instance.currentUser;
       UserClass localUser;
 
-      // If a user exist locally, log in.
       if (user != null) {
         localUser = UserClass(
             displayName: user.displayName,
@@ -27,9 +27,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
             uid: user.uid,
             photoUrl: user.photoURL);
         emit(LoggedIn(user: localUser));
-      }
-      // If a user does not exist, create an anonymous user and log in.
-      else {
+      } else {
         UserCredential userCredential =
             await FirebaseAuth.instance.signInAnonymously();
         User user = userCredential.user!;
@@ -99,12 +97,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       emit(LoggedIn(user: localUser));
     });
 
-    on<UserUpdate>((event, emit) async {
-      //update the user and emit logged in state
-      //BlocProvider.of<LoadingBloc>(context).add(LoadingStart(loadingReason:"asd"));
-      emit(LoggedIn(user: event.user));
-      await Future.delayed(Duration(seconds: 2));
-      emit(LoggedIn(user: event.user));
-    });
+    on<UserUpdate>((event, emit) async {});
   }
 }

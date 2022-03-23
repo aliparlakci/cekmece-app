@@ -1,4 +1,6 @@
+import 'package:cekmece_mobile/util/blocProviders.dart';
 import 'package:cekmece_mobile/views/misc/firebaseError.dart';
+import 'package:cekmece_mobile/views/misc/loadingView.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -18,18 +20,14 @@ class _FirebaseWrapperState extends State<FirebaseWrapper> {
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             print('Cannot connect to firebase: ' + snapshot.error.toString());
-            return MaterialApp(
-              home: Text("Cannot connect to firebase"),
-            );
+            return FirebaseErrorView();
           }
           if (snapshot.connectionState == ConnectionState.done) {
             print('Firebase connected');
-            return FirebaseErrorView();
+            return BlocProviders();
           }
 
-          return MaterialApp(
-            home: Text("Loading"),
-          );
+          return LoadingView();
         });
   }
 }
