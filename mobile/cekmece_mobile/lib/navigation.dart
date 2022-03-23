@@ -4,6 +4,7 @@ import 'package:cekmece_mobile/constants/color_contsants.dart';
 import 'package:cekmece_mobile/constants/font_constants.dart';
 import 'package:cekmece_mobile/models/user/UserClass.dart';
 import 'package:cekmece_mobile/util/bloc/userBloc/user_bloc.dart';
+import 'package:cekmece_mobile/views/profile/profileView.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/cupertino.dart';
@@ -32,7 +33,9 @@ class _NavigationViewState extends State<NavigationView> {
       Container(),
       Container(),
       Container(),
-      Container(),
+      ProfileView(
+        user: widget.user,
+      ),
     ];
   }
 

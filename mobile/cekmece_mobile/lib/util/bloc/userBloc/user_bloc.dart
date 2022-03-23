@@ -1,8 +1,6 @@
-import 'dart:convert';
-
 import 'package:cekmece_mobile/models/user/UserClass.dart';
+import 'package:cekmece_mobile/util/bloc/loadingBloc/loading_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -43,6 +41,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     });
 
     on<GoogleLoginButtonPressed>((event, emit) async {
+      BlocProvider.of<LoadingBloc>(context)
+          .add(LoadingStart(loadingReason: "Google Login"));
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
       // Obtain the auth details from the request
@@ -71,6 +71,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       } else {
         emit(NotLoggedIn());
       }
+      BlocProvider.of<LoadingBloc>(context).add(LoadingEnd());
     });
 
     on<LoginButtonPressed>((event, emit) async {
@@ -78,6 +79,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     });
 
     on<LogoutButtonPressed>((event, emit) async {
+      BlocProvider.of<LoadingBloc>(context)
+          .add(LoadingStart(loadingReason: "User Logout"));
       final GoogleSignIn googleUser = await GoogleSignIn();
       await googleUser.signOut();
       await FirebaseAuth.instance.signOut();
@@ -93,6 +96,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
           cart: [],
           email: user.email,
           photoUrl: user.photoURL);
+
+      BlocProvider.of<LoadingBloc>(context).add(LoadingEnd());
 
       emit(LoggedIn(user: localUser));
     });
