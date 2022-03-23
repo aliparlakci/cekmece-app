@@ -1,4 +1,5 @@
 import 'package:cekmece_mobile/constants/color_contsants.dart';
+import 'package:cekmece_mobile/navigation.dart';
 import 'package:cekmece_mobile/util/bloc/loadingBloc/loading_bloc.dart';
 import 'package:cekmece_mobile/util/bloc/userBloc/user_bloc.dart';
 import 'package:cekmece_mobile/views/misc/loadingOverlay.dart';
@@ -30,12 +31,11 @@ class BlocProviders extends StatelessWidget {
             child: BlocBuilder<UserBloc, UserState>(
               builder: (context, state) {
                 if (state is LoggedIn) {
+                  print(state.user);
                   return MultiBlocListener(
                     listeners: [
                       BlocListener<LoadingBloc, LoadingState>(
                         listener: (context, loadState) {
-                          print("loading listener in action");
-
                           if (loadState is Loading) {
                             _loadingOverlay.show(context);
                           } else {
@@ -44,7 +44,9 @@ class BlocProviders extends StatelessWidget {
                         },
                       ),
                     ],
-                    child: Container(),
+                    child: NavigationView(
+                      user: state.user,
+                    ),
                   );
                 } else {
                   return LoadingView();
