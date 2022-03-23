@@ -8,6 +8,7 @@
     "prestart": "npm run build",
     "start": "node ./dist/app.js",
     "dev": "nodemon --exec npx ts-node ./src/app.ts",
+    "test": "",
     "lint": "eslint ."
   },
   "dependencies": {
