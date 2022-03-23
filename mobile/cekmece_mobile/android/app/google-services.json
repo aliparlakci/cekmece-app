@@ -1,0 +1,62 @@
+{
+  "project_info": {
+    "project_number": "16234318900",
+    "project_id": "cekmece-test",
+    "storage_bucket": "cekmece-test.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:16234318900:android:855f2a61f7f52ffc168e61",
+        "android_client_info": {
+          "package_name": "com.cekmeceteam.cekmece_mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "16234318900-cem5lds14rfq80dap0bcjq3dnggg80o8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cekmeceteam.cekmece_mobile",
+            "certificate_hash": "1a10371390e00075c840e2374484b7d195ec468a"
+          }
+        },
+        {
+          "client_id": "16234318900-va0fhgmkkultp8k56hbrbvg9t4makef9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cekmeceteam.cekmece_mobile",
+            "certificate_hash": "30c352eb9e24c5cfd34c3cdc2913059bbbb0715a"
+          }
+        },
+        {
+          "client_id": "16234318900-0h0kk7r5i0b4f599p73f0j8scvf5ao3u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCAnwdiHSRJBmmJP8Td3kPq4ngnGzi6cyo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "16234318900-0h0kk7r5i0b4f599p73f0j8scvf5ao3u.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "16234318900-cvkndb7n7ke9uvsj3ea5uj3o4n07k2nc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.cekmeceteam.cekmece-mobile"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
