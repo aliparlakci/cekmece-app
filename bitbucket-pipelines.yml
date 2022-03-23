@@ -16,5 +16,5 @@ pipelines:
           - npm install
           - npm run lint
           - npm run test
-  branches: **
+  branches: "**"
   
