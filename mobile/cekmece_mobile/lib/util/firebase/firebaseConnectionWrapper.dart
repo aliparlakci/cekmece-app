@@ -1,3 +1,4 @@
+import 'package:cekmece_mobile/views/misc/firebaseError.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -23,7 +24,7 @@ class _FirebaseWrapperState extends State<FirebaseWrapper> {
           }
           if (snapshot.connectionState == ConnectionState.done) {
             print('Firebase connected');
-            return Container();
+            return FirebaseErrorView();
           }
 
           return MaterialApp(
