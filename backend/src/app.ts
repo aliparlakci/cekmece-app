@@ -2,35 +2,48 @@ import express from "express"
 import createError from "http-errors"
 import path from "path"
 import cookieParser from "cookie-parser"
-import logger from 'morgan'
+import logger from "morgan"
+import "reflect-metadata"
 
-import usersRouter from "./routes/users"
+import carRouter from "./routes/carRouter"
+import db from "./dataSource"
 
-const app = express()
+async function main() {
+    try {
+        await db.initialize()
+        console.log("Data Source has been initialized!")
+    } catch (err) {
+        console.error("Error during Data Source initialization:", err)
+    }
 
-app.use(logger("dev"))
-app.use(express.json())
-app.use(express.urlencoded({ extended: false }))
-app.use(cookieParser())
+    const app = express()
 
-app.use("/users", usersRouter)
+    app.use(logger("dev"))
+    app.use(express.json())
+    app.use(express.urlencoded({ extended: false }))
+    app.use(cookieParser())
 
-// catch 404 and forward to error handler
-app.use(function (req, res, next) {
-    next(createError(404))
-})
+    app.use("/cars", carRouter())
 
-// error handler
-app.use(function (err, req, res, next) {
-    // set locals, only providing error in development
-    res.locals.message = err.message
-    res.locals.error = req.app.get("env") === "development" ? err : {}
+    // catch 404 and forward to error handler
+    app.use(function (req, res, next) {
+        next(createError(404))
+    })
 
-    // render the error page
-    res.status(err.status || 500)
-    res.json("")
-})
+    // error handler
+    app.use(function (err, req, res, next) {
+        // set locals, only providing error in development
+        res.locals.message = err.message
+        res.locals.error = req.app.get("env") === "development" ? err : {}
 
-app.listen(5000, () => {
-    console.log("Listening on http://localhost:5000")
-})
+        // render the error page
+        res.status(err.status || 500)
+        res.json(err)
+    })
+
+    app.listen(5000, () => {
+        console.log("Listening on http://localhost:5000")
+    })
+}
+
+main()
