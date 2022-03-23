@@ -6,15 +6,16 @@
 image: node:16
 
 pipelines:
-  default:
-    - step:
-        name: Build and Test Backend
-        caches:
-          - node
-        script:
-          - cd backend
-          - npm install
-          - npm run lint
-          - npm run test
-  branches: "**"
+  branches:
+    "**":
+      - step:
+          name: Build and Test Backend
+          caches:
+            - node
+          script:
+            - cd backend
+            - npm install
+            - npm run lint
+            - npm run test
+  
   
