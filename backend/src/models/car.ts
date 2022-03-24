@@ -10,7 +10,7 @@ export class Car {
     name: string
 
     @Column()
-    model: string
+    model: number
 
     @Column()
     number: number

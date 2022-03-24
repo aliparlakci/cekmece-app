@@ -7,6 +7,7 @@ import "reflect-metadata"
 
 import carRouter from "./routes/carRouter"
 import db from "./dataSource"
+import categoryRouter from "./routes/categoryRouter"
 
 async function main() {
     try {
@@ -24,6 +25,7 @@ async function main() {
     app.use(cookieParser())
 
     app.use("/cars", carRouter())
+    app.use("/categories", categoryRouter())
 
     // catch 404 and forward to error handler
     app.use(function (req, res, next) {
