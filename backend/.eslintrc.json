@@ -16,13 +16,10 @@
         "@typescript-eslint"
     ],
     "rules": {
-        "indent": [
-            "error",
-            4
-        ],
         "linebreak-style": "off",
         "quotes": "off",
-        "semi": "off"
+        "semi": "off",
+        "no-empty-function": "off"
     },
     "globals": {
         "require": "readonly",
