@@ -1,9 +1,12 @@
+import 'package:cekmece_mobile/constants/color_contsants.dart';
 import 'package:cekmece_mobile/constants/font_constants.dart';
 import 'package:cekmece_mobile/util/bloc/loadingBloc/loading_bloc.dart';
 import 'package:cekmece_mobile/util/bloc/userBloc/user_bloc.dart';
+import 'package:cekmece_mobile/views/profile/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 class AnonymousProfileView extends StatelessWidget {
   const AnonymousProfileView({Key? key}) : super(key: key);
@@ -23,31 +26,25 @@ class AnonymousProfileView extends StatelessWidget {
             ),
             Column(
               children: [
-                SignInButton(
-                  Buttons.Google,
-                  text: "Sign up with Google",
-                  onPressed: () {
-                    BlocProvider.of<UserBloc>(context)
-                        .add(GoogleLoginButtonPressed());
-                  },
-                ),
                 SignInButtonBuilder(
                   text: 'Sign up with Email',
                   icon: Icons.email,
+                  padding: EdgeInsets.symmetric(vertical: 15, horizontal: 5),
                   onPressed: () async {
-                    BlocProvider.of<LoadingBloc>(context)
-                        .add(LoadingStart(loadingReason: "Google Login"));
-                    await Future.delayed(Duration(seconds: 2));
-                    BlocProvider.of<LoadingBloc>(context).add(LoadingEnd());
+                    var res = await pushNewScreen(
+                      context,
+                      screen: LoginScreen(),
+                      withNavBar: false, // OPTIONAL VALUE. True by default.
+                      pageTransitionAnimation:
+                          PageTransitionAnimation.cupertino,
+                    );
+                    if (res == "google") {
+                      BlocProvider.of<UserBloc>(context)
+                          .add(GoogleLoginButtonPressed());
+                    }
                   },
-                  backgroundColor: Colors.blueGrey[700]!,
+                  backgroundColor: secondaryColor,
                 ),
-                SignInButtonBuilder(
-                  text: 'Login with Email',
-                  icon: Icons.email,
-                  onPressed: () {},
-                  backgroundColor: Colors.blueGrey[700]!,
-                )
               ],
             )
           ],

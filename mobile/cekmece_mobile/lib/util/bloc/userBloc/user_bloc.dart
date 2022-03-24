@@ -43,35 +43,40 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     on<GoogleLoginButtonPressed>((event, emit) async {
       BlocProvider.of<LoadingBloc>(context)
           .add(LoadingStart(loadingReason: "Google Login"));
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      try {
+        final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
-      // Obtain the auth details from the request
-      final GoogleSignInAuthentication? googleAuth =
-          await googleUser?.authentication;
+        // Obtain the auth details from the request
+        final GoogleSignInAuthentication? googleAuth =
+            await googleUser?.authentication;
 
-      // Create a new credential
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth?.accessToken,
-        idToken: googleAuth?.idToken,
-      );
+        // Create a new credential
+        final credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth?.accessToken,
+          idToken: googleAuth?.idToken,
+        );
 
-      // Once signed in, return the UserCredential
-      UserCredential user =
-          await FirebaseAuth.instance.signInWithCredential(credential);
-      UserClass localUser = UserClass(
-          displayName: user.user!.displayName,
-          isAnonymous: user.user!.isAnonymous,
-          email: user.user!.email,
-          cart: [],
-          uid: user.user!.uid,
-          photoUrl: user.user!.photoURL);
+        // Once signed in, return the UserCredential
+        UserCredential user =
+            await FirebaseAuth.instance.signInWithCredential(credential);
+        UserClass localUser = UserClass(
+            displayName: user.user!.displayName,
+            isAnonymous: user.user!.isAnonymous,
+            email: user.user!.email,
+            cart: [],
+            uid: user.user!.uid,
+            photoUrl: user.user!.photoURL);
 
-      if (user.user != null) {
-        emit(LoggedIn(user: localUser));
-      } else {
-        emit(NotLoggedIn());
+        if (user.user != null) {
+          emit(LoggedIn(user: localUser));
+        } else {
+          emit(NotLoggedIn());
+        }
+        BlocProvider.of<LoadingBloc>(context).add(LoadingEnd());
+      } catch (err) {
+        print("Google login error.");
+        BlocProvider.of<LoadingBloc>(context).add(LoadingEnd());
       }
-      BlocProvider.of<LoadingBloc>(context).add(LoadingEnd());
     });
 
     on<LoginButtonPressed>((event, emit) async {
