@@ -21,4 +21,8 @@ export default class CategoryService {
     async getCategory(id: number) {
         return this.repository.findOne({ where: { id } })
     }
+
+    async deleteCategory(id: number) {
+        return this.repository.createQueryBuilder().delete().from(Category).where("id = :id", { id })
+    }
 }

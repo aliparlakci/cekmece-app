@@ -15,7 +15,7 @@ function addNewCategory(categoryService: CategoryService): RequestHandler {
             next(createError(StatusCodes.BAD_REQUEST))
         }
 
-        let id;
+        let id
         try {
             id = await categoryService.newCategory(req.body)
         } catch (err) {
@@ -35,6 +35,13 @@ function getCategories(categoryService: CategoryService): RequestHandler {
     }
 }
 
+function deleteCategory(categoryService: CategoryService): RequestHandler {
+    return async function (req, res, next) {
+        const categoryId = parseInt(req.params.categoryId)
+        await categoryService.deleteCategory(categoryId)
+    }
+}
+
 function categoryRouter() {
     const router = Router()
 
@@ -42,6 +49,7 @@ function categoryRouter() {
 
     router.get("/", getCategories(categoryService))
     router.post("/new", addNewCategory(categoryService))
+    router.post("/:categoryId/delete", deleteCategory(categoryService))
 
     return router
 }

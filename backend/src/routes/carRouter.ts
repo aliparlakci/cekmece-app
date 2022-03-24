@@ -14,6 +14,15 @@ function getAllCars(carService: CarService) {
     }
 }
 
+function getCar(carService: CarService) {
+    return async function (req, res, next) {
+        const carId = parseInt(req.params.carId)
+        const cars = await carService.getCar(carId)
+
+        res.status(200).json(cars)
+    }
+}
+
 function addNewCar(carService: CarService): RequestHandler {
     return async function (req, res, next) {
         const carFormat = Joi.object().keys({
@@ -23,6 +32,7 @@ function addNewCar(carService: CarService): RequestHandler {
             quantity: Joi.number().greater(-1).required(),
             price: Joi.number().positive().required(),
             warranty: Joi.number().positive().required(),
+            distributor: Joi.number().required(),
         })
         const { error } = carFormat.validate(req.body)
         if (error) {
@@ -30,15 +40,45 @@ function addNewCar(carService: CarService): RequestHandler {
             return
         }
 
-        let id
+        let car
         try {
-            id = await carService.insertCar(req.body)
+            car = await carService.insertCar(req.body)
         } catch (err) {
             next(createError(404))
             return
         }
 
-        res.status(200).json(id)
+        res.status(200).json(car)
+    }
+}
+
+function updateNewCar(carService: CarService): RequestHandler {
+    return async function (req, res, next) {
+        const carFormat = Joi.object().keys({
+            id: Joi.number().positive().required(),
+            name: Joi.string().required(),
+            model: Joi.number().less(2022).greater(1900).required(),
+            number: Joi.number().positive().required(),
+            quantity: Joi.number().greater(-1).required(),
+            price: Joi.number().positive().required(),
+            warranty: Joi.number().positive().required(),
+            distributor: Joi.number().required(),
+        })
+        const { error } = carFormat.validate(req.body)
+        if (error) {
+            next(createError(400))
+            return
+        }
+
+        let car
+        try {
+            car = await carService.insertCar(req.body)
+        } catch (err) {
+            next(createError(404))
+            return
+        }
+
+        res.status(200).json(car)
     }
 }
 
@@ -69,7 +109,9 @@ function carRouter() {
     const carService = new CarService(categoryService)
 
     router.get("/", getAllCars(carService))
+    router.get("/:carId", getCar(carService))
     router.post("/new", addNewCar(carService))
+    router.post("/update", updateNewCar(carService))
     router.post("/:carId/category/:categoryId", assignNewCategory(carService))
     router.delete("/:carId/category/:categoryId", removeCategory(carService))
 

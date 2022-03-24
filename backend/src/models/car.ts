@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, ManyToOne } from "typeorm"
 import { Category } from "./category"
+import { Distributor } from "./distributor"
 
 @Entity()
 export class Car {
@@ -24,7 +25,10 @@ export class Car {
     @Column()
     warranty: number
 
-    @ManyToMany(() => Category)
+    @ManyToOne(() => Distributor, (distributor) => distributor.cars, { cascade: true })
+    distributor: Distributor 
+
+    @ManyToMany(() => Category, { cascade: true })
     @JoinTable()
     categories: Category[]
 }

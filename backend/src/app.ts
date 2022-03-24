@@ -8,6 +8,7 @@ import "reflect-metadata"
 import carRouter from "./routes/carRouter"
 import db from "./dataSource"
 import categoryRouter from "./routes/categoryRouter"
+import distributorRouter from "./routes/distributorRouter"
 
 async function main() {
     try {
@@ -26,6 +27,7 @@ async function main() {
 
     app.use("/cars", carRouter())
     app.use("/categories", categoryRouter())
+    app.use("/distributors", distributorRouter())
 
     // catch 404 and forward to error handler
     app.use(function (req, res, next) {
