@@ -11,8 +11,7 @@ export default class CategoryService {
     }
 
     async newCategory(candidate: Category) {
-        const { id } = await this.repository.save(candidate)
-        return id
+        return await this.repository.save(candidate)
     }
 
     async getAllCategories() {

@@ -1,5 +1,6 @@
-import { Router, Request, Response, RequestHandler } from "express"
+import { Router, RequestHandler } from "express"
 import createError from "http-errors"
+import { StatusCodes } from "http-status-codes"
 import Joi from "joi"
 
 import CarService from "../services/carService"
@@ -29,26 +30,48 @@ function addNewCar(carService: CarService): RequestHandler {
             return
         }
 
-        let id;
+        let id
         try {
             id = await carService.insertCar(req.body)
         } catch (err) {
             next(createError(404))
             return
         }
-        
+
         res.status(200).json(id)
+    }
+}
+
+function assignNewCategory(carService: CarService): RequestHandler {
+    return async function (req, res, next) {
+        const carId = parseInt(req.params.carId)
+        const categoryId = parseInt(req.params.categoryId)
+        
+        carService.assignCategory(categoryId, carId)
+        res.status(StatusCodes.OK).json()
+    }
+}
+
+function removeCategory(carService: CarService): RequestHandler {
+    return async function (req, res, next) {
+        const carId = parseInt(req.params.carId)
+        const categoryId = parseInt(req.params.categoryId)
+        
+        carService.removeCategory(categoryId, carId)
+        res.status(StatusCodes.OK).json()
     }
 }
 
 function carRouter() {
     const router = Router()
 
-    const categoryService = new CategoryService();
+    const categoryService = new CategoryService()
     const carService = new CarService(categoryService)
 
     router.get("/", getAllCars(carService))
     router.post("/new", addNewCar(carService))
+    router.post("/:carId/category/:categoryId", assignNewCategory(carService))
+    router.delete("/:carId/category/:categoryId", removeCategory(carService))
 
     return router
 }

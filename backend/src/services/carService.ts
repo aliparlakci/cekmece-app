@@ -12,8 +12,7 @@ export default class CarService {
     }
 
     async insertCar(candidate: Car) {
-        const car = await this.repository.save(candidate)
-        return car.id
+        return await this.repository.save(candidate)
     }
 
     async getCar(carId: number) {
@@ -42,8 +41,6 @@ export default class CarService {
     }
 
     async assignCategory(categoryId: number, carId: number) {
-        this.repository.createQueryBuilder().relation(Car, "categories").add(categoryId)
-
         const category = await this.categoryService.getCategory(categoryId)
         if (category === null)
             throw `Category does not exists: id=${categoryId}`
@@ -51,10 +48,25 @@ export default class CarService {
         const car = await this.getCar(carId)
         if (car === null) throw `Car does not exists: id=${carId}`
 
-        const filtered = car.categories.filter((item) => item.id !== categoryId)
+        this.repository
+            .createQueryBuilder()
+            .relation(Car, "categories")
+            .of(car)
+            .add(category)
+    }
 
-        car.categories = [...filtered, category]
-        
-        this.repository.save(category)
+    async removeCategory(categoryId: number, carId: number) {
+        const category = await this.categoryService.getCategory(categoryId)
+        if (category === null)
+            throw `Category does not exists: id=${categoryId}`
+
+        const car = await this.getCar(carId)
+        if (car === null) throw `Car does not exists: id=${carId}`
+
+        this.repository
+            .createQueryBuilder()
+            .relation(Car, "categories")
+            .of(car)
+            .remove(categoryId)
     }
 }
