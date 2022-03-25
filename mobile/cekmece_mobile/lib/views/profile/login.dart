@@ -51,6 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
           decoration: kBoxDecorationStyle,
           height: 60.0,
           child: TextFormField(
+            key: Key("loginEmailField"),
             keyboardType: TextInputType.emailAddress,
             onChanged: (val) {
               email = val;
@@ -98,6 +99,7 @@ class _LoginScreenState extends State<LoginScreen> {
           decoration: kBoxDecorationStyle,
           height: 60.0,
           child: TextFormField(
+            key: Key("loginPasswordField"),
             obscureText: true,
             onChanged: (val) {
               password = val;
@@ -180,6 +182,7 @@ class _LoginScreenState extends State<LoginScreen> {
       padding: EdgeInsets.symmetric(vertical: 25.0),
       width: double.infinity,
       child: RaisedButton(
+        key: Key("loginButton"),
         elevation: 5.0,
         onPressed: () {
           if (_formKey.currentState!.validate()) {
