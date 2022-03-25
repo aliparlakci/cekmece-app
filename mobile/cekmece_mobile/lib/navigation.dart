@@ -1,11 +1,10 @@
-import 'dart:math';
-
 import 'package:cekmece_mobile/constants/color_contsants.dart';
 import 'package:cekmece_mobile/constants/font_constants.dart';
+import 'package:cekmece_mobile/main.dart';
 import 'package:cekmece_mobile/models/user/UserClass.dart';
 import 'package:cekmece_mobile/util/bloc/userBloc/user_bloc.dart';
+import 'package:cekmece_mobile/views/productView/details_screen.dart';
 import 'package:cekmece_mobile/views/profile/profileView.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -32,9 +31,18 @@ class _NavigationViewState extends State<NavigationView> {
     return [
       Container(
         child: Center(
-          child: Text(
-            "Home",
-            style: header,
+          child: OutlinedButton(
+            onPressed: () {
+              pushNewScreen(
+                context,
+                screen: DetailsScreen(
+                  product: mockProd,
+                ),
+                withNavBar: false, // OPTIONAL VALUE. True by default.
+                pageTransitionAnimation: PageTransitionAnimation.cupertino,
+              );
+            },
+            child: Text("Go to mock product page"),
           ),
         ),
       ),

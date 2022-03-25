@@ -17,7 +17,7 @@ class BlocProviders extends StatelessWidget {
     return MaterialApp(
         title: 'Cekmece',
         theme: ThemeData(
-            primarySwatch: Colors.amber,
+            primarySwatch: Colors.blue,
             canvasColor: neutralColor,
             primaryColor: primaryColor),
         home: MultiBlocProvider(
