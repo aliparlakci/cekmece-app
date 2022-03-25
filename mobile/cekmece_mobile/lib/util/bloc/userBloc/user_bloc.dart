@@ -80,7 +80,12 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     });
 
     on<LoginButtonPressed>((event, emit) async {
-      //loadingBloc.add(LoadingStart(loadingReason: "Google Login Start"));
+      BlocProvider.of<LoadingBloc>(context)
+          .add(LoadingStart(loadingReason: "User Login"));
+
+      await Future.delayed(Duration(seconds: 2));
+
+      BlocProvider.of<LoadingBloc>(context).add(LoadingEnd());
     });
 
     on<LogoutButtonPressed>((event, emit) async {
