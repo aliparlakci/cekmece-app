@@ -2,6 +2,7 @@ import 'package:cekmece_mobile/constants/color_contsants.dart';
 import 'package:cekmece_mobile/constants/font_constants.dart';
 import 'package:cekmece_mobile/util/bloc/userBloc/user_bloc.dart';
 import 'package:cekmece_mobile/util/blocProviders.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,6 +16,11 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  final _formKey = GlobalKey<FormState>();
+  String email = "";
+  String password = "";
+  String name = "";
+
   bool _rememberMe = false;
 
   Widget _buildEmailTF() {
@@ -30,12 +36,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
           alignment: Alignment.centerLeft,
           decoration: kBoxDecorationStyle,
           height: 60.0,
-          child: TextField(
+          child: TextFormField(
             keyboardType: TextInputType.emailAddress,
             style: TextStyle(
               color: Colors.white,
               fontFamily: 'OpenSans',
             ),
+            onChanged: (val) {
+              email = val;
+            },
+            validator: (val) {
+              if (val == "") {
+                return "Please enter email";
+              }
+              if (!EmailValidator.validate(val!)) {
+                return "Please enter a valid email";
+              }
+              return null;
+            },
             decoration: InputDecoration(
               border: InputBorder.none,
               contentPadding: EdgeInsets.only(top: 14.0),
@@ -65,12 +83,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
           alignment: Alignment.centerLeft,
           decoration: kBoxDecorationStyle,
           height: 60.0,
-          child: TextField(
+          child: TextFormField(
             keyboardType: TextInputType.name,
             style: TextStyle(
               color: Colors.white,
               fontFamily: 'OpenSans',
             ),
+            onChanged: (val) {
+              name = val;
+            },
+            validator: (val) {
+              if (val == "") {
+                return "Please enter your name";
+              }
+
+              if (val!.length < 6) {
+                return "Seriously? You can't have a name that short.";
+              }
+
+              return null;
+            },
             decoration: InputDecoration(
               border: InputBorder.none,
               contentPadding: EdgeInsets.only(top: 14.0),
@@ -100,12 +132,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
           alignment: Alignment.centerLeft,
           decoration: kBoxDecorationStyle,
           height: 60.0,
-          child: TextField(
+          child: TextFormField(
             obscureText: true,
             style: TextStyle(
               color: Colors.white,
               fontFamily: 'OpenSans',
             ),
+            onChanged: (val) {
+              password = val;
+            },
+            validator: (val) {
+              if (val == "") {
+                return "Please enter password";
+              }
+              if (val!.length < 8) {
+                return "Password must be at least 8 characters";
+              }
+              return null;
+            },
             decoration: InputDecoration(
               border: InputBorder.none,
               contentPadding: EdgeInsets.only(top: 14.0),
@@ -122,59 +166,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  Widget _buildForgotPasswordBtn() {
-    return Container(
-      alignment: Alignment.bottomCenter,
-      child: FlatButton(
-        onPressed: () => print('Forgot Password Button Pressed'),
-        padding: EdgeInsets.only(right: 0.0),
-        child: Text(
-          'Forgot Password?',
-          style: header3.copyWith(
-            color: Colors.white,
-            fontSize: 13,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildRememberMeCheckbox() {
-    return Container(
-      height: 20.0,
-      child: Row(
-        children: <Widget>[
-          Theme(
-            data: ThemeData(unselectedWidgetColor: Colors.white),
-            child: Checkbox(
-              value: _rememberMe,
-              checkColor: Colors.green,
-              activeColor: Colors.white,
-              onChanged: (value) {
-                setState(() {
-                  _rememberMe = value!;
-                });
-              },
-            ),
-          ),
-          Text(
-            'Remember me',
-            style: kLabelStyle,
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildRegisterBtn() {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 25.0),
       width: double.infinity,
       child: RaisedButton(
         elevation: 5.0,
-        onPressed: () => {
-          Navigator.pop(
-              context, ["email", "ahmetomer@sabanciuniv.edu", "123123123"])
+        onPressed: () {
+          if (_formKey.currentState!.validate()) {
+            Navigator.pop(context);
+          }
         },
         padding: EdgeInsets.all(15.0),
         shape: RoundedRectangleBorder(
@@ -189,134 +190,66 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  Widget _buildSignInWithText() {
-    return Column(
-      children: <Widget>[
-        Text(
-          '- OR -',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.w400,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildSocialBtn(Function onTap, AssetImage logo) {
-    return GestureDetector(
-      onTap: () {},
-      child: Container(
-        height: 60.0,
-        width: 60.0,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black26,
-              offset: Offset(0, 2),
-              blurRadius: 6.0,
-            ),
-          ],
-          image: DecorationImage(
-            image: logo,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSocialBtnRow() {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 30.0),
-      child: SignInButton(
-        Buttons.Google,
-        text: "Sign in with Google",
-        onPressed: () {
-          Navigator.pop(context, 'google');
-        },
-      ),
-    );
-  }
-
-  Widget _buildSignupBtn() {
-    return GestureDetector(
-      onTap: () => {},
-      child: RichText(
-        text: TextSpan(
-          children: [
-            TextSpan(
-              text: 'Don\'t have an Account?  ',
-              style: header3.copyWith(color: Colors.white),
-            ),
-            TextSpan(
-              text: 'Sign Up',
-              style: header2.copyWith(color: Colors.white),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.light,
-        child: GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
-          child: Stack(
-            children: <Widget>[
-              Container(
-                height: double.infinity,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Color(0xFF61A4F1),
-                      Color(0xFF61A4F1),
-                      Color(0xFF478DE0),
-                      secondaryColor,
-                    ],
-                    stops: [0.1, 0.4, 0.7, 0.9],
+        child: Form(
+          key: _formKey,
+          child: GestureDetector(
+            onTap: () => FocusScope.of(context).unfocus(),
+            child: Stack(
+              children: <Widget>[
+                Container(
+                  height: double.infinity,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Color(0xFF61A4F1),
+                        Color(0xFF61A4F1),
+                        Color(0xFF478DE0),
+                        secondaryColor,
+                      ],
+                      stops: [0.1, 0.4, 0.7, 0.9],
+                    ),
                   ),
                 ),
-              ),
-              Container(
-                height: double.infinity,
-                child: SingleChildScrollView(
-                  physics: AlwaysScrollableScrollPhysics(),
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 40.0,
-                    vertical: 120.0,
+                Container(
+                  height: double.infinity,
+                  child: SingleChildScrollView(
+                    physics: AlwaysScrollableScrollPhysics(),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 40.0,
+                      vertical: 120.0,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          'Register',
+                          style: header.copyWith(color: Colors.white),
+                        ),
+                        SizedBox(height: 30.0),
+                        _buildNameTF(),
+                        SizedBox(
+                          height: 30.0,
+                        ),
+                        _buildEmailTF(),
+                        SizedBox(
+                          height: 30.0,
+                        ),
+                        _buildPasswordTF(),
+                        _buildRegisterBtn(),
+                      ],
+                    ),
                   ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        'Register',
-                        style: header.copyWith(color: Colors.white),
-                      ),
-                      SizedBox(height: 30.0),
-                      _buildNameTF(),
-                      SizedBox(
-                        height: 30.0,
-                      ),
-                      _buildEmailTF(),
-                      SizedBox(
-                        height: 30.0,
-                      ),
-                      _buildPasswordTF(),
-                      _buildRegisterBtn(),
-                    ],
-                  ),
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ),
       ),
