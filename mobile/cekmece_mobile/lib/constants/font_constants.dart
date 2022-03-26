@@ -54,3 +54,39 @@ final kBoxDecorationStyle = BoxDecoration(
     ),
   ],
 );
+
+
+/* General */
+final appBarTextStyle = GoogleFonts.raleway(
+  fontSize: 20,
+  fontWeight: FontWeight.w600,
+  color: Colors.black,
+);
+
+final buttonTextStyle = GoogleFonts.raleway(
+  fontSize: 16,
+  fontWeight: FontWeight.w600,
+  color: Colors.black,
+);
+
+/* ReviewsView.dart */
+
+/* ReviewTile.dart */
+
+final reviewTileDateStyle = GoogleFonts.raleway(
+  fontSize: 14,
+  fontWeight: FontWeight.w600,
+  color: Colors.black,
+);
+
+final reviewTileCommentStyle = GoogleFonts.raleway(
+  fontSize: 14,
+  fontWeight: FontWeight.w500,
+  color: Colors.black,
+);
+
+final reviewTileMoreLessStyle = GoogleFonts.raleway(
+  fontSize: 14,
+  fontWeight: FontWeight.w700,
+  color: Colors.black,
+);

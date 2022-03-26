@@ -11,7 +11,7 @@ const db = new DataSource({
     migrations: ["src/migrations/*.ts"],
     migrationsTableName: "migrations",
     logging: true,
-    synchronize: false,
+    synchronize: true,
 })
 
 export default db

@@ -5,6 +5,8 @@ import 'package:cekmece_mobile/constants/font_constants.dart';
 import 'package:cekmece_mobile/models/user/UserClass.dart';
 import 'package:cekmece_mobile/util/bloc/userBloc/user_bloc.dart';
 import 'package:cekmece_mobile/views/profile/profileView.dart';
+import 'package:cekmece_mobile/views/reviews/ReviewsView.dart';
+import 'package:cekmece_mobile/views/temp/TempView.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/cupertino.dart';
@@ -31,6 +33,7 @@ class _NavigationViewState extends State<NavigationView> {
   List<Widget> _buildScreens() {
     return [
       Container(),
+      TempView(),
       Container(),
       Container(),
       ProfileView(
@@ -42,28 +45,39 @@ class _NavigationViewState extends State<NavigationView> {
   List<PersistentBottomNavBarItem> _navBarsItems() {
     return [
       PersistentBottomNavBarItem(
-        icon: const Icon(CupertinoIcons.home),
+        inactiveIcon: const Icon(CupertinoIcons.house),
+        inactiveColorPrimary: CupertinoColors.systemGrey,
+        icon: const Icon(CupertinoIcons.house_fill),
+        activeColorPrimary: bottomNavBarActiveColor,
         title: ("Home"),
-        activeColorPrimary: primaryColor,
-        inactiveColorPrimary: CupertinoColors.systemGrey,
       ),
       PersistentBottomNavBarItem(
-        icon: const Icon(CupertinoIcons.heart),
+        inactiveIcon: const Icon(CupertinoIcons.search),
+        inactiveColorPrimary: CupertinoColors.systemGrey,
+        icon: const Icon(CupertinoIcons.search),
+        activeColorPrimary: bottomNavBarActiveColor,
+        title: ("Search"),
+      ),
+      PersistentBottomNavBarItem(
+        inactiveIcon: const Icon(CupertinoIcons.heart),
+        inactiveColorPrimary: CupertinoColors.systemGrey,
+        icon: const Icon(CupertinoIcons.heart_fill),
+        activeColorPrimary: bottomNavBarActiveColor,
         title: ("Favorites"),
-        activeColorPrimary: primaryColor,
-        inactiveColorPrimary: CupertinoColors.systemGrey,
       ),
       PersistentBottomNavBarItem(
-        icon: const Icon(CupertinoIcons.cart),
+        inactiveIcon: const Icon(CupertinoIcons.cart),
+        inactiveColorPrimary: CupertinoColors.systemGrey,
+        icon: const Icon(CupertinoIcons.cart_fill),
+        activeColorPrimary: bottomNavBarActiveColor,
         title: ("Cart"),
-        activeColorPrimary: primaryColor,
-        inactiveColorPrimary: CupertinoColors.systemGrey,
       ),
       PersistentBottomNavBarItem(
-        icon: const Icon(CupertinoIcons.person_fill),
-        title: ("Profıle"),
-        activeColorPrimary: primaryColor,
+        inactiveIcon: const Icon(CupertinoIcons.person_circle),
         inactiveColorPrimary: CupertinoColors.systemGrey,
+        icon: const Icon(CupertinoIcons.person_circle_fill),
+        activeColorPrimary: bottomNavBarActiveColor,
+        title: ("Profile"),
       ),
     ];
   }
@@ -94,25 +108,27 @@ class _NavigationViewState extends State<NavigationView> {
           true, // Recommended to set 'resizeToAvoidBottomInset' as true while using this argument. Default is true.
       decoration: const NavBarDecoration(
         border: Border(
-          top: BorderSide(width: 1.0, color: primaryColor),
+          top: BorderSide(width: 1.0, color: Color(0xFFECECEC)),
         ),
         colorBehindNavBar: Colors.white,
       ),
       popAllScreensOnTapOfSelectedTab: true,
       popActionScreens: PopActionScreensType.all,
+      navBarStyle:
+          NavBarStyle.style12, // Choose the nav bar style with this property.
       itemAnimationProperties: const ItemAnimationProperties(
         // Navigation Bar's items animation properties.
         duration: Duration(milliseconds: 200),
         curve: Curves.ease,
       ),
+      /*
       screenTransitionAnimation: const ScreenTransitionAnimation(
         // Screen transition animation on change of selected tab.
         animateTabTransition: true,
         curve: Curves.ease,
         duration: Duration(milliseconds: 200),
       ),
-      navBarStyle:
-          NavBarStyle.style3, // Choose the nav bar style with this property.
+       */
     );
   }
 }

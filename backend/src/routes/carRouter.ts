@@ -86,7 +86,7 @@ function assignNewCategory(carService: CarService): RequestHandler {
     return async function (req, res, next) {
         const carId = parseInt(req.params.carId)
         const categoryId = parseInt(req.params.categoryId)
-        
+
         carService.assignCategory(categoryId, carId)
         res.status(StatusCodes.OK).json()
     }
@@ -96,7 +96,7 @@ function removeCategory(carService: CarService): RequestHandler {
     return async function (req, res, next) {
         const carId = parseInt(req.params.carId)
         const categoryId = parseInt(req.params.categoryId)
-        
+
         carService.removeCategory(categoryId, carId)
         res.status(StatusCodes.OK).json()
     }
@@ -114,6 +114,7 @@ function carRouter() {
     router.post("/update", updateNewCar(carService))
     router.post("/:carId/category/:categoryId", assignNewCategory(carService))
     router.delete("/:carId/category/:categoryId", removeCategory(carService))
+    //router.get("/:carId/reviews", getReviewsByCar(carService))
 
     return router
 }
