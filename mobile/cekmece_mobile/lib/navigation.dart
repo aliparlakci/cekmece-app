@@ -40,7 +40,7 @@ class _NavigationViewState extends State<NavigationView> {
           ),
         ),
       ),
-
+      TempView(),
       Container(
         child: Center(
           child: Text(
