@@ -32,10 +32,37 @@ class _NavigationViewState extends State<NavigationView> {
 
   List<Widget> _buildScreens() {
     return [
+<<<<<<< HEAD
       Container(),
       TempView(),
       Container(),
       Container(),
+=======
+      Container(
+        child: Center(
+          child: Text(
+            "Home",
+            style: header,
+          ),
+        ),
+      ),
+      Container(
+        child: Center(
+          child: Text(
+            "Favorites",
+            style: header,
+          ),
+        ),
+      ),
+      Container(
+        child: Center(
+          child: Text(
+            "Cart",
+            style: header,
+          ),
+        ),
+      ),
+>>>>>>> 1fa8b9f8abe070e6d06fedb5c7b5499513e05bc4
       ProfileView(
         user: widget.user,
       ),

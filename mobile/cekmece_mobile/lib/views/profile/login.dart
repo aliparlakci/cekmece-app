@@ -1,8 +1,11 @@
 import 'package:cekmece_mobile/constants/color_contsants.dart';
 import 'package:cekmece_mobile/constants/font_constants.dart';
+import 'package:cekmece_mobile/util/bloc/loadingBloc/loading_bloc.dart';
 import 'package:cekmece_mobile/util/bloc/userBloc/user_bloc.dart';
 import 'package:cekmece_mobile/util/blocProviders.dart';
+import 'package:cekmece_mobile/views/misc/loadingOverlay.dart';
 import 'package:cekmece_mobile/views/profile/register.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,7 +19,23 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final _formKey = GlobalKey<FormState>();
+  final LoadingOverlay _loadingOverlay = LoadingOverlay();
+
   bool _rememberMe = false;
+  String email = "";
+  String password = "";
+
+  void loginWithEmailAndPassword() async {
+    // try logging in
+    _loadingOverlay.show(context);
+
+    await Future.delayed(Duration(seconds: 2));
+
+    _loadingOverlay.hide();
+    // return to the main screen
+    Navigator.pop(context);
+  }
 
   Widget _buildEmailTF() {
     return Column(
@@ -31,8 +50,21 @@ class _LoginScreenState extends State<LoginScreen> {
           alignment: Alignment.centerLeft,
           decoration: kBoxDecorationStyle,
           height: 60.0,
-          child: TextField(
+          child: TextFormField(
+            key: Key("loginEmailField"),
             keyboardType: TextInputType.emailAddress,
+            onChanged: (val) {
+              email = val;
+            },
+            validator: (val) {
+              if (val == "") {
+                return "Please enter email";
+              }
+              if (!EmailValidator.validate(val!)) {
+                return "Please enter a valid email";
+              }
+              return null;
+            },
             style: TextStyle(
               color: Colors.white,
               fontFamily: 'OpenSans',
@@ -66,8 +98,21 @@ class _LoginScreenState extends State<LoginScreen> {
           alignment: Alignment.centerLeft,
           decoration: kBoxDecorationStyle,
           height: 60.0,
-          child: TextField(
+          child: TextFormField(
+            key: Key("loginPasswordField"),
             obscureText: true,
+            onChanged: (val) {
+              password = val;
+            },
+            validator: (val) {
+              if (val == "") {
+                return "Please enter password";
+              }
+              if (val!.length < 8) {
+                return "Password must be at least 8 characters";
+              }
+              return null;
+            },
             style: TextStyle(
               color: Colors.white,
               fontFamily: 'OpenSans',
@@ -137,10 +182,14 @@ class _LoginScreenState extends State<LoginScreen> {
       padding: EdgeInsets.symmetric(vertical: 25.0),
       width: double.infinity,
       child: RaisedButton(
+        key: Key("loginButton"),
         elevation: 5.0,
-        onPressed: () => {
-          Navigator.pop(
-              context, ["email", "ahmetomer@sabanciuniv.edu", "123123123"])
+        onPressed: () {
+          if (_formKey.currentState!.validate()) {
+            FocusScope.of(context).unfocus();
+
+            loginWithEmailAndPassword();
+          }
         },
         padding: EdgeInsets.all(15.0),
         shape: RoundedRectangleBorder(
@@ -241,56 +290,59 @@ class _LoginScreenState extends State<LoginScreen> {
         value: SystemUiOverlayStyle.light,
         child: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
-          child: Stack(
-            children: <Widget>[
-              Container(
-                height: double.infinity,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Color(0xFF61A4F1),
-                      Color(0xFF61A4F1),
-                      Color(0xFF478DE0),
-                      secondaryColor,
-                    ],
-                    stops: [0.1, 0.4, 0.7, 0.9],
+          child: Form(
+            key: _formKey,
+            child: Stack(
+              children: <Widget>[
+                Container(
+                  height: double.infinity,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Color(0xFF61A4F1),
+                        Color(0xFF61A4F1),
+                        Color(0xFF478DE0),
+                        secondaryColor,
+                      ],
+                      stops: [0.1, 0.4, 0.7, 0.9],
+                    ),
                   ),
                 ),
-              ),
-              Container(
-                height: double.infinity,
-                child: SingleChildScrollView(
-                  physics: AlwaysScrollableScrollPhysics(),
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 40.0,
-                    vertical: 120.0,
+                Container(
+                  height: double.infinity,
+                  child: SingleChildScrollView(
+                    physics: AlwaysScrollableScrollPhysics(),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 40.0,
+                      vertical: 120.0,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          'Sign In',
+                          style: header.copyWith(color: Colors.white),
+                        ),
+                        SizedBox(height: 30.0),
+                        _buildEmailTF(),
+                        SizedBox(
+                          height: 30.0,
+                        ),
+                        _buildPasswordTF(),
+                        _buildLoginBtn(),
+                        _buildSignInWithText(),
+                        _buildSocialBtnRow(),
+                        _buildSignupBtn(),
+                        _buildForgotPasswordBtn(),
+                      ],
+                    ),
                   ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        'Sign In',
-                        style: header.copyWith(color: Colors.white),
-                      ),
-                      SizedBox(height: 30.0),
-                      _buildEmailTF(),
-                      SizedBox(
-                        height: 30.0,
-                      ),
-                      _buildPasswordTF(),
-                      _buildLoginBtn(),
-                      _buildSignInWithText(),
-                      _buildSocialBtnRow(),
-                      _buildSignupBtn(),
-                      _buildForgotPasswordBtn(),
-                    ],
-                  ),
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ),
       ),

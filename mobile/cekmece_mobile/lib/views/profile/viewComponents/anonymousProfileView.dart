@@ -27,7 +27,7 @@ class AnonymousProfileView extends StatelessWidget {
             Column(
               children: [
                 SignInButtonBuilder(
-                  text: 'Sign up with Email',
+                  text: 'Sign up / Log in',
                   icon: Icons.email,
                   padding: EdgeInsets.symmetric(vertical: 15, horizontal: 5),
                   onPressed: () async {
