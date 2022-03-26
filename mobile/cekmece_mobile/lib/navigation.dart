@@ -32,12 +32,6 @@ class _NavigationViewState extends State<NavigationView> {
 
   List<Widget> _buildScreens() {
     return [
-<<<<<<< HEAD
-      Container(),
-      TempView(),
-      Container(),
-      Container(),
-=======
       Container(
         child: Center(
           child: Text(
@@ -46,6 +40,7 @@ class _NavigationViewState extends State<NavigationView> {
           ),
         ),
       ),
+
       Container(
         child: Center(
           child: Text(
@@ -62,7 +57,6 @@ class _NavigationViewState extends State<NavigationView> {
           ),
         ),
       ),
->>>>>>> 1fa8b9f8abe070e6d06fedb5c7b5499513e05bc4
       ProfileView(
         user: widget.user,
       ),
@@ -129,10 +123,10 @@ class _NavigationViewState extends State<NavigationView> {
       backgroundColor: Colors.white, // Default is Colors.white.
       handleAndroidBackButtonPress: true, // Default is true.
       resizeToAvoidBottomInset:
-          true, // This needs to be true if you want to move up the screen when keyboard appears. Default is true.
+      true, // This needs to be true if you want to move up the screen when keyboard appears. Default is true.
       stateManagement: true, // Default is true.
       hideNavigationBarWhenKeyboardShows:
-          true, // Recommended to set 'resizeToAvoidBottomInset' as true while using this argument. Default is true.
+      true, // Recommended to set 'resizeToAvoidBottomInset' as true while using this argument. Default is true.
       decoration: const NavBarDecoration(
         border: Border(
           top: BorderSide(width: 1.0, color: Color(0xFFECECEC)),
@@ -142,7 +136,7 @@ class _NavigationViewState extends State<NavigationView> {
       popAllScreensOnTapOfSelectedTab: true,
       popActionScreens: PopActionScreensType.all,
       navBarStyle:
-          NavBarStyle.style12, // Choose the nav bar style with this property.
+      NavBarStyle.style12, // Choose the nav bar style with this property.
       itemAnimationProperties: const ItemAnimationProperties(
         // Navigation Bar's items animation properties.
         duration: Duration(milliseconds: 200),
