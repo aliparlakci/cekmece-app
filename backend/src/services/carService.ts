@@ -3,6 +3,7 @@ import { Repository } from "typeorm"
 import db from "../dataSource"
 import { Car } from "../models/car"
 import CategoryService from "./categoryService"
+import { Review } from "../models/review"
 
 export default class CarService {
     private repository: Repository<Car>

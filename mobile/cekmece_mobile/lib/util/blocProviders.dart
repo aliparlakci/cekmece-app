@@ -1,4 +1,5 @@
 import 'package:cekmece_mobile/constants/color_contsants.dart';
+import 'package:cekmece_mobile/constants/font_constants.dart';
 import 'package:cekmece_mobile/navigation.dart';
 import 'package:cekmece_mobile/util/bloc/loadingBloc/loading_bloc.dart';
 import 'package:cekmece_mobile/util/bloc/userBloc/user_bloc.dart';
@@ -17,9 +18,23 @@ class BlocProviders extends StatelessWidget {
     return MaterialApp(
         title: 'Cekmece',
         theme: ThemeData(
-            primarySwatch: Colors.blue,
-            canvasColor: neutralColor,
-            primaryColor: primaryColor),
+            // primarySwatch: Colors.amber,
+            // canvasColor: neutralColor,
+          primaryColor: primaryColor,
+          appBarTheme: AppBarTheme(
+            backgroundColor: Colors.white,
+            foregroundColor: Colors.black,
+            titleTextStyle: appBarTextStyle,
+            elevation: 0,
+            shape: const Border(
+                bottom: BorderSide(
+                  color: Color(0xFFCFCFCF),
+                  width: 0.3,
+                )
+            ),
+
+          ),
+        ),
         home: MultiBlocProvider(
             providers: [
               BlocProvider(create: (context) => LoadingBloc()),
