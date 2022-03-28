@@ -1,7 +1,9 @@
 import 'package:cekmece_mobile/models/product/Product.dart';
+import 'package:cekmece_mobile/views/productView/components/descriptionDetailed.dart';
 import 'package:cekmece_mobile/views/productView/components/size.dart';
 import 'package:cekmece_mobile/views/productView/product.dart';
 import 'package:flutter/material.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 class ProductDescription extends StatelessWidget {
   const ProductDescription({
@@ -45,7 +47,16 @@ class ProductDescription extends StatelessWidget {
             vertical: 10,
           ),
           child: GestureDetector(
-            onTap: () {},
+            onTap: () {
+              pushNewScreen(
+                context,
+                screen: DescriptionDetail(
+                  description: product.description,
+                ),
+                withNavBar: false, // OPTIONAL VALUE. True by default.
+                pageTransitionAnimation: PageTransitionAnimation.cupertino,
+              );
+            },
             child: Row(
               children: [
                 Text(
