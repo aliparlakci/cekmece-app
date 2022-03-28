@@ -109,7 +109,7 @@ class _NavigationViewState extends State<NavigationView> {
       screens: _buildScreens(),
       items: _navBarsItems(),
       onItemSelected: (idx) async {
-        if (idx != 0) {
+        if (!(idx == 0 || idx == 1)) {
           print("update user");
           BlocProvider.of<UserBloc>(context).add(UserUpdate(user: widget.user));
         }
