@@ -19,7 +19,7 @@ class SearchView extends StatefulWidget {
 }
 
 class _SearchViewState extends State<SearchView> {
-  List<String> categories = [];
+  Map<int, String> categories = {};
 
   void getCategories() async {
     BlocProvider.of<LoadingBloc>(context)
@@ -33,7 +33,7 @@ class _SearchViewState extends State<SearchView> {
         // then parse the JSON.
         print(response.body);
         for (var elem in jsonDecode(response.body)) {
-          categories.add(elem["name"]);
+          categories[elem["id"]] = elem["name"];
         }
       } else {
         // If the server did not return a 200 OK response,
@@ -74,16 +74,15 @@ pushNewScreen(
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 25),
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           Expanded(
-            child: Column(children: [
-              SizedBox(
-                height: 40,
-              ),
+            flex: 3,
+            child:
+                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               Icon(
                 Icons.search,
                 size: 200,
               ),
               Text(
-                "Looking for your next car? We got you covered!",
+                "Looking for your next car?\nWe got you covered!",
                 style: appBarTextStyle.copyWith(fontSize: 30),
                 textAlign: TextAlign.center,
               ),
@@ -101,13 +100,17 @@ pushNewScreen(
             ]),
           ),
           Expanded(
+            flex: 2,
             child: SingleChildScrollView(
               child: Wrap(
-                runSpacing: 10,
-                alignment: WrapAlignment.center,
-                children:
-                    categories.map((e) => CategoryButton(name: e)).toList(),
-              ),
+                  runSpacing: 10,
+                  alignment: WrapAlignment.center,
+                  children: categories.entries
+                      .map((e) => CategoryButton(category: e.value, id: e.key))
+                      .toList()
+                  //  categories.map((e) => CategoryButton(category: e)).toList(),
+                  //categories.entries.map((key, value) => CategoryButton(category: )).toList()
+                  ),
             ),
           )
         ]),
@@ -117,8 +120,10 @@ pushNewScreen(
 }
 
 class CategoryButton extends StatelessWidget {
-  String name;
-  CategoryButton({Key? key, required this.name}) : super(key: key);
+  String category;
+  int id;
+  CategoryButton({Key? key, required this.category, required this.id})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -140,7 +145,7 @@ class CategoryButton extends StatelessWidget {
           ],
         ),
         child: Text(
-          name,
+          category,
           style: buttonTextStyle,
         ),
       ),

@@ -163,6 +163,23 @@ function deleteReview(reviewService: ReviewService): RequestHandler {
     }
 }
 
+function getCarsByCategory(carService: CarService) {
+
+    return async function (req, res, next) {
+
+        const categoryId = parseInt(req.params.categoryId)
+
+        const cars = await carService.getCarsByCategory(categoryId)
+
+
+        res.status(200).json(cars)
+
+    }
+
+}
+
+
+
 function carRouter() {
     const router = Router()
 
@@ -177,6 +194,8 @@ function carRouter() {
     router.post("/update", updateNewCar(carService))
     router.post("/:carId/category/:categoryId", assignNewCategory(carService))
     router.delete("/:carId/category/:categoryId", removeCategory(carService))
+    router.get("/category/:categoryId", getCarsByCategory(carService))
+
 
     /* CODE REVIEW */
     router.get("/:carId/reviews", getReviews(reviewService))
