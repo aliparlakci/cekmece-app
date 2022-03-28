@@ -9,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:anim_search_bar/anim_search_bar.dart';
 
 class NavigationView extends StatefulWidget {
   UserClass user;
@@ -20,6 +21,7 @@ class NavigationView extends StatefulWidget {
 
 class _NavigationViewState extends State<NavigationView> {
   late PersistentTabController _controller;
+  TextEditingController textController = TextEditingController();
 
   @override
   void initState() {
@@ -29,23 +31,41 @@ class _NavigationViewState extends State<NavigationView> {
 
   List<Widget> _buildScreens() {
     return [
-      Container(
-        child: Center(
-          child: OutlinedButton(
-            onPressed: () {
-              pushNewScreen(
-                context,
-                screen: DetailsScreen(
-                  product: mockProd,
-                ),
-                withNavBar: false, // OPTIONAL VALUE. True by default.
-                pageTransitionAnimation: PageTransitionAnimation.cupertino,
-              );
-            },
-            child: Text("Go to mock product page"),
+      Stack(children: [
+        Container(
+          child: Center(
+            child: OutlinedButton(
+              onPressed: () {
+                pushNewScreen(
+                  context,
+                  screen: DetailsScreen(
+                    product: mockProd,
+                  ),
+                  withNavBar: false, // OPTIONAL VALUE. True by default.
+                  pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                );
+              },
+              child: Text("Go to mock product page"),
+            ),
           ),
         ),
-      ),
+        Align(
+          alignment: Alignment.topLeft,
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: AnimSearchBar(
+              width: 400,
+              autoFocus: true,
+              textController: textController,
+              onSuffixTap: () {
+                setState(() {
+                  textController.clear();
+                });
+              },
+            ),
+          ),
+        )
+      ]),
       Container(
         child: Center(
           child: Text(

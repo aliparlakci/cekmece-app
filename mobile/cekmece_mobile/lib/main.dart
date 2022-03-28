@@ -17,7 +17,8 @@ final mockProd = Product(
     "assets/images/rb16b-4.jpg",
     "assets/images/rb16b-5.jpg",
   ],
-  title: "YER UÇAĞI - Keyfe Keder Dosta Gider RB16-B - ENNN DOLU PAKET",
+  title:
+      "YER UÇAĞI - Keyfe Keder Dosta Gider RB16-B - ENNN DOLU PAKET - CİDDE MAKYAJLI",
   price: 120000000,
   description: description,
   rating: 4.8,

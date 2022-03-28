@@ -11,6 +11,7 @@ class DescriptionDetail extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("Detailed Description"),
+        backgroundColor: Colors.black,
       ),
       body: Container(
         padding: EdgeInsets.all(8),
