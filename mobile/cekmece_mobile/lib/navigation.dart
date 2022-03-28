@@ -7,6 +7,7 @@ import 'package:cekmece_mobile/views/productView/details_screen.dart';
 import 'package:cekmece_mobile/views/profile/profileView.dart';
 import 'package:cekmece_mobile/views/reviews/ReviewsView.dart';
 import 'package:cekmece_mobile/views/temp/TempView.dart';
+import 'package:cekmece_mobile/views/temp/omerTemp.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/cupertino.dart';
@@ -24,7 +25,6 @@ class NavigationView extends StatefulWidget {
 
 class _NavigationViewState extends State<NavigationView> {
   late PersistentTabController _controller;
-  TextEditingController textController = TextEditingController();
 
   @override
   void initState() {
@@ -34,41 +34,7 @@ class _NavigationViewState extends State<NavigationView> {
 
   List<Widget> _buildScreens() {
     return [
-      Stack(children: [
-        Container(
-          child: Center(
-            child: OutlinedButton(
-              onPressed: () {
-                pushNewScreen(
-                  context,
-                  screen: DetailsScreen(
-                    product: mockProd,
-                  ),
-                  withNavBar: false, // OPTIONAL VALUE. True by default.
-                  pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                );
-              },
-              child: Text("Go to mock product page"),
-            ),
-          ),
-        ),
-        Align(
-          alignment: Alignment.topLeft,
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: AnimSearchBar(
-              width: 400,
-              autoFocus: true,
-              textController: textController,
-              onSuffixTap: () {
-                setState(() {
-                  textController.clear();
-                });
-              },
-            ),
-          ),
-        )
-      ]),
+      OmerTest(),
       TempView(),
       Container(
         child: Center(

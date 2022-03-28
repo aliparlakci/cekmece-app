@@ -7,25 +7,28 @@ part of 'Product.dart';
 // **************************************************************************
 
 _$_Product _$$_ProductFromJson(Map<String, dynamic> json) => _$_Product(
-      id: json['id'] as String,
-      images:
-          (json['images'] as List<dynamic>).map((e) => e as String).toList(),
-      rating: (json['rating'] as num).toDouble(),
-      isFavourite: json['isFavourite'] as bool,
-      isPopular: json['isPopular'] as bool,
-      title: json['title'] as String,
+      id: json['id'] as int,
+      name: json['name'] as String,
       price: json['price'] as int,
-      description: json['description'] as String,
+      number: json['number'] as int,
+      model: json['model'] as int,
+      quantity: json['quantity'] as int,
+      warranty: json['warranty'] as int,
+      distributor: json['distributor'],
+      categories: (json['categories'] as List<dynamic>)
+          .map((e) => e as String)
+          .toList(),
     );
 
 Map<String, dynamic> _$$_ProductToJson(_$_Product instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'images': instance.images,
-      'rating': instance.rating,
-      'isFavourite': instance.isFavourite,
-      'isPopular': instance.isPopular,
-      'title': instance.title,
+      'name': instance.name,
       'price': instance.price,
-      'description': instance.description,
+      'number': instance.number,
+      'model': instance.model,
+      'quantity': instance.quantity,
+      'warranty': instance.warranty,
+      'distributor': instance.distributor,
+      'categories': instance.categories,
     };

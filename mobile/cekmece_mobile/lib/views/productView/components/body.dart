@@ -1,3 +1,4 @@
+import 'package:cekmece_mobile/constants/font_constants.dart';
 import 'package:cekmece_mobile/models/product/Product.dart';
 import 'package:cekmece_mobile/views/productView/components/custom_app_bar.dart';
 import 'package:cekmece_mobile/views/productView/components/size.dart';
@@ -44,17 +45,58 @@ class _BodyState extends State<Body> {
               ],
             ),
           ),
-          ReviewsButton(carId: 1, reviewCount: 555, reviewAverage: 4.3),
+          CarSpecCard(left: "Year", right: "${widget.product.model}"),
+          CarSpecCard(
+              left: "Distributor", right: widget.product.distributor["name"]),
+          CarSpecCard(
+              left: "Warranty", right: "${widget.product.warranty} years"),
+          const SizedBox(
+            height: 15,
+          ),
+          ReviewsButton(carId: 1, reviewCount: 555, reviewAverage: 4.8),
           const SizedBox(
             height: 5,
           ),
-          LeaveAReviewButton(carId: 1)
+          LeaveAReviewButton(carId: 1),
+          const SizedBox(
+            height: 20,
+          ),
         ],
       ),
       PreferredSize(
         preferredSize: Size.fromHeight(AppBar().preferredSize.height),
-        child: CustomAppBar(rating: widget.product.rating),
+        child: CustomAppBar(rating: 4.8),
       )
     ]);
+  }
+}
+
+class CarSpecCard extends StatelessWidget {
+  String left, right;
+  CarSpecCard({
+    Key? key,
+    required this.left,
+    required this.right,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TopRoundedContainer(
+      color: Colors.white,
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 2, horizontal: 20),
+        child:
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          Text(
+            left,
+            style: buttonTextStyle,
+          ),
+          Text(
+            right,
+            style: buttonTextStyle,
+          )
+        ]),
+      ),
+    );
   }
 }

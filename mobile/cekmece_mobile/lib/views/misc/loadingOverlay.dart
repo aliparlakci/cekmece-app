@@ -9,7 +9,7 @@ class LoadingOverlay {
     _overlay = OverlayEntry(
       // replace with your own layout
       builder: (context) => ColoredBox(
-        color: primaryColor.withOpacity(0.5),
+        color: Colors.black.withOpacity(0.5),
         child: LoadingView(),
       ),
     );

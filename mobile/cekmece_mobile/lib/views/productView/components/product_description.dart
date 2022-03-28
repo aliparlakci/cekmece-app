@@ -23,7 +23,7 @@ class ProductDescription extends StatelessWidget {
           padding: EdgeInsets.symmetric(
               horizontal: getProportionateScreenHeight(20)),
           child: Text(
-            product.title,
+            product.name,
             style: Theme.of(context).textTheme.headline6,
           ),
         ),
@@ -32,11 +32,11 @@ class ProductDescription extends StatelessWidget {
         ),
         Padding(
           padding: EdgeInsets.only(
-            left: getProportionateScreenWidth(20),
+            left: getProportionateScreenWidth(19),
             right: getProportionateScreenWidth(64),
           ),
           child: Text(
-            product.description,
+            "${product.model} Model ${product.name}, ${product.warranty} years of warranty. Sold by ${product.distributor["name"]}",
             maxLines: 4,
           ),
         ),
@@ -50,7 +50,8 @@ class ProductDescription extends StatelessWidget {
               pushNewScreen(
                 context,
                 screen: DescriptionDetail(
-                  description: product.description,
+                  description:
+                      "${product.model} Model ${product.name}, ${product.warranty} years of warranty. Sold by ${product.distributor["name"]}",
                 ),
                 withNavBar: false, // OPTIONAL VALUE. True by default.
                 pageTransitionAnimation: PageTransitionAnimation.cupertino,

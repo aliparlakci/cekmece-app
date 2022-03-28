@@ -23,23 +23,25 @@ class _$ProductTearOff {
   const _$ProductTearOff();
 
   _Product call(
-      {required String id,
-      required List<String> images,
-      required double rating,
-      required bool isFavourite,
-      required bool isPopular,
-      required String title,
+      {required int id,
+      required String name,
       required int price,
-      required String description}) {
+      required int number,
+      required int model,
+      required int quantity,
+      required int warranty,
+      required dynamic distributor,
+      required List<String> categories}) {
     return _Product(
       id: id,
-      images: images,
-      rating: rating,
-      isFavourite: isFavourite,
-      isPopular: isPopular,
-      title: title,
+      name: name,
       price: price,
-      description: description,
+      number: number,
+      model: model,
+      quantity: quantity,
+      warranty: warranty,
+      distributor: distributor,
+      categories: categories,
     );
   }
 
@@ -53,14 +55,15 @@ const $Product = _$ProductTearOff();
 
 /// @nodoc
 mixin _$Product {
-  String get id => throw _privateConstructorUsedError;
-  List<String> get images => throw _privateConstructorUsedError;
-  double get rating => throw _privateConstructorUsedError;
-  bool get isFavourite => throw _privateConstructorUsedError;
-  bool get isPopular => throw _privateConstructorUsedError;
-  String get title => throw _privateConstructorUsedError;
+  int get id => throw _privateConstructorUsedError;
+  String get name => throw _privateConstructorUsedError;
   int get price => throw _privateConstructorUsedError;
-  String get description => throw _privateConstructorUsedError;
+  int get number => throw _privateConstructorUsedError;
+  int get model => throw _privateConstructorUsedError;
+  int get quantity => throw _privateConstructorUsedError;
+  int get warranty => throw _privateConstructorUsedError;
+  dynamic get distributor => throw _privateConstructorUsedError;
+  List<String> get categories => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -72,14 +75,15 @@ abstract class $ProductCopyWith<$Res> {
   factory $ProductCopyWith(Product value, $Res Function(Product) then) =
       _$ProductCopyWithImpl<$Res>;
   $Res call(
-      {String id,
-      List<String> images,
-      double rating,
-      bool isFavourite,
-      bool isPopular,
-      String title,
+      {int id,
+      String name,
       int price,
-      String description});
+      int number,
+      int model,
+      int quantity,
+      int warranty,
+      dynamic distributor,
+      List<String> categories});
 }
 
 /// @nodoc
@@ -93,47 +97,52 @@ class _$ProductCopyWithImpl<$Res> implements $ProductCopyWith<$Res> {
   @override
   $Res call({
     Object? id = freezed,
-    Object? images = freezed,
-    Object? rating = freezed,
-    Object? isFavourite = freezed,
-    Object? isPopular = freezed,
-    Object? title = freezed,
+    Object? name = freezed,
     Object? price = freezed,
-    Object? description = freezed,
+    Object? number = freezed,
+    Object? model = freezed,
+    Object? quantity = freezed,
+    Object? warranty = freezed,
+    Object? distributor = freezed,
+    Object? categories = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      images: images == freezed
-          ? _value.images
-          : images // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      rating: rating == freezed
-          ? _value.rating
-          : rating // ignore: cast_nullable_to_non_nullable
-              as double,
-      isFavourite: isFavourite == freezed
-          ? _value.isFavourite
-          : isFavourite // ignore: cast_nullable_to_non_nullable
-              as bool,
-      isPopular: isPopular == freezed
-          ? _value.isPopular
-          : isPopular // ignore: cast_nullable_to_non_nullable
-              as bool,
-      title: title == freezed
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
+              as int,
+      name: name == freezed
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
               as String,
       price: price == freezed
           ? _value.price
           : price // ignore: cast_nullable_to_non_nullable
               as int,
-      description: description == freezed
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
-              as String,
+      number: number == freezed
+          ? _value.number
+          : number // ignore: cast_nullable_to_non_nullable
+              as int,
+      model: model == freezed
+          ? _value.model
+          : model // ignore: cast_nullable_to_non_nullable
+              as int,
+      quantity: quantity == freezed
+          ? _value.quantity
+          : quantity // ignore: cast_nullable_to_non_nullable
+              as int,
+      warranty: warranty == freezed
+          ? _value.warranty
+          : warranty // ignore: cast_nullable_to_non_nullable
+              as int,
+      distributor: distributor == freezed
+          ? _value.distributor
+          : distributor // ignore: cast_nullable_to_non_nullable
+              as dynamic,
+      categories: categories == freezed
+          ? _value.categories
+          : categories // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ));
   }
 }
@@ -144,14 +153,15 @@ abstract class _$ProductCopyWith<$Res> implements $ProductCopyWith<$Res> {
       __$ProductCopyWithImpl<$Res>;
   @override
   $Res call(
-      {String id,
-      List<String> images,
-      double rating,
-      bool isFavourite,
-      bool isPopular,
-      String title,
+      {int id,
+      String name,
       int price,
-      String description});
+      int number,
+      int model,
+      int quantity,
+      int warranty,
+      dynamic distributor,
+      List<String> categories});
 }
 
 /// @nodoc
@@ -166,47 +176,52 @@ class __$ProductCopyWithImpl<$Res> extends _$ProductCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = freezed,
-    Object? images = freezed,
-    Object? rating = freezed,
-    Object? isFavourite = freezed,
-    Object? isPopular = freezed,
-    Object? title = freezed,
+    Object? name = freezed,
     Object? price = freezed,
-    Object? description = freezed,
+    Object? number = freezed,
+    Object? model = freezed,
+    Object? quantity = freezed,
+    Object? warranty = freezed,
+    Object? distributor = freezed,
+    Object? categories = freezed,
   }) {
     return _then(_Product(
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      images: images == freezed
-          ? _value.images
-          : images // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      rating: rating == freezed
-          ? _value.rating
-          : rating // ignore: cast_nullable_to_non_nullable
-              as double,
-      isFavourite: isFavourite == freezed
-          ? _value.isFavourite
-          : isFavourite // ignore: cast_nullable_to_non_nullable
-              as bool,
-      isPopular: isPopular == freezed
-          ? _value.isPopular
-          : isPopular // ignore: cast_nullable_to_non_nullable
-              as bool,
-      title: title == freezed
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
+              as int,
+      name: name == freezed
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
               as String,
       price: price == freezed
           ? _value.price
           : price // ignore: cast_nullable_to_non_nullable
               as int,
-      description: description == freezed
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
-              as String,
+      number: number == freezed
+          ? _value.number
+          : number // ignore: cast_nullable_to_non_nullable
+              as int,
+      model: model == freezed
+          ? _value.model
+          : model // ignore: cast_nullable_to_non_nullable
+              as int,
+      quantity: quantity == freezed
+          ? _value.quantity
+          : quantity // ignore: cast_nullable_to_non_nullable
+              as int,
+      warranty: warranty == freezed
+          ? _value.warranty
+          : warranty // ignore: cast_nullable_to_non_nullable
+              as int,
+      distributor: distributor == freezed
+          ? _value.distributor
+          : distributor // ignore: cast_nullable_to_non_nullable
+              as dynamic,
+      categories: categories == freezed
+          ? _value.categories
+          : categories // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ));
   }
 }
@@ -216,37 +231,40 @@ class __$ProductCopyWithImpl<$Res> extends _$ProductCopyWithImpl<$Res>
 class _$_Product implements _Product {
   const _$_Product(
       {required this.id,
-      required this.images,
-      required this.rating,
-      required this.isFavourite,
-      required this.isPopular,
-      required this.title,
+      required this.name,
       required this.price,
-      required this.description});
+      required this.number,
+      required this.model,
+      required this.quantity,
+      required this.warranty,
+      required this.distributor,
+      required this.categories});
 
   factory _$_Product.fromJson(Map<String, dynamic> json) =>
       _$$_ProductFromJson(json);
 
   @override
-  final String id;
+  final int id;
   @override
-  final List<String> images;
-  @override
-  final double rating;
-  @override
-  final bool isFavourite;
-  @override
-  final bool isPopular;
-  @override
-  final String title;
+  final String name;
   @override
   final int price;
   @override
-  final String description;
+  final int number;
+  @override
+  final int model;
+  @override
+  final int quantity;
+  @override
+  final int warranty;
+  @override
+  final dynamic distributor;
+  @override
+  final List<String> categories;
 
   @override
   String toString() {
-    return 'Product(id: $id, images: $images, rating: $rating, isFavourite: $isFavourite, isPopular: $isPopular, title: $title, price: $price, description: $description)';
+    return 'Product(id: $id, name: $name, price: $price, number: $number, model: $model, quantity: $quantity, warranty: $warranty, distributor: $distributor, categories: $categories)';
   }
 
   @override
@@ -255,28 +273,30 @@ class _$_Product implements _Product {
         (other.runtimeType == runtimeType &&
             other is _Product &&
             const DeepCollectionEquality().equals(other.id, id) &&
-            const DeepCollectionEquality().equals(other.images, images) &&
-            const DeepCollectionEquality().equals(other.rating, rating) &&
-            const DeepCollectionEquality()
-                .equals(other.isFavourite, isFavourite) &&
-            const DeepCollectionEquality().equals(other.isPopular, isPopular) &&
-            const DeepCollectionEquality().equals(other.title, title) &&
+            const DeepCollectionEquality().equals(other.name, name) &&
             const DeepCollectionEquality().equals(other.price, price) &&
+            const DeepCollectionEquality().equals(other.number, number) &&
+            const DeepCollectionEquality().equals(other.model, model) &&
+            const DeepCollectionEquality().equals(other.quantity, quantity) &&
+            const DeepCollectionEquality().equals(other.warranty, warranty) &&
             const DeepCollectionEquality()
-                .equals(other.description, description));
+                .equals(other.distributor, distributor) &&
+            const DeepCollectionEquality()
+                .equals(other.categories, categories));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(id),
-      const DeepCollectionEquality().hash(images),
-      const DeepCollectionEquality().hash(rating),
-      const DeepCollectionEquality().hash(isFavourite),
-      const DeepCollectionEquality().hash(isPopular),
-      const DeepCollectionEquality().hash(title),
+      const DeepCollectionEquality().hash(name),
       const DeepCollectionEquality().hash(price),
-      const DeepCollectionEquality().hash(description));
+      const DeepCollectionEquality().hash(number),
+      const DeepCollectionEquality().hash(model),
+      const DeepCollectionEquality().hash(quantity),
+      const DeepCollectionEquality().hash(warranty),
+      const DeepCollectionEquality().hash(distributor),
+      const DeepCollectionEquality().hash(categories));
 
   @JsonKey(ignore: true)
   @override
@@ -291,33 +311,36 @@ class _$_Product implements _Product {
 
 abstract class _Product implements Product {
   const factory _Product(
-      {required String id,
-      required List<String> images,
-      required double rating,
-      required bool isFavourite,
-      required bool isPopular,
-      required String title,
+      {required int id,
+      required String name,
       required int price,
-      required String description}) = _$_Product;
+      required int number,
+      required int model,
+      required int quantity,
+      required int warranty,
+      required dynamic distributor,
+      required List<String> categories}) = _$_Product;
 
   factory _Product.fromJson(Map<String, dynamic> json) = _$_Product.fromJson;
 
   @override
-  String get id;
+  int get id;
   @override
-  List<String> get images;
-  @override
-  double get rating;
-  @override
-  bool get isFavourite;
-  @override
-  bool get isPopular;
-  @override
-  String get title;
+  String get name;
   @override
   int get price;
   @override
-  String get description;
+  int get number;
+  @override
+  int get model;
+  @override
+  int get quantity;
+  @override
+  int get warranty;
+  @override
+  dynamic get distributor;
+  @override
+  List<String> get categories;
   @override
   @JsonKey(ignore: true)
   _$ProductCopyWith<_Product> get copyWith =>

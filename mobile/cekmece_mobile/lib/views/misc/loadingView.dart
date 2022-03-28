@@ -22,7 +22,7 @@ class _LoadingViewState extends State<LoadingView>
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: primaryColor.withOpacity(0.5),
+      color: Colors.black.withOpacity(0.5),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

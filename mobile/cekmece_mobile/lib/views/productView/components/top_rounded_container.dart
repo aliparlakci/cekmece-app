@@ -27,10 +27,10 @@ class TopRoundedContainer extends StatelessWidget {
         borderRadius: BorderRadius.all(Radius.circular(5)),
         boxShadow: [
           BoxShadow(
-            color: secondaryColor,
+            color: Colors.black,
             blurRadius: 2.0,
             spreadRadius: 0.0,
-            offset: Offset(0.0, -2.0), // shadow direction: bottom right
+            offset: Offset(0.0, -0.0), // shadow direction: bottom right
           )
         ],
       ),
