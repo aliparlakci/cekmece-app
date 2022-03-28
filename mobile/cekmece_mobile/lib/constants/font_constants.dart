@@ -8,25 +8,25 @@ var header = GoogleFonts.raleway(
     color: Colors.black,
     letterSpacing: 1);
 
-var loadingViewTitle = GoogleFonts.ubuntu(
+var loadingViewTitle = GoogleFonts.raleway(
     fontSize: 48,
     fontWeight: FontWeight.w600,
     color: Colors.white,
     letterSpacing: 2);
 
-var header2 = GoogleFonts.ubuntu(
+var header2 = GoogleFonts.raleway(
     fontSize: 20,
     fontWeight: FontWeight.w600,
     color: neutralColor,
     letterSpacing: 1);
 
-var header3 = GoogleFonts.ubuntu(
+var header3 = GoogleFonts.raleway(
     fontSize: 16,
     fontWeight: FontWeight.w600,
     color: neutralColor,
     letterSpacing: 1);
 
-var textDefault = GoogleFonts.ubuntu(
+var textDefault = GoogleFonts.raleway(
     fontSize: 10,
     fontWeight: FontWeight.w400,
     color: neutralColor,
@@ -54,7 +54,6 @@ final kBoxDecorationStyle = BoxDecoration(
     ),
   ],
 );
-
 
 /* General */
 
@@ -84,7 +83,6 @@ final snackBarTextStyle = GoogleFonts.raleway(
   color: Colors.white,
 );
 
-
 /* ReviewsView.dart */
 
 final errorTextStyle = GoogleFonts.raleway(
@@ -92,7 +90,6 @@ final errorTextStyle = GoogleFonts.raleway(
   fontWeight: FontWeight.w700,
   color: Colors.black,
 );
-
 
 /* ReviewTile.dart */
 
