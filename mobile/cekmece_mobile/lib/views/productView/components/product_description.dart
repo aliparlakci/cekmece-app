@@ -1,7 +1,6 @@
 import 'package:cekmece_mobile/models/product/Product.dart';
 import 'package:cekmece_mobile/views/productView/components/descriptionDetailed.dart';
 import 'package:cekmece_mobile/views/productView/components/size.dart';
-import 'package:cekmece_mobile/views/productView/product.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 

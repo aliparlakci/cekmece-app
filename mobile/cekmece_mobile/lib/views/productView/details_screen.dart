@@ -38,7 +38,7 @@ class DetailsScreen extends StatelessWidget {
                 "\$1.250.000",
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: secondaryColor,
+                    color: Colors.black,
                     fontSize: getProportionateScreenWidth(16)),
               )),
               Expanded(

@@ -1,8 +1,9 @@
 import 'package:cekmece_mobile/models/product/Product.dart';
 import 'package:cekmece_mobile/views/productView/components/custom_app_bar.dart';
 import 'package:cekmece_mobile/views/productView/components/size.dart';
-import 'package:cekmece_mobile/views/productView/product.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cekmece_mobile/views/reviews/widgets/LeaveAReviewButton.dart';
+import 'package:cekmece_mobile/views/reviews/widgets/ReviewsButton.dart';
 import 'package:flutter/material.dart';
 
 import 'product_description.dart';
@@ -43,6 +44,11 @@ class _BodyState extends State<Body> {
               ],
             ),
           ),
+          ReviewsButton(carId: 1, reviewCount: 555, reviewAverage: 4.3),
+          const SizedBox(
+            height: 5,
+          ),
+          LeaveAReviewButton(carId: 1)
         ],
       ),
       PreferredSize(
