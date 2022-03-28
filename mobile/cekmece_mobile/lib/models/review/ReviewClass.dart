@@ -7,11 +7,9 @@ part 'ReviewClass.g.dart';
 class ReviewClass with _$ReviewClass {
   const factory ReviewClass({
     required int id,
-    required int carId,
-    int? userId,
     required int rating,
     required String comment,
-    required DateTime date,
+    required DateTime createdDate,
     bool? isApproved,
   }) = _ReviewClass;
 

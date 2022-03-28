@@ -34,6 +34,5 @@ export class Car {
     categories: Category[]
 
     @OneToMany(() => Review, (review) => review.car)
-    @JoinTable()
     reviews: Review[]
 }

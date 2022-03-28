@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, JoinColumn } from "typeorm"
 import { Car } from "./car"
+import { User } from "./user"
 
 export type Ratings = 1 | 2 | 3 | 4 | 5
 
@@ -15,24 +16,31 @@ export class Review {
     })
     rating: Ratings
 
-    @Column("varchar", {
-        length: 200,
+    @Column({
+        length: 1000,
     })
     comment: string
 
-    @Column({
-        type: "datetime",
-    })
-    date: string
+    @CreateDateColumn()
+    createdDate: Date
 
     @Column({
         type: "boolean",
+        default: false,
     })
     isApproved: boolean
 
-    @Column()
-    userId: number
-
-    @ManyToOne(() => Car, (car) => car.reviews, { cascade: true })
+    @ManyToOne(() => Car, (car) => car.reviews, { cascade: true, onDelete: "CASCADE" })
+    @JoinColumn({ name: "carId", referencedColumnName: "id" })
     car: Car
+
+    @Column()
+    carId: number
+
+    @ManyToOne(() => User, (user) => user.reviews, { cascade: true, onDelete: "CASCADE" })
+    @JoinColumn({ name: "userId", referencedColumnName: "id" })
+    user: User
+
+    @Column()
+    userId: string
 }
