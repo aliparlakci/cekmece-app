@@ -24,7 +24,7 @@ class TopRoundedContainer extends StatelessWidget {
       width: double.infinity,
       decoration: BoxDecoration(
         color: color,
-        borderRadius: BorderRadius.all(Radius.circular(5)),
+        borderRadius: BorderRadius.all(Radius.circular(1)),
         boxShadow: [
           BoxShadow(
             color: Colors.black,
