@@ -10,14 +10,14 @@ export class Review {
     id: number
 
     @Column({
-        type: "enum",
-        enum: [1, 2, 3, 4, 5],
-        default: 5,
+        type: "tinyint",
+        default: 3,
     })
-    rating: Ratings
+    rating: number
 
     @Column({
         length: 1000,
+        nullable: true,
     })
     comment: string
 
@@ -31,16 +31,8 @@ export class Review {
     isApproved: boolean
 
     @ManyToOne(() => Car, (car) => car.reviews, { cascade: true, onDelete: "CASCADE" })
-    @JoinColumn({ name: "carId", referencedColumnName: "id" })
     car: Car
 
-    @Column()
-    carId: number
-
     @ManyToOne(() => User, (user) => user.reviews, { cascade: true, onDelete: "CASCADE" })
-    @JoinColumn({ name: "userId", referencedColumnName: "id" })
     user: User
-
-    @Column()
-    userId: string
 }

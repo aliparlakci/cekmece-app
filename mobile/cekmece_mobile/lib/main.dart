@@ -1,9 +1,11 @@
 import 'package:cekmece_mobile/models/product/Product.dart';
 import 'package:cekmece_mobile/util/firebase/firebaseConnectionWrapper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
 
   runApp(FirebaseWrapper());
 }

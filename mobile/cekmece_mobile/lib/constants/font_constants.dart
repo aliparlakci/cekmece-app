@@ -76,6 +76,12 @@ final blackButtonTextStyle = GoogleFonts.raleway(
   color: Colors.white,
 );
 
+final bottomBarBlackButtonTextStyle = GoogleFonts.raleway(
+  fontSize: 17,
+  fontWeight: FontWeight.w700,
+  color: Colors.white,
+);
+
 /* showSnackBar.dart */
 
 final snackBarTextStyle = GoogleFonts.raleway(
@@ -108,6 +114,13 @@ final reviewTileCommentStyle = GoogleFonts.raleway(
   color: Colors.black,
 );
 
+final reviewTileUnapprovedCommentStyle = GoogleFonts.raleway(
+  fontSize: 15,
+  fontStyle: FontStyle.italic,
+  fontWeight: FontWeight.w500,
+  color: Colors.black,
+);
+
 final reviewTileMoreLessStyle = GoogleFonts.raleway(
   fontSize: 15,
   fontWeight: FontWeight.w700,
@@ -134,20 +147,26 @@ final newReviewHintStyle = GoogleFonts.raleway(
   color: const Color(0xFF888888),
 );
 
-final newReviewTextFieldActiveLabelStyle = GoogleFonts.raleway(
+final newReviewTextFormFieldActiveLabelStyle = GoogleFonts.raleway(
   fontWeight: FontWeight.w600,
   fontSize: 20,
   color: Color(0xFF919191),
 );
 
-final newReviewTextFieldInactiveLabelStyle = GoogleFonts.raleway(
+final newReviewTextFieldFormInactiveLabelStyle = GoogleFonts.raleway(
   fontWeight: FontWeight.w600,
   fontSize: 20,
   color: const Color(0xFF888888),
 );
 
-final newReviewTextFieldFillStyle = GoogleFonts.raleway(
+final newReviewTextFormFieldFillStyle = GoogleFonts.raleway(
   fontWeight: FontWeight.w600,
   fontSize: 15,
   color: Colors.black,
+);
+
+final newReviewTextFormFieldErrorFillStyle = GoogleFonts.raleway(
+  fontWeight: FontWeight.w600,
+  fontSize: 15,
+  color: Colors.red,
 );

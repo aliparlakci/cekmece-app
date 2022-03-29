@@ -121,11 +121,13 @@ function getReviews(reviewService: ReviewService): RequestHandler {
 function addNewReview(reviewService: ReviewService): RequestHandler {
     return async function (req, res, next) {
         const carId = parseInt(req.params.carId)
-        const userId = "FFDkyFb7u8QbiwrLlWgLSbcF0ex2"
+        const userId = "K40nLqy4NJcWMvEur7LOlKzQnOA3"
+
+        console.log(req.body)
 
         const reviewFormat = Joi.object().keys({
             rating: Joi.number().valid(1, 2, 3, 4, 5).required(),
-            comment: Joi.string().required(),
+            comment: Joi.string().min(3).max(1000).optional(),
         })
 
         const { error } = reviewFormat.validate(req.body)
@@ -155,11 +157,13 @@ function deleteReview(reviewService: ReviewService): RequestHandler {
     return async function (req, res, next) {
         const reviewId = parseInt(req.params.reviewId)
         const result = await reviewService.deleteReview(reviewId)
-        if (result && result.affected! > 0) {
-            res.status(StatusCodes.OK).json({ Result: "Success" })
-        } else {
+
+        if (!result.affected || result.affected === 0) {
             res.status(StatusCodes.BAD_REQUEST).json({ Result: "Error" })
+            return
         }
+
+        res.status(StatusCodes.OK).json({ Result: "Success" })
     }
 }
 

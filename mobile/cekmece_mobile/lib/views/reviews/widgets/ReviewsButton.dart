@@ -10,6 +10,16 @@ class ReviewsButton extends StatelessWidget {
   final int reviewCount;
   final double? reviewAverage;
 
+  double roundReviewAverage(double reviewAverage) {
+    if (reviewAverage % 1 == 0) {return reviewAverage;}
+    else if (0 < reviewAverage && reviewAverage < 1) {return 0.5;}
+    else if (1 < reviewAverage && reviewAverage < 2) {return 1.5;}
+    else if (2 < reviewAverage && reviewAverage < 3) {return 2.5;}
+    else if (3 < reviewAverage && reviewAverage < 4) {return 3.5;}
+    else if (4 < reviewAverage && reviewAverage < 5) {return 4.5;}
+    else { return 0; }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -41,15 +51,17 @@ class ReviewsButton extends StatelessWidget {
               const SizedBox(
                   width: 15
               ),
-              RatingBarIndicator(
-                rating: reviewAverage ?? 5,
-                itemBuilder: (context, index) => const Icon(
-                  Icons.star,
-                  color: Colors.black,
-                ),
+              RatingBar(
+                initialRating: reviewAverage != null ? roundReviewAverage(reviewAverage!) : 0,
+                ignoreGestures: true,
+                allowHalfRating: true,
                 itemCount: 5,
-                itemSize: 18.0,
-                unratedColor: const Color(0xFFCDCDCD),
+                itemSize: 18,
+                ratingWidget: RatingWidget(
+                  full: const Icon(Icons.star_sharp, color: Colors.black),
+                  half: const Icon(Icons.star_half_sharp, color: Colors.black),
+                  empty: const Icon(Icons.star_outline_sharp, color: Colors.black),
+                ), onRatingUpdate: (double value) { },
               ),
             ],
           ),

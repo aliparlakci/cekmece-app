@@ -4,6 +4,7 @@ import 'package:cekmece_mobile/widgets/linearProgressBar.dart';
 import 'package:cekmece_mobile/widgets/showSnackBar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'ReviewTile.dart';
 
@@ -27,7 +28,7 @@ class _ReviewsListState extends State<ReviewsList> {
 
       var response = await http.delete(
           Uri.parse(
-              "http://192.168.1.20:5000/cars/${widget.carId}/reviews/$reviewId"),
+              "${dotenv.env['CLIENT_URL']}/cars/${widget.carId}/reviews/$reviewId"),
           headers: <String, String>{
             "Accept": "application/json",
             "Content-Type": "charset=UTF-8",
