@@ -7,6 +7,7 @@ import 'package:cekmece_mobile/views/productView/details_screen.dart';
 import 'package:cekmece_mobile/views/profile/profileView.dart';
 import 'package:cekmece_mobile/views/reviews/ReviewsView.dart';
 import 'package:cekmece_mobile/views/search/search.dart';
+import 'package:cekmece_mobile/views/search/searchWrapper.dart';
 import 'package:cekmece_mobile/views/temp/TempView.dart';
 import 'package:cekmece_mobile/views/temp/omerTemp.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -36,7 +37,7 @@ class _NavigationViewState extends State<NavigationView> {
   List<Widget> _buildScreens() {
     return [
       OmerTest(),
-      SearchView(),
+      SearchWrapper(),
       Container(
         child: Center(
           child: Text(

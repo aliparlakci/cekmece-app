@@ -224,7 +224,7 @@ class _SearchBotState extends State<SearchBot> {
                             context: context,
                             message:
                                 "Minimum price can not be higher than the maximum price!");
-                      } else if (minModel > maxModel) {
+                      } else if (maxModel != 0 && minModel > maxModel) {
                         showSnackBar(
                             context: context,
                             message:
@@ -286,6 +286,23 @@ class _SearchBotState extends State<SearchBot> {
                   ),
                 )
               : Container(),
+          curPage == 0
+              ? Align(
+                  alignment: Alignment.topRight,
+                  child: GestureDetector(
+                    onTap: () {
+                      widget.onCallback();
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 35),
+                      child: CategoryButton(
+                        category: "Manual Search",
+                        id: 1,
+                      ),
+                    ),
+                  ),
+                )
+              : Container()
         ],
       );
     }
