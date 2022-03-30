@@ -4,6 +4,7 @@ import 'package:cekmece_mobile/constants/font_constants.dart';
 import 'package:cekmece_mobile/models/product/Product.dart';
 import 'package:cekmece_mobile/util/bloc/loadingBloc/loading_bloc.dart';
 import 'package:cekmece_mobile/views/productView/components/size.dart';
+import 'package:cekmece_mobile/views/productView/details_screen.dart';
 import 'package:cekmece_mobile/views/search/components/button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -140,54 +141,69 @@ class _ManualSearchState extends State<ManualSearch> {
                           Product car = results[index];
                           return Padding(
                             padding: const EdgeInsets.symmetric(vertical: 5),
-                            child: Card(
-                              elevation: 5,
-                              child: Container(
-                                height: getProportionateScreenWidth(80),
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      flex: 2,
-                                      child: Image.network(
-                                          "https://cdn.motor1.com/images/mgl/g1gW9/s1/nuova-bmw-z4.webp"),
-                                    ),
-                                    Expanded(
-                                        flex: 5,
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 10, horizontal: 5),
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceAround,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                results[index].name,
-                                                style: appBarTextStyle,
-                                              ),
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Text(
-                                                    '${car.model} - ${car.distributor["name"]}',
-                                                    style: buttonTextStyle
-                                                        .copyWith(fontSize: 12),
-                                                  ),
-                                                  Text(
-                                                    numberFormat
-                                                        .format(car.price),
-                                                    style:
-                                                        newReviewTextFieldFillStyle,
-                                                  ),
-                                                ],
-                                              )
-                                            ],
-                                          ),
-                                        ))
-                                  ],
+                            child: GestureDetector(
+                              onTap: () {
+                                pushNewScreen(
+                                  context,
+                                  screen: DetailsScreen(
+                                    product: car,
+                                  ),
+                                  withNavBar:
+                                      false, // OPTIONAL VALUE. True by default.
+                                  pageTransitionAnimation:
+                                      PageTransitionAnimation.cupertino,
+                                );
+                              },
+                              child: Card(
+                                elevation: 5,
+                                child: Container(
+                                  height: getProportionateScreenWidth(80),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        flex: 2,
+                                        child: Image.network(
+                                            "https://cdn.motor1.com/images/mgl/g1gW9/s1/nuova-bmw-z4.webp"),
+                                      ),
+                                      Expanded(
+                                          flex: 5,
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 10, horizontal: 5),
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceAround,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  results[index].name,
+                                                  style: appBarTextStyle,
+                                                ),
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Text(
+                                                      '${car.model} - ${car.distributor["name"]}',
+                                                      style: buttonTextStyle
+                                                          .copyWith(
+                                                              fontSize: 12),
+                                                    ),
+                                                    Text(
+                                                      numberFormat
+                                                          .format(car.price),
+                                                      style:
+                                                          newReviewTextFieldFillStyle,
+                                                    ),
+                                                  ],
+                                                )
+                                              ],
+                                            ),
+                                          ))
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
