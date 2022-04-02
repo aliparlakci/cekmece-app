@@ -8,9 +8,10 @@ class ReviewClass with _$ReviewClass {
   const factory ReviewClass({
     required int id,
     required int rating,
-    required String comment,
+    String? comment,
     required DateTime createdDate,
-    bool? isApproved,
+    required bool isApproved,
+    required Map user,
   }) = _ReviewClass;
 
   factory ReviewClass.fromJson(Map<String, dynamic> json) =>

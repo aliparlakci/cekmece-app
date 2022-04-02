@@ -1,7 +1,7 @@
 import { Repository } from "typeorm"
 
 import db from "../dataSource"
-import { Review } from "../models/review"
+import { Review, Ratings } from "../models/review"
 import CarService from "./carService"
 import UserService from "./userService"
 
@@ -12,14 +12,24 @@ export default class ReviewService {
         this.repository = db.getRepository(Review)
     }
 
-    async newReview(body: any) {
-        const car = await this.carService.getCar(body.carId)
-        if (car === null) throw `Car does not exist: id=${body.carId}`
+    async newReview(body: { carId: number; userId: string; rating: number; comment?: string }) {
+        const { carId, userId, rating, comment } = body
 
-        const user = await this.userService.getUser(body.userId)
-        if (user === null) throw `User does not exist: id=${body.carId}`
+        const car = await this.carService.getCar(carId)
+        if (car === null) throw `Car does not exist: id=${carId}`
 
-        return await this.repository.save(body)
+        const user = await this.userService.getUser(userId)
+        if (user === null) throw `User does not exist: id=${carId}`
+
+        return (
+            await this.repository.save({
+                car,
+                comment: comment,
+                isApproved: comment ? false : true,
+                rating: rating as Ratings,
+                user,
+            })
+        ).id
     }
 
     async getAllReviews() {
@@ -35,15 +45,17 @@ export default class ReviewService {
     }
 
     async getReviewsOfCar(carId: number) {
-        return await this.repository.find({
+        const reviews: Review[] = await this.repository.find({
             relations: {
                 user: true,
             },
+
             select: {
                 user: {
                     id: true,
                 },
             },
+
             where: {
                 car: {
                     id: carId,
@@ -52,6 +64,15 @@ export default class ReviewService {
             order: {
                 createdDate: "DESC",
             },
+        })
+
+        return reviews.map((review) => {
+            if (review.isApproved === false) {
+                review.comment = "This comment is currently being reviewed by one of our moderators for approval."
+                return review
+            }
+
+            return review
         })
     }
 
@@ -62,5 +83,22 @@ export default class ReviewService {
             .addSelect("AVG(R.rating)", "average_rating")
             .where("carId = :carId", { carId })
             .getRawOne()
+    }
+
+    async getAllUnapprovedReviews() {
+        return await this.repository.find({
+            relations: {
+                user: true,
+                car: true,
+            },
+
+            where: {
+                isApproved: false,
+            },
+
+            order: {
+                createdDate: "ASC",
+            },
+        })
     }
 }

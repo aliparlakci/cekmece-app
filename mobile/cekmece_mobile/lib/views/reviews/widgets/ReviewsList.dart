@@ -31,7 +31,7 @@ class _ReviewsListState extends State<ReviewsList> {
 
       var response = await http.delete(
           Uri.parse(
-              "http://${localIPAddress}:5000/cars/${widget.carId}/reviews/$reviewId"),
+              "${dotenv.env['CLIENT_URL']}/cars/${widget.carId}/reviews/$reviewId"),
           headers: <String, String>{
             "Accept": "application/json",
             "Content-Type": "charset=UTF-8",

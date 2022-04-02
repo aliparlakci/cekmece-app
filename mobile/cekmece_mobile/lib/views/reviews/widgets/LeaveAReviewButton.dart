@@ -2,6 +2,7 @@ import 'package:cekmece_mobile/views/reviews/NewReviewView.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import '../../../constants/font_constants.dart';
+import '../../../widgets/showSnackBar.dart';
 
 class LeaveAReviewButton extends StatelessWidget {
   const LeaveAReviewButton({Key? key, required this.carId}) : super(key: key);
@@ -14,7 +15,10 @@ class LeaveAReviewButton extends StatelessWidget {
         onPressed: () {
           pushNewScreen(
             context,
-            screen: NewReviewView(carId: carId),
+            screen: NewReviewView(carId: carId, onSuccess: () {
+              showSnackBar(
+              context: context, message: "Review submitted successfully.");
+            }),
             withNavBar: false,
             pageTransitionAnimation: PageTransitionAnimation.cupertino,
           );

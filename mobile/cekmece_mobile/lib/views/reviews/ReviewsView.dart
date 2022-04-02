@@ -1,12 +1,13 @@
 import 'dart:convert';
 import 'package:cekmece_mobile/constants/font_constants.dart';
 import 'package:cekmece_mobile/models/review/ReviewClass.dart';
-import 'package:cekmece_mobile/views/misc/loadingView.dart';
+import 'package:cekmece_mobile/views/reviews/widgets/LoadingScreen.dart';
 import 'package:cekmece_mobile/views/reviews/widgets/ReviewsList.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import '../misc/loadingOverlay.dart';
 
@@ -33,7 +34,7 @@ class _ReviewsViewState extends State<ReviewsView> {
   Future getReviewsByCar(carId) async {
     try {
       var response = await http.get(
-          Uri.parse("http://${localIPAddress}:5000/cars/$carId/reviews"),
+          Uri.parse("${dotenv.env['CLIENT_URL']}/cars/$carId/reviews"),
           headers: <String, String>{
             "Accept": "application/json",
             "Content-Type": "charset=UTF-8",
@@ -44,6 +45,8 @@ class _ReviewsViewState extends State<ReviewsView> {
         reviews = (jsonDecode(response.body) as List)
             .map((jsonObj) => ReviewClass.fromJson(jsonObj))
             .toList();
+      } else {
+        return Future.error(Error());
       }
     } catch (e) {
       return Future.error(e.toString());
@@ -61,7 +64,7 @@ class _ReviewsViewState extends State<ReviewsView> {
         builder: (BuildContext context, snapshot) {
           Widget child;
           if (snapshot.connectionState == ConnectionState.waiting) {
-            child = LoadingView();
+            child = LoadingScreen();
           } else if (snapshot.hasError) {
             child = Column(
               mainAxisAlignment: MainAxisAlignment.center,

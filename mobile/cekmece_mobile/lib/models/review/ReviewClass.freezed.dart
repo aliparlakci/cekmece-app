@@ -25,15 +25,17 @@ class _$ReviewClassTearOff {
   _ReviewClass call(
       {required int id,
       required int rating,
-      required String comment,
+      String? comment,
       required DateTime createdDate,
-      bool? isApproved}) {
+      required bool isApproved,
+      required Map<dynamic, dynamic> user}) {
     return _ReviewClass(
       id: id,
       rating: rating,
       comment: comment,
       createdDate: createdDate,
       isApproved: isApproved,
+      user: user,
     );
   }
 
@@ -49,9 +51,10 @@ const $ReviewClass = _$ReviewClassTearOff();
 mixin _$ReviewClass {
   int get id => throw _privateConstructorUsedError;
   int get rating => throw _privateConstructorUsedError;
-  String get comment => throw _privateConstructorUsedError;
+  String? get comment => throw _privateConstructorUsedError;
   DateTime get createdDate => throw _privateConstructorUsedError;
-  bool? get isApproved => throw _privateConstructorUsedError;
+  bool get isApproved => throw _privateConstructorUsedError;
+  Map<dynamic, dynamic> get user => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -67,9 +70,10 @@ abstract class $ReviewClassCopyWith<$Res> {
   $Res call(
       {int id,
       int rating,
-      String comment,
+      String? comment,
       DateTime createdDate,
-      bool? isApproved});
+      bool isApproved,
+      Map<dynamic, dynamic> user});
 }
 
 /// @nodoc
@@ -87,6 +91,7 @@ class _$ReviewClassCopyWithImpl<$Res> implements $ReviewClassCopyWith<$Res> {
     Object? comment = freezed,
     Object? createdDate = freezed,
     Object? isApproved = freezed,
+    Object? user = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed
@@ -100,7 +105,7 @@ class _$ReviewClassCopyWithImpl<$Res> implements $ReviewClassCopyWith<$Res> {
       comment: comment == freezed
           ? _value.comment
           : comment // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       createdDate: createdDate == freezed
           ? _value.createdDate
           : createdDate // ignore: cast_nullable_to_non_nullable
@@ -108,7 +113,11 @@ class _$ReviewClassCopyWithImpl<$Res> implements $ReviewClassCopyWith<$Res> {
       isApproved: isApproved == freezed
           ? _value.isApproved
           : isApproved // ignore: cast_nullable_to_non_nullable
-              as bool?,
+              as bool,
+      user: user == freezed
+          ? _value.user
+          : user // ignore: cast_nullable_to_non_nullable
+              as Map<dynamic, dynamic>,
     ));
   }
 }
@@ -123,9 +132,10 @@ abstract class _$ReviewClassCopyWith<$Res>
   $Res call(
       {int id,
       int rating,
-      String comment,
+      String? comment,
       DateTime createdDate,
-      bool? isApproved});
+      bool isApproved,
+      Map<dynamic, dynamic> user});
 }
 
 /// @nodoc
@@ -145,6 +155,7 @@ class __$ReviewClassCopyWithImpl<$Res> extends _$ReviewClassCopyWithImpl<$Res>
     Object? comment = freezed,
     Object? createdDate = freezed,
     Object? isApproved = freezed,
+    Object? user = freezed,
   }) {
     return _then(_ReviewClass(
       id: id == freezed
@@ -158,7 +169,7 @@ class __$ReviewClassCopyWithImpl<$Res> extends _$ReviewClassCopyWithImpl<$Res>
       comment: comment == freezed
           ? _value.comment
           : comment // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       createdDate: createdDate == freezed
           ? _value.createdDate
           : createdDate // ignore: cast_nullable_to_non_nullable
@@ -166,7 +177,11 @@ class __$ReviewClassCopyWithImpl<$Res> extends _$ReviewClassCopyWithImpl<$Res>
       isApproved: isApproved == freezed
           ? _value.isApproved
           : isApproved // ignore: cast_nullable_to_non_nullable
-              as bool?,
+              as bool,
+      user: user == freezed
+          ? _value.user
+          : user // ignore: cast_nullable_to_non_nullable
+              as Map<dynamic, dynamic>,
     ));
   }
 }
@@ -177,9 +192,10 @@ class _$_ReviewClass implements _ReviewClass {
   const _$_ReviewClass(
       {required this.id,
       required this.rating,
-      required this.comment,
+      this.comment,
       required this.createdDate,
-      this.isApproved});
+      required this.isApproved,
+      required this.user});
 
   factory _$_ReviewClass.fromJson(Map<String, dynamic> json) =>
       _$$_ReviewClassFromJson(json);
@@ -189,15 +205,17 @@ class _$_ReviewClass implements _ReviewClass {
   @override
   final int rating;
   @override
-  final String comment;
+  final String? comment;
   @override
   final DateTime createdDate;
   @override
-  final bool? isApproved;
+  final bool isApproved;
+  @override
+  final Map<dynamic, dynamic> user;
 
   @override
   String toString() {
-    return 'ReviewClass(id: $id, rating: $rating, comment: $comment, createdDate: $createdDate, isApproved: $isApproved)';
+    return 'ReviewClass(id: $id, rating: $rating, comment: $comment, createdDate: $createdDate, isApproved: $isApproved, user: $user)';
   }
 
   @override
@@ -211,7 +229,8 @@ class _$_ReviewClass implements _ReviewClass {
             const DeepCollectionEquality()
                 .equals(other.createdDate, createdDate) &&
             const DeepCollectionEquality()
-                .equals(other.isApproved, isApproved));
+                .equals(other.isApproved, isApproved) &&
+            const DeepCollectionEquality().equals(other.user, user));
   }
 
   @override
@@ -221,7 +240,8 @@ class _$_ReviewClass implements _ReviewClass {
       const DeepCollectionEquality().hash(rating),
       const DeepCollectionEquality().hash(comment),
       const DeepCollectionEquality().hash(createdDate),
-      const DeepCollectionEquality().hash(isApproved));
+      const DeepCollectionEquality().hash(isApproved),
+      const DeepCollectionEquality().hash(user));
 
   @JsonKey(ignore: true)
   @override
@@ -238,9 +258,10 @@ abstract class _ReviewClass implements ReviewClass {
   const factory _ReviewClass(
       {required int id,
       required int rating,
-      required String comment,
+      String? comment,
       required DateTime createdDate,
-      bool? isApproved}) = _$_ReviewClass;
+      required bool isApproved,
+      required Map<dynamic, dynamic> user}) = _$_ReviewClass;
 
   factory _ReviewClass.fromJson(Map<String, dynamic> json) =
       _$_ReviewClass.fromJson;
@@ -250,11 +271,13 @@ abstract class _ReviewClass implements ReviewClass {
   @override
   int get rating;
   @override
-  String get comment;
+  String? get comment;
   @override
   DateTime get createdDate;
   @override
-  bool? get isApproved;
+  bool get isApproved;
+  @override
+  Map<dynamic, dynamic> get user;
   @override
   @JsonKey(ignore: true)
   _$ReviewClassCopyWith<_ReviewClass> get copyWith =>

@@ -23,6 +23,6 @@ export default class CategoryService {
     }
 
     async deleteCategory(id: number) {
-        return this.repository.createQueryBuilder().delete().from(Category).where("id = :id", { id })
+        return this.repository.createQueryBuilder().delete().from(Category).where("id = :id", { id }).execute()
     }
 }
