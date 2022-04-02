@@ -112,6 +112,13 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       emit(LoggedIn(user: localUser));
     });
 
-    on<UserUpdate>((event, emit) async {});
+    on<UserUpdate>((event, emit) async {
+      BlocProvider.of<LoadingBloc>(context)
+          .add(LoadingStart(loadingReason: "User fetch"));
+
+      await Future.delayed(Duration(milliseconds: 100));
+
+      BlocProvider.of<LoadingBloc>(context).add(LoadingEnd());
+    });
   }
 }

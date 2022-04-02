@@ -43,7 +43,7 @@ class AnonymousProfileView extends StatelessWidget {
                           .add(GoogleLoginButtonPressed());
                     }
                   },
-                  backgroundColor: secondaryColor,
+                  backgroundColor: Colors.black,
                 ),
               ],
             )

@@ -19,3 +19,7 @@ Color(0xFF73AEF5),
 const primaryColor = Color(0xFF5D8BF4);
 const secondaryColor = Color(0xFF051367);
 const neutralColor = Color(0xFFDFF6FF);
+
+
+/* navigation.dart */
+const bottomNavBarActiveColor = Colors.black;
