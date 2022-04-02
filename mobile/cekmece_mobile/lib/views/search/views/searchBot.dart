@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cekmece_mobile/constants/font_constants.dart';
+import 'package:cekmece_mobile/models/product/Product.dart';
 import 'package:cekmece_mobile/util/bloc/loadingBloc/loading_bloc.dart';
 import 'package:cekmece_mobile/views/productView/components/body.dart';
 import 'package:cekmece_mobile/views/productView/components/size.dart';
@@ -8,14 +9,19 @@ import 'package:cekmece_mobile/views/search/components/button.dart';
 import 'package:cekmece_mobile/views/search/search.dart';
 import 'package:cekmece_mobile/views/search/views/categoryPicker.dart';
 import 'package:cekmece_mobile/views/search/views/distributorSelect.dart';
+import 'package:cekmece_mobile/views/search/views/manualSearch.dart';
 import 'package:cekmece_mobile/views/search/views/pricePicker.dart';
+import 'package:cekmece_mobile/views/search/views/searchResults.dart';
+import 'package:cekmece_mobile/views/search/views/searchSummary.dart';
 import 'package:cekmece_mobile/views/search/views/yearPicker.dart';
 import 'package:cekmece_mobile/widgets/showSnackBar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 
@@ -27,6 +33,9 @@ class SearchBot extends StatefulWidget {
 }
 
 class _SearchBotState extends State<SearchBot> {
+  String localIPAddress = dotenv.env['LOCALADDRESS']!;
+  List<Product> results = [];
+
   Map<int, String> categories = {};
   Map<int, String> distributors = {};
 
@@ -52,12 +61,65 @@ class _SearchBotState extends State<SearchBot> {
     getData();
   }
 
+  /*
+Product(
+                    id: carData["id"],
+                    name: carData["name"],
+                    price: carData["price"],
+                    number: carData["number"],
+                    model: carData["model"],
+                    quantity: carData["quantity"],
+                    warranty: carData["warranty"],
+                    distributor: carData["distributor"],
+                    categories: carData["categories"]);
+  */
+
+  void searchCar() async {
+    results = [];
+    BlocProvider.of<LoadingBloc>(context)
+        .add(LoadingStart(loadingReason: "Car fetch"));
+    try {
+      final response =
+          await http.get(Uri.parse('http://${localIPAddress}:5000/cars/'));
+
+      if (response.statusCode == 200) {
+        for (Map<String, dynamic> carData in jsonDecode(response.body)) {
+          if (carData["distributor"]["name"] == chosenDistributorName) {
+            if ((minPrice != 0 && minPrice < carData["price"]) ||
+                minPrice == 0) {
+              if ((maxPrice != 0 && maxPrice > carData["price"]) ||
+                  maxPrice == 0) {
+                if ((minModel != 0 && minModel < carData["model"]) ||
+                    minModel == 0) {
+                  if ((maxModel != 0 && maxModel > carData["model"]) ||
+                      maxModel == 0) {
+                    Product car = Product.fromJson(carData);
+
+                    results.add(car);
+                  }
+                }
+              }
+            }
+          }
+        }
+      } else {
+        throw Exception('Failed to load product');
+      }
+
+      setState(() {});
+      BlocProvider.of<LoadingBloc>(context).add(LoadingEnd());
+    } catch (err) {
+      print(err);
+      BlocProvider.of<LoadingBloc>(context).add(LoadingEnd());
+    }
+  }
+
   void getData() async {
     BlocProvider.of<LoadingBloc>(context)
         .add(LoadingStart(loadingReason: "Distributor fetch"));
     try {
       final distributorsresponse = await http
-          .get(Uri.parse('http://192.168.10.103:5000/distributors'))
+          .get(Uri.parse('http://${localIPAddress}:5000/distributors'))
           .timeout(Duration(seconds: 10));
 
       if (distributorsresponse.statusCode == 200) {
@@ -69,7 +131,7 @@ class _SearchBotState extends State<SearchBot> {
       }
 
       final response = await http
-          .get(Uri.parse('http://192.168.10.103:5000/categories'))
+          .get(Uri.parse('http://${localIPAddress}:5000/categories'))
           .timeout(Duration(seconds: 10));
 
       if (response.statusCode == 200) {
@@ -143,7 +205,11 @@ class _SearchBotState extends State<SearchBot> {
     if (error) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          SizedBox(
+            width: double.infinity,
+          ),
           Text(
             "Oh no! Something went wrong.",
             style: appBarTextStyle,
@@ -195,10 +261,30 @@ class _SearchBotState extends State<SearchBot> {
                   minPrice: minPrice,
                   maxPrice: maxPrice,
                   minYear: minModel,
-                  maxYear: maxModel)
+                  maxYear: maxModel),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 110,
+                    ),
+                    Text(
+                      "Here are your results!",
+                      style: header.copyWith(fontSize: 30),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    SearchResults(
+                      results: results,
+                    ),
+                  ],
+                ),
+              )
             ],
           ),
-          curPage != 0
+          curPage != 0 && curPage != 5
               ? Align(
                   alignment: Alignment.bottomLeft,
                   child: GestureDetector(
@@ -224,6 +310,14 @@ class _SearchBotState extends State<SearchBot> {
                             context: context,
                             message:
                                 "Minimum price can not be higher than the maximum price!");
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text("AAAA", style: snackBarTextStyle),
+                            backgroundColor: !error
+                                ? Colors.green
+                                : Theme.of(context).errorColor,
+                          ),
+                        );
                       } else if (maxModel != 0 && minModel > maxModel) {
                         showSnackBar(
                             context: context,
@@ -249,7 +343,7 @@ class _SearchBotState extends State<SearchBot> {
                   child: Padding(
                     padding: const EdgeInsets.only(top: 40),
                     child: StepProgressIndicator(
-                      totalSteps: 5,
+                      totalSteps: 6,
                       currentStep: curPage + 1,
                       size: 48,
                       selectedColor: Colors.black,
@@ -277,7 +371,10 @@ class _SearchBotState extends State<SearchBot> {
                   alignment: Alignment.bottomRight,
                   child: GestureDetector(
                     onTap: () {
-                      ctrl.jumpTo(0);
+                      searchCar();
+                      ctrl.nextPage(
+                          duration: Duration(milliseconds: 500),
+                          curve: Curves.easeOut);
                     },
                     child: CategoryButton(
                       category: "Find me a new car!",
@@ -302,94 +399,26 @@ class _SearchBotState extends State<SearchBot> {
                     ),
                   ),
                 )
+              : Container(),
+          curPage == 5
+              ? Align(
+                  alignment: Alignment.bottomCenter,
+                  child: GestureDetector(
+                    onTap: () {
+                      ctrl.jumpTo(0);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 35),
+                      child: CategoryButton(
+                        category: "Start Over",
+                        id: 1,
+                      ),
+                    ),
+                  ),
+                )
               : Container()
         ],
       );
     }
-  }
-}
-
-class SearchSummary extends StatelessWidget {
-  NumberFormat numberFormat = NumberFormat.simpleCurrency(locale: "en-US");
-
-  int minYear, maxYear, minPrice, maxPrice;
-  String distributor, category;
-  SearchSummary(
-      {Key? key,
-      required this.distributor,
-      required this.category,
-      required this.minPrice,
-      required this.maxPrice,
-      required this.minYear,
-      required this.maxYear})
-      : super(key: key);
-
-  String processModel() {
-    if (minYear == 0 && maxYear == 0) {
-      return "Not specified";
-    } else if (minYear == 0) {
-      return "Up to ${maxYear}";
-    } else if (maxYear == 0) {
-      return "At least ${minYear}";
-    } else {
-      return "${minYear} - ${maxYear}";
-    }
-  }
-
-  String processPrice() {
-    if (minPrice == 0 && maxPrice == 0) {
-      return "Not specified";
-    } else if (minPrice == 0) {
-      return "Up to \$${maxPrice}";
-    } else if (maxPrice == 0) {
-      return "At least \$${minYear}";
-    } else {
-      return "Between \$${minPrice} - \$${maxPrice}";
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-      Expanded(
-        flex: 2,
-        child: Column(mainAxisAlignment: MainAxisAlignment.end, children: [
-          Icon(
-            Icons.check,
-            size: 180,
-          ),
-          Text(
-            "You are almost done!",
-            style: appBarTextStyle.copyWith(fontSize: 30),
-            textAlign: TextAlign.center,
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Text(
-            "Lets take a brief look at your selections",
-            style: appBarTextStyle.copyWith(fontSize: 20),
-            textAlign: TextAlign.center,
-          ),
-          SizedBox(
-            height: 20,
-          ),
-        ]),
-      ),
-      Expanded(
-        flex: 2,
-        child: SingleChildScrollView(
-          child: Column(children: [
-            CarSpecCard(left: "Distributor", right: distributor),
-            CarSpecCard(left: "Category", right: category),
-            CarSpecCard(left: "Price", right: processPrice()),
-            CarSpecCard(left: "Model", right: processModel()),
-            const SizedBox(
-              height: 15,
-            )
-          ]),
-        ),
-      )
-    ]);
   }
 }

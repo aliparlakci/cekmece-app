@@ -5,6 +5,7 @@ import 'package:cekmece_mobile/views/misc/loadingView.dart';
 import 'package:cekmece_mobile/views/reviews/widgets/ReviewsList.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 import '../misc/loadingOverlay.dart';
@@ -19,6 +20,8 @@ class ReviewsView extends StatefulWidget {
 
 class _ReviewsViewState extends State<ReviewsView> {
   List<ReviewClass> reviews = [];
+  String localIPAddress = dotenv.env['LOCALADDRESS']!;
+
   final LoadingOverlay _loadingOverlay = LoadingOverlay();
 
   @override
@@ -30,7 +33,7 @@ class _ReviewsViewState extends State<ReviewsView> {
   Future getReviewsByCar(carId) async {
     try {
       var response = await http.get(
-          Uri.parse("http://192.168.1.20:5000/cars/$carId/reviews"),
+          Uri.parse("http://${localIPAddress}:5000/cars/$carId/reviews"),
           headers: <String, String>{
             "Accept": "application/json",
             "Content-Type": "charset=UTF-8",
@@ -53,7 +56,6 @@ class _ReviewsViewState extends State<ReviewsView> {
       appBar: AppBar(
         title: const Text("Reviews"),
       ),
-
       body: FutureBuilder(
         future: getReviewsByCar(widget.carId),
         builder: (BuildContext context, snapshot) {
@@ -79,19 +81,19 @@ class _ReviewsViewState extends State<ReviewsView> {
             child = reviews.isNotEmpty
                 ? ReviewsList(reviews: reviews, carId: widget.carId)
                 : Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const Icon(CupertinoIcons.tray, size: 35),
-                const SizedBox(height: 10),
-                Center(
-                    child: Text(
-                        "There are no customer reviews for this item.",
-                        textAlign: TextAlign.center,
-                        style: errorTextStyle)),
-                const SizedBox(height: 50),
-              ],
-            );
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Icon(CupertinoIcons.tray, size: 35),
+                      const SizedBox(height: 10),
+                      Center(
+                          child: Text(
+                              "There are no customer reviews for this item.",
+                              textAlign: TextAlign.center,
+                              style: errorTextStyle)),
+                      const SizedBox(height: 50),
+                    ],
+                  );
           }
           return AnimatedSwitcher(
             duration: const Duration(milliseconds: 250),

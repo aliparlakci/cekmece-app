@@ -14,9 +14,9 @@ _$_Product _$$_ProductFromJson(Map<String, dynamic> json) => _$_Product(
       model: json['model'] as int,
       quantity: json['quantity'] as int,
       warranty: json['warranty'] as int,
-      distributor: json['distributor'],
+      distributor: json['distributor'] as Map<String, dynamic>,
       categories: (json['categories'] as List<dynamic>)
-          .map((e) => e as String)
+          .map((e) => e as Map<String, dynamic>)
           .toList(),
     );
 

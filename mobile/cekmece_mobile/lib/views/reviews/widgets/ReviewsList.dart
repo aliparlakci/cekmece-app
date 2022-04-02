@@ -4,11 +4,13 @@ import 'package:cekmece_mobile/widgets/linearProgressBar.dart';
 import 'package:cekmece_mobile/widgets/showSnackBar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'ReviewTile.dart';
 
 class ReviewsList extends StatefulWidget {
-  const ReviewsList({Key? key, required this.reviews, required this.carId}) : super(key: key);
+  const ReviewsList({Key? key, required this.reviews, required this.carId})
+      : super(key: key);
   final List<ReviewClass> reviews;
   final int carId;
 
@@ -17,6 +19,8 @@ class ReviewsList extends StatefulWidget {
 }
 
 class _ReviewsListState extends State<ReviewsList> {
+  String localIPAddress = dotenv.env['LOCALADDRESS']!;
+
   bool isLoading = false;
 
   Future deleteReview(reviewId, listIndex) async {
@@ -27,7 +31,7 @@ class _ReviewsListState extends State<ReviewsList> {
 
       var response = await http.delete(
           Uri.parse(
-              "http://192.168.1.20:5000/cars/${widget.carId}/reviews/$reviewId"),
+              "http://${localIPAddress}:5000/cars/${widget.carId}/reviews/$reviewId"),
           headers: <String, String>{
             "Accept": "application/json",
             "Content-Type": "charset=UTF-8",
@@ -69,8 +73,8 @@ class _ReviewsListState extends State<ReviewsList> {
             itemBuilder: (context, index) {
               return Column(
                 children: [
-                  ReviewTile.fromReviewClassWithDelete(
-                      widget.reviews[index], () async {
+                  ReviewTile.fromReviewClassWithDelete(widget.reviews[index],
+                      () async {
                     await deleteReview(widget.reviews[index].id, index);
                   }),
                   const Divider(

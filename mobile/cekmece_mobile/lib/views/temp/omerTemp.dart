@@ -8,6 +8,7 @@ import 'package:cekmece_mobile/util/blocProviders.dart';
 import 'package:cekmece_mobile/views/productView/details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:http/http.dart' as http;
 
@@ -26,17 +27,8 @@ class OmerTest extends StatefulWidget {
 */
 
 class _OmerTestState extends State<OmerTest> {
-  Product testProd = Product(
-    id: 1,
-    name: "test",
-    price: 123,
-    model: 1,
-    number: 111,
-    quantity: 2,
-    warranty: 2,
-    distributor: "distributor",
-    categories: [],
-  );
+  String localIPAddress = dotenv.env['LOCALADDRESS']!;
+
   TextEditingController textController = TextEditingController();
   int prodId = 1;
 
@@ -45,13 +37,12 @@ class _OmerTestState extends State<OmerTest> {
         .add(LoadingStart(loadingReason: "Car fetch"));
     try {
       final response =
-          await http.get(Uri.parse('http://192.168.10.103:5000/cars/2'));
+          await http.get(Uri.parse('http://${localIPAddress}:5000/cars/2'));
 
       if (response.statusCode == 200) {
         // If the server did return a 200 OK response,
         // then parse the JSON.
         Product car = Product.fromJson(jsonDecode(response.body));
-        print(car);
         pushNewScreen(
           context,
           screen: DetailsScreen(
