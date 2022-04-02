@@ -27,7 +27,7 @@ function addNewDistributor(distributorService: DistributorService): RequestHandl
     }
 }
 
-function getCategories(distributorService: DistributorService): RequestHandler {
+function getDistributors(distributorService: DistributorService): RequestHandler {
     return async function (req, res, next) {
         const categories = await distributorService.getAllCategories()
 
@@ -47,7 +47,7 @@ function distributorRouter() {
 
     const distributorService = new DistributorService()
 
-    router.get("/", getCategories(distributorService))
+    router.get("/", getDistributors(distributorService))
     router.post("/new", addNewDistributor(distributorService))
     router.post("/:distributorId/delete", deleteDistributor(distributorService))
 

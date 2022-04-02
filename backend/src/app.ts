@@ -1,4 +1,4 @@
-import express from "express"
+import express, { Router } from "express"
 import createError from "http-errors"
 import path from "path"
 import cookieParser from "cookie-parser"
@@ -25,9 +25,12 @@ async function main() {
     app.use(express.urlencoded({ extended: false }))
     app.use(cookieParser())
 
-    app.use("/cars", carRouter())
-    app.use("/categories", categoryRouter())
-    app.use("/distributors", distributorRouter())
+    const v1 = Router()
+    app.use("/api", v1)
+
+    v1.use("/cars", carRouter())
+    v1.use("/categories", categoryRouter())
+    v1.use("/distributors", distributorRouter())
 
     // catch 404 and forward to error handler
     app.use(function (req, res, next) {
