@@ -94,7 +94,6 @@ Product(
                   if ((maxModel != 0 && maxModel > carData["model"]) ||
                       maxModel == 0) {
                     Product car = Product.fromJson(carData);
-
                     results.add(car);
                   }
                 }

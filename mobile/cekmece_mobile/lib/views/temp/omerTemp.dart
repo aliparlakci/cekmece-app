@@ -77,30 +77,15 @@ pushNewScreen(
 
   @override
   Widget build(BuildContext context) {
-    return Stack(children: [
-      Container(
-        child: Center(
-          child: OutlinedButton(
-            onPressed: () {
-              getInfo();
-            },
-            child: Text("Go to mock product page"),
-          ),
+    return Container(
+      child: Center(
+        child: OutlinedButton(
+          onPressed: () {
+            getInfo();
+          },
+          child: Text("Go to mock product page"),
         ),
       ),
-      Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: AnimSearchBar(
-          width: 400,
-          autoFocus: true,
-          textController: textController,
-          onSuffixTap: () {
-            setState(() {
-              textController.clear();
-            });
-          },
-        ),
-      )
-    ]);
+    );
   }
 }
