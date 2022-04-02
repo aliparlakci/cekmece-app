@@ -262,26 +262,54 @@ Product(
                   maxPrice: maxPrice,
                   minYear: minModel,
                   maxYear: maxModel),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: 110,
-                    ),
-                    Text(
-                      "Here are your results!",
-                      style: header.copyWith(fontSize: 30),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    SearchResults(
-                      results: results,
-                    ),
-                  ],
-                ),
-              )
+              results.isEmpty
+                  ? Container(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                      child: Column(
+                        children: [
+                          const SizedBox(
+                            height: 150,
+                          ),
+                          const Icon(
+                            Icons.sentiment_dissatisfied_outlined,
+                            size: 200,
+                          ),
+                          Text(
+                            "Oh no!",
+                            style: header,
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          Text(
+                            "We could not find any cars that fit your selection.\n\nPlease try searching with different parameters, or use manual search.\n\nWe are doing our best to provide more cars in the future!",
+                            style: header2.copyWith(color: Colors.black),
+                            textAlign: TextAlign.center,
+                          )
+                        ],
+                      ),
+                    )
+                  : Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 110,
+                          ),
+                          Text(
+                            "Here are your results!",
+                            style: header.copyWith(fontSize: 30),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          SearchResults(
+                            results: results,
+                          ),
+                        ],
+                      ),
+                    )
             ],
           ),
           curPage != 0 && curPage != 5

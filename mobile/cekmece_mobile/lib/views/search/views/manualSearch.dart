@@ -78,24 +78,18 @@ class _ManualSearchState extends State<ManualSearch> {
             padding: EdgeInsets.all(10),
             child: Column(
               children: [
-                Expanded(
-                  flex: 2,
-                  child: CupertinoSearchTextField(
-                    controller: _textController,
-                    onSubmitted: (query) => makeSearch(query),
-                  ),
-                ),
                 SizedBox(
                   height: 15,
                 ),
                 Expanded(
                   flex: 2,
-                  child: Container(
-                    color: Colors.amber,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: CupertinoSearchTextField(
+                      controller: _textController,
+                      onSubmitted: (query) => makeSearch(query),
+                    ),
                   ),
-                ),
-                SizedBox(
-                  height: 5,
                 ),
                 Expanded(
                   flex: 20,
