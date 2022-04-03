@@ -45,7 +45,7 @@ async function main() {
         res.json(err)
     })
 
-    app.listen(5001, () => {
+    app.listen(5000, () => {
         console.log("Listening on http://localhost:5000")
     })
 }
