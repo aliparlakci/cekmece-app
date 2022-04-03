@@ -135,7 +135,6 @@ function addNewReview(reviewService: ReviewService): RequestHandler {
             next(createError(400))
             return
         }
-
         let review
         try {
             review = await reviewService.newReview({
@@ -150,6 +149,19 @@ function addNewReview(reviewService: ReviewService): RequestHandler {
         }
 
         res.status(200).json(review)
+    }
+}
+
+function searchCar(carService: CarService): RequestHandler {
+    return async function (req, res, next) {
+        const query = req.query.q
+        if (!query) {
+            next(createError(400))
+            return
+        }
+
+        const cars = await carService.searchCars(query[0])
+        res.status(StatusCodes.OK).json(cars)
     }
 }
 
@@ -168,21 +180,14 @@ function deleteReview(reviewService: ReviewService): RequestHandler {
 }
 
 function getCarsByCategory(carService: CarService) {
-
     return async function (req, res, next) {
-
         const categoryId = parseInt(req.params.categoryId)
 
         const cars = await carService.getCarsByCategory(categoryId)
 
-
         res.status(200).json(cars)
-
     }
-
 }
-
-
 
 function carRouter() {
     const router = Router()
@@ -201,7 +206,7 @@ function carRouter() {
     router.post("/:carId/category/:categoryId", assignNewCategory(carService))
     router.delete("/:carId/category/:categoryId", removeCategory(carService))
     router.get("/category/:categoryId", getCarsByCategory(carService))
-
+    router.get("/search")
 
     /* CODE REVIEW */
     router.get("/:carId/reviews", getReviews(reviewService))

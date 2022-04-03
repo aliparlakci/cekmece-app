@@ -14,6 +14,8 @@ function addNewCategory(categoryService: CategoryService): RequestHandler {
         if (error) {
             next(createError(StatusCodes.BAD_REQUEST))
         }
+        
+        // batu
 
         let id
         try {

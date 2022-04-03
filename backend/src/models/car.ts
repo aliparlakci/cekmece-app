@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, ManyToOne, OneToMany } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, ManyToOne, OneToMany, Index } from "typeorm"
 import { Category } from "./category"
 import { Distributor } from "./distributor"
 import { Review } from "./review"
@@ -8,6 +8,7 @@ export class Car {
     @PrimaryGeneratedColumn()
     id: number
 
+    @Index({ fulltext: true })
     @Column()
     name: string
 
@@ -26,6 +27,7 @@ export class Car {
     @Column()
     warranty: number
 
+    @Index({ fulltext: true })
     @ManyToOne(() => Distributor, (distributor) => distributor.cars, { cascade: true })
     distributor: Distributor
 
