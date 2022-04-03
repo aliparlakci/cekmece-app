@@ -66,4 +66,11 @@ export default class CarService {
 
         this.repository.createQueryBuilder().relation(Car, "categories").of(car).remove(categoryId)
     }
+
+    async searchCars(query: string) {
+        return this.repository.createQueryBuilder().select()
+          .where(`MATCH(name) AGAINST ('${query}' IN NATURAL LANGUAGE MODE)`)
+          .getMany();
+    }
 }
+

@@ -43,15 +43,15 @@ function addNewCar(carService: CarService): RequestHandler {
         })
         const { error } = carFormat.validate(req.body)
         if (error) {
-            next(createError(400))
+            res.status(500).json(error)
             return
         }
 
         let car
         try {
             car = await carService.insertCar(req.body)
-        } catch (err) {
-            next(createError(404))
+        } catch (error) {
+            res.status(500).json(error)
             return
         }
 
@@ -135,7 +135,6 @@ function addNewReview(reviewService: ReviewService): RequestHandler {
             next(createError(400))
             return
         }
-
         let review
         try {
             review = await reviewService.newReview({
@@ -150,6 +149,24 @@ function addNewReview(reviewService: ReviewService): RequestHandler {
         }
 
         res.status(200).json(review)
+    }
+}
+
+function searchCar(carService: CarService): RequestHandler {
+    return async function (req, res, next) {
+        const query = req.query.q || ""
+        if (!query) {
+            next(createError(400))
+            return
+        }
+
+        try {
+            const response = await carService.searchCars(query as string)
+            res.status(StatusCodes.OK).json(response)
+            return
+        } catch (error) {
+            res.status(500).json("error")
+        }
     }
 }
 
@@ -168,21 +185,14 @@ function deleteReview(reviewService: ReviewService): RequestHandler {
 }
 
 function getCarsByCategory(carService: CarService) {
-
     return async function (req, res, next) {
-
         const categoryId = parseInt(req.params.categoryId)
 
         const cars = await carService.getCarsByCategory(categoryId)
 
-
         res.status(200).json(cars)
-
     }
-
 }
-
-
 
 function carRouter() {
     const router = Router()
@@ -195,13 +205,13 @@ function carRouter() {
     const reviewService = new ReviewService(carService, userService)
 
     router.get("/", getAllCars(carService))
+    router.get("/search", searchCar(carService))
     router.get("/:carId", getCar(carService, reviewService))
     router.post("/new", addNewCar(carService))
     router.post("/update", updateNewCar(carService))
     router.post("/:carId/category/:categoryId", assignNewCategory(carService))
     router.delete("/:carId/category/:categoryId", removeCategory(carService))
     router.get("/category/:categoryId", getCarsByCategory(carService))
-
 
     /* CODE REVIEW */
     router.get("/:carId/reviews", getReviews(reviewService))
