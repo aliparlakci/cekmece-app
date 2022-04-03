@@ -43,15 +43,15 @@ function addNewCar(carService: CarService): RequestHandler {
         })
         const { error } = carFormat.validate(req.body)
         if (error) {
-            next(createError(400))
+            res.status(500).json(error)
             return
         }
 
         let car
         try {
             car = await carService.insertCar(req.body)
-        } catch (err) {
-            next(createError(404))
+        } catch (error) {
+            res.status(500).json(error)
             return
         }
 
@@ -154,14 +154,19 @@ function addNewReview(reviewService: ReviewService): RequestHandler {
 
 function searchCar(carService: CarService): RequestHandler {
     return async function (req, res, next) {
-        const query = req.query.q
+        const query = req.query.q || ""
         if (!query) {
             next(createError(400))
             return
         }
 
-        const cars = await carService.searchCars(query[0])
-        res.status(StatusCodes.OK).json(cars)
+        try {
+            const response = await carService.searchCars(query as string)
+            res.status(StatusCodes.OK).json(response)
+            return
+        } catch (error) {
+            res.status(500).json("error")
+        }
     }
 }
 
@@ -200,13 +205,13 @@ function carRouter() {
     const reviewService = new ReviewService(carService, userService)
 
     router.get("/", getAllCars(carService))
+    router.get("/search", searchCar(carService))
     router.get("/:carId", getCar(carService, reviewService))
     router.post("/new", addNewCar(carService))
     router.post("/update", updateNewCar(carService))
     router.post("/:carId/category/:categoryId", assignNewCategory(carService))
     router.delete("/:carId/category/:categoryId", removeCategory(carService))
     router.get("/category/:categoryId", getCarsByCategory(carService))
-    router.get("/search")
 
     /* CODE REVIEW */
     router.get("/:carId/reviews", getReviews(reviewService))
