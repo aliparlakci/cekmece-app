@@ -5,7 +5,7 @@ const db = new DataSource({
     host: "localhost",
     port: 3306,
     username: "root",
-    password: "45404540",
+    password: "123456",
     database: "cekmece",
     entities: ["src/models/*.ts"],
     migrations: ["src/migrations/*.ts"],

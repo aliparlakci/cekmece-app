@@ -27,7 +27,6 @@ export class Car {
     @Column()
     warranty: number
 
-    @Index({ fulltext: true })
     @ManyToOne(() => Distributor, (distributor) => distributor.cars, { cascade: true })
     distributor: Distributor
 
