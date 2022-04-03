@@ -10,7 +10,7 @@
     "start": "node ./dist/app.js",
     "predev": "npm run migrate",
     "dev": "nodemon --exec npx ts-node ./src/app.ts",
-    "migrate": "npm run typeorm migration:run -- -d .\\src\\dataSource.js",
+    "migrate": "npm run typeorm migration:run -- -d ./src/dataSource.ts",
     "lint": "eslint .",
     "typeorm": "typeorm-ts-node-esm"
   },
