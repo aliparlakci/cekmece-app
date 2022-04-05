@@ -21,7 +21,6 @@ class ReviewsView extends StatefulWidget {
 
 class _ReviewsViewState extends State<ReviewsView> {
   List<ReviewClass> reviews = [];
-  String localIPAddress = dotenv.env['LOCALADDRESS']!;
 
   final LoadingOverlay _loadingOverlay = LoadingOverlay();
 

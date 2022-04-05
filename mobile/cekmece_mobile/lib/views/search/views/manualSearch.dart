@@ -26,7 +26,7 @@ class ManualSearch extends StatefulWidget {
 
 class _ManualSearchState extends State<ManualSearch> {
   late TextEditingController _textController;
-  String localIPAddress = dotenv.env['LOCALADDRESS']!;
+  String clientURL = dotenv.env['CLIENT_URL']!;
   List<Product> results = [];
 
   void getInfo(String query) async {
@@ -35,7 +35,7 @@ class _ManualSearchState extends State<ManualSearch> {
         .add(LoadingStart(loadingReason: "Car fetch"));
     try {
       final response =
-          await http.get(Uri.parse('http://${localIPAddress}:5000/cars/'));
+          await http.get(Uri.parse('$clientURL/cars/'));
 
       if (response.statusCode == 200) {
         for (Map<String, dynamic> carData in jsonDecode(response.body)) {
