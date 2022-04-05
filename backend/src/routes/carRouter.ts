@@ -3,14 +3,28 @@ import createError from "http-errors"
 import { StatusCodes } from "http-status-codes"
 import Joi from "joi"
 
-import CarService from "../services/carService"
+import CarService, { FilterOptions } from "../services/carService"
 import CategoryService from "../services/categoryService"
 import ReviewService from "../services/reviewService"
 import UserService from "../services/userService"
 
-function getAllCars(carService: CarService) {
+function getAllCars(carService: CarService): RequestHandler {
     return async function (req, res, next) {
-        const cars = await carService.getAllCars()
+        const sort = req.query.sort as "ASC" | "DESC" | undefined
+        const model = req.query.model as string | undefined
+
+        const options: FilterOptions = {
+            sortBy: sort || "DESC"
+        }
+
+        if (model) {
+            options.model = {
+                type: "MORE",
+                value: parseInt(model as string)
+            }
+        }
+
+        const cars = await carService.filterCars(options)
 
         res.status(200).json(cars)
     }

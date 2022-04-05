@@ -31,9 +31,9 @@ export class Car {
     @ManyToOne(() => Distributor, (distributor) => distributor.cars, { cascade: true })
     distributor: Distributor
 
-    @ManyToMany(() => Category, { cascade: true })
+    @ManyToOne(() => Category, { cascade: true })
     @JoinTable()
-    categories: Category[]
+    category: Category
 
     @OneToMany(type => CartEntity, cart => cart.id)
     @JoinColumn()
@@ -41,4 +41,7 @@ export class Car {
 
     @OneToMany(() => Review, (review) => review.car)
     reviews: Review[]
+
+    @Column({ default: 0 })
+    unitsSold: number
 }

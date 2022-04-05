@@ -1,9 +1,21 @@
-import { Repository } from "typeorm"
+import { FindOptionsWhere, LessThan, LessThanOrEqual, MoreThan, MoreThanOrEqual, Repository } from "typeorm"
 
 import db from "../dataSource"
 import { Car } from "../models/car"
-import CategoryService from "./categoryService"
 import { Review } from "../models/review"
+import CategoryService from "./categoryService"
+
+export interface FilterOptions {
+    price?: {
+        value: number,
+        type: "MORE" | "LESS"
+    },
+    model?: {
+        value: number,
+        type: "MORE" | "LESS"
+    },
+    sortBy: "ASC" | "DESC"
+}
 
 export default class CarService {
     private repository: Repository<Car>
@@ -21,17 +33,50 @@ export default class CarService {
             where: { id: carId },
             relations: {
                 distributor: true,
-                categories: true,
+                category: true,
             },
         })
     }
 
-    async getAllCars() {
+    async filterCars(options: FilterOptions) {
+        let where: FindOptionsWhere<Car> = {}
+
+        if (options.price) {
+            if (options.price.type == "LESS")
+                where.price = LessThanOrEqual(options.price.value)
+            else
+                where.price = MoreThanOrEqual(options.price.value)
+        }
+
+        if (options.model) {
+            where.model = MoreThanOrEqual(options.model.value)
+        }
+
         return this.repository.find({
             relations: {
-                categories: true,
+                category: true,
                 distributor: true,
             },
+            where: where,
+            order: {
+                price: {
+                    direction: options.sortBy as "ASC" | "DESC" | "asc" | "desc" | undefined
+                }
+            }
+        })
+    }
+
+    async getAllCars(sortBy: string) {
+        return this.repository.find({
+            relations: {
+                category: true,
+                distributor: true,
+            },
+            order: {
+                price: {
+                    direction: sortBy as "ASC" | "DESC" | "asc" | "desc" | undefined
+                }
+            }
         })
     }
 
@@ -42,7 +87,7 @@ export default class CarService {
         return this.repository.find({
             join: { alias: "categories" },
             where: {
-                categories: category,
+                category: category,
             },
         })
     }
