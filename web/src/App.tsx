@@ -5,6 +5,7 @@ import AdminPage from "./pages/admin/AdminPage"
 import HomePage from "./pages/home/HomePage"
 
 import "./App.css"
+import CarDetailPage from "./pages/carDetail/CarDetailPage"
 
 function App() {
     return (
@@ -16,6 +17,9 @@ function App() {
                     </Route>
                     <Route exact path="/">
                         <HomePage />
+                    </Route>
+                    <Route path="/cars/:carId">
+                        <CarDetailPage />
                     </Route>
                 </Switch>
             </Router>
