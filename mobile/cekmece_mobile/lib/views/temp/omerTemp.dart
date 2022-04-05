@@ -27,7 +27,7 @@ class OmerTest extends StatefulWidget {
 */
 
 class _OmerTestState extends State<OmerTest> {
-  String localIPAddress = dotenv.env['LOCALADDRESS']!;
+  String clientURL = dotenv.env['CLIENT_URL']!;
 
   TextEditingController textController = TextEditingController();
   int prodId = 1;
@@ -37,7 +37,7 @@ class _OmerTestState extends State<OmerTest> {
         .add(LoadingStart(loadingReason: "Car fetch"));
     try {
       final response =
-          await http.get(Uri.parse('http://${localIPAddress}:5000/cars/2'));
+          await http.get(Uri.parse('$clientURL/cars/1'));
 
       if (response.statusCode == 200) {
         // If the server did return a 200 OK response,

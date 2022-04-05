@@ -19,8 +19,6 @@ class ReviewsList extends StatefulWidget {
 }
 
 class _ReviewsListState extends State<ReviewsList> {
-  String localIPAddress = dotenv.env['LOCALADDRESS']!;
-
   bool isLoading = false;
 
   Future deleteReview(reviewId, listIndex) async {
