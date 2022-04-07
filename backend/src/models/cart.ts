@@ -1,16 +1,24 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, OneToOne, JoinColumn } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, OneToOne, JoinColumn, ManyToOne } from "typeorm"
 import { Car } from "./car"
 import { User } from "./user"
 
 @Entity()
-export class Cart {
-    @PrimaryGeneratedColumn("uuid")
+export class CartEntity  {
+    @PrimaryGeneratedColumn('uuid')
     id: number
 
-    @OneToOne(() => User, (user) => user.cart, { cascade: true, onDelete: "CASCADE" })
-    user: User
-
-    @OneToMany(() => Car, (car) => car.id)
+    @Column()
+    total: number
+ 
+    @Column()
+    quantity: number
+   
+   
+    @ManyToOne(type => Car)
     @JoinColumn()
-    products: Car[]
+    item: Car
+ 
+    @ManyToOne(type => User, user=>user.id)
+    @JoinColumn()
+    user: User
 }
