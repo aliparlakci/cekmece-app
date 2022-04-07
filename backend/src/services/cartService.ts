@@ -52,6 +52,11 @@ export default class CartService {
             return 404 
     }
 
+    async removeFromCart(cartEntityId: String) {
+        console.log(cartEntityId)
+            return  this.cartRepo.createQueryBuilder().delete().from(CartEntity).where("id = :id", { id:cartEntityId }).execute()
+    }
+
     async getItemsInCard(user: string): Promise<CartEntity[]> {
         const userCart = await this.cartRepo.find({ relations: ["item",'user'] });
         return (await userCart).filter(item => item.user.id === user)

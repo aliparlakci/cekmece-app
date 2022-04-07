@@ -35,6 +35,25 @@ function addToCart(userService: UserService, cartService: CartService) {
     }
 }
 
+
+function removeFromCart(userService: UserService, cartService: CartService) {
+    return async function (req, res, next) {
+        const cartEntityId = req.params.cartEntityId
+        console.log(cartEntityId)
+
+
+        const removeResult = await cartService.removeFromCart(cartEntityId);
+
+        if(removeResult.affected !== 0){
+            res.status(200).json({message:"Success"})
+        }
+        else{
+            res.status(404).json({message:"Error"})
+        }
+    
+    }
+}
+
 function cartRouter() {
     const router = Router()
 
@@ -45,6 +64,8 @@ function cartRouter() {
 
     router.get("/:userId", getCart(userService,cartService ))
     router.post("/:userId/add/:carId", addToCart(userService,cartService ))
+    router.post("/remove/:cartEntityId", removeFromCart(userService,cartService ))
+
 
 
     return router
