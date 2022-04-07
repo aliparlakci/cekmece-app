@@ -40,8 +40,6 @@ export default class CartService {
 
                     const quantity = (cart[0].quantity += 1);
                     const total = cart[0].total * quantity;
-                    cart[0].quantity = (cart[0].quantity += 1);
-                    cart[0].total= cart[0].total * quantity;
 
                     await this.cartRepo.update(cart[0].id, { quantity, total })
      
