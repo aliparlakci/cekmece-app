@@ -9,7 +9,7 @@ import carRouter from "./routes/carRouter"
 import db from "./dataSource"
 import categoryRouter from "./routes/categoryRouter"
 import distributorRouter from "./routes/distributorRouter"
-import cartRouter from "./routes/cartRoutes"
+import cartRouter from "./routes/cartRouter"
 
 async function main() {
     try {

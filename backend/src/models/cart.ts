@@ -5,12 +5,12 @@ import { User } from "./user"
 @Entity()
 export class Cart {
     @PrimaryGeneratedColumn("uuid")
-    id: string
+    id: number
 
     @OneToOne(() => User, (user) => user.cart, { cascade: true, onDelete: "CASCADE" })
-    @JoinColumn()
     user: User
 
     @OneToMany(() => Car, (car) => car.id)
+    @JoinColumn()
     products: Car[]
 }

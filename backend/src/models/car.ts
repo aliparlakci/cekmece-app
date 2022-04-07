@@ -1,4 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, ManyToOne, OneToMany, Index } from "typeorm"
+import { Cart } from "./cart"
 import { Category } from "./category"
 import { Distributor } from "./distributor"
 import { Review } from "./review"
@@ -33,6 +34,9 @@ export class Car {
     @ManyToMany(() => Category, { cascade: true })
     @JoinTable()
     categories: Category[]
+
+    @ManyToMany(() => Cart,cart=>cart.products)
+    carts: Cart[]
 
     @OneToMany(() => Review, (review) => review.car)
     reviews: Review[]

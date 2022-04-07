@@ -13,8 +13,8 @@ export class User {
     @OneToMany(() => Review, (review) => review.user)
     reviews: Review[]
 
-    @OneToOne(() => Cart)
-    @JoinColumn()
+    @OneToOne(() => Cart, cart=>cart.user)
+    @JoinColumn({name:"cartId"})
     cart: Cart
 
 }
