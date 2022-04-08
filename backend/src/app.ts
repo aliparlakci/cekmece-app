@@ -9,6 +9,7 @@ import carRouter from "./routes/carRouter"
 import db from "./dataSource"
 import categoryRouter from "./routes/categoryRouter"
 import distributorRouter from "./routes/distributorRouter"
+import cartRouter from "./routes/cartRouter"
 
 async function main() {
     try {
@@ -31,6 +32,8 @@ async function main() {
     v1.use("/cars", carRouter())
     v1.use("/categories", categoryRouter())
     v1.use("/distributors", distributorRouter())
+    v1.use("/cart", cartRouter())
+
 
     // catch 404 and forward to error handler
     app.use(function (req, res, next) {

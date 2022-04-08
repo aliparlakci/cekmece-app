@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, OneToOne, JoinColumn } from "typeorm"
+import { CartEntity } from "./cart"
 import { Review } from "./review"
 
 @Entity()
@@ -11,4 +12,9 @@ export class User {
 
     @OneToMany(() => Review, (review) => review.user)
     reviews: Review[]
+
+    @OneToMany(type => CartEntity, cart => cart.id)
+    @JoinColumn()
+    cart: CartEntity[]
+
 }
