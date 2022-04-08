@@ -26,7 +26,7 @@ class _$UserClassTearOff {
       {String? displayName,
       required bool isAnonymous,
       required String uid,
-      List<String>? cart,
+      required List<CartItem> cart,
       String? email,
       String? photoUrl}) {
     return _UserClass(
@@ -52,7 +52,7 @@ mixin _$UserClass {
   String? get displayName => throw _privateConstructorUsedError;
   bool get isAnonymous => throw _privateConstructorUsedError;
   String get uid => throw _privateConstructorUsedError;
-  List<String>? get cart => throw _privateConstructorUsedError;
+  List<CartItem> get cart => throw _privateConstructorUsedError;
   String? get email => throw _privateConstructorUsedError;
   String? get photoUrl => throw _privateConstructorUsedError;
 
@@ -70,7 +70,7 @@ abstract class $UserClassCopyWith<$Res> {
       {String? displayName,
       bool isAnonymous,
       String uid,
-      List<String>? cart,
+      List<CartItem> cart,
       String? email,
       String? photoUrl});
 }
@@ -108,7 +108,7 @@ class _$UserClassCopyWithImpl<$Res> implements $UserClassCopyWith<$Res> {
       cart: cart == freezed
           ? _value.cart
           : cart // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
+              as List<CartItem>,
       email: email == freezed
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
@@ -131,7 +131,7 @@ abstract class _$UserClassCopyWith<$Res> implements $UserClassCopyWith<$Res> {
       {String? displayName,
       bool isAnonymous,
       String uid,
-      List<String>? cart,
+      List<CartItem> cart,
       String? email,
       String? photoUrl});
 }
@@ -170,7 +170,7 @@ class __$UserClassCopyWithImpl<$Res> extends _$UserClassCopyWithImpl<$Res>
       cart: cart == freezed
           ? _value.cart
           : cart // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
+              as List<CartItem>,
       email: email == freezed
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
@@ -190,7 +190,7 @@ class _$_UserClass implements _UserClass {
       {this.displayName,
       required this.isAnonymous,
       required this.uid,
-      this.cart,
+      required this.cart,
       this.email,
       this.photoUrl});
 
@@ -204,7 +204,7 @@ class _$_UserClass implements _UserClass {
   @override
   final String uid;
   @override
-  final List<String>? cart;
+  final List<CartItem> cart;
   @override
   final String? email;
   @override
@@ -256,7 +256,7 @@ abstract class _UserClass implements UserClass {
       {String? displayName,
       required bool isAnonymous,
       required String uid,
-      List<String>? cart,
+      required List<CartItem> cart,
       String? email,
       String? photoUrl}) = _$_UserClass;
 
@@ -270,7 +270,7 @@ abstract class _UserClass implements UserClass {
   @override
   String get uid;
   @override
-  List<String>? get cart;
+  List<CartItem> get cart;
   @override
   String? get email;
   @override
