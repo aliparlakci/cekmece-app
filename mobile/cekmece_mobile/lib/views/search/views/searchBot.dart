@@ -33,7 +33,7 @@ class SearchBot extends StatefulWidget {
 }
 
 class _SearchBotState extends State<SearchBot> {
-  String localIPAddress = dotenv.env['LOCALADDRESS']!;
+  String clientURL = dotenv.env['CLIENT_URL']!;
   List<Product> results = [];
 
   Map<int, String> categories = {};
@@ -79,8 +79,7 @@ Product(
     BlocProvider.of<LoadingBloc>(context)
         .add(LoadingStart(loadingReason: "Car fetch"));
     try {
-      final response =
-          await http.get(Uri.parse('http://${localIPAddress}:5000/api/cars/'));
+      final response = await http.get(Uri.parse('$clientURL/api/cars/'));
 
       if (response.statusCode == 200) {
         for (Map<String, dynamic> carData in jsonDecode(response.body)) {
@@ -118,7 +117,7 @@ Product(
         .add(LoadingStart(loadingReason: "Distributor fetch"));
     try {
       final distributorsresponse = await http
-          .get(Uri.parse('http://${localIPAddress}:5000/api/distributors'))
+          .get(Uri.parse('$clientURL/api/distributors'))
           .timeout(Duration(seconds: 10));
 
       if (distributorsresponse.statusCode == 200) {
@@ -130,7 +129,7 @@ Product(
       }
 
       final response = await http
-          .get(Uri.parse('http://${localIPAddress}:5000/api/categories'))
+          .get(Uri.parse('$clientURL/api/categories'))
           .timeout(Duration(seconds: 10));
 
       if (response.statusCode == 200) {
