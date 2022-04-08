@@ -4,12 +4,10 @@ import 'package:cekmece_mobile/models/cartItem/CartItem.dart';
 import 'package:cekmece_mobile/models/product/Product.dart';
 import 'package:cekmece_mobile/models/user/UserClass.dart';
 import 'package:cekmece_mobile/util/bloc/loadingBloc/loading_bloc.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -154,7 +152,12 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       BlocProvider.of<LoadingBloc>(context)
           .add(LoadingStart(loadingReason: "User fetch"));
 
-      await Future.delayed(Duration(milliseconds: 100));
+      final prefs = await SharedPreferences.getInstance();
+      final String? userId = prefs.getString('id');
+
+      if (userId != null) {
+        emit(LoggedIn(user: await updateUser(userId)));
+      }
 
       BlocProvider.of<LoadingBloc>(context).add(LoadingEnd());
     });

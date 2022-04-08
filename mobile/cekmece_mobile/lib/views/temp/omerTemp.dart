@@ -36,7 +36,7 @@ class _OmerTestState extends State<OmerTest> {
     BlocProvider.of<LoadingBloc>(context)
         .add(LoadingStart(loadingReason: "Car fetch"));
     try {
-      final response = await http.get(Uri.parse('$clientURL/api/cars/1'));
+      final response = await http.get(Uri.parse('$clientURL/api/cars/2'));
 
       if (response.statusCode == 200) {
         // If the server did return a 200 OK response,
