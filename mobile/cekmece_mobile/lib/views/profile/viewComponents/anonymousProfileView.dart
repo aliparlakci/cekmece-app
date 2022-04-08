@@ -20,7 +20,7 @@ class AnonymousProfileView extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Text(
-              "(actually anonymously logged in)\n\nYou are not logged in! In order to purchase an item, add to favories, and access many more features, please login or sign up. ",
+              "You are not logged in! In order to purchase an item, add to favories, and access many more features, please login or sign up. ",
               style: header2.copyWith(color: secondaryColor),
               textAlign: TextAlign.center,
             ),

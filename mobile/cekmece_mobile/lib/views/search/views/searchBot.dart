@@ -80,7 +80,7 @@ Product(
         .add(LoadingStart(loadingReason: "Car fetch"));
     try {
       final response =
-          await http.get(Uri.parse('$clientURL/cars/'));
+          await http.get(Uri.parse('http://${localIPAddress}:5000/api/cars/'));
 
       if (response.statusCode == 200) {
         for (Map<String, dynamic> carData in jsonDecode(response.body)) {
@@ -118,7 +118,7 @@ Product(
         .add(LoadingStart(loadingReason: "Distributor fetch"));
     try {
       final distributorsresponse = await http
-          .get(Uri.parse('$clientURL/distributors'))
+          .get(Uri.parse('http://${localIPAddress}:5000/api/distributors'))
           .timeout(Duration(seconds: 10));
 
       if (distributorsresponse.statusCode == 200) {
@@ -130,7 +130,7 @@ Product(
       }
 
       final response = await http
-          .get(Uri.parse('$clientURL/categories'))
+          .get(Uri.parse('http://${localIPAddress}:5000/api/categories'))
           .timeout(Duration(seconds: 10));
 
       if (response.statusCode == 200) {

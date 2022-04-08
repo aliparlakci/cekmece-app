@@ -50,6 +50,9 @@ class _BodyState extends State<Body> {
               left: "Distributor", right: widget.product.distributor["name"]),
           CarSpecCard(
               left: "Warranty", right: "${widget.product.warranty} years"),
+          CarSpecCard(
+              left: "Category",
+              right: "${widget.product.categories[0]["name"]}"),
           const SizedBox(
             height: 15,
           ),

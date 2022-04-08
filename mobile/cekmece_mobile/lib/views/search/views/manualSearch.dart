@@ -35,7 +35,7 @@ class _ManualSearchState extends State<ManualSearch> {
         .add(LoadingStart(loadingReason: "Car fetch"));
     try {
       final response =
-          await http.get(Uri.parse('$clientURL/cars/'));
+          await http.get(Uri.parse('http://${localIPAddress}:5000/api/cars/'));
 
       if (response.statusCode == 200) {
         for (Map<String, dynamic> carData in jsonDecode(response.body)) {
@@ -81,20 +81,14 @@ class _ManualSearchState extends State<ManualSearch> {
                 SizedBox(
                   height: 15,
                 ),
-                Expanded(
-                  flex: 2,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: CupertinoSearchTextField(
-                      controller: _textController,
-                      onSubmitted: (query) => makeSearch(query),
-                    ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: CupertinoSearchTextField(
+                    controller: _textController,
+                    onSubmitted: (query) => makeSearch(query),
                   ),
                 ),
-                Expanded(
-                  flex: 20,
-                  child: SearchResults(results: results),
-                ),
+                SearchResults(results: results),
               ],
             ),
           ),
