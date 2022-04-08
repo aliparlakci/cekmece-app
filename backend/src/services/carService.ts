@@ -49,7 +49,10 @@ export default class CarService {
         }
 
         if (options.model) {
-            where.model = MoreThanOrEqual(options.model.value)
+            if (options.model.type == "MORE")
+                where.model = MoreThanOrEqual(options.model.value)
+            else 
+                where.model = LessThanOrEqual(options.model.value)
         }
 
         return this.repository.find({

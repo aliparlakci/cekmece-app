@@ -12,6 +12,7 @@ function getAllCars(carService: CarService): RequestHandler {
     return async function (req, res, next) {
         const sort = req.query.sort as "ASC" | "DESC" | undefined
         const model = req.query.model as string | undefined
+        const price= req.query.price as string | undefined 
 
         const options: FilterOptions = {
             sortBy: sort || "DESC"
@@ -22,6 +23,14 @@ function getAllCars(carService: CarService): RequestHandler {
                 type: "MORE",
                 value: parseInt(model as string)
             }
+        }
+
+        if (price) {
+            options.price={
+                type: "LESS",
+                value: parseInt(price as string)
+            }
+
         }
 
         const cars = await carService.filterCars(options)
