@@ -3,6 +3,7 @@ import 'package:cekmece_mobile/constants/font_constants.dart';
 import 'package:cekmece_mobile/main.dart';
 import 'package:cekmece_mobile/models/user/UserClass.dart';
 import 'package:cekmece_mobile/util/bloc/userBloc/user_bloc.dart';
+import 'package:cekmece_mobile/views/cart/cartView.dart';
 import 'package:cekmece_mobile/views/productView/details_screen.dart';
 import 'package:cekmece_mobile/views/profile/profileView.dart';
 import 'package:cekmece_mobile/views/reviews/ReviewsView.dart';
@@ -46,14 +47,7 @@ class _NavigationViewState extends State<NavigationView> {
           ),
         ),
       ),
-      Container(
-        child: Center(
-          child: Text(
-            "Cart",
-            style: header,
-          ),
-        ),
-      ),
+      CartView(user: widget.user),
       ProfileView(
         user: widget.user,
       ),

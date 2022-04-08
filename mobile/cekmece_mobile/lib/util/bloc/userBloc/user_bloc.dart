@@ -20,8 +20,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
   Future<Product> getCar(int carId) async {
     try {
-      final response = await http
-          .get(Uri.parse('http://${localIPAddress}:5000/api/cars/${carId}'));
+      final response =
+          await http.get(Uri.parse('${localIPAddress}/api/cars/${carId}'));
 
       if (response.statusCode == 200) {
         return Product.fromJson(jsonDecode(response.body));
@@ -46,8 +46,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   Future<List<CartItem>> getCart(String userId) async {
     List<CartItem> cart = [];
     try {
-      final response = await http
-          .get(Uri.parse('http://${localIPAddress}:5000/api/cart/${userId}'));
+      final response =
+          await http.get(Uri.parse('${localIPAddress}/api/cart/${userId}'));
 
       List<dynamic> cartJson = jsonDecode(response.body)["cart"];
 
