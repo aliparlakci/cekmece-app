@@ -75,7 +75,7 @@ export default class CarService {
                 category: true,
                 distributor: true,
             },
-            order: {
+            order: { // Sorts by the price, popularity should added.
                 price: {
                     direction: sortBy as "ASC" | "DESC" | "asc" | "desc" | undefined
                 }

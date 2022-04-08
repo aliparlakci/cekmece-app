@@ -10,29 +10,58 @@ import UserService from "../services/userService"
 
 function getAllCars(carService: CarService): RequestHandler {
     return async function (req, res, next) {
+
         const sort = req.query.sort as "ASC" | "DESC" | undefined
         const model = req.query.model as string | undefined
+        const modelFilter = req.query.modelFilter as "LESS" | "MORE"
         const price= req.query.price as string | undefined 
-
-        const options: FilterOptions = {
+        const priceFilter = req.query.priceFilter as "LESS" | "MORE"
+    
+        const options: FilterOptions = { // sort selection
             sortBy: sort || "DESC"
         }
+        if (model) { // Filter by model
 
-        if (model) {
-            options.model = {
-                type: "MORE",
-                value: parseInt(model as string)
+            if (modelFilter){
+                
+                if (modelFilter == "LESS") {
+                    options.model= {
+                        type: "LESS",
+                        value: parseInt(model as string)
+                    }
+                }
+
+                else {
+                    options.model= {
+                        type: "MORE",
+                        value: parseInt(model as string)
+                    }
+                }
             }
         }
 
-        if (price) {
-            options.price={
-                type: "LESS",
-                value: parseInt(price as string)
+        if (price) { //Filter by price
+
+            if (priceFilter){
+
+                if (priceFilter == "LESS") {
+
+                    options.price={
+                        type: "LESS",
+                        value: parseInt(price as string)
+                    }
+                }
+
+                else {
+
+                    options.price={
+                        type: "MORE",
+                        value: parseInt(price as string)
+                    }
+                }
             }
-
         }
-
+ 
         const cars = await carService.filterCars(options)
 
         res.status(200).json(cars)
