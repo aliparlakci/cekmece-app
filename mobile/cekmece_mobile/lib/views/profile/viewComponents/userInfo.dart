@@ -15,7 +15,7 @@ class UserInfoView extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 25),
       decoration: BoxDecoration(
-          color: secondaryColor,
+          color: Colors.black,
           borderRadius: const BorderRadius.all(
             Radius.circular(8.0),
           ),
@@ -40,7 +40,7 @@ class UserInfoView extends StatelessWidget {
                       "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png"),
                 ),
                 const SizedBox(
-                  width: 10,
+                  width: 20,
                 ),
                 Container(
                   width: 170,
