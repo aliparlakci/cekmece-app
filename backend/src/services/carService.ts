@@ -14,7 +14,10 @@ export interface FilterOptions {
         value: number,
         type: "MORE" | "LESS"
     },
-    sortBy: "ASC" | "DESC"
+    sortBy: "ASC" | "DESC",
+    category?: {
+        value: number
+    }
 }
 
 export default class CarService {
@@ -53,6 +56,14 @@ export default class CarService {
                 where.model = MoreThanOrEqual(options.model.value)
             else 
                 where.model = LessThanOrEqual(options.model.value)
+        }
+
+        if (options.category) {
+
+
+            where.category = {
+                id: options.category.value
+            }
         }
 
         return this.repository.find({

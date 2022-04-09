@@ -16,10 +16,19 @@ function getAllCars(carService: CarService): RequestHandler {
         const modelFilter = req.query.modelFilter as "LESS" | "MORE"
         const price= req.query.price as string | undefined 
         const priceFilter = req.query.priceFilter as "LESS" | "MORE"
-    
+        const category = req.query.category as string
+
+        
         const options: FilterOptions = { // sort selection
             sortBy: sort || "DESC"
         }
+        
+        if (category) {
+            options.category = {
+                value: parseInt(category)
+            }    
+        }
+
         if (model) { // Filter by model
 
             if (modelFilter){
@@ -92,6 +101,7 @@ function addNewCar(carService: CarService): RequestHandler {
             price: Joi.number().positive().required(),
             warranty: Joi.number().positive().required(),
             distributor: Joi.number().required(),
+            category: Joi.number().required()
         })
         const { error } = carFormat.validate(req.body)
         if (error) {

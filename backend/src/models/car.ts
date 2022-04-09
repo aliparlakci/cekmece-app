@@ -32,7 +32,6 @@ export class Car {
     distributor: Distributor
 
     @ManyToOne(() => Category, { cascade: true })
-    @JoinTable()
     category: Category
 
     @OneToMany(type => CartEntity, cart => cart.id)
