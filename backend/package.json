@@ -8,6 +8,7 @@
     "build": "npx tsc",
     "prestart": "npm run build",
     "start": "node ./dist/app.js",
+    "predev": "npm run migrate",
     "dev": "nodemon ./src/app.ts",
     "migrate": "npm run typeorm migration:run -- -d ./src/dataSource.ts",
     "lint": "eslint .",
