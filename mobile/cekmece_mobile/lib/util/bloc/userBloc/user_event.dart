@@ -19,6 +19,12 @@ class UserUpdate extends UserEvent {
   String toString() => 'User data update event.';
 }
 
+class SetUser extends UserEvent {
+  SetUser();
+  @override
+  String toString() => 'User data set event.';
+}
+
 class GoogleLoginButtonPressed extends UserEvent {
   @override
   String toString() => 'Google Login button pressed';

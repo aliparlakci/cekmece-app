@@ -2,7 +2,9 @@ import 'dart:convert';
 
 import 'package:cekmece_mobile/constants/font_constants.dart';
 import 'package:cekmece_mobile/models/product/Product.dart';
+import 'package:cekmece_mobile/models/user/UserClass.dart';
 import 'package:cekmece_mobile/util/bloc/loadingBloc/loading_bloc.dart';
+import 'package:cekmece_mobile/util/bloc/userBloc/user_bloc.dart';
 import 'package:cekmece_mobile/views/productView/components/size.dart';
 import 'package:cekmece_mobile/views/productView/details_screen.dart';
 import 'package:flutter/cupertino.dart';
@@ -27,6 +29,15 @@ class SearchResults extends StatefulWidget {
 class _SearchResultsState extends State<SearchResults> {
   NumberFormat numberFormat = NumberFormat.simpleCurrency(locale: "en-US");
   String filterStatus = "";
+  late UserBloc userBloc;
+  late UserClass user;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    userBloc = BlocProvider.of<UserBloc>(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -176,12 +187,15 @@ class _SearchResultsState extends State<SearchResults> {
                             context,
                             screen: DetailsScreen(
                               product: car,
+                              userBloc: userBloc,
                             ),
                             withNavBar:
                                 false, // OPTIONAL VALUE. True by default.
                             pageTransitionAnimation:
                                 PageTransitionAnimation.cupertino,
                           );
+
+                          BlocProvider.of<UserBloc>(context).add(SetUser());
                         },
                         child: Card(
                           elevation: 5,
