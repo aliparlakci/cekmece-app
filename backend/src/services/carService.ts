@@ -1,9 +1,24 @@
-import { Repository } from "typeorm"
+import { FindOptionsWhere, LessThan, LessThanOrEqual, MoreThan, MoreThanOrEqual, Repository } from "typeorm"
 
 import db from "../dataSource"
 import { Car } from "../models/car"
-import CategoryService from "./categoryService"
 import { Review } from "../models/review"
+import CategoryService from "./categoryService"
+
+export interface FilterOptions {
+    price?: {
+        value: number,
+        type: "MORE" | "LESS"
+    },
+    model?: {
+        value: number,
+        type: "MORE" | "LESS"
+    },
+    sortBy: "ASC" | "DESC",
+    category?: {
+        value: number
+    }
+}
 
 export default class CarService {
     private repository: Repository<Car>
@@ -21,17 +36,61 @@ export default class CarService {
             where: { id: carId },
             relations: {
                 distributor: true,
-                categories: true,
+                category: true,
             },
         })
     }
 
-    async getAllCars() {
+    async filterCars(options: FilterOptions) {
+        let where: FindOptionsWhere<Car> = {}
+
+        if (options.price) {
+            if (options.price.type == "LESS")
+                where.price = LessThanOrEqual(options.price.value)
+            else
+                where.price = MoreThanOrEqual(options.price.value)
+        }
+
+        if (options.model) {
+            if (options.model.type == "MORE")
+                where.model = MoreThanOrEqual(options.model.value)
+            else 
+                where.model = LessThanOrEqual(options.model.value)
+        }
+
+        if (options.category) {
+
+
+            where.category = {
+                id: options.category.value
+            }
+        }
+
         return this.repository.find({
             relations: {
-                categories: true,
+                category: true,
                 distributor: true,
             },
+            where: where,
+            order: {
+                price: {
+                    direction: options.sortBy as "ASC" | "DESC" | "asc" | "desc" | undefined
+                }
+            }
+        })
+    }
+
+    async getAllCars(sortBy: string) {
+        return this.repository.find({
+            relations: {
+                category: true,
+                distributor: true,
+            },
+            order: { // Sorts by the price, popularity should added.
+                price: {
+                    direction: sortBy as "ASC" | "DESC" | "asc" | "desc" | undefined
+                }
+            }
         })
     }
 
@@ -42,7 +101,7 @@ export default class CarService {
         return this.repository.find({
             join: { alias: "categories" },
             where: {
-                categories: category,
+                category: category,
             },
         })
     }
