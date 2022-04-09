@@ -2,9 +2,11 @@ import 'package:cekmece_mobile/constants/font_constants.dart';
 import 'package:cekmece_mobile/models/cartItem/CartItem.dart';
 import 'package:cekmece_mobile/models/product/Product.dart';
 import 'package:cekmece_mobile/models/user/UserClass.dart';
+import 'package:cekmece_mobile/util/bloc/userBloc/user_bloc.dart';
 import 'package:cekmece_mobile/views/productView/components/size.dart';
 import 'package:cekmece_mobile/views/productView/details_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
@@ -20,6 +22,14 @@ class CartView extends StatefulWidget {
 class _CartViewState extends State<CartView> {
   NumberFormat numberFormat =
       NumberFormat.simpleCurrency(locale: "en-US", decimalDigits: 0);
+  late UserBloc userBloc;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    userBloc = BlocProvider.of<UserBloc>(context);
+  }
 
   int getTotal() {
     int sum = 0;
@@ -61,17 +71,20 @@ class _CartViewState extends State<CartView> {
                       padding: const EdgeInsets.symmetric(
                           vertical: 5, horizontal: 15),
                       child: GestureDetector(
-                        onTap: () {
-                          pushNewScreen(
+                        onTap: () async {
+                          await pushNewScreen(
                             context,
                             screen: DetailsScreen(
                               product: car,
+                              userBloc: userBloc,
                             ),
                             withNavBar:
                                 false, // OPTIONAL VALUE. True by default.
                             pageTransitionAnimation:
                                 PageTransitionAnimation.cupertino,
                           );
+                          BlocProvider.of<UserBloc>(context)
+                              .add(UserUpdate(user: userBloc.user));
                         },
                         child: Card(
                           elevation: 5,

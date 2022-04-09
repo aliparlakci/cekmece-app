@@ -17,6 +17,7 @@ part 'user_state.dart';
 class UserBloc extends Bloc<UserEvent, UserState> {
   BuildContext context;
   String localIPAddress = dotenv.env['LOCALADDRESS']!;
+  late UserClass user;
 
   Future<Product> getCar(int carId) async {
     try {
@@ -29,7 +30,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         throw Exception('Failed to load product');
       }
     } catch (err) {
-      print(err);
       return const Product(
           id: 1,
           name: "",
@@ -69,6 +69,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   }
 
   Future<UserClass> updateUser(String id) async {
+    BlocProvider.of<LoadingBloc>(context)
+        .add(LoadingStart(loadingReason: "User fetch"));
     List<CartItem> cartList = await getCart("1");
 
     UserClass localUser = UserClass(
@@ -79,6 +81,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         uid: "1",
         photoUrl:
             "https://pbs.twimg.com/profile_images/1506730396679036937/zDIidO5w_400x400.jpg");
+    BlocProvider.of<LoadingBloc>(context).add(LoadingEnd());
 
     return localUser;
   }
@@ -90,18 +93,26 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
       try {
         if (userId != null) {
-          emit(LoggedIn(user: await updateUser(userId)));
+          user = await updateUser(userId);
+          emit(LoggedIn(user: user));
         } else {
-          emit(LoggedIn(
-              user: const UserClass(
-                  displayName: "",
-                  isAnonymous: true,
-                  uid: "0",
-                  cart: [],
-                  email: "",
-                  photoUrl: "")));
+          user = const UserClass(
+              displayName: "",
+              isAnonymous: true,
+              uid: "0",
+              cart: [],
+              email: "",
+              photoUrl: "");
+          emit(LoggedIn(user: user));
         }
       } catch (err) {
+        user = const UserClass(
+            displayName: "",
+            isAnonymous: true,
+            uid: "0",
+            cart: [],
+            email: "",
+            photoUrl: "");
         emit(NotLoggedIn());
       }
     });
@@ -111,7 +122,9 @@ class UserBloc extends Bloc<UserEvent, UserState> {
           .add(LoadingStart(loadingReason: "Google Login"));
       try {
         final prefs = await SharedPreferences.getInstance();
-        emit(LoggedIn(user: await updateUser("1")));
+
+        user = await updateUser("1");
+        emit(LoggedIn(user: user));
         await prefs.setString('id', '1');
 
         BlocProvider.of<LoadingBloc>(context).add(LoadingEnd());
@@ -135,15 +148,14 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
       final prefs = await SharedPreferences.getInstance();
       await prefs.remove('id');
-
-      emit(LoggedIn(
-          user: const UserClass(
-              displayName: "",
-              isAnonymous: true,
-              uid: "0",
-              cart: [],
-              email: "",
-              photoUrl: "")));
+      user = const UserClass(
+          displayName: "",
+          isAnonymous: true,
+          uid: "0",
+          cart: [],
+          email: "",
+          photoUrl: "");
+      emit(LoggedIn(user: user));
 
       BlocProvider.of<LoadingBloc>(context).add(LoadingEnd());
     });
@@ -156,10 +168,15 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       final String? userId = prefs.getString('id');
 
       if (userId != null) {
-        emit(LoggedIn(user: await updateUser(userId)));
+        user = await updateUser(userId);
+        emit(LoggedIn(user: user));
       }
 
       BlocProvider.of<LoadingBloc>(context).add(LoadingEnd());
+    });
+
+    on<SetUser>((event, emit) async {
+      emit(LoggedIn(user: user));
     });
   }
 }

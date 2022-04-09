@@ -4,6 +4,7 @@ import 'package:anim_search_bar/anim_search_bar.dart';
 import 'package:cekmece_mobile/main.dart';
 import 'package:cekmece_mobile/models/product/Product.dart';
 import 'package:cekmece_mobile/util/bloc/loadingBloc/loading_bloc.dart';
+import 'package:cekmece_mobile/util/bloc/userBloc/user_bloc.dart';
 import 'package:cekmece_mobile/util/blocProviders.dart';
 import 'package:cekmece_mobile/views/productView/details_screen.dart';
 import 'package:flutter/material.dart';
@@ -18,13 +19,6 @@ class OmerTest extends StatefulWidget {
   @override
   State<OmerTest> createState() => _OmerTestState();
 }
-/*
-      
-      rating: 5,
-      price: 123123,
-
-
-*/
 
 class _OmerTestState extends State<OmerTest> {
   String clientURL = dotenv.env['CLIENT_URL']!;
@@ -41,11 +35,14 @@ class _OmerTestState extends State<OmerTest> {
       if (response.statusCode == 200) {
         // If the server did return a 200 OK response,
         // then parse the JSON.
+        UserBloc userBloc = BlocProvider.of<UserBloc>(context);
+
         Product car = Product.fromJson(jsonDecode(response.body));
         pushNewScreen(
           context,
           screen: DetailsScreen(
             product: car,
+            userBloc: userBloc,
           ),
           withNavBar: false, // OPTIONAL VALUE. True by default.
           pageTransitionAnimation: PageTransitionAnimation.cupertino,
