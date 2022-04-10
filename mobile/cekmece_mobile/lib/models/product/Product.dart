@@ -14,7 +14,7 @@ class Product with _$Product {
     required int quantity,
     required int warranty,
     required Map<String, dynamic> distributor,
-    required List<Map<String, dynamic>> categories,
+    required Map<String, dynamic> category,
   }) = _Product;
 
   factory Product.fromJson(Map<String, dynamic> json) =>

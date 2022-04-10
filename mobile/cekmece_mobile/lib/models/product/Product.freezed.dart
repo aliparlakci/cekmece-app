@@ -31,7 +31,7 @@ class _$ProductTearOff {
       required int quantity,
       required int warranty,
       required Map<String, dynamic> distributor,
-      required List<Map<String, dynamic>> categories}) {
+      required Map<String, dynamic> category}) {
     return _Product(
       id: id,
       name: name,
@@ -41,7 +41,7 @@ class _$ProductTearOff {
       quantity: quantity,
       warranty: warranty,
       distributor: distributor,
-      categories: categories,
+      category: category,
     );
   }
 
@@ -63,8 +63,7 @@ mixin _$Product {
   int get quantity => throw _privateConstructorUsedError;
   int get warranty => throw _privateConstructorUsedError;
   Map<String, dynamic> get distributor => throw _privateConstructorUsedError;
-  List<Map<String, dynamic>> get categories =>
-      throw _privateConstructorUsedError;
+  Map<String, dynamic> get category => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -84,7 +83,7 @@ abstract class $ProductCopyWith<$Res> {
       int quantity,
       int warranty,
       Map<String, dynamic> distributor,
-      List<Map<String, dynamic>> categories});
+      Map<String, dynamic> category});
 }
 
 /// @nodoc
@@ -105,7 +104,7 @@ class _$ProductCopyWithImpl<$Res> implements $ProductCopyWith<$Res> {
     Object? quantity = freezed,
     Object? warranty = freezed,
     Object? distributor = freezed,
-    Object? categories = freezed,
+    Object? category = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed
@@ -140,10 +139,10 @@ class _$ProductCopyWithImpl<$Res> implements $ProductCopyWith<$Res> {
           ? _value.distributor
           : distributor // ignore: cast_nullable_to_non_nullable
               as Map<String, dynamic>,
-      categories: categories == freezed
-          ? _value.categories
-          : categories // ignore: cast_nullable_to_non_nullable
-              as List<Map<String, dynamic>>,
+      category: category == freezed
+          ? _value.category
+          : category // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>,
     ));
   }
 }
@@ -162,7 +161,7 @@ abstract class _$ProductCopyWith<$Res> implements $ProductCopyWith<$Res> {
       int quantity,
       int warranty,
       Map<String, dynamic> distributor,
-      List<Map<String, dynamic>> categories});
+      Map<String, dynamic> category});
 }
 
 /// @nodoc
@@ -184,7 +183,7 @@ class __$ProductCopyWithImpl<$Res> extends _$ProductCopyWithImpl<$Res>
     Object? quantity = freezed,
     Object? warranty = freezed,
     Object? distributor = freezed,
-    Object? categories = freezed,
+    Object? category = freezed,
   }) {
     return _then(_Product(
       id: id == freezed
@@ -219,10 +218,10 @@ class __$ProductCopyWithImpl<$Res> extends _$ProductCopyWithImpl<$Res>
           ? _value.distributor
           : distributor // ignore: cast_nullable_to_non_nullable
               as Map<String, dynamic>,
-      categories: categories == freezed
-          ? _value.categories
-          : categories // ignore: cast_nullable_to_non_nullable
-              as List<Map<String, dynamic>>,
+      category: category == freezed
+          ? _value.category
+          : category // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>,
     ));
   }
 }
@@ -239,7 +238,7 @@ class _$_Product implements _Product {
       required this.quantity,
       required this.warranty,
       required this.distributor,
-      required this.categories});
+      required this.category});
 
   factory _$_Product.fromJson(Map<String, dynamic> json) =>
       _$$_ProductFromJson(json);
@@ -261,11 +260,11 @@ class _$_Product implements _Product {
   @override
   final Map<String, dynamic> distributor;
   @override
-  final List<Map<String, dynamic>> categories;
+  final Map<String, dynamic> category;
 
   @override
   String toString() {
-    return 'Product(id: $id, name: $name, price: $price, number: $number, model: $model, quantity: $quantity, warranty: $warranty, distributor: $distributor, categories: $categories)';
+    return 'Product(id: $id, name: $name, price: $price, number: $number, model: $model, quantity: $quantity, warranty: $warranty, distributor: $distributor, category: $category)';
   }
 
   @override
@@ -282,8 +281,7 @@ class _$_Product implements _Product {
             const DeepCollectionEquality().equals(other.warranty, warranty) &&
             const DeepCollectionEquality()
                 .equals(other.distributor, distributor) &&
-            const DeepCollectionEquality()
-                .equals(other.categories, categories));
+            const DeepCollectionEquality().equals(other.category, category));
   }
 
   @override
@@ -297,7 +295,7 @@ class _$_Product implements _Product {
       const DeepCollectionEquality().hash(quantity),
       const DeepCollectionEquality().hash(warranty),
       const DeepCollectionEquality().hash(distributor),
-      const DeepCollectionEquality().hash(categories));
+      const DeepCollectionEquality().hash(category));
 
   @JsonKey(ignore: true)
   @override
@@ -320,7 +318,7 @@ abstract class _Product implements Product {
       required int quantity,
       required int warranty,
       required Map<String, dynamic> distributor,
-      required List<Map<String, dynamic>> categories}) = _$_Product;
+      required Map<String, dynamic> category}) = _$_Product;
 
   factory _Product.fromJson(Map<String, dynamic> json) = _$_Product.fromJson;
 
@@ -341,7 +339,7 @@ abstract class _Product implements Product {
   @override
   Map<String, dynamic> get distributor;
   @override
-  List<Map<String, dynamic>> get categories;
+  Map<String, dynamic> get category;
   @override
   @JsonKey(ignore: true)
   _$ProductCopyWith<_Product> get copyWith =>
