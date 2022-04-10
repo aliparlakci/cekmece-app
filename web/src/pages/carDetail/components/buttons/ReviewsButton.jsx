@@ -22,7 +22,7 @@ function ReviewsButton({ carId, averageRating, reviewCount }) {
                     <Rating
                         name="read-only"
                         precision={0.5}
-                        value={averageRating}
+                        value={averageRating ? averageRating : 0}
                         emptyIcon={<StarOutlineSharp sx={{ color: "black", fontSize: 18 }} />}
                         icon={<StarSharp sx={{ color: "black", fontSize: 18 }} />}
                         sx={{ paddingLeft: 2 }}

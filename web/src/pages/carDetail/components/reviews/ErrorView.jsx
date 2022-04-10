@@ -1,8 +1,9 @@
 import React from "react"
-import { Box, Typography } from "@mui/material"
-import { Inbox } from "@mui/icons-material"
 
-function NoReviewsView() {
+import { Box, Typography } from "@mui/material"
+import { ErrorOutline, Inbox } from "@mui/icons-material"
+
+function ErrorView() {
     return (
         <Box
             display="flex"
@@ -16,12 +17,12 @@ function NoReviewsView() {
                 paddingRight: 3,
             }}
         >
-            <Inbox sx={{ color: "black", fontSize: 34 }} />
+            <ErrorOutline sx={{ color: "black", fontSize: 34 }} />
             <Typography variant="body2" sx={{ paddingTop: 1, paddingBottom: 9, fontWeight: 700 }}>
-                There are no customer reviews for this item.
+                An error occurred while getting reviews.\nPlease try again later.
             </Typography>
         </Box>
     )
 }
 
-export default NoReviewsView
+export default ErrorView

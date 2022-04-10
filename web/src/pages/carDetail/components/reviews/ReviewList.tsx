@@ -15,6 +15,10 @@ type Car = {
 export default function ReviewList({ carId }: Car) {
     const { data, error } = useSWR<IReview[]>(`/api/cars/${carId}/reviews`, fetcher)
 
+    if (error) {
+        return <></>
+    }
+
     if (!data) return <></>
 
     if (data.length == 0) {
