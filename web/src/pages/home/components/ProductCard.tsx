@@ -31,27 +31,30 @@ export default function ProductCard() {
         <>
         <ThemeProvider theme={theme}>
             <Grid item xs={12} md={4}>
-                    <Box margin={2}>
-                        <Paper elevation={4} className="paper">
+                    <Box marginX={2} marginBottom={4}>
+                        <Paper elevation={4} className="paper" sx={{ borderRadius:0 }}>
                             <CardActionArea>
                                 <Box>
                                     <img src={"https://wallpaperaccess.com/full/8039043.jpg"} alt="" />
                                 </Box>
-                                <Box marginX={0.5} marginTop={1} sx={{ alignItems: "center", direction: "column", justifyContent: "center"}}>
+                                <Box marginX={0.5} marginTop={0.5} sx={{ alignItems: "center", direction: "column", justifyContent: "center"}}>
                                     <Typography variant="h3" marginX={0.5} fontWeight="Bold" textAlign="left"> Porsche </Typography>
                                     <Typography variant="h4" marginX={0.5} fontWeight="Light" textAlign="left"> 911 GT3 Touring </Typography>
                                 </Box>
-                                <Box marginX={0.5} marginY={1} sx={{ alignItems: "center", direction: "column", justifyContent: "center"}}>
-                                    <Typography variant="h6" marginX={0.5} fontWeight="light" textAlign="center"> 223.000$ </Typography>
+                                <Box sx={{ display:"flex", alignItems:"center", justifyContent:"space-between"}} marginTop={4} marginBottom={1} marginX={1}>
+                                    <Box sx={{ display: "flex", alignItems: "center" }}>
+                                        <Rating name="size-small" size="small" defaultValue={4.5} precision={0.25} readOnly />
+                                        <Typography variant="body2" marginLeft={0.5}> 4.5 </Typography>
+                                        <Typography variant="body2" marginLeft={0.5}>(600 reviews)</Typography>
+                                    </Box>
+                                    <Box paddingBottom={0.5}>
+                                        <Typography variant="h5" fontWeight="bold" textAlign="right"> 223.000$ </Typography>
+                                    </Box>
                                 </Box>
-                                <Box sx={{ display: "flex", alignItems: "center" }} marginBottom={1} marginTop={2} marginLeft={1}>
-                                    <Rating name="size-small" size="small" defaultValue={4.5} precision={0.25} readOnly />
-                                    <Typography variant="body2" marginLeft={0.5}> 4.5 </Typography>
-                                    <Typography variant="body2" marginLeft={0.5}>(600 reviews)</Typography>
-                                </Box>
+                                
                             </CardActionArea>
                             <Box>
-                                <Button variant="text" endIcon={<AddShoppingCartIcon/>} sx={{  }} fullWidth={true}>Add to Cart</Button>
+                                <Button variant="text" endIcon={<AddShoppingCartIcon/>} sx={{ borderRadius:0 }} fullWidth={true} >Add to Cart</Button>
                             </Box>
                         </Paper>
                     </Box>

@@ -1,8 +1,6 @@
-import { Box, Container, createTheme, CssBaseline, Grid, Paper} from "@mui/material"
-import { styled } from '@mui/material/styles';
+import { Container, createTheme, Grid} from "@mui/material"
 import React from "react"
-import ProductCard from "./components/ProductCard"
-import ProductsView from "./components/ProductCard"
+import ProductsView from "./components/ProductsView"
 import FilterMenu from "./components/FilterMenu";
 import NavBar from './components/NavBar'
 import { ThemeProvider } from "@mui/styles";
@@ -21,34 +19,17 @@ export default function HomePage() {
         <>
             <ThemeProvider theme={theme}>
                 <NavBar/>
-                <Grid container direction="row" justifyContent="flex-start">
-                    <Grid item xs={3}>
+                <Grid container direction="row" justifyContent="flex-start" marginTop={10}>
+                    <Grid item xs={3} sx={{ display: { xs: "none", lg: "inline" }, zIndex:10}}>
                         <Container>
-                        <Grid container direction="column" justifyContent="flex-start" alignItems="center" marginTop={1}>
+                        <Grid container direction="column" justifyContent="flex-start" alignItems="center">
                             <FilterMenu/>
                         </Grid>
                         </Container>
                     </Grid>
-                    <Grid item xs={9}>
+                    <Grid item xs={12} lg={9}>
                     <Container>    
-                        <Grid container direction="row" justifyContent="flex-start" alignItems="center" marginTop={1}>
-                            <ProductCard/>
-                            <ProductCard/>
-                            <ProductCard/>
-                            <ProductCard/>
-                            <ProductCard/>
-                            <ProductCard/>
-                            <ProductCard/>
-                            <ProductCard/>
-                            <ProductCard/>
-                            <ProductCard/>
-                            <ProductCard/>
-                            <ProductCard/>
-                            <ProductCard/>
-                            <ProductCard/>
-                            <ProductCard/>
-                            <ProductCard/>
-                        </Grid>
+                        <ProductsView/>
                     </Container>
                     </Grid>     
                 </Grid>

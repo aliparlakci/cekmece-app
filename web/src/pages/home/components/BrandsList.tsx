@@ -34,15 +34,15 @@ export default function CheckboxList() {
   };
 
   return (
-      <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper', overflow: 'auto', maxHeight:200, '& ul': { padding: 0 }, }}>
+      <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper.dark', overflow: 'scroll', maxHeight:100, '& ul': { padding: 0 }, marginTop:1}}>
       {[0, 1, 2, 3, 4, 5, 6].map((value) => {
         const labelId = `checkbox-list-label-${value}`;
 
         return (
           <ListItem
             key={value}
-
             disablePadding
+            sx={{ padding:0, margin:0 }}
           >
             <ListItemButton role={undefined} onClick={handleToggle(value)} dense>
               <ListItemIcon>

@@ -1,8 +1,10 @@
 import React from "react"
 import {
+    Box,
     createTheme,
     ThemeProvider,
     Slider,
+    Typography
 } from "@mui/material"
 
 const theme = createTheme({
@@ -19,8 +21,8 @@ function valuetext(value: number) {
 
 const minDistance = 10
 
-export default function PriceSlider() {
-    const [value2, setValue2] = React.useState<number[]>([20, 37])
+export default function YearSlider() {
+    const [value2, setValue2] = React.useState<number[]>([0, 100])
 
     const handleChange2 = (event: Event, newValue: number | number[], activeThumb: number) => {
         if (!Array.isArray(newValue)) {
@@ -43,6 +45,8 @@ export default function PriceSlider() {
     return (
 
             <ThemeProvider theme={theme}>
+              <Box sx={{display:"flex",  alignItems: "center", justifyContent: "space-between", marginTop:2}} >
+              <Typography variant="h6" sx={{ fontWeight:"light" }}>2000</Typography>
                 <Slider
                     getAriaLabel={() => "Minimum distance shift"}
                     value={value2}
@@ -50,7 +54,10 @@ export default function PriceSlider() {
                     valueLabelDisplay="auto"
                     getAriaValueText={valuetext}
                     disableSwap
+                    sx = {{ marginX:2 }}
                 />
+                <Typography variant="h6" sx={{ fontWeight:"light" }}>2022</Typography>
+              </Box>
             </ThemeProvider>
     )
 }

@@ -2,24 +2,18 @@ import React from "react"
 import {
     Button,
     Box,
-    Card,
-    CardContent,
-    CardMedia,
-    CardActionArea,
     Container,
     createTheme,
     Paper,
     Grid,
     ThemeProvider,
     Typography,
-    Rating,
-    Slider,
     Divider,
 } from "@mui/material"
-import { styled } from "@mui/material/styles"
-import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart"
 import BrandsList from "./BrandsList"
-import PriceSlider from "./PriceSlider"
+import YearSlider from "./YearSlider"
+import PriceSelect from "./PriceSelect"
+import CategorySelect from "./CategorySelect"
 
 const theme = createTheme({
     palette: {
@@ -49,21 +43,35 @@ export default function FilterMenu() {
     return (
         <>
             <ThemeProvider theme={theme}>
-                <Grid item sx={{ width: { md: 200, lg: 300, xl: 400 }, display: { xs: "none", md: "inline" } }}>
+                <Grid item sx={{ width: { lg: 300, xl: 400 }, display: { xs: "none", lg: "inline" } }}>
                     <Container>
-                        <Box marginTop={2}>
-                            <Paper elevation={4} className="paper">
+                        <Box>
+                            <Paper elevation={24} className="paper"  sx={{ maxHeight:0.85, overflow: 'auto', borderRadius:0, position:"fixed", left:{xl:40, lg:20,}, width: { lg: 280, xl: 380 } }} >
+                                <Box sx={{ paddingX: 2, paddingY: 1 }}>
+                                    <Typography variant="h6" sx={{ fontWeight:"bold", color:"#666"}} >Filter Cars</Typography>
+                                </Box>
+                                <Divider variant="middle"/>
                                 <Box sx={{ paddingX: 5, paddingY: 2 }}>
-                                  <Typography>Select Brands:</Typography>
+                                  <Typography sx={{ fontWeight:"bold" }} >Select Brands:</Typography>
                                   <BrandsList/>
                                 </Box>
                                 <Divider variant="middle"/>
                                 <Box sx={{ paddingX: 5, paddingY: 2 }}>
-                                    <Typography>Price Range:</Typography>
-                                    <PriceSlider/>
+                                    <Typography sx={{ fontWeight:"bold" }}>Between Years:</Typography>
+                                    <YearSlider/>
+                                </Box>
+                                <Divider variant="middle"/>
+                                <Box sx={{ paddingX: 5, paddingY: 2 }}>
+                                    <Typography sx={{ fontWeight:"bold" }}>Price Range:</Typography>
+                                    <PriceSelect/>
+                                </Box>
+                                <Divider variant="middle"/>
+                                <Box sx={{ paddingX: 5, paddingY: 2 }}>
+                                    <Typography sx={{ fontWeight:"bold" }}>Select Category:</Typography>
+                                    <CategorySelect/>
                                 </Box>
                                 <Box>
-                                    <Button variant="contained" fullWidth={true} sx={{ borderRadius:0 }}>
+                                    <Button variant="contained" fullWidth={true} sx={{ borderRadius:0}}>
                                         Show Cars
                                     </Button>
                                 </Box>
