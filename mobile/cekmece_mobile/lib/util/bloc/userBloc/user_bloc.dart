@@ -39,7 +39,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
           quantity: 0,
           warranty: 0,
           distributor: {},
-          categories: []);
+          category: {});
     }
   }
 
