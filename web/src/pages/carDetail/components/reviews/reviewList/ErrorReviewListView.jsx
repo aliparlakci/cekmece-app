@@ -1,7 +1,5 @@
-import React from "react"
-
 import { Box, Typography } from "@mui/material"
-import { ErrorOutline, Inbox } from "@mui/icons-material"
+import { ErrorOutline } from "@mui/icons-material"
 
 function ErrorView() {
     return (
@@ -15,11 +13,12 @@ function ErrorView() {
             sx={{
                 paddingLeft: 3,
                 paddingRight: 3,
+                paddingBottom: 7,
             }}
         >
             <ErrorOutline sx={{ color: "black", fontSize: 34 }} />
-            <Typography variant="body2" sx={{ paddingTop: 1, paddingBottom: 9, fontWeight: 700 }}>
-                An error occurred while getting reviews.\nPlease try again later.
+            <Typography variant="body2" sx={{ paddingTop: 1, fontWeight: 700 }}>
+                {"An error occurred while getting reviews."} <br /> {"Please try again later."}
             </Typography>
         </Box>
     )

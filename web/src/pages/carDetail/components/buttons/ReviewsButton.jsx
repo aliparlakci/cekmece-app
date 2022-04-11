@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { Rating, Box, Drawer, Button } from "@mui/material"
 import { StarOutlineSharp, StarSharp } from "@mui/icons-material"
-import ReviewList from "../reviews/ReviewList"
+import ReviewList from "../reviews/reviewList/ReviewListView"
 
 function ReviewsButton({ carId, averageRating, reviewCount }) {
     const [isReviewsDrawerOpen, setIsReviewsDrawerOpen] = useState(false)
@@ -34,7 +34,7 @@ function ReviewsButton({ carId, averageRating, reviewCount }) {
                 PaperProps={{
                     sx: {
                         width: {
-                            xs: 300,
+                            xs: "75%",
                             sm: 400,
                             md: 500,
                         },

@@ -53,11 +53,11 @@ class _BodyState extends State<Body> {
           const SizedBox(
             height: 15,
           ),
-          ReviewsButton(carId: 1, reviewCount: 555, reviewAverage: 4.8),
+          ReviewsButton(carId: 2, reviewCount: 555, reviewAverage: 4.8),
           const SizedBox(
             height: 5,
           ),
-          LeaveAReviewButton(carId: 1),
+          LeaveAReviewButton(carId: 2),
           const SizedBox(
             height: 20,
           ),

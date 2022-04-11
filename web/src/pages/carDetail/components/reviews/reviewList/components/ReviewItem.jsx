@@ -6,7 +6,7 @@ import ReadMore from "./ReadMore"
 
 const pattern = date.compile("MMM D, YYYY")
 
-function ReviewTile({ key, rating, comment, createdDate, isApproved }) {
+function ReviewItem({ key, rating, comment, createdDate, isApproved }) {
     return (
         <ListItem alignItems="flex-start" key={key}>
             <ListItemText
@@ -39,4 +39,4 @@ function ReviewTile({ key, rating, comment, createdDate, isApproved }) {
     )
 }
 
-export default ReviewTile
+export default ReviewItem
