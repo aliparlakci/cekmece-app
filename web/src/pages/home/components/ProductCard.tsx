@@ -27,13 +27,14 @@ const theme = createTheme({
 
 
 export default function ProductCard() {
+
     return (
         <>
         <ThemeProvider theme={theme}>
             <Grid item xs={12} md={4}>
                     <Box marginX={2} marginBottom={4}>
-                        <Paper elevation={4} className="paper" sx={{ borderRadius:0 }}>
-                            <CardActionArea>
+                        <Paper elevation={8} className="paper" sx={{ borderRadius:0 }}>
+                            <CardActionArea >
                                 <Box>
                                     <img src={"https://wallpaperaccess.com/full/8039043.jpg"} alt="" />
                                 </Box>

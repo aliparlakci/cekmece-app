@@ -1,4 +1,4 @@
-import { Container, createTheme, Grid} from "@mui/material"
+import { Box, Container, createTheme, Grid} from "@mui/material"
 import React from "react"
 import ProductsView from "./components/ProductsView"
 import FilterMenu from "./components/FilterMenu";
@@ -19,9 +19,9 @@ export default function HomePage() {
         <>
             <ThemeProvider theme={theme}>
                 <NavBar/>
-                <Grid container direction="row" justifyContent="flex-start" marginTop={10}>
+                <Grid container direction="row" justifyContent="center" marginTop={10}>
                     <Grid item xs={3} sx={{ display: { xs: "none", lg: "inline" }, zIndex:10}}>
-                        <Container>
+                        <Container sx={{top:100, justifyContent:"center"}}>
                         <Grid container direction="column" justifyContent="flex-start" alignItems="center">
                             <FilterMenu/>
                         </Grid>

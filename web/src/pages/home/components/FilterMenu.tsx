@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import {
     Button,
     Box,
@@ -40,13 +40,16 @@ const theme = createTheme({
 
 export default function FilterMenu() {
 
+    const [selectedBrands, setSelectedBrands] = useState([])
+
+
     return (
         <>
             <ThemeProvider theme={theme}>
                 <Grid item sx={{ width: { lg: 300, xl: 400 }, display: { xs: "none", lg: "inline" } }}>
                     <Container>
-                        <Box>
-                            <Paper elevation={24} className="paper"  sx={{ maxHeight:0.85, overflow: 'auto', borderRadius:0, position:"fixed", left:{xl:40, lg:20,}, width: { lg: 280, xl: 380 } }} >
+                        <Box  sx={{ alignItems: "right", direction: "row", justifyContent: "right"}}>
+                            <Paper elevation={24} className="paper"  sx={{position:"sticky", alignSelf:"right",  maxHeight:0.85, overflow: 'auto', borderRadius:0, width: { lg: 280, xl: 380 } }} >
                                 <Box sx={{ paddingX: 2, paddingY: 1 }}>
                                     <Typography variant="h6" sx={{ fontWeight:"bold", color:"#666"}} >Filter Cars</Typography>
                                 </Box>
