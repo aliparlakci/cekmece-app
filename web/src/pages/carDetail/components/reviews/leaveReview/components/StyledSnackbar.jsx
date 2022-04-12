@@ -4,7 +4,7 @@ function StyledSnackbar({ showSnackbar, handleSnackbarClose, type, message }) {
     return (
         <Snackbar
             open={showSnackbar}
-            autoHideDuration={6000}
+            autoHideDuration={5000}
             onClose={handleSnackbarClose}
             anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
         >

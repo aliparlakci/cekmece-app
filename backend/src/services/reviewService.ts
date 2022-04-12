@@ -40,6 +40,13 @@ export default class ReviewService {
         return await this.repository.findOne({ where: { id } })
     }
 
+    async approveReview(id: number) {
+        return await this.repository.save({
+            id: id,
+            isApproved: true,
+        })
+    }
+
     async deleteReview(id: number) {
         return this.repository.createQueryBuilder().delete().from(Review).where("id = :id", { id }).execute()
     }

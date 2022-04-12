@@ -13,8 +13,9 @@ function LeaveAReviewForm({ carId }) {
     const [formValidationError, setFormValidationError] = useState(false)
     const [formValidationErrorMessage, setFormValidationErrorMessage] = useState(null)
 
-    const { post, response, loading, error } = useFetch(`/api/cars/${carId}/reviews`, { cachePolicy: "no-cache" })
-    const [insertedReviewId, setInsertedReviewId] = useState()
+    const [successNotification, setSuccessNotification] = useState(false)
+    const [errorNotification, setErrorNotification] = useState(false)
+    const { post, response, loading } = useFetch(`/api/cars/${carId}/reviews`, { cachePolicy: "no-cache" })
 
     const validateComment = (toValidate) => {
         const input = toValidate.trim()
@@ -51,27 +52,36 @@ function LeaveAReviewForm({ carId }) {
 
     const handleFormSubmit = async (event) => {
         event.preventDefault()
-        let reviewId
 
         if (comment.trim() != "") {
-            reviewId = await post("/new", {
+            await post("/new", {
                 rating: rating,
                 comment: comment.trim(),
             })
         } else {
-            reviewId = await post("/new", {
+            await post("/new", {
                 rating: rating,
             })
         }
 
         if (response.ok) {
-            setInsertedReviewId(reviewId)
+            setComment("")
+            setSuccessNotification(true)
+        } else {
+            setErrorNotification(true)
         }
     }
 
     return (
         <form style={{ height: "100%" }} onSubmit={handleFormSubmit}>
-            <SnackbarHandler data={insertedReviewId} error={error} />
+            <SnackbarHandler
+                isSuccess={successNotification}
+                isError={errorNotification}
+                successMessage="Review submitted successfully."
+                errorMessage="An error occurred while submitting the review."
+                onSuccessClose={() => setSuccessNotification(false)}
+                onErrorClose={() => setErrorNotification(false)}
+            />
             <Backdrop sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }} open={loading}>
                 <CircularProgress color="inherit" />
             </Backdrop>
