@@ -3,7 +3,7 @@ import { DataGrid } from "@mui/x-data-grid"
 import { Box, Button, CssBaseline } from "@mui/material"
 import useSWR from "swr"
 
-import NewCarModal from "./NewCategoryDialog"
+import NewCarDialog from "./NewCarDialog"
 import ICar from "../../../models/car"
 import fetcher from "../../../utils/fetcher"
 
@@ -31,14 +31,23 @@ export default function CarListView() {
 
     const [selected, setSelected] = useState<any[]>([])
     const [isNewCarModalOpen, setNewCarModalOpen] = useState(false)
+    const [update, setUpdate] = useState<number|undefined>(undefined)
 
-    useEffect(() => console.log(selected), [selected])
+    const handleClose = () => {
+        setNewCarModalOpen(false)
+        setUpdate(undefined)
+    }
+
+    const onCarEdit = (id: number) => {
+        setUpdate(id)
+        setNewCarModalOpen(true)
+    }
 
     if (!data) return <></>
 
     return (
         <>
-            <NewCarModal open={isNewCarModalOpen} onClose={() => setNewCarModalOpen(false)} />
+            <NewCarDialog open={isNewCarModalOpen} onClose={handleClose} update={update} />
             <Box sx={{ display: "flex", minHeight: "100vh" }}>
                 <CssBaseline />
                 <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
@@ -77,6 +86,7 @@ export default function CarListView() {
                                 onSelectionModelChange={(model, details) => setSelected(model)}
                                 checkboxSelection
                                 disableSelectionOnClick
+                                onCellDoubleClick={(params) => onCarEdit(params.row.id)}
                             />
                         </div>
                     </Box>

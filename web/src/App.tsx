@@ -6,23 +6,26 @@ import HomePage from "./pages/home/HomePage"
 
 import "./App.css"
 import CarDetailPage from "./pages/carDetail/CarDetailPage"
+import { NotificationProvider } from "./hooks/useNotification"
 
 function App() {
     return (
         <>
-            <Router>
-                <Switch>
-                    <Route path="/admin">
-                        <AdminPage />
-                    </Route>
-                    <Route exact path="/">
-                        <HomePage />
-                    </Route>
-                    <Route path="/cars/:carId">
-                        <CarDetailPage />
-                    </Route>
-                </Switch>
-            </Router>
+            <NotificationProvider>
+                <Router>
+                    <Switch>
+                        <Route path="/admin">
+                            <AdminPage />
+                        </Route>
+                        <Route exact path="/">
+                            <HomePage />
+                        </Route>
+                        <Route path="/cars/:carId">
+                            <CarDetailPage />
+                        </Route>
+                    </Switch>
+                </Router>
+            </NotificationProvider>
         </>
     )
 }

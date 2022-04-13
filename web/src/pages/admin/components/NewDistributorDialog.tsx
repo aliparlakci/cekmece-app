@@ -13,54 +13,54 @@ interface NewCateogryDialogProps {
     onClose: () => any
 }
 
-function NewCategoryDialog({ open, onClose }: NewCateogryDialogProps) {
-    const [categoryName, setCategoryName] = useState("")
+function NewDistributorDialog({ open, onClose }: NewCateogryDialogProps) {
+    const [distributorName, setDistributorName] = useState("")
     const [loading, setLoading] = useState(false)
     const notification = useNotification()
 
     const handleCreate = async () => {
         setLoading(true)
         try {
-            const response = await fetch("/api/categories/new", {
+            const response = await fetch("/api/distributors/new", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    name: categoryName,
+                    name: distributorName,
                 }),
             })
 
             if (response.status === 201) {
-                notification(NOTIFICATON_TYPES.SUCCESS, "Category created!")
+                notification(NOTIFICATON_TYPES.SUCCESS, "Distributor created!")
                 if (onClose) onClose()
-                mutate("/api/categories")
+                mutate("/api/distributors")
             } else {
-                throw `Cannot create a new category`
+                throw `Cannot create a new distributor`
             }
         } catch (err) {
             notification(NOTIFICATON_TYPES.ERROR, JSON.stringify(err))
         }
 
         setLoading(false)
-        setCategoryName("")
+        setDistributorName("")
     }
 
     return (
         <>
             <Dialog open={open} onClose={onClose}>
-                <DialogTitle>Register a new category</DialogTitle>
+                <DialogTitle>Register a new distributor</DialogTitle>
                 <DialogContent>
                     <TextField
                         autoFocus
                         margin="dense"
                         id="name"
-                        label="Category Name"
+                        label="Distributor Name"
                         type="text"
                         fullWidth
                         variant="standard"
-                        value={categoryName}
-                        onChange={(event) => setCategoryName(event.target.value)}
+                        value={distributorName}
+                        onChange={(event) => setDistributorName(event.target.value)}
                         disabled={loading}
                     />
                 </DialogContent>
@@ -77,4 +77,4 @@ function NewCategoryDialog({ open, onClose }: NewCateogryDialogProps) {
     )
 }
 
-export default NewCategoryDialog
+export default NewDistributorDialog

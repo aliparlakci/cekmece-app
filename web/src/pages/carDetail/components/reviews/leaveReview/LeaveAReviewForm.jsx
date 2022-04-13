@@ -15,7 +15,7 @@ function LeaveAReviewForm({ carId }) {
 
     const [successNotification, setSuccessNotification] = useState(false)
     const [errorNotification, setErrorNotification] = useState(false)
-    const { post, response, loading } = useFetch(`/api/cars/${carId}/reviews`, { cachePolicy: "no-cache" })
+    const { post, response, loading } = useFetch(`/api/cars/${carId}/reviews`, { cachePolicy: "no-cache", Headers: { "Content-Type": "applcation/json" } })
 
     const validateComment = (toValidate) => {
         const input = toValidate.trim()

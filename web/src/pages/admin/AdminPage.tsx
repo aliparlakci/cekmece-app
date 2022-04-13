@@ -24,15 +24,6 @@ export default function AdminPage() {
                 <Box sx={{ flexGrow: 1 }}>
                     <AppBar position="fixed">
                         <Toolbar>
-                            <IconButton
-                                size="large"
-                                edge="start"
-                                color="inherit"
-                                aria-label="open drawer"
-                                sx={{ mr: 2 }}
-                            >
-                                <Home />
-                            </IconButton>
                             <Box sx={{display: "flex", gap: "1rem"}}>
                                 <Typography noWrap sx={{ display: { xs: "none", sm: "block" } }}>
                                     <Link to="/admin/cars">Cars</Link>
@@ -42,6 +33,9 @@ export default function AdminPage() {
                                 </Typography>
                                 <Typography noWrap sx={{ display: { xs: "none", sm: "block" } }}>
                                     <Link to="/admin/distributors">Distributors</Link>
+                                </Typography>
+                                <Typography noWrap sx={{ display: { xs: "none", sm: "block" } }}>
+                                    <Link to="/admin/reviews">Reviews</Link>
                                 </Typography>
                             </Box>
                         </Toolbar>
@@ -58,6 +52,9 @@ export default function AdminPage() {
                     </Route>
                     <Route path="/admin/distributors">
                         <DistributorListView />
+                    </Route>
+                    <Route path="/admin/reviews">
+                        Reviews
                     </Route>
                 </Switch>
             </Box>

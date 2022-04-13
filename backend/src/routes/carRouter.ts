@@ -88,7 +88,7 @@ function addNewCar(carService: CarService): RequestHandler {
     return async function (req, res, next) {
         const carFormat = Joi.object().keys({
             name: Joi.string().required(),
-            model: Joi.number().less(2022).greater(1900).required(),
+            model: Joi.number().less(2023).greater(1900).required(),
             number: Joi.number().positive().required(),
             quantity: Joi.number().greater(-1).required(),
             price: Joi.number().positive().required(),
@@ -110,7 +110,7 @@ function addNewCar(carService: CarService): RequestHandler {
             return
         }
 
-        res.status(200).json(car)
+        res.status(StatusCodes.CREATED).json(car)
     }
 }
 
@@ -203,7 +203,7 @@ function addNewReview(reviewService: ReviewService): RequestHandler {
             return
         }
 
-        res.status(200).json(review)
+        res.status(StatusCodes.CREATED).json(review)
     }
 }
 
