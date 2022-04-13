@@ -1,6 +1,6 @@
-interface Category {
+interface ICategory {
     id: number
     name: string
 }
 
-export default Category
+export default ICategory
