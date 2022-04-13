@@ -81,7 +81,7 @@ export default function CarListView() {
                             <DataGrid
                                 rows={mapData(data || [])}
                                 columns={columns}
-                                pageSize={5}
+                                pageSize={25}
                                 rowsPerPageOptions={[5]}
                                 onSelectionModelChange={(model, details) => setSelected(model)}
                                 checkboxSelection

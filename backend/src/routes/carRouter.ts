@@ -119,16 +119,17 @@ function updateNewCar(carService: CarService): RequestHandler {
         const carFormat = Joi.object().keys({
             id: Joi.number().positive().required(),
             name: Joi.string().required(),
-            model: Joi.number().less(2022).greater(1900).required(),
+            model: Joi.number().less(2023).greater(1900).required(),
             number: Joi.number().positive().required(),
             quantity: Joi.number().greater(-1).required(),
             price: Joi.number().positive().required(),
             warranty: Joi.number().positive().required(),
             distributor: Joi.number().required(),
+            category: Joi.number().required()
         })
         const { error } = carFormat.validate(req.body)
         if (error) {
-            next(createError(400))
+            res.status(400).json(error)
             return
         }
 

@@ -80,6 +80,7 @@ function NewCarDialog({ open, onClose, update }: NewCarDialogProps) {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
+                    id: input.id === 0 ? undefined : input.id,
                     distributor: input.distributor,
                     name: input.name,
                     model: input.model,
@@ -91,7 +92,7 @@ function NewCarDialog({ open, onClose, update }: NewCarDialogProps) {
                 }),
             })
 
-            if (response.status === 201) {
+            if (response.status === 201 || response.status === 200) {
                 if (update) notification(NOTIFICATON_TYPES.SUCCESS, "Car updated!")
                 else notification(NOTIFICATON_TYPES.SUCCESS, "Car created!")
                 setInput(defaultState)
