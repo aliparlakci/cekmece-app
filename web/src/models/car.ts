@@ -10,7 +10,7 @@ interface ICar {
     price: number
     warranty: number
     distributor: IDistributor
-    categories: ICategory[]
+    category: ICategory
 }
 
 export default ICar

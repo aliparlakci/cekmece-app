@@ -21,7 +21,7 @@ const mapData = (data: ICar[]) =>
     data.map((car) => ({
         ...car,
         distributor: car.distributor.name,
-        categories: car.categories.map((category) => category.name).toString(),
+        categories: car.category.name,
     }))
 
 export default function CarListView() {
