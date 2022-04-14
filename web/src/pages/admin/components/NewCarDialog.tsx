@@ -42,6 +42,7 @@ function NewCarDialog({ open, onClose, update }: NewCarDialogProps) {
     const { data: categories } = useSWR<ICategory[]>("/api/categories", fetcher)
 
     const fetchCar = async (id: number) => {
+        setLoading(true)
         try {
             const response = await fetch(`/api/cars/${id}`)
             const data = await response.json()
@@ -57,8 +58,12 @@ function NewCarDialog({ open, onClose, update }: NewCarDialogProps) {
                 price: data.price,
                 number: data.number,
             })
+
+            setLoading(false)
         } catch (err) {
-            notification(NOTIFICATON_TYPES.ERROR, JSON.stringify(err))   
+            notification(NOTIFICATON_TYPES.ERROR, JSON.stringify(err))
+            setLoading(false)
+            onClose()
         }
     }
 
@@ -93,14 +98,12 @@ function NewCarDialog({ open, onClose, update }: NewCarDialogProps) {
             })
 
             if (response.status === 201 || response.status === 200) {
-                if (update) notification(NOTIFICATON_TYPES.SUCCESS, "Car updated!")
-                else notification(NOTIFICATON_TYPES.SUCCESS, "Car created!")
+                notification(NOTIFICATON_TYPES.SUCCESS, "Car saved!")
                 setInput(defaultState)
                 if (onClose) onClose()
                 mutate("/api/cars")
             } else {
-                if (update) `Cannot update the new car`
-                else throw `Cannot create a new car`
+                throw `Cannot save the new car`
             }
         } catch (err) {
             if (typeof err == "string") notification(NOTIFICATON_TYPES.ERROR, err)
@@ -113,7 +116,6 @@ function NewCarDialog({ open, onClose, update }: NewCarDialogProps) {
             <Dialog open={open} onClose={onClose}>
                 <Box sx={{ minWidth: "30rem" }}>
                     <form onSubmit={handleCreate}>
-                        <DialogTitle>Register a new car</DialogTitle>
                         <DialogContent sx={{ display: "flex", flexDirection: "column" }}>
                             <FormControl variant="filled" sx={{ m: 1, minWidth: 120 }}>
                                 <InputLabel id="distributor">Distributor</InputLabel>
@@ -250,7 +252,7 @@ function NewCarDialog({ open, onClose, update }: NewCarDialogProps) {
                                 Cancel
                             </Button>
                             <Button onClick={handleCreate} disabled={loading} type="submit">
-                                Create
+                                Save
                             </Button>
                         </DialogActions>
                     </form>

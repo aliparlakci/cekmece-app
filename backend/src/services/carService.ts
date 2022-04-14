@@ -42,7 +42,7 @@ export default class CarService {
     }
 
     async filterCars(options: FilterOptions) {
-        let where: FindOptionsWhere<Car> = {}
+        const where: FindOptionsWhere<Car> = {}
 
         if (options.price) {
             if (options.price.type == "LESS")
@@ -130,6 +130,14 @@ export default class CarService {
         return this.repository.createQueryBuilder().select()
           .where(`MATCH(name) AGAINST ('${query}' IN NATURAL LANGUAGE MODE)`)
           .getMany();
+    }
+
+    async deleteCar(id: number) {
+        return this.repository.createQueryBuilder()
+            .delete()
+            .from(Car)
+            .where("id = :id", { id })
+            .execute()
     }
 }
 

@@ -1,39 +1,45 @@
-import { Box, Container, createTheme, Grid} from "@mui/material"
+import { Box, Container, createTheme, Grid } from "@mui/material"
 import React from "react"
 import ProductsView from "./components/ProductsView"
-import FilterMenu from "./components/FilterMenu";
-import NavBar from './components/NavBar'
-import { ThemeProvider } from "@mui/styles";
+import FilterMenu from "./components/FilterMenu"
+import NavBar from "./components/NavBar"
+import { ThemeProvider } from "@mui/styles"
+import useSWR from "swr"
+import ICar from "../../models/car"
+import fetcher from "../../utils/fetcher"
 
 const theme = createTheme({
     palette: {
         primary: {
-            main: '#000000',
-        }
+            main: "#000000",
+        },
     },
-});
-
+})
 
 export default function HomePage() {
+    const { data: cars } = useSWR<ICar[]>("/api/cars", fetcher)
+    const { data: categories } = useSWR<ICar[]>("/api/categories", fetcher)
+    const { data: distributors } = useSWR<ICar[]>("/api/distributors", fetcher)
+
     return (
         <>
             <ThemeProvider theme={theme}>
-                <NavBar/>
+                <NavBar />
                 <Grid container direction="row" justifyContent="center" marginTop={10}>
-                    <Grid item xs={3} sx={{ display: { xs: "none", lg: "inline" }, zIndex:10}}>
-                        <Container sx={{top:100, justifyContent:"center"}}>
-                        <Grid container direction="column" justifyContent="flex-start" alignItems="center">
-                            <FilterMenu/>
-                        </Grid>
+                    <Grid item xs={3} sx={{ display: { xs: "none", lg: "inline" }, zIndex: 10 }}>
+                        <Container sx={{ top: 100, justifyContent: "center" }}>
+                            <Grid container direction="column" justifyContent="flex-start" alignItems="center">
+                                <FilterMenu />
+                            </Grid>
                         </Container>
                     </Grid>
                     <Grid item xs={12} lg={9}>
-                    <Container>    
-                        <ProductsView/>
-                    </Container>
-                    </Grid>     
+                        <Container>
+                            {cars && <ProductsView cars={cars} />}
+                        </Container>
+                    </Grid>
                 </Grid>
-                
+
             </ThemeProvider>
         </>
     )

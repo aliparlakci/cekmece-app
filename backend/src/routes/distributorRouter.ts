@@ -1,6 +1,6 @@
-import { Router, Request, Response, RequestHandler } from "express"
+import {Router, Request, Response, RequestHandler} from "express"
 import createError from "http-errors"
-import { StatusCodes } from "http-status-codes"
+import {StatusCodes} from "http-status-codes"
 import Joi from "joi"
 
 import DistributorService from "../services/distributorService"
@@ -10,7 +10,7 @@ function addNewDistributor(distributorService: DistributorService): RequestHandl
         const distributorFormat = Joi.object().keys({
             name: Joi.string().required(),
         })
-        const { error } = distributorFormat.validate(req.body)
+        const {error} = distributorFormat.validate(req.body)
         if (error) {
             next(createError(StatusCodes.BAD_REQUEST))
         }
@@ -29,9 +29,44 @@ function addNewDistributor(distributorService: DistributorService): RequestHandl
 
 function getDistributors(distributorService: DistributorService): RequestHandler {
     return async function (req, res, next) {
-        const categories = await distributorService.getAllCategories()
+        const categories = await distributorService.getAllDistributors()
 
         res.status(StatusCodes.OK).json(categories)
+    }
+}
+
+function getDistributor(distributorService: DistributorService): RequestHandler {
+    return async function (req, res, next) {
+        const distributorId = parseInt(req.params.distributorId)
+        if (isNaN(distributorId)) {
+            res.status(StatusCodes.BAD_REQUEST).json("id is not valid")
+            return
+        }
+        const distributor = await distributorService.getDistributor(distributorId)
+        res.status(StatusCodes.OK).json(distributor)
+    }
+}
+
+function updateDistributor(distributorService: DistributorService): RequestHandler {
+    return async function (req, res, next) {
+        const distributorUpdateFormat = Joi.object().keys({
+            id: Joi.not().allow(),
+            name: Joi.string().required()
+        })
+        const {error} = distributorUpdateFormat.validate(req.body)
+        if (error) {
+            res.status(400).json(error)
+            return
+        }
+
+        let category
+        try {
+            category = await distributorService.updateDistributor(req.body)
+        } catch (err) {
+            res.status(500).json(err)
+        }
+
+        res.status(200).json(category)
     }
 }
 
@@ -48,6 +83,8 @@ function distributorRouter() {
     const distributorService = new DistributorService()
 
     router.get("/", getDistributors(distributorService))
+    router.get("/:distributorId", getDistributor(distributorService))
+    router.post("/update", updateDistributor(distributorService))
     router.post("/new", addNewDistributor(distributorService))
     router.post("/:distributorId/delete", deleteDistributor(distributorService))
 

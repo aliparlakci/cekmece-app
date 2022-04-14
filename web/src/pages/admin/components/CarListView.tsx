@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { DataGrid } from "@mui/x-data-grid"
 import { Box, Button, CssBaseline } from "@mui/material"
-import useSWR from "swr"
+import useSWR, { mutate } from "swr"
 
 import NewCarDialog from "./NewCarDialog"
 import ICar from "../../../models/car"
 import fetcher from "../../../utils/fetcher"
+import useConfirmation from "../../../hooks/useConfirmation"
+import useNotification, { NOTIFICATON_TYPES } from "../../../hooks/useNotification"
 
 const columns = [
     { field: "id", headerName: "ID" },
@@ -29,6 +31,9 @@ const mapData = (data: ICar[]) =>
 export default function CarListView() {
     const { data, error } = useSWR<ICar[]>("/api/cars", fetcher)
 
+    const confirm = useConfirmation()
+    const notification = useNotification()
+
     const [selected, setSelected] = useState<any[]>([])
     const [isNewCarModalOpen, setNewCarModalOpen] = useState(false)
     const [update, setUpdate] = useState<number|undefined>(undefined)
@@ -41,6 +46,27 @@ export default function CarListView() {
     const onCarEdit = (id: number) => {
         setUpdate(id)
         setNewCarModalOpen(true)
+    }
+
+    const onDelete = (id: number) => {
+        confirm({
+            title: "Do you want to delete the car?",
+            message: ""
+        }, async () => {
+            try {
+                const response = await fetch(`/api/cars/${id}/delete`, {
+                    method: "POST"
+                })
+
+                if (response.status !== 200) {
+                    throw `Couldn't delete the car, server responded with ${response.status}`
+                }
+
+                mutate("/api/cars")
+            } catch (err) {
+                notification(NOTIFICATON_TYPES.ERROR, JSON.stringify(err))
+            }
+        })
     }
 
     if (!data) return <></>
@@ -70,7 +96,7 @@ export default function CarListView() {
                         >
                             {selected.length > 0 && (
                                 <Button variant="contained" color="error">
-                                    <span className="whitespace-nowrap">Delete Car(s)</span>
+                                    <span className="whitespace-nowrap" onClick={() => onDelete(selected[0])}>Delete Car</span>
                                 </Button>
                             )}
                             <Button variant="contained" onClick={() => setNewCarModalOpen(true)}>
@@ -81,11 +107,8 @@ export default function CarListView() {
                             <DataGrid
                                 rows={mapData(data || [])}
                                 columns={columns}
-                                pageSize={25}
-                                rowsPerPageOptions={[5]}
+                                rowsPerPageOptions={[5,10,25,50,100]}
                                 onSelectionModelChange={(model, details) => setSelected(model)}
-                                checkboxSelection
-                                disableSelectionOnClick
                                 onCellDoubleClick={(params) => onCarEdit(params.row.id)}
                             />
                         </div>

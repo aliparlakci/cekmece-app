@@ -3,7 +3,7 @@ import { Car } from "./car"
 import { User } from "./user"
 
 @Entity()
-export class CartEntity  {
+export class Cart {
     @PrimaryGeneratedColumn('uuid')
     id: number
 
