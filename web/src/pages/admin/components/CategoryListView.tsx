@@ -17,14 +17,24 @@ export default function CategoryListView() {
 
     const [isNewCategoryDialogOpen, setNewCategoryDialogOpen] = useState(false)
     const [selected, setSelected] = useState<any[]>([])
+    const [update, setUpdate] = useState<number | undefined>(undefined)
 
-    useEffect(() => console.log(selected), [selected])
+    const handleClose = () => {
+        setUpdate(undefined)
+        setNewCategoryDialogOpen(false)
+    }
+
+    const onCategoryEdit = (id: number) => {
+        setUpdate(id)
+        setNewCategoryDialogOpen(true)
+    }
 
     if (!data) return <></>
 
     return (
         <>
-            <NewCategoryDialog open={isNewCategoryDialogOpen} onClose={() => setNewCategoryDialogOpen(false)} />
+            <NewCategoryDialog open={isNewCategoryDialogOpen} onClose={handleClose}
+                               update={update} />
             <Box sx={{ display: "flex", minHeight: "100vh" }}>
                 <CssBaseline />
                 <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
@@ -53,11 +63,10 @@ export default function CategoryListView() {
                             <DataGrid
                                 rows={data || []}
                                 columns={columns}
-                                pageSize={5}
-                                rowsPerPageOptions={[5]}
+                                pageSize={25}
+                                rowsPerPageOptions={[5,10,25,50,100]}
                                 onSelectionModelChange={(model, details) => setSelected(model)}
-                                checkboxSelection
-                                disableSelectionOnClick
+                                onCellDoubleClick={(params) => onCategoryEdit(params.row.id)}
                             />
                         </div>
                     </Box>

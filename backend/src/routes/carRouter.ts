@@ -7,6 +7,7 @@ import CarService, { FilterOptions } from "../services/carService"
 import CategoryService from "../services/categoryService"
 import ReviewService from "../services/reviewService"
 import UserService from "../services/userService"
+import {Car} from "../models/car";
 
 function getAllCars(carService: CarService): RequestHandler {
     return async function (req, res, next) {
@@ -250,6 +251,24 @@ function getCarsByCategory(carService: CarService) {
     }
 }
 
+function deleteCar(carService: CarService): RequestHandler {
+    return async function (req, res, next) {
+        const carId = parseInt(req.params.carId)
+        if (isNaN(carId)) {
+            res.status(StatusCodes.BAD_REQUEST).json("id invalid")
+            return
+        }
+
+        const result = await carService.deleteCar(carId)
+        if (result.affected === 0) {
+            res.status(StatusCodes.BAD_REQUEST).json("Cannot delete the car")
+            return
+        }
+
+        res.status(StatusCodes.OK).json()
+    }
+}
+
 function carRouter() {
     const router = Router()
 
@@ -265,6 +284,7 @@ function carRouter() {
     router.get("/:carId", getCar(carService, reviewService))
     router.post("/new", addNewCar(carService))
     router.post("/update", updateNewCar(carService))
+    router.post("/:carId/delete", deleteCar(carService))
     router.post("/:carId/category/:categoryId", assignNewCategory(carService))
     router.delete("/:carId/category/:categoryId", removeCategory(carService))
     router.get("/category/:categoryId", getCarsByCategory(carService))

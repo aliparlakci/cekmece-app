@@ -3,19 +3,19 @@ import { Repository } from "typeorm"
 
 import db from "../dataSource"
 import { Car } from "../models/car"
-import { CartEntity } from "../models/cart"
+import { Cart } from "../models/cart"
 import { Review, Ratings } from "../models/review"
 import { User } from "../models/user"
 import CarService from "./carService"
 import UserService from "./userService"
 
 export default class CartService {
-    private cartRepo: Repository<CartEntity>
+    private cartRepo: Repository<Cart>
     private userRepo: Repository<User>
     private carRepo: Repository<Car>
 
     constructor( private userService: UserService,private carService: CarService) {
-        this.cartRepo = db.getRepository(CartEntity)
+        this.cartRepo = db.getRepository(Cart)
         this.userRepo = db.getRepository(User)
         this.carRepo = db.getRepository(Car)
 
@@ -52,10 +52,10 @@ export default class CartService {
 
     async removeFromCart(cartEntityId: String) {
         console.log(cartEntityId)
-            return  this.cartRepo.createQueryBuilder().delete().from(CartEntity).where("id = :id", { id:cartEntityId }).execute()
+            return  this.cartRepo.createQueryBuilder().delete().from(Cart).where("id = :id", { id:cartEntityId }).execute()
     }
 
-    async getItemsInCard(user: string): Promise<CartEntity[]> {
+    async getItemsInCard(user: string): Promise<Cart[]> {
         const userCart = await this.cartRepo.find({ relations: ["item",'user'] });
         return (await userCart).filter(item => item.user.id === user)
     }

@@ -1,7 +1,7 @@
-import { Repository } from "typeorm"
+import {Repository} from "typeorm"
 
 import db from "../dataSource"
-import { Category } from "../models/category"
+import {Category} from "../models/category"
 
 export default class CategoryService {
     private repository: Repository<Category>
@@ -19,10 +19,16 @@ export default class CategoryService {
     }
 
     async getCategory(id: number) {
-        return this.repository.findOne({ where: { id } })
+        return this.repository.findOne({
+            where: {id}
+        })
     }
 
     async deleteCategory(id: number) {
-        return this.repository.createQueryBuilder().delete().from(Category).where("id = :id", { id }).execute()
+        return this.repository.createQueryBuilder().delete().from(Category).where("id = :id", {id}).execute()
+    }
+
+    async updateCategory(category: Category) {
+        return this.repository.save(category)
     }
 }
