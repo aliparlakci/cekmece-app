@@ -21,50 +21,50 @@ function valuetext(value: number) {
 }
 
 const minDistance = 1;
-const minYear = 2000;
-const maxYear = 2022;
 
-export default function YearSlider() {
-    const [value, setValue] = React.useState<number[]>([minYear, maxYear])
-    const [low, setLow] = React.useState(minYear)
-    const [high, setHigh] = React.useState(maxYear)
+interface IYearSliderProps {
+    minYear?: number
+    maxYear?: number
+    onChange: (min: number, max: number) => void
+}
 
+export default function YearSlider({ minYear, maxYear, onChange }: IYearSliderProps) {
     const handleChange = (event: Event, newValue: number | number[], activeThumb: number) => {
         if (!Array.isArray(newValue)) {
             return
         }
 
+        let min, max
         if (newValue[1] - newValue[0] < minDistance) {
             if (activeThumb === 0) {
                 const clamped = Math.min(newValue[0], 2022 - minDistance)
-                setValue([clamped, clamped + minDistance])
+                min = clamped
+                max = clamped + minDistance
             } else {
                 const clamped = Math.max(newValue[1], minDistance)
-                setValue([clamped - minDistance, clamped])
+                min = clamped - minDistance
+                max = clamped
             }
+            onChange(min, max)
         } else {
-            setValue(newValue as number[])
+            onChange(newValue[0], newValue[1])
         }
-            setLow(newValue[0]);
-            setHigh(newValue[1]);
-
     }
 
     return (
             <ThemeProvider theme={theme}>
               <Box sx={{display:"flex",  alignItems: "center", justifyContent: "space-between", marginTop:2}} >
-              <Typography variant="h6" sx={{ fontWeight:"light" }}>{low}</Typography>
+              <Typography variant="h6" sx={{ fontWeight:"light" }}>{minYear}</Typography>
                 <Slider
                     getAriaLabel={() => "Minimum distance shift"}
-                    value={value}
+                    value={[minYear || 2000, maxYear || 2022]}
                     onChange={handleChange}
                     disableSwap
                     sx = {{ marginX:2 }}
-                    min={minYear}
-                    max={maxYear}
-
+                    min={2000}
+                    max={2022}
                 />
-                <Typography variant="h6" sx={{ fontWeight:"light" }}>{high}</Typography>
+                <Typography variant="h6" sx={{ fontWeight:"light" }}>{maxYear}</Typography>
               </Box>
             </ThemeProvider>
     )

@@ -19,13 +19,10 @@ export default function SortCars() {
         label="Sort By"
         onChange={handleChange}
       >
-        <MenuItem value="">
-          <em>Show All</em>
-        </MenuItem>
-        <MenuItem value={"Highest Price"}>Highest Price</MenuItem>
-        <MenuItem value={"Lowest Price"}>Lowest Price</MenuItem>
-        <MenuItem value={"Most Popular"}>Most Popular</MenuItem>
-        <MenuItem value={"Least Popular"}>Least Popular</MenuItem>
+        <MenuItem value={"priceHigh"}>Highest Price</MenuItem>
+        <MenuItem value={"priceLow"}>Lowest Price</MenuItem>
+        <MenuItem value={"mostPopular"}>Most Popular</MenuItem>
+        <MenuItem value={"leastPopular"}>Least Popular</MenuItem>
       </Select>
     </FormControl>
   );

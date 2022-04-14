@@ -57,9 +57,9 @@ export default function ProductCard({ car }: IProductCardProps) {
                                 </Box>
                                 <Box marginX={0.5} marginTop={0.5}
                                      sx={{ alignItems: "center", direction: "column", justifyContent: "center" }}>
-                                    <Typography variant="h5" marginX={0.5} fontWeight="Light"
+                                    <Typography variant="h6" marginX={0.5} fontWeight="Light"
                                                 textAlign="left">{car.distributor?.name}</Typography>
-                                    <Typography variant="h4" marginX={0.5} fontWeight="Bold"
+                                    <Typography variant="h5" marginX={0.5} fontWeight="Bold"
                                                 textAlign="left">{car.name}</Typography>
                                 </Box>
                                 <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}
