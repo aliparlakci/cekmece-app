@@ -14,6 +14,8 @@ import BrandsList from "./BrandsList"
 import YearSlider from "./YearSlider"
 import PriceSelect from "./PriceSelect"
 import CategorySelect from "./CategorySelect"
+import SortCars from "./SortCars"
+
 
 const theme = createTheme({
     palette: {
@@ -50,6 +52,13 @@ export default function FilterMenu() {
                     <Container>
                         <Box  sx={{ alignItems: "right", direction: "row", justifyContent: "right"}}>
                             <Paper elevation={24} className="paper"  sx={{position:"sticky", alignSelf:"right",  maxHeight:0.85, overflow: 'auto', borderRadius:0, width: { lg: 280, xl: 380 } }} >
+                                <Box sx={{ paddingX: 2, paddingY: 1 }}>
+                                    <Typography variant="h6" sx={{ fontWeight:"bold", color:"#666"}} >Sort Cars</Typography>
+                                </Box>
+                                <Divider variant="middle"/>
+                                <Box sx={{ paddingX: 5, paddingY: 2 }}>
+                                    <SortCars/>
+                                </Box>
                                 <Box sx={{ paddingX: 2, paddingY: 1 }}>
                                     <Typography variant="h6" sx={{ fontWeight:"bold", color:"#666"}} >Filter Cars</Typography>
                                 </Box>
