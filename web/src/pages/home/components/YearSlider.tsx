@@ -51,7 +51,6 @@ export default function YearSlider() {
     }
 
     return (
-
             <ThemeProvider theme={theme}>
               <Box sx={{display:"flex",  alignItems: "center", justifyContent: "space-between", marginTop:2}} >
               <Typography variant="h6" sx={{ fontWeight:"light" }}>{low}</Typography>
