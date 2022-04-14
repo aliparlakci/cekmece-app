@@ -44,7 +44,6 @@ function NewCategoryDialog({ open, onClose, update }: NewCateogryDialogProps) {
         setLoading(true)
         try {
             const endpoint = update ? "/api/categories/update" : "/api/categories/new"
-            console.log({ endpoint })
             const response = await fetch(endpoint, {
                 method: "POST",
                 headers: {

@@ -1,42 +1,66 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import Button from "@mui/material/Button"
 import TextField from "@mui/material/TextField"
 import Dialog from "@mui/material/Dialog"
 import DialogActions from "@mui/material/DialogActions"
 import DialogContent from "@mui/material/DialogContent"
 import DialogTitle from "@mui/material/DialogTitle"
-import useNotification, { NOTIFICATON_TYPES } from "../../../hooks/useNotification"
 import { mutate } from "swr"
 
-interface NewCateogryDialogProps {
+import useNotification, { NOTIFICATON_TYPES } from "../../../hooks/useNotification"
+
+interface NewDistributorDialogProps {
     open: boolean
     onClose: () => any
+    update?: number
 }
 
-function NewDistributorDialog({ open, onClose }: NewCateogryDialogProps) {
+function NewDistributorDialog({ open, onClose, update }: NewDistributorDialogProps) {
     const [distributorName, setDistributorName] = useState("")
     const [loading, setLoading] = useState(false)
     const notification = useNotification()
 
+    const fetchDistributor = async (id: number) => {
+        setLoading(true)
+        try {
+            const response = await fetch(`/api/distributors/${id}`)
+            if (response.status !== 200)
+                throw `Server responded with ${response.status}`
+            const data = await response.json()
+
+            setDistributorName(data.name)
+        } catch (err) {
+            notification(NOTIFICATON_TYPES.ERROR, JSON.stringify(err))
+        }
+        setLoading(false)
+    }
+
+    useEffect(() => {
+        if (update)
+            fetchDistributor(update)
+    }, [update])
+
     const handleCreate = async () => {
         setLoading(true)
         try {
-            const response = await fetch("/api/distributors/new", {
+            const endpoint = update ? "/api/distributors/update" : "/api/distributors/new"
+            const response = await fetch(endpoint, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
+                    id: update ? update : undefined,
                     name: distributorName,
                 }),
             })
 
-            if (response.status === 201) {
-                notification(NOTIFICATON_TYPES.SUCCESS, "Distributor created!")
+            if (response.status === 200 || response.status === 201) {
+                notification(NOTIFICATON_TYPES.SUCCESS, "Distributor saved!")
                 if (onClose) onClose()
                 mutate("/api/distributors")
             } else {
-                throw `Cannot create a new distributor`
+                throw `Cannot save the distributor`
             }
         } catch (err) {
             notification(NOTIFICATON_TYPES.ERROR, JSON.stringify(err))

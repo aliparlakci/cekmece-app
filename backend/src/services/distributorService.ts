@@ -14,12 +14,16 @@ export default class DistributorService {
         return await this.repository.save(candidate)
     }
 
-    async getAllCategories() {
+    async getAllDistributors() {
         return this.repository.find()
     }
 
     async getDistributor(id: number) {
         return this.repository.findOne({ where: { id } })
+    }
+
+    async updateDistributor(distributor: Distributor) {
+        return this.repository.save(distributor)
     }
 
     async deleteDistributor(id: number) {

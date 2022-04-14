@@ -3,8 +3,8 @@ import { DataGrid } from "@mui/x-data-grid"
 import { Box, Button, CssBaseline } from "@mui/material"
 import useSWR from "swr"
 
-import NewDistributorDialog from './NewDistributorDialog'
-import IDistributor from '../../../models/distributor'
+import NewDistributorDialog from "./NewDistributorDialog"
+import IDistributor from "../../../models/distributor"
 import fetcher from "../../../utils/fetcher"
 
 const columns = [
@@ -17,14 +17,24 @@ export default function DistributorListView() {
 
     const [isNewDistributorDialogOpen, setNewDistributorDialogOpen] = useState(false)
     const [selected, setSelected] = useState<any[]>([])
+    const [update, setUpdate] = useState<number | undefined>(undefined)
 
-    useEffect(() => console.log(selected), [selected])
+    const handleClose = () => {
+        setUpdate(undefined)
+        setNewDistributorDialogOpen(false)
+    }
+
+    const onCategoryEdit = (id: number) => {
+        setUpdate(id)
+        setNewDistributorDialogOpen(true)
+    }
 
     if (!data) return <></>
 
     return (
         <>
-            <NewDistributorDialog open={isNewDistributorDialogOpen} onClose={() => setNewDistributorDialogOpen(false)} />
+            <NewDistributorDialog open={isNewDistributorDialogOpen} onClose={() => setNewDistributorDialogOpen(false)}
+                                  update={update} />
             <Box sx={{ display: "flex", minHeight: "100vh" }}>
                 <CssBaseline />
                 <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
@@ -56,8 +66,7 @@ export default function DistributorListView() {
                                 pageSize={5}
                                 rowsPerPageOptions={[5]}
                                 onSelectionModelChange={(model, details) => setSelected(model)}
-                                checkboxSelection
-                                disableSelectionOnClick
+                                onCellDoubleClick={(params) => onCategoryEdit(params.row.id)}
                             />
                         </div>
                     </Box>
