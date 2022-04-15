@@ -1,10 +1,10 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Button, Box, Container, createTheme, Paper, Grid, ThemeProvider, Typography, Divider } from "@mui/material"
 import BrandsList from "./BrandsList"
 import YearSlider from "./YearSlider"
 import PriceSelect from "./PriceSelect"
 import CategorySelect from "./CategorySelect"
-import SortCars from "./SortCars"
+import SortCars, { SortType } from "./SortCars"
 
 import ICategory from "../../../models/category"
 import IDistributor from "../../../models/distributor"
@@ -37,15 +37,16 @@ const theme = createTheme({
     },
 })
 
-type IOnFilter = (filter: IFilter) => any
+type IOnFilter = (filter: IFilterOptions) => any
 
-interface IFilter {
-    minPrice?: string
-    maxPrice?: string
-    minYear?: number
-    maxYear?: number
-    brand?: string
-    category?: string
+export interface IFilterOptions {
+    minPrice: string
+    maxPrice: string
+    minYear: number
+    maxYear: number
+    distributor: string
+    category: string
+    sort: SortType
 }
 
 interface FilterMenuProps {
@@ -54,13 +55,22 @@ interface FilterMenuProps {
     onFilter: IOnFilter
 }
 
-const defaultState: IFilter = {
+const defaultState: IFilterOptions = {
     minYear: 2000,
-    maxYear: 2022
+    maxYear: 2022,
+    minPrice: "",
+    maxPrice: "",
+    distributor: "",
+    category: "",
+    sort: "mostPopular",
 }
 
 export default function FilterMenu({ categories, distributors, onFilter }: FilterMenuProps) {
     const [filter, setFilter] = useState(defaultState)
+
+    useEffect(() => {
+        onFilter(filter)
+    }, [filter])
 
     return (
         <>
@@ -87,7 +97,8 @@ export default function FilterMenu({ categories, distributors, onFilter }: Filte
                                 </Box>
                                 <Divider variant="middle" />
                                 <Box sx={{ paddingX: 5, paddingY: 2 }}>
-                                    <SortCars />
+                                    <SortCars sort={filter.sort}
+                                              onChange={(sort) => setFilter(old => ({ ...old, sort }))} />
                                 </Box>
                                 <Box sx={{ paddingX: 2, paddingY: 1 }}>
                                     <Typography variant="h6" sx={{ fontWeight: "bold", color: "#666" }}>
@@ -124,7 +135,12 @@ export default function FilterMenu({ categories, distributors, onFilter }: Filte
                                 <Divider variant="middle" />
                                 <Box sx={{ paddingX: 5, paddingY: 2 }}>
                                     <Typography sx={{ fontWeight: "bold" }}>Between Years:</Typography>
-                                    <YearSlider minYear={filter.minYear} maxYear={filter.maxYear} onChange={(minYear, maxYear) => setFilter(old => ({...old, minYear, maxYear}))}/>
+                                    <YearSlider minYear={filter.minYear} maxYear={filter.maxYear}
+                                                onChange={(minYear, maxYear) => setFilter(old => ({
+                                                    ...old,
+                                                    minYear,
+                                                    maxYear,
+                                                }))} />
                                 </Box>
                                 <Divider variant="middle" />
                                 <Box sx={{ paddingX: 5, paddingY: 2 }}>

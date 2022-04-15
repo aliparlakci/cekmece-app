@@ -4,18 +4,23 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 
-export default function SortCars() {
-  const [sortby, setSort] = React.useState('');
+export type SortType = "priceHigh" | "priceLow" | "mostPopular" | "leastPopular"
 
+interface ISortCarsProps {
+    sort: SortType,
+    onChange: (sort: SortType) => void
+}
+
+export default function SortCars({ sort, onChange }: ISortCarsProps) {
   const handleChange = (event: SelectChangeEvent) => {
-    setSort(event.target.value);
+    onChange(event.target.value as SortType);
   };
 
   return (
     <FormControl sx={{ marginY:1, minWidth: 120 }} size="small">
       <InputLabel>Sort By</InputLabel>
       <Select
-        value={sortby}
+        value={sort}
         label="Sort By"
         onChange={handleChange}
       >
