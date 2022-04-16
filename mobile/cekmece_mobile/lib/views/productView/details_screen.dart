@@ -17,6 +17,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'components/body.dart';
 import 'components/custom_app_bar.dart';
@@ -84,17 +85,34 @@ class _ProductBottomBarState extends State<ProductBottomBar> {
       isLoading = true;
     });
     try {
-      final response = await http.post(Uri.parse(
-          '$clientURL/api/cart/${widget.userBloc.user.uid}/add/${widget.product.id}'));
+      if (widget.userBloc.user.isAnonymous == false) {
+        final response = await http.post(Uri.parse(
+            '$clientURL/api/cart/${widget.userBloc.user.uid}/add/${widget.product.id}'));
 
-      if (response.statusCode == 200) {
+        if (response.statusCode == 200) {
+        } else {
+          showSnackBar(
+            context: context,
+            error: true,
+            message: "Could not add item to the cart!",
+          );
+          throw Exception('Failed to add to cart');
+        }
+
+        user = await widget.userBloc.updateUser(widget.userBloc.user.uid);
       } else {
-        showSnackBar(
-          context: context,
-          error: true,
-          message: "Could not add item to the cart!",
-        );
-        throw Exception('Failed to add to cart');
+        final prefs = await SharedPreferences.getInstance();
+        final List<String> cart = prefs.getStringList('cart')!;
+
+        if (cart.contains("${widget.product.id}-${quantity}")) {
+          cart.remove("${widget.product.id}-${quantity}");
+          cart.add("${widget.product.id}-${quantity + 1}");
+        } else {
+          cart.add("${widget.product.id}-1");
+        }
+        await prefs.setStringList('cart', cart);
+
+        user = await widget.userBloc.updateLocalUser();
       }
     } catch (err) {
       print(err);
@@ -104,7 +122,6 @@ class _ProductBottomBarState extends State<ProductBottomBar> {
       isLoading = false;
     });
 
-    user = await widget.userBloc.updateUser(widget.userBloc.user.uid);
     inCart = isInCart();
 
     setState(() {});
@@ -163,19 +180,51 @@ class _ProductBottomBarState extends State<ProductBottomBar> {
                                         isLoading = true;
                                       });
                                       try {
-                                        final response = await http.post(Uri.parse(
-                                            '$clientURL/api/cart/remove/${cartId}'));
+                                        if (widget.userBloc.user.isAnonymous) {
+                                          // Obtain shared preferences.
+                                          final prefs = await SharedPreferences
+                                              .getInstance();
+                                          final List<String>? cart =
+                                              prefs.getStringList('cart');
+                                          print(cart);
+                                          if (quantity == 1) {
+                                            print("quantity is 1");
+                                            cart!.remove(
+                                                "${widget.product.id}-1");
+                                          } else {
+                                            cart!.remove(
+                                                "${widget.product.id}-${quantity}");
+                                            print(cart);
 
-                                        if (response.statusCode == 200) {
+                                            cart.add(
+                                                "${widget.product.id}-${quantity - 1}");
+                                          }
+                                          print(cart);
+                                          await prefs.setStringList(
+                                              'cart', cart);
+
+                                          user = await widget.userBloc
+                                              .updateLocalUser();
                                         } else {
-                                          showSnackBar(
-                                            context: context,
-                                            error: true,
-                                            message:
-                                                "Could not remove item to the cart!",
-                                          );
-                                          throw Exception(
-                                              'Failed to remove to cart');
+                                          final response = await http.post(
+                                              Uri.parse(
+                                                  '$clientURL/api/cart/remove/${cartId}'));
+
+                                          user = await widget.userBloc
+                                              .updateUser(
+                                                  widget.userBloc.user.uid);
+
+                                          if (response.statusCode == 200) {
+                                          } else {
+                                            showSnackBar(
+                                              context: context,
+                                              error: true,
+                                              message:
+                                                  "Could not remove item to the cart!",
+                                            );
+                                            throw Exception(
+                                                'Failed to remove to cart');
+                                          }
                                         }
                                       } catch (err) {
                                         print(err);
@@ -185,8 +234,6 @@ class _ProductBottomBarState extends State<ProductBottomBar> {
                                         isLoading = false;
                                       });
 
-                                      user = await widget.userBloc
-                                          .updateUser(widget.userBloc.user.uid);
                                       inCart = isInCart();
 
                                       setState(() {});

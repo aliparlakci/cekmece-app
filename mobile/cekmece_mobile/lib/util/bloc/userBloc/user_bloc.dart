@@ -80,10 +80,52 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         cart: cartList,
         uid: "1",
         photoUrl:
-            "https://pbs.twimg.com/profile_images/1506730396679036937/zDIidO5w_400x400.jpg");
+            "https://pbs.twimg.com/profile_images/1512564015045742600/2lfvceZz_400x400.jpg");
     BlocProvider.of<LoadingBloc>(context).add(LoadingEnd());
-
     return localUser;
+  }
+
+  Future<UserClass> updateLocalUser() async {
+    BlocProvider.of<LoadingBloc>(context)
+        .add(LoadingStart(loadingReason: "User fetch"));
+    List<CartItem> cartList = await getLocalCart();
+    print("update local user");
+    print(cartList);
+    UserClass localUser = UserClass(
+        displayName: "Anon user",
+        isAnonymous: true,
+        email: "",
+        cart: cartList,
+        uid: "0",
+        photoUrl: "");
+
+    BlocProvider.of<LoadingBloc>(context).add(LoadingEnd());
+    return localUser;
+  }
+
+  Future<List<CartItem>> getLocalCart() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    final List<String>? cart = prefs.getStringList('cart');
+    List<CartItem> cartList = [];
+    if (cart != null && cart != []) {
+      for (String elem in cart) {
+        String carId = elem.substring(0, elem.indexOf('-'));
+        String quantity = elem.substring(elem.indexOf('-') + 1);
+        Product car = await getCar(int.tryParse(carId)!);
+
+        CartItem item = CartItem(
+            id: "0",
+            total: car.price * int.tryParse(quantity)!,
+            quantity: int.tryParse(quantity)!,
+            item: car);
+
+        cartList.add(item);
+      }
+    } else {
+      await prefs.setStringList('cart', <String>[]);
+    }
+    return cartList;
   }
 
   UserBloc({required this.context}) : super(NotLoggedIn()) {
@@ -96,11 +138,11 @@ class UserBloc extends Bloc<UserEvent, UserState> {
           user = await updateUser(userId);
           emit(LoggedIn(user: user));
         } else {
-          user = const UserClass(
+          user = UserClass(
               displayName: "",
               isAnonymous: true,
               uid: "0",
-              cart: [],
+              cart: await getLocalCart(),
               email: "",
               photoUrl: "");
           emit(LoggedIn(user: user));
@@ -148,6 +190,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
       final prefs = await SharedPreferences.getInstance();
       await prefs.remove('id');
+      await prefs.setStringList('cart', <String>[]);
       user = const UserClass(
           displayName: "",
           isAnonymous: true,
@@ -169,6 +212,9 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
       if (userId != null) {
         user = await updateUser(userId);
+        emit(LoggedIn(user: user));
+      } else {
+        user = await updateLocalUser();
         emit(LoggedIn(user: user));
       }
 
