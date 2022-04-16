@@ -7,7 +7,6 @@
 
 import 'package:cekmece_mobile/models/user/UserClass.dart';
 import 'package:cekmece_mobile/navigation.dart';
-import 'package:cekmece_mobile/util/firebase/firebaseConnectionWrapper.dart';
 import 'package:cekmece_mobile/views/profile/login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

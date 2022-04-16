@@ -1,10 +1,6 @@
-import 'dart:math';
-
 import 'package:cekmece_mobile/models/user/UserClass.dart';
 import 'package:cekmece_mobile/views/profile/viewComponents/anonymousProfileView.dart';
 import 'package:cekmece_mobile/views/profile/viewComponents/userInfo.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ProfileView extends StatefulWidget {

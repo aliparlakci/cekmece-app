@@ -33,7 +33,7 @@ class _ReviewsViewState extends State<ReviewsView> {
   Future getReviewsByCar(carId) async {
     try {
       var response = await http.get(
-          Uri.parse("${dotenv.env['CLIENT_URL']}/cars/$carId/reviews"),
+          Uri.parse("${dotenv.env['CLIENT_URL']}/api/cars/$carId/reviews"),
           headers: <String, String>{
             "Accept": "application/json",
             "Content-Type": "charset=UTF-8",

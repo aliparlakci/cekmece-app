@@ -9,10 +9,10 @@ import '../../widgets/linearProgressBar.dart';
 import '../../widgets/showSnackBar.dart';
 
 class NewReviewView extends StatefulWidget {
-  const NewReviewView({Key? key, required this.carId, required this.onSuccess}) : super(key: key);
+  const NewReviewView({Key? key, required this.carId, required this.onSuccess})
+      : super(key: key);
   final int carId;
   final Function() onSuccess;
-
 
   @override
   State<NewReviewView> createState() => _NewReviewViewState();
@@ -34,15 +34,14 @@ class _NewReviewViewState extends State<NewReviewView> {
       var response = await http
           .post(
               Uri.parse(
-                  "${dotenv.env['CLIENT_URL']}/cars/${widget.carId}/reviews/new"),
+                  "${dotenv.env['CLIENT_URL']}/api/cars/${widget.carId}/reviews/new"),
               headers: <String, String>{
                 'Content-Type': 'application/json; charset=UTF-8',
               },
               body: comment.isNotEmpty
                   ? jsonEncode(
                       <String, dynamic>{"rating": rating, "comment": comment})
-                  : jsonEncode(
-                      <String, dynamic>{"rating": rating}))
+                  : jsonEncode(<String, dynamic>{"rating": rating}))
           .timeout(const Duration(seconds: 5));
 
       if (response.statusCode < 400) {
