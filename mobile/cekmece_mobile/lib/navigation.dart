@@ -11,7 +11,6 @@ import 'package:cekmece_mobile/views/search/search.dart';
 import 'package:cekmece_mobile/views/search/searchWrapper.dart';
 import 'package:cekmece_mobile/views/temp/TempView.dart';
 import 'package:cekmece_mobile/views/temp/omerTemp.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

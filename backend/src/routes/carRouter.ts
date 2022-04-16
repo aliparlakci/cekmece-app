@@ -178,7 +178,7 @@ function getReviews(reviewService: ReviewService): RequestHandler {
 function addNewReview(reviewService: ReviewService): RequestHandler {
     return async function (req, res, next) {
         const carId = parseInt(req.params.carId)
-        const userId = "K40nLqy4NJcWMvEur7LOlKzQnOA3"
+        const userId = "1"
 
         console.log(req.body)
 

@@ -1,5 +1,4 @@
 import 'package:cekmece_mobile/constants/font_constants.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:intl/intl.dart';
@@ -26,12 +25,11 @@ class ReviewTile extends StatelessWidget {
 
   factory ReviewTile.fromReviewClass(ReviewClass review) {
     return ReviewTile(
-      rating: review.rating,
-      comment: review.comment,
-      createdDate: review.createdDate,
-      isApproved: review.isApproved,
-      userId: review.user["id"]
-    );
+        rating: review.rating,
+        comment: review.comment,
+        createdDate: review.createdDate,
+        isApproved: review.isApproved,
+        userId: review.user["id"]);
   }
 
   factory ReviewTile.fromReviewClassWithDelete(
@@ -79,8 +77,7 @@ class ReviewTile extends StatelessWidget {
                         style: reviewTileDateStyle),
                   ],
                 ),
-                if (FirebaseAuth.instance.currentUser != null &&
-                    FirebaseAuth.instance.currentUser!.uid == userId)
+                if (true)
                   PopupMenuButton(
                     child: const Icon(Icons.more_horiz_outlined),
                     onSelected: (value) {
@@ -102,15 +99,18 @@ class ReviewTile extends StatelessWidget {
               ],
             ),
             if (comment != null) const SizedBox(height: 10),
-            if (comment != null) ReadMoreText(
-              comment!,
-              textAlign: TextAlign.left,
-              style: isApproved ? reviewTileCommentStyle : reviewTileUnapprovedCommentStyle,
-              trimMode: TrimMode.Line,
-              trimLines: 3,
-              moreStyle: reviewTileMoreLessStyle,
-              lessStyle: reviewTileMoreLessStyle,
-            )
+            if (comment != null)
+              ReadMoreText(
+                comment!,
+                textAlign: TextAlign.left,
+                style: isApproved
+                    ? reviewTileCommentStyle
+                    : reviewTileUnapprovedCommentStyle,
+                trimMode: TrimMode.Line,
+                trimLines: 3,
+                moreStyle: reviewTileMoreLessStyle,
+                lessStyle: reviewTileMoreLessStyle,
+              )
           ],
         ),
       ),
