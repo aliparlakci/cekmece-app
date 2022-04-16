@@ -5,6 +5,7 @@ import 'package:cekmece_mobile/models/user/UserClass.dart';
 import 'package:cekmece_mobile/util/bloc/userBloc/user_bloc.dart';
 import 'package:cekmece_mobile/views/productView/components/size.dart';
 import 'package:cekmece_mobile/views/productView/details_screen.dart';
+import 'package:cekmece_mobile/widgets/showSnackBar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -195,11 +196,23 @@ class _CartViewState extends State<CartView> {
                   child: ElevatedButton(
                 style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(Colors.black)),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 15),
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 15),
                   child: Text("Complete Order"),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  if (widget.user.isAnonymous) {
+                    showSnackBar(
+                        context: context,
+                        message: "You must be logged in in order to proceed",
+                        error: true);
+                  } else {
+                    showSnackBar(
+                      context: context,
+                      message: "Now you will be directed to the payment page",
+                    );
+                  }
+                },
               ))
             ]),
           ),

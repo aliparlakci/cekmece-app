@@ -11,7 +11,6 @@ class LoadingBloc extends Bloc<LoadingEvent, LoadingState> {
     });
 
     on<LoadingStart>((event, emit) async {
-      print("Loading Start");
       emit(Loading());
     });
 
@@ -19,7 +18,6 @@ class LoadingBloc extends Bloc<LoadingEvent, LoadingState> {
       event,
       emit,
     ) async {
-      print("Loading End");
       emit(NotLoading());
     });
   }
