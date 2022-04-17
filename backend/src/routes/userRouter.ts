@@ -31,6 +31,7 @@ function getUserById(userService: UserService): RequestHandler {
 function listAllUsers(userService: UserService): RequestHandler {
     return async function (req, res, next) {
     const users = await userService.getAllUsers()
+    
     //Send the users object
     
     res.status(200).json(users)
@@ -41,12 +42,13 @@ function listAllUsers(userService: UserService): RequestHandler {
 function newUser(userService: UserService): RequestHandler {
     return async function (req, res, next) {
         //Get parameters from the body
-        let { username, password, role } = req.body
+        let { username, password, email } = req.body
         let user = new User()
         user.username = username
+        user.email = email
         user.password = password
-        user.role = role
-        console.log({ username, password, role })
+        user.role = "custom_user"
+        console.log({ username, password })
 
         //Validade if the parameters are ok
         const errors = await validate(user)
