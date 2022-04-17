@@ -6,10 +6,10 @@ import CarService from "./carService"
 import UserService from "./userService"
 
 export default class ReviewService {
-    private repository: Repository<Review>
+    private repository: () => Repository<Review>
 
     constructor(private carService: CarService, private userService: UserService) {
-        this.repository = db.getRepository(Review)
+        this.repository = () => db.getRepository(Review)
     }
 
     async newReview(body: { carId: number; userId: string; rating: number; comment?: string }) {
@@ -22,7 +22,7 @@ export default class ReviewService {
         if (user === null) throw `User does not exist: id=${carId}`
 
         return (
-            await this.repository.save({
+            await this.repository().save({
                 car,
                 comment: comment,
                 isApproved: comment ? false : true,
@@ -33,26 +33,26 @@ export default class ReviewService {
     }
 
     async getAllReviews() {
-        return await this.repository.find()
+        return await this.repository().find()
     }
 
     async getReview(id: number) {
-        return await this.repository.findOne({ where: { id } })
+        return await this.repository().findOne({ where: { id } })
     }
 
     async approveReview(id: number) {
-        return await this.repository.save({
+        return await this.repository().save({
             id: id,
             isApproved: true,
         })
     }
 
     async deleteReview(id: number) {
-        return this.repository.createQueryBuilder().delete().from(Review).where("id = :id", { id }).execute()
+        return this.repository().createQueryBuilder().delete().from(Review).where("id = :id", { id }).execute()
     }
 
     async getReviewsOfCar(carId: number) {
-        const reviews: Review[] = await this.repository.find({
+        const reviews: Review[] = await this.repository().find({
             relations: {
                 user: true,
             },
@@ -84,7 +84,7 @@ export default class ReviewService {
     }
 
     async getReviewCountAndAverageRating(carId: number) {
-        return await this.repository
+        return await this.repository()
             .createQueryBuilder("R")
             .select("COUNT(*)", "review_count")
             .addSelect("AVG(R.rating)", "average_rating")
@@ -93,7 +93,7 @@ export default class ReviewService {
     }
 
     async getAllUnapprovedReviews() {
-        return await this.repository.find({
+        return await this.repository().find({
             relations: {
                 user: true,
                 car: true,

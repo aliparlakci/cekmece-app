@@ -134,13 +134,11 @@ function userRouter() {
 
     const checkRolesMiddleware = checkRole(userService)
 
-
     router.get("/", listAllUsers(userService)); 
     router.get("/:id([0-9]+)", [checkJwt, checkRolesMiddleware(["ADMIN"])], getUserById)
     router.post("/", newUser(userService));
     router.patch( "/:id([0-9]+)",[checkJwt, checkRolesMiddleware(["ADMIN"])], editUser(userService));
     router.delete("/:id([0-9]+)", [checkJwt, checkRolesMiddleware(["ADMIN"])], deleteUser(userService));
-      
 
     return router
 }

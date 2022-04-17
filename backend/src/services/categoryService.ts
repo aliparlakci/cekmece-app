@@ -4,18 +4,18 @@ import db from "../dataSource"
 import {Category} from "../models/category"
 
 export default class CategoryService {
-    private repository: Repository<Category>
+    private repository: () => Repository<Category>
 
     constructor() {
-        this.repository = db.getRepository(Category)
+        this.repository = () => db.getRepository(Category)
     }
 
     async newCategory(candidate: Category) {
-        return await this.repository.save(candidate)
+        return await this.repository().save(candidate)
     }
 
     async getAllCategories() {
-        return this.repository.find({
+        return this.repository().find({
             order: {
                 name: "ASC"
             }
@@ -23,16 +23,16 @@ export default class CategoryService {
     }
 
     async getCategory(id: number) {
-        return this.repository.findOne({
+        return this.repository().findOne({
             where: {id}
         })
     }
 
     async deleteCategory(id: number) {
-        return this.repository.createQueryBuilder().delete().from(Category).where("id = :id", {id}).execute()
+        return this.repository().createQueryBuilder().delete().from(Category).where("id = :id", {id}).execute()
     }
 
     async updateCategory(category: Category) {
-        return this.repository.save(category)
+        return this.repository().save(category)
     }
 }

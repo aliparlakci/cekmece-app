@@ -7,15 +7,15 @@ import config from "../config";
 
 
 export default class AuthService{
-    private repository: Repository<User>
+    private repository: () => Repository<User>
 
     constructor() {
-        this.repository = db.getRepository(User)
+        this.repository = () => db.getRepository(User)
     }
 
     async authenticate(username: string, password: string) {
 
-        const user = await this.repository.findOne({ where: { username } })
+        const user = await this.repository().findOne({ where: { username } })
         if (user === null) return false
         const result = user.checkIfUnencryptedPasswordIsValid(password)
         if (!result) return false
@@ -29,7 +29,7 @@ export default class AuthService{
 
     async authenticateByIdPassword(id: any, oldPassword: any) {
 
-        const user = await this.repository.findOne({ where: { id } })
+        const user = await this.repository().findOne({ where: { id } })
         if (user === null) return false
         const result = user.checkIfUnencryptedPasswordIsValid(oldPassword)
         if (!result) return false

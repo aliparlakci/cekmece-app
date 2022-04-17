@@ -15,9 +15,9 @@ export default class CartService {
     private carRepo: Repository<Car>
 
     constructor( private userService: UserService,private carService: CarService) {
-        this.cartRepo = db.getRepository(Cart)
-        this.userRepo = db.getRepository(User)
-        this.carRepo = db.getRepository(Car)
+        this.cartRepo = () => db.getRepository(Cart)
+        this.userRepo = () => db.getRepository(User)
+        this.carRepo = () => db.getRepository(Car)
 
     }
 

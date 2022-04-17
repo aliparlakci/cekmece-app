@@ -16,18 +16,18 @@ export interface FilterOptions {
 }
 
 export default class CarService {
-    private repository: Repository<Car>
+    private repository: () => Repository<Car>
 
     constructor(private categoryService: CategoryService) {
-        this.repository = db.getRepository(Car)
+        this.repository = () => db.getRepository(Car)
     }
 
     async insertCar(candidate: Car) {
-        return await this.repository.save(candidate)
+        return await this.repository().save(candidate)
     }
 
     async getCar(carId: number) {
-        return this.repository.findOne({
+        return this.repository().findOne({
             where: { id: carId },
             relations: {
                 distributor: true,
@@ -37,7 +37,7 @@ export default class CarService {
     }
 
     async filterCars(options: FilterOptions) {
-        let query = this.repository.createQueryBuilder("cars").where("1 = 1")
+        let query = this.repository().createQueryBuilder("cars").where("1 = 1")
         const where: FindOptionsWhere<Car> = {}
 
         if (options.minPrice) {
@@ -87,7 +87,7 @@ export default class CarService {
     }
 
     async getAllCars(sortBy: string) {
-        return this.repository.find({
+        return this.repository().find({
             relations: {
                 category: true,
                 distributor: true,
@@ -104,7 +104,7 @@ export default class CarService {
         const category = await this.categoryService.getCategory(categoryId)
         if (category === null) throw `Category does not exists: id=${categoryId}`
 
-        return this.repository.find({
+        return this.repository().find({
             where: {
                 category: {
                     id: categoryId
@@ -120,7 +120,7 @@ export default class CarService {
         const car = await this.getCar(carId)
         if (car === null) throw `Car does not exists: id=${carId}`
 
-        this.repository.createQueryBuilder().relation(Car, "categories").of(car).add(category)
+        this.repository().createQueryBuilder().relation(Car, "categories").of(car).add(category)
     }
 
     async removeCategory(categoryId: number, carId: number) {
@@ -130,17 +130,17 @@ export default class CarService {
         const car = await this.getCar(carId)
         if (car === null) throw `Car does not exists: id=${carId}`
 
-        this.repository.createQueryBuilder().relation(Car, "categories").of(car).remove(categoryId)
+        this.repository().createQueryBuilder().relation(Car, "categories").of(car).remove(categoryId)
     }
 
     async searchCars(query: string) {
-        return this.repository.createQueryBuilder().select()
+        return this.repository().createQueryBuilder().select()
           .where(`MATCH(name) AGAINST ('${query}' IN NATURAL LANGUAGE MODE)`)
           .getMany();
     }
 
     async deleteCar(id: number) {
-        return this.repository.createQueryBuilder()
+        return this.repository().createQueryBuilder()
             .delete()
             .from(Car)
             .where("id = :id", { id })
