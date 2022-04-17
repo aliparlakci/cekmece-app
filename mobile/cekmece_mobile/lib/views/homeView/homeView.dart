@@ -27,43 +27,43 @@ class _HomeViewState extends State<HomeView> {
     const Product(
         id: 1,
         name: "RB-18B",
-        price: 123,
+        price: 49900,
         number: 1,
         model: 2019,
         quantity: 1,
         warranty: 1,
         distributor: {"name": "RedBull"},
+        category: {"name": "Formula 2"}),
+    const Product(
+        id: 1,
+        name: "F1-75",
+        price: 85000,
+        number: 1,
+        model: 2019,
+        quantity: 1,
+        warranty: 1,
+        distributor: {"name": "Ferrari"},
         category: {"name": "Formula 1"}),
     const Product(
         id: 1,
-        name: "RB-18B",
-        price: 123,
+        name: "W13",
+        price: 49900,
         number: 1,
         model: 2019,
         quantity: 1,
         warranty: 1,
-        distributor: {"name": "RedBull"},
-        category: {"name": "Formula 1"}),
+        distributor: {"name": "Mercedes"},
+        category: {"name": "Formula 3"}),
     const Product(
         id: 1,
-        name: "RB-18B",
-        price: 123,
+        name: "Guila",
+        price: 38750,
         number: 1,
-        model: 2019,
+        model: 2021,
         quantity: 1,
         warranty: 1,
-        distributor: {"name": "RedBull"},
-        category: {"name": "Formula 1"}),
-    const Product(
-        id: 1,
-        name: "RB-18B",
-        price: 123,
-        number: 1,
-        model: 2019,
-        quantity: 1,
-        warranty: 1,
-        distributor: {"name": "RedBull"},
-        category: {"name": "Formula 1"})
+        distributor: {"name": "Alfa Romeo"},
+        category: {"name": "Sedan"})
   ];
 
   @override
@@ -278,7 +278,8 @@ class CarouselWidget extends StatelessWidget {
 }
 
 class CarouselContainer extends StatelessWidget {
-  NumberFormat numberFormat = NumberFormat.simpleCurrency(locale: "en-US");
+  NumberFormat numberFormat =
+      NumberFormat.simpleCurrency(locale: "en-US", decimalDigits: 0);
   Product car;
 
   CarouselContainer({Key? key, required this.car}) : super(key: key);
