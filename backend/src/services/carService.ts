@@ -99,9 +99,10 @@ export default class CarService {
         if (category === null) throw `Category does not exists: id=${categoryId}`
 
         return this.repository.find({
-            join: { alias: "categories" },
             where: {
-                category: category,
+                category: {
+                    id: categoryId
+                },
             },
         })
     }
