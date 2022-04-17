@@ -7,65 +7,18 @@ import CarService, { FilterOptions } from "../services/carService"
 import CategoryService from "../services/categoryService"
 import ReviewService from "../services/reviewService"
 import UserService from "../services/userService"
-import {Car} from "../models/car";
 
 function getAllCars(carService: CarService): RequestHandler {
     return async function (req, res, next) {
-        const sort = req.query.sort as "ASC" | "DESC" | undefined
-        const model = req.query.model as string | undefined
-        const modelFilter = req.query.modelFilter as "LESS" | "MORE"
-        const price = req.query.price as string | undefined
-        const priceFilter = req.query.priceFilter as "LESS" | "MORE"
-        const category = req.query.category as string
-
-        const options: FilterOptions = {
-            // sort selection
-            sortBy: sort || "DESC",
-        }
-
-        if (category) {
-            options.category = {
-                value: parseInt(category),
-            }
-        }
-
-        if (model) {
-            // Filter by model
-
-            if (modelFilter) {
-                if (modelFilter == "LESS") {
-                    options.model = {
-                        type: "LESS",
-                        value: parseInt(model as string),
-                    }
-                } else {
-                    options.model = {
-                        type: "MORE",
-                        value: parseInt(model as string),
-                    }
-                }
-            }
-        }
-
-        if (price) {
-            //Filter by price
-
-            if (priceFilter) {
-                if (priceFilter == "LESS") {
-                    options.price = {
-                        type: "LESS",
-                        value: parseInt(price as string),
-                    }
-                } else {
-                    options.price = {
-                        type: "MORE",
-                        value: parseInt(price as string),
-                    }
-                }
-            }
-        }
-
-        const cars = await carService.filterCars(options)
+        const cars = await carService.filterCars({
+            category: req.query.category as string,
+            distributor: req.query.distributor as string,
+            sort: req.query.sort as "priceHigh" | "priceLow" | "mostPopular" | "leastPopular" | undefined,
+            minPrice: req.query.minPrice as string,
+            maxPrice: req.query.maxPrice as string,
+            minYear: req.query.minYear as string,
+            maxYear: req.query.maxYear as string
+        })
 
         res.status(200).json(cars)
     }

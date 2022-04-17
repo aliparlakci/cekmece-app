@@ -2,22 +2,17 @@ import { FindOptionsWhere, LessThan, LessThanOrEqual, MoreThan, MoreThanOrEqual,
 
 import db from "../dataSource"
 import { Car } from "../models/car"
-import { Review } from "../models/review"
 import CategoryService from "./categoryService"
 
 export interface FilterOptions {
-    price?: {
-        value: number,
-        type: "MORE" | "LESS"
-    },
-    model?: {
-        value: number,
-        type: "MORE" | "LESS"
-    },
-    sortBy: "ASC" | "DESC",
-    category?: {
-        value: number
-    }
+    q?: string
+    sort?: "priceHigh" | "priceLow" | "mostPopular" | "leastPopular"
+    minPrice?: string
+    maxPrice?: string
+    minYear?: string
+    maxYear?: string
+    distributor?: string
+    category?: string
 }
 
 export default class CarService {
@@ -42,42 +37,53 @@ export default class CarService {
     }
 
     async filterCars(options: FilterOptions) {
+        let query = this.repository.createQueryBuilder("cars").where("1 = 1")
         const where: FindOptionsWhere<Car> = {}
 
-        if (options.price) {
-            if (options.price.type == "LESS")
-                where.price = LessThanOrEqual(options.price.value)
-            else
-                where.price = MoreThanOrEqual(options.price.value)
+        if (options.minPrice) {
+            query = query.andWhere("cars.price >= :minPrice", { minPrice: options.minPrice })
         }
 
-        if (options.model) {
-            if (options.model.type == "MORE")
-                where.model = MoreThanOrEqual(options.model.value)
-            else 
-                where.model = LessThanOrEqual(options.model.value)
+        if (options.maxPrice) {
+            query = query.andWhere("cars.price <= :minPrice", { maxPrice: options.maxPrice })
+        }
+
+        if (options.minYear) {
+            query = query.andWhere("cars.model >= :minYear", { minYear: options.minYear })
+        }
+
+        if (options.maxYear) {
+            query = query.andWhere("cars.model <= :maxYear", { maxYear: options.maxYear })
+        }
+
+        if (options.distributor) {
+            query = query.andWhere("cars.distributor = :distributor", { distributor: options.distributor })
         }
 
         if (options.category) {
+            query = query.andWhere("cars.category = :category", { category: options.category })
+        }
 
-
-            where.category = {
-                id: options.category.value
+        if (options.sort) {
+            if (options.sort === "priceLow") {
+                query = query.orderBy({
+                    price: "ASC"
+                })
+            } else if (options.sort === "priceHigh") {
+                query = query.orderBy({
+                    price: "DESC"
+                })
             }
         }
 
-        return this.repository.find({
-            relations: {
-                category: true,
-                distributor: true,
-            },
-            where: where,
-            order: {
-                price: {
-                    direction: options.sortBy as "ASC" | "DESC" | "asc" | "desc" | undefined
-                }
-            }
-        })
+        if (options.q) {
+            query = query.andWhere(`MATCH(cars.name) AGAINST ('${options.q}' IN NATURAL LANGUAGE MODE)`)
+        }
+
+        query = query.leftJoinAndSelect("cars.category", "category")
+        query = query.leftJoinAndSelect("cars.distributor", "distributor")
+
+        return query.getMany()
     }
 
     async getAllCars(sortBy: string) {

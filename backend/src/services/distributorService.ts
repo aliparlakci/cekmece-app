@@ -15,7 +15,11 @@ export default class DistributorService {
     }
 
     async getAllDistributors() {
-        return this.repository.find()
+        return this.repository.find({
+            order: {
+                name: "ASC"
+            }
+        })
     }
 
     async getDistributor(id: number) {

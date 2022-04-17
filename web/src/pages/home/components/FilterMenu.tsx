@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react"
+import React from "react"
 import { Button, Box, Container, createTheme, Paper, Grid, ThemeProvider, Typography, Divider } from "@mui/material"
-import BrandsList from "./BrandsList"
 import YearSlider from "./YearSlider"
 import PriceSelect from "./PriceSelect"
 import CategorySelect from "./CategorySelect"
@@ -37,8 +36,6 @@ const theme = createTheme({
     },
 })
 
-type IOnFilter = (filter: IFilterOptions) => any
-
 export interface IFilterOptions {
     minPrice: string
     maxPrice: string
@@ -52,10 +49,12 @@ export interface IFilterOptions {
 interface FilterMenuProps {
     categories: ICategory[]
     distributors: IDistributor[]
-    onFilter: IOnFilter
+    filter: IFilterOptions
+    setFilter: React.Dispatch<React.SetStateAction<IFilterOptions>>
+    onSearch: () => void
 }
 
-const defaultState: IFilterOptions = {
+export const defaultFilterOptions: IFilterOptions = Object.freeze({
     minYear: 2000,
     maxYear: 2022,
     minPrice: "",
@@ -63,15 +62,9 @@ const defaultState: IFilterOptions = {
     distributor: "",
     category: "",
     sort: "mostPopular",
-}
+})
 
-export default function FilterMenu({ categories, distributors, onFilter }: FilterMenuProps) {
-    const [filter, setFilter] = useState(defaultState)
-
-    useEffect(() => {
-        onFilter(filter)
-    }, [filter])
-
+export default function FilterMenu({ filter, setFilter, categories, distributors, onSearch }: FilterMenuProps) {
     return (
         <>
             <ThemeProvider theme={theme}>
@@ -164,7 +157,7 @@ export default function FilterMenu({ categories, distributors, onFilter }: Filte
                                 </Box>
                                 <Divider variant="middle" />
                                 <Box>
-                                    <Button variant="contained" fullWidth={true} sx={{ borderRadius: 0 }}>
+                                    <Button variant="contained" fullWidth={true} sx={{ borderRadius: 0 }} onClick={onSearch}>
                                         Show Cars
                                     </Button>
                                 </Box>

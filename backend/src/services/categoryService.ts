@@ -15,7 +15,11 @@ export default class CategoryService {
     }
 
     async getAllCategories() {
-        return this.repository.find()
+        return this.repository.find({
+            order: {
+                name: "ASC"
+            }
+        })
     }
 
     async getCategory(id: number) {

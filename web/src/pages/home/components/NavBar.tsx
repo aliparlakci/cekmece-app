@@ -55,15 +55,20 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
+interface INavBarProps {
+    search: string
+    onSearch: (value: string) => void
+}
 
-export default function NavBar() {
+export default function NavBar({search, onSearch}) {
+
   return (
     <ThemeProvider theme={theme}>
         <Box sx={{ flexGrow: 1 }}>
           <AppBar position='fixed'>
             <Toolbar>
               <IconButton size='large' edge='start' color='inherit' aria-label='open drawer' sx={{ mr: 2 }}>
-                <Home /> 
+                <Home />
               </IconButton>
               <Typography variant='h6' noWrap component='div' sx={{ display: { xs:'none', sm:'block' } }}>
                 Zort Storzt
@@ -79,7 +84,7 @@ export default function NavBar() {
                 <SearchIconWrapper>
                   <SearchIcon />
                 </SearchIconWrapper>
-                <StyledInputBase placeholder="Search…" inputProps={{ 'aria-label': 'search' }} />
+                <StyledInputBase  placeholder="Search…" value={search}  onChange={(event) => onSearch(event.target.value)} inputProps={{ 'aria-label': 'search' }} />
               </Search>
             </Toolbar>
           </AppBar>
