@@ -4,7 +4,6 @@ import 'package:cekmece_mobile/main.dart';
 import 'package:cekmece_mobile/models/user/UserClass.dart';
 import 'package:cekmece_mobile/util/bloc/userBloc/user_bloc.dart';
 import 'package:cekmece_mobile/views/cart/cartView.dart';
-import 'package:cekmece_mobile/views/home/home_screen.dart';
 import 'package:cekmece_mobile/views/homeView/homeView.dart';
 import 'package:cekmece_mobile/views/productView/components/size.dart';
 import 'package:cekmece_mobile/views/productView/details_screen.dart';
@@ -39,7 +38,9 @@ class _NavigationViewState extends State<NavigationView> {
 
   List<Widget> _buildScreens() {
     return [
-      HomeView(),
+      HomeView(
+        tabController: _controller,
+      ),
       SearchWrapper(),
       Container(
         child: Center(
