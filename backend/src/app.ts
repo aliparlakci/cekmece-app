@@ -10,6 +10,8 @@ import db from "./dataSource"
 import categoryRouter from "./routes/categoryRouter"
 import distributorRouter from "./routes/distributorRouter"
 import cartRouter from "./routes/cartRouter"
+import userRouter from "./routes/userRouter"
+import authRouter from "./routes/authRouter"
 
 async function main() {
     try {
@@ -33,6 +35,8 @@ async function main() {
     v1.use("/categories", categoryRouter())
     v1.use("/distributors", distributorRouter())
     v1.use("/cart", cartRouter())
+    v1.use("/users", userRouter())
+    v1.use("/auth", authRouter())
 
 
     // catch 404 and forward to error handler

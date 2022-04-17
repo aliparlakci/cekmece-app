@@ -32,7 +32,8 @@ function listAllUsers(userService: UserService): RequestHandler {
     return async function (req, res, next) {
     const users = await userService.getAllUsers()
     //Send the users object
-    res.send(users)
+    
+    res.status(200).json(users)
     }
 }
 
