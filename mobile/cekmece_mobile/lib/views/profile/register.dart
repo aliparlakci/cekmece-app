@@ -170,18 +170,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 25.0),
       width: double.infinity,
-      child: RaisedButton(
-        elevation: 5.0,
+      child: ElevatedButton(
         onPressed: () {
           if (_formKey.currentState!.validate()) {
             Navigator.pop(context);
           }
         },
-        padding: EdgeInsets.all(15.0),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30.0),
-        ),
-        color: Colors.white,
         child: Text(
           'REGISTER',
           style: header3.copyWith(color: Colors.blue),

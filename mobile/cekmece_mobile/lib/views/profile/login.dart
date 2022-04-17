@@ -136,14 +136,16 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _buildForgotPasswordBtn() {
     return Container(
       alignment: Alignment.bottomCenter,
-      child: FlatButton(
+      child: OutlinedButton(
         onPressed: () => print('Forgot Password Button Pressed'),
-        padding: EdgeInsets.only(right: 0.0),
-        child: Text(
-          'Forgot Password?',
-          style: header3.copyWith(
-            color: Colors.white,
-            fontSize: 13,
+        child: Padding(
+          padding: EdgeInsets.only(right: 0.0),
+          child: Text(
+            'Forgot Password?',
+            style: header3.copyWith(
+              color: Colors.white,
+              fontSize: 13,
+            ),
           ),
         ),
       ),
@@ -181,9 +183,8 @@ class _LoginScreenState extends State<LoginScreen> {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 25.0),
       width: double.infinity,
-      child: RaisedButton(
+      child: ElevatedButton(
         key: Key("loginButton"),
-        elevation: 5.0,
         onPressed: () {
           if (_formKey.currentState!.validate()) {
             FocusScope.of(context).unfocus();
@@ -191,11 +192,6 @@ class _LoginScreenState extends State<LoginScreen> {
             loginWithEmailAndPassword();
           }
         },
-        padding: EdgeInsets.all(15.0),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30.0),
-        ),
-        color: Colors.white,
         child: Text(
           'LOGIN',
           style: header3.copyWith(color: Colors.blue),
