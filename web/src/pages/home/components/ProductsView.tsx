@@ -4,14 +4,14 @@ import ProductCard from "./ProductCard"
 import ICar from "../../../models/car"
 
 interface IProductsView {
-    cars: ICar[]
+    cars?: ICar[]
 }
 
-export default function ProductsView({ cars }) {
+export default function ProductsView({ cars }:IProductsView)  {
     return (
         <>
             <Grid container direction="row" justifyContent="flex-start" alignItems="space-between">
-                {cars.map(car => <ProductCard car={car} />)}
+                {cars && cars.map(car => <ProductCard car={car} />)}
             </Grid>
         </>
     )

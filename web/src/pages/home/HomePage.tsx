@@ -71,7 +71,7 @@ export default function HomePage() {
                         </Container>
                     </Grid>
                     <div className="max-w-screen-lg" >
-                        {cars && <ProductsView cars={cars} />}
+                        <ProductsView cars={cars} />
                     </div>
                 </div>
 
