@@ -1,4 +1,3 @@
-import 'package:cekmece_mobile/models/product/Product.dart';
 import 'package:cekmece_mobile/util/blocProviders.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';

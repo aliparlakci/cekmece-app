@@ -4,6 +4,8 @@ import 'package:cekmece_mobile/main.dart';
 import 'package:cekmece_mobile/models/user/UserClass.dart';
 import 'package:cekmece_mobile/util/bloc/userBloc/user_bloc.dart';
 import 'package:cekmece_mobile/views/cart/cartView.dart';
+import 'package:cekmece_mobile/views/homeView/homeView.dart';
+import 'package:cekmece_mobile/views/productView/components/size.dart';
 import 'package:cekmece_mobile/views/productView/details_screen.dart';
 import 'package:cekmece_mobile/views/profile/profileView.dart';
 import 'package:cekmece_mobile/views/reviews/ReviewsView.dart';
@@ -36,7 +38,9 @@ class _NavigationViewState extends State<NavigationView> {
 
   List<Widget> _buildScreens() {
     return [
-      OmerTest(),
+      HomeView(
+        tabController: _controller,
+      ),
       SearchWrapper(),
       Container(
         child: Center(
@@ -96,6 +100,8 @@ class _NavigationViewState extends State<NavigationView> {
   int curIdx = 0;
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
+
     return PersistentTabView(
       context,
       margin: const EdgeInsets.only(bottom: 5),
