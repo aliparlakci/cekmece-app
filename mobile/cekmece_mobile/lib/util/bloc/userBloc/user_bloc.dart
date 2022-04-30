@@ -80,7 +80,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         cart: cartList,
         uid: "1",
         photoUrl:
-            "https://pbs.twimg.com/profile_images/1512564015045742600/2lfvceZz_400x400.jpg");
+            "https://pbs.twimg.com/profile_images/1515493247413538826/jhuSAxfO_400x400.jpg");
     BlocProvider.of<LoadingBloc>(context).add(LoadingEnd());
     return localUser;
   }

@@ -61,6 +61,7 @@ dependencies:
   flutter_dotenv: ^5.0.2
   modal_bottom_sheet: ^2.0.1
   shared_preferences: ^2.0.13
+  skeleton_loader: ^2.0.0+4
   
   percent_indicator: ^3.4.0
 
