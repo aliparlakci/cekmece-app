@@ -27,7 +27,7 @@ function addToCart(userService: UserService, cartService: CartService) {
         const cartItem = await cartService.addToCart(carId,1, userId);
 
         if (cartItem === 404) {
-            res.status(404).json({ cartItem:{},message:"Wrong parameters" })
+            res.status(404).json({ cartItem:{},message:"An error happened" })
         } else {
             res.status(200).json({cartItem,message:"Success"})
         }
@@ -54,6 +54,22 @@ function removeFromCart(userService: UserService, cartService: CartService) {
     }
 }
 
+function decreaseItemQuantity(userService: UserService, cartService: CartService) {
+    return async function (req, res, next) {
+        const carId = parseInt(req.params.carId)
+        const userId = (req.params.userId)
+        
+        const cartItem = await cartService.decreaseItemQuantity(carId,1, userId);
+
+        if (cartItem === 404) {
+            res.status(404).json({ cartItem:{},message:"Wrong parameters" })
+        } else {
+            res.status(200).json({cartItem,message:"Success"})
+        }
+    
+    }
+}
+
 function cartRouter() {
     const router = Router()
 
@@ -64,7 +80,9 @@ function cartRouter() {
 
     router.get("/:userId", getCart(userService,cartService ))
     router.post("/:userId/add/:carId", addToCart(userService,cartService ))
+    router.post("/:userId/remove/:carId", decreaseItemQuantity(userService,cartService ))
     router.post("/remove/:cartEntityId", removeFromCart(userService,cartService ))
+
 
 
 
