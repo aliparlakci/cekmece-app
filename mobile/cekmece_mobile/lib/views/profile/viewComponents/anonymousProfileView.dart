@@ -2,6 +2,7 @@ import 'package:cekmece_mobile/constants/color_contsants.dart';
 import 'package:cekmece_mobile/constants/font_constants.dart';
 import 'package:cekmece_mobile/util/bloc/loadingBloc/loading_bloc.dart';
 import 'package:cekmece_mobile/util/bloc/userBloc/user_bloc.dart';
+import 'package:cekmece_mobile/views/productView/components/size.dart';
 import 'package:cekmece_mobile/views/profile/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,9 +20,13 @@ class AnonymousProfileView extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
+            Icon(
+              Icons.car_rental,
+              size: getProportionateScreenHeight(150),
+            ),
             Text(
-              "You are not logged in! In order to purchase an item, add to favories, and access many more features, please login or sign up. ",
-              style: header2.copyWith(color: secondaryColor),
+              "You are not logged in!\n\nIn order to purchase an item, add to favories, and access many more features, please login or sign up. ",
+              style: header2.copyWith(color: Colors.black),
               textAlign: TextAlign.center,
             ),
             Column(
