@@ -12,6 +12,11 @@ import distributorRouter from "./routes/distributorRouter"
 import cartRouter from "./routes/cartRouter"
 import userRouter from "./routes/userRouter"
 import authRouter from "./routes/authRouter"
+import UserService from "./services/userService"
+
+import { JWTAuth } from "./middlewares/JWTAuth"
+import AuthService from "./services/authService"
+import Context from "./utils/context"
 
 async function main() {
     try {
@@ -22,11 +27,19 @@ async function main() {
     }
 
     const app = express()
+    app.use((req, res, next) => {
+        Context.bind(req)
+        next()
+    })
 
     app.use(logger("dev"))
     app.use(express.json())
     app.use(express.urlencoded({ extended: false }))
     app.use(cookieParser())
+
+    const userService = new UserService()
+    const authService = new AuthService(userService)
+    app.use(JWTAuth(authService, userService))
 
     const v1 = Router()
     app.use("/api", v1)
@@ -37,7 +50,6 @@ async function main() {
     v1.use("/cart", cartRouter())
     v1.use("/users", userRouter())
     v1.use("/auth", authRouter())
-
 
     // catch 404 and forward to error handler
     app.use(function (req, res, next) {

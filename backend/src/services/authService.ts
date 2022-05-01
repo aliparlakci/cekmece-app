@@ -1,42 +1,24 @@
-import {  Repository } from "typeorm"
-import * as jwt from "jsonwebtoken";
+import * as jwt from "jsonwebtoken"
 
-import { User } from "../models/user";
-import db from "../dataSource"
-import config from "../config";
+import UserService from "./userService";
+import config from "../config"
 
+export default class AuthService {
+    constructor(public userService: UserService) {}
 
-export default class AuthService{
-    private repository: () => Repository<User>
+    async authenticate(email: string, password: string) {
+        const user = await this.userService.getUserByEmail(email)
+        if (user === null) return null
 
-    constructor() {
-        this.repository = () => db.getRepository(User)
+        const result = user.verifyPassword(password)
+        if (!result) return null
+
+        return this.refreshToken(user.id)
     }
 
-    async authenticate(username: string, password: string) {
-
-        const user = await this.repository().findOne({ where: { username } })
-        if (user === null) return false
-        const result = user.checkIfUnencryptedPasswordIsValid(password)
-        if (!result) return false
-
-        return jwt.sign(
-            { userId: user.id, username },
-            config.jwtSecret,
-            { expiresIn: "1h" }
-        );
+    refreshToken(userId: string) {
+        return jwt.sign({ userId }, config.jwtSecret, {
+            expiresIn: "24h",
+        })
     }
-
-    async authenticateByIdPassword(id: any, oldPassword: any) {
-
-        const user = await this.repository().findOne({ where: { id } })
-        if (user === null) return false
-        const result = user.checkIfUnencryptedPasswordIsValid(oldPassword)
-        if (!result) return false
-
-        return user
-    }
-
-
-
 }

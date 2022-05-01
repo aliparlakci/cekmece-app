@@ -5,39 +5,31 @@ import {
     Unique,
     CreateDateColumn,
     UpdateDateColumn,
-    OneToOne,
     OneToMany,
     JoinColumn,
-    BeforeInsert,
-    BeforeUpdate,
 } from "typeorm"
-import { Length, IsNotEmpty } from "class-validator"
 import * as bcrypt from "bcryptjs"
+
 import { Review } from "./review"
 import { Cart } from "./cart"
 
 @Entity()
-@Unique(["username"])
 @Unique(["email"])
 export class User {
     @PrimaryGeneratedColumn("uuid")
     id: string
 
     @Column()
-    @Length(4, 20)
-    username: string
+    email: string
 
     @Column()
-    @Length(4, 100)
+    displayName: string
+
+    @Column()
     password: string
 
     @Column()
-    @IsNotEmpty()
     role: string
-
-    @Column()
-    @IsNotEmpty()
-    email: string
 
     @Column()
     @CreateDateColumn()
@@ -50,15 +42,15 @@ export class User {
     @OneToMany(() => Review, (review) => review.user)
     reviews: Review[]
 
-    @OneToMany(type => Cart, cart => cart.id)
+    @OneToMany((type) => Cart, (cart) => cart.id)
     @JoinColumn()
     cart: Cart[]
 
-    hashPassword() {
-        this.password = bcrypt.hashSync(this.password, 8)
+    setPassword(plainPassword: string) {
+        this.password = bcrypt.hashSync(plainPassword, 8)
     }
 
-    checkIfUnencryptedPasswordIsValid(unencryptedPassword: string) {
+    verifyPassword(unencryptedPassword: string) {
         return bcrypt.compareSync(unencryptedPassword, this.password)
     }
 }

@@ -1,6 +1,7 @@
 import { Repository } from "typeorm"
 import db from "../dataSource"
 import { User } from "../models/user"
+import UserRoles from "../models/userRoles";
 
 export default class UserService {
     private repository: () => Repository<User>
@@ -9,24 +10,30 @@ export default class UserService {
         this.repository = () => db.getRepository(User)
     }
 
-    async newUser(candidate: User) {
-        return await this.repository().save(candidate)
+    async newUser(displayName: string, email: string, password: string) {
+        const user = new User()
+        user.email = email
+        user.displayName = displayName
+        user.role = UserRoles.Customer
+        user.setPassword(password)
+
+        return await this.repository().save(user)
     }
 
     async getAllUsers() {
-        return this.repository().find({ select: ["id", "username", "role"] })
+        return this.repository().find({ select: ["id", "email", "role"] })
     }
 
     async getUser(id: string) {
         return this.repository().findOne({ where: { id } })
     }
 
-    async getUserByUsername(username: string) {
-        return this.repository().findOne({ where: { username } })
+    async getUserByEmail(email: string) {
+        return this.repository().findOne({ where: { email } })
     }
 
-    async editUser(username: string, role: string, id: string){
-        return this.repository().findOne({where: { username, role, id } })
+    async editUser(email: string, role: string, id: string){
+        return this.repository().findOne({ where: { email, role, id } })
     }
     
     async updateUser(user: User){

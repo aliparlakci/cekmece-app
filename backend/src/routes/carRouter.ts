@@ -52,7 +52,7 @@ function addNewCar(carService: CarService): RequestHandler {
         })
         const { error } = carFormat.validate(req.body)
         if (error) {
-            res.status(500).json(error)
+            res.status(400).json(error)
             return
         }
 

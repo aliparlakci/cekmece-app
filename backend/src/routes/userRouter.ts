@@ -3,9 +3,10 @@ import { StatusCodes } from "http-status-codes"
 import { validate } from "class-validator";
 
 import UserService from "../services/userService"
-import { checkJwt } from "../middlewares/checkJwt"
 import { checkRole } from "../middlewares/checkRole"
 import {User} from "../models/user"
+import userRoles from "../models/userRoles";
+import Joi from "joi";
 
 // get one user
 function getUserById(userService: UserService): RequestHandler {
@@ -27,118 +28,92 @@ function getUserById(userService: UserService): RequestHandler {
     }
 }
 
-// get all userss
-function listAllUsers(userService: UserService): RequestHandler {
-    return async function (req, res, next) {
-    const users = await userService.getAllUsers()
-    
-    //Send the users object
-    
-    res.status(200).json(users)
-    }
-}
-
-// create new user
 function newUser(userService: UserService): RequestHandler {
     return async function (req, res, next) {
-        //Get parameters from the body
-        let { username, password, email } = req.body
-        let user = new User()
-        user.username = username
-        user.email = email
-        user.password = password
-        user.role = "custom_user"
-        console.log({ username, password })
+        const newUserFormat = Joi.object().keys({
+            email: Joi.string().email().required(),
+            password: Joi.string().required(),
+            displayName: Joi.string().required()
+        })
 
-        //Validade if the parameters are ok
-        const errors = await validate(user)
-        if (errors.length > 0) {
-            res.status(400).send(errors)
+        const { error } = newUserFormat.validate(req.body)
+        if (error) {
+            res.status(400).json(error)
             return
         }
 
-        //Hash the password, to securely store on DB
-        user.hashPassword()
-
-        //Try to save. If fails, the username is already in use
         try {
-            await userService.newUser(user)
+            await userService.newUser(req.body.displayName, req.body.email, req.body.password)
         } catch (e) {
-            res.status(409).send("username already in use")
+            res.status(StatusCodes.BAD_REQUEST).json(e)
             return
         }
 
-        //If all ok, send 201 response
-        res.status(201).send("User created") 
+        res.status(StatusCodes.CREATED).json()
     }
 }
-
-//edit one user
-function editUser(userService: UserService): RequestHandler {
-    return async function (req, res, next) {
-        const id = req.params.id
-        //Get values from the body
-        const { username, role } = req.body
-
-        //Try to find user on database
-        let user
-        try {
-            user = await userService.getUser(id)
-        } catch (error) {
-            //If not found, send a 404 response
-            res.status(404).send("User not found")
-            return
-        }
-
-        //Validate the new values on model
-        user.username = username
-        user.role = role
-        const errors = await validate(user)
-        if (errors.length > 0) {
-            res.status(400).send(errors)
-            return
-        }
-
-        //Try to safe, if fails, that means username already in use
-        try {
-            await userService.updateUser(user)
-        } catch (e) {
-            res.status(409).send("username already in use")
-            return
-        }
-        //After all send a 204 (no content, but accepted) response
-        res.status(204).send()
-    }
-}
-
-function deleteUser(userService: UserService): RequestHandler {
-    return async function (req, res, next) {
-        //Get the ID from the url
-        const id = req.params.id
-
-        try {
-            await userService.deleteUser(id)
-        } catch (error) {
-            res.status(404).send("User not found")
-            return
-        }
-
-        //After all send a 204 (no content, but accepted) response
-        res.status(204).send()
-    }
-}
+//
+// //edit one user
+// function editUser(userService: UserService): RequestHandler {
+//     return async function (req, res, next) {
+//         const id = req.params.id
+//         //Get values from the body
+//         const { username, role } = req.body
+//
+//         //Try to find user on database
+//         let user
+//         try {
+//             user = await userService.getUser(id)
+//         } catch (error) {
+//             //If not found, send a 404 response
+//             res.status(404).send("User not found")
+//             return
+//         }
+//
+//         //Validate the new values on model
+//         user.username = username
+//         user.role = role
+//         const errors = await validate(user)
+//         if (errors.length > 0) {
+//             res.status(400).send(errors)
+//             return
+//         }
+//
+//         //Try to safe, if fails, that means username already in use
+//         try {
+//             await userService.updateUser(user)
+//         } catch (e) {
+//             res.status(409).send("username already in use")
+//             return
+//         }
+//         //After all send a 204 (no content, but accepted) response
+//         res.status(204).send()
+//     }
+// }
+//
+// function deleteUser(userService: UserService): RequestHandler {
+//     return async function (req, res, next) {
+//         //Get the ID from the url
+//         const id = req.params.id
+//
+//         try {
+//             await userService.deleteUser(id)
+//         } catch (error) {
+//             res.status(404).send("User not found")
+//             return
+//         }
+//
+//         //After all send a 204 (no content, but accepted) response
+//         res.status(204).send()
+//     }
+// }
 
 function userRouter() {
     const router = Router()
     const userService = new UserService()
 
-    const checkRolesMiddleware = checkRole(userService)
-
-    router.get("/", listAllUsers(userService)); 
-    router.get("/:id([0-9]+)", [checkJwt, checkRolesMiddleware(["ADMIN"])], getUserById)
+    router.get("/:id", getUserById)
     router.post("/", newUser(userService));
-    router.patch( "/:id([0-9]+)",[checkJwt, checkRolesMiddleware(["ADMIN"])], editUser(userService));
-    router.delete("/:id([0-9]+)", [checkJwt, checkRolesMiddleware(["ADMIN"])], deleteUser(userService));
 
     return router
 }
