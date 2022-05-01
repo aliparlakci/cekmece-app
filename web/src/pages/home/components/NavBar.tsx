@@ -75,7 +75,7 @@ interface INavBarProps {
 }
 
 export default function NavBar({ search, onSearch }) {
-    const { user } = useAuth()
+    const { user, logout } = useAuth()
     const history = useHistory()
 
     return (
@@ -96,7 +96,8 @@ export default function NavBar({ search, onSearch }) {
                             </Badge>
                         </IconButton>
                         {
-                            user && <Avatar sx={{ bgcolor: deepPurple[500], mr: 2 }}>{user.displayName}</Avatar>
+                            // user && <Avatar sx={{ bgcolor: deepPurple[500], mr: 2 }}>{user.displayName}</Avatar>
+                            user && <Button variant="text" color="inherit" onClick={() => logout()}>Logout</Button>
                         }
                         {
                             user === null && <Button variant="text" color="inherit" onClick={() => history.push("/login")}>Login</Button>

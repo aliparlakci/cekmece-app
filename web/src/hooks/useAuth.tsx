@@ -4,9 +4,10 @@ import IUser from "../models/user"
 interface IUseAuth {
     user: IUser | null
     refresh: CallableFunction
+    logout: CallableFunction
 }
 
-const context = createContext<IUseAuth>({ user: null, refresh: () => null })
+const context = createContext<IUseAuth>({ user: null, refresh: () => null, logout: () => null })
 
 function AuthProvider({ children }) {
     const [user, setUser] = useState<IUser|null>(null)
@@ -26,7 +27,15 @@ function AuthProvider({ children }) {
         refresh()
     }, [])
 
-    return <context.Provider value={{ user, refresh }}>
+
+    const logout = async () => {
+        await fetch("/api/auth/logout", {
+            method: "POST"
+        })
+        refresh()
+    }
+
+    return <context.Provider value={{ user, refresh, logout }}>
         {children}
     </context.Provider>
 }

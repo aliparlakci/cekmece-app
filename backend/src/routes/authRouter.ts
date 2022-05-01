@@ -30,7 +30,8 @@ function login(authService: AuthService): RequestHandler {
 
 function logout(): RequestHandler {
     return function (req, res) {
-        res.cookie("token", "", { expires: new Date(0), path: "/" })
+        res.removeHeader("set-cookie")
+        res.clearCookie("token")
         res.status(StatusCodes.OK).json()
     }
 }
