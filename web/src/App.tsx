@@ -1,19 +1,23 @@
 import React from "react"
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
+import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom"
 
 import AdminPage from "./pages/admin/AdminPage"
 import HomePage from "./pages/home/HomePage"
 import CarDetailPage from "./pages/carDetail/CarDetailPage"
 import LoginPage from "./pages/LoginPage"
+import RegisterPage from "./pages/RegisterPage"
 
-import { AuthProvider } from "./hooks/useAuth"
+import useAuth, { AuthProvider } from "./hooks/useAuth"
 import { NotificationProvider } from "./hooks/useNotification"
 import { ConfirmationProvider } from "./hooks/useConfirmation"
 
+import UserRoles from "./models/userRoles"
+
 import "./App.css"
-import RegisterPage from "./pages/RegisterPage"
 
 function App() {
+    const { user, loading } = useAuth()
+
     return (
         <>
             <AuthProvider>
@@ -22,7 +26,12 @@ function App() {
                         <Router>
                             <Switch>
                                 <Route path="/admin">
-                                    <AdminPage />
+                                    { !loading &&
+                                        <>
+                                            {user?.role === UserRoles.ADMIN && <AdminPage />}
+                                            {user?.role !== UserRoles.ADMIN && <Redirect to="/" />}
+                                        </>
+                                    }
                                 </Route>
                                 <Route exact path="/">
                                     <HomePage />

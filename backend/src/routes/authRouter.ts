@@ -54,6 +54,7 @@ function me(): RequestHandler {
             id: user.id,
             email: user.email,
             displayName: user.displayName,
+            role: user.role
         })
     }
 }
