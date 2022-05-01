@@ -27,7 +27,7 @@ export default function LoginPage() {
         if (auth.user) history.push("/")
     }, [auth.user])
 
-    const handleLogin = async (email: string, password: string, reset: () => void) => {
+    const handleLogin = async (email: string, password: string) => {
         const body = {
             "email": email,
             "password": password,
@@ -59,7 +59,7 @@ export default function LoginPage() {
         const email = data.get("email")
         const password = data.get("password")
 
-        handleLogin(email as string, password as string, event.currentTarget.reset).catch((e) => {
+        handleLogin(email as string, password as string).catch((e) => {
             notification(NOTIFICATON_TYPES.ERROR, JSON.stringify(e))
         }).finally(() => setLoading(false))
     }

@@ -11,6 +11,7 @@ import { NotificationProvider } from "./hooks/useNotification"
 import { ConfirmationProvider } from "./hooks/useConfirmation"
 
 import "./App.css"
+import RegisterPage from "./pages/RegisterPage"
 
 function App() {
     return (
@@ -28,6 +29,9 @@ function App() {
                                 </Route>
                                 <Route path="/login">
                                     <LoginPage />
+                                </Route>
+                                <Route path="/register">
+                                    <RegisterPage />
                                 </Route>
                                 <Route path="/cars/:carId">
                                     <CarDetailPage />

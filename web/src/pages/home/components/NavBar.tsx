@@ -17,7 +17,7 @@ import SearchIcon from "@mui/icons-material/Search"
 import { styled, alpha } from "@mui/material/styles"
 import { deepPurple } from "@mui/material/colors"
 import useAuth from "../../../hooks/useAuth"
-import { useHistory } from "react-router-dom"
+import { Link, useHistory } from "react-router-dom"
 
 const theme = createTheme({
     palette: {
@@ -97,10 +97,17 @@ export default function NavBar({ search, onSearch }) {
                         </IconButton>
                         {
                             // user && <Avatar sx={{ bgcolor: deepPurple[500], mr: 2 }}>{user.displayName}</Avatar>
-                            user && <Button variant="text" color="inherit" onClick={() => logout()}>Logout</Button>
+                            user && <>
+                                {user.displayName}
+                                <hr />
+                                <Button variant="text" color="inherit" onClick={() => logout()}>Logout</Button>
+                            </>
                         }
                         {
-                            user === null && <Button variant="text" color="inherit" onClick={() => history.push("/login")}>Login</Button>
+                            user === null && <div className="flex gap-2">
+                                <Link to="/login">Login</Link>
+                                <Link to="/register">Register</Link>
+                            </div>
                         }
                         <Search>
                             <SearchIconWrapper>
