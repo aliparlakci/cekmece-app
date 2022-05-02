@@ -84,6 +84,14 @@ class _ProductBottomBarState extends State<ProductBottomBar> {
     setState(() {
       isLoading = true;
     });
+    if (isInCart() && widget.product.quantity < quantity + 1) {
+      showSnackBar(
+          context: context, message: "Stock limit reached", error: true);
+      setState(() {
+        isLoading = false;
+      });
+      return;
+    }
     try {
       if (widget.userBloc.user.isAnonymous == false) {
         final response = await http.post(Uri.parse(
@@ -208,12 +216,12 @@ class _ProductBottomBarState extends State<ProductBottomBar> {
                                         } else {
                                           final response = await http.post(
                                               Uri.parse(
-                                                  '$clientURL/api/cart/remove/${cartId}'));
+                                                  '$clientURL/api/cart/${widget.userBloc.user.uid}/remove/${widget.product.id}'));
 
                                           user = await widget.userBloc
                                               .updateUser(
                                                   widget.userBloc.user.uid);
-
+                                          print(response.body);
                                           if (response.statusCode == 200) {
                                           } else {
                                             showSnackBar(
@@ -230,13 +238,11 @@ class _ProductBottomBarState extends State<ProductBottomBar> {
                                         print(err);
                                       }
 
+                                      inCart = isInCart();
+
                                       setState(() {
                                         isLoading = false;
                                       });
-
-                                      inCart = isInCart();
-
-                                      setState(() {});
                                     },
                                     icon: Icon(Icons.remove)),
                                 Text(
