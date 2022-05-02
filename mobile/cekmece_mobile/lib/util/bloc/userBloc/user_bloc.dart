@@ -4,11 +4,13 @@ import 'package:cekmece_mobile/models/cartItem/CartItem.dart';
 import 'package:cekmece_mobile/models/product/Product.dart';
 import 'package:cekmece_mobile/models/user/UserClass.dart';
 import 'package:cekmece_mobile/util/bloc/loadingBloc/loading_bloc.dart';
+import 'package:cekmece_mobile/util/network/networkProvider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 part 'user_event.dart';
@@ -18,6 +20,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   BuildContext context;
   String localIPAddress = dotenv.env['LOCALADDRESS']!;
   late UserClass user;
+  late NetworkService networkService;
 
   Future<Product> getCar(int carId) async {
     try {
@@ -68,17 +71,16 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     return cart;
   }
 
-  Future<UserClass> updateUser(String id) async {
+  Future<UserClass> updateUser(dynamic me) async {
     BlocProvider.of<LoadingBloc>(context)
         .add(LoadingStart(loadingReason: "User fetch"));
-    List<CartItem> cartList = await getCart("1");
-
+    List<CartItem> cartList = await getCart(me["id"]);
     UserClass localUser = UserClass(
-        displayName: "Ahmet Omer Kayabasi",
+        displayName: me["displayName"],
         isAnonymous: false,
-        email: "ahmetomer@sabanciuniv.edu",
+        email: me["email"],
         cart: cartList,
-        uid: "1",
+        uid: me["id"],
         photoUrl:
             "https://pbs.twimg.com/profile_images/1515493247413538826/jhuSAxfO_400x400.jpg");
     BlocProvider.of<LoadingBloc>(context).add(LoadingEnd());
@@ -132,10 +134,19 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     on<AppStarted>((event, emit) async {
       final prefs = await SharedPreferences.getInstance();
       final String? userId = prefs.getString('id');
+      final String? cookie = prefs.getString('cookie');
+
+      networkService = Provider.of<NetworkService>(context, listen: false);
 
       try {
         if (userId != null) {
-          user = await updateUser(userId);
+          bool localCookie = await networkService.getCookieFromLocalStorage();
+          if (!localCookie) {
+            throw new Exception("No cookie");
+          }
+          print("here");
+          var me = await networkService.get('${localIPAddress}/api/auth/me');
+          user = await updateUser(me);
           emit(LoggedIn(user: user));
         } else {
           user = UserClass(
@@ -148,6 +159,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
           emit(LoggedIn(user: user));
         }
       } catch (err) {
+        print(err);
         user = const UserClass(
             displayName: "",
             isAnonymous: true,
@@ -155,7 +167,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
             cart: [],
             email: "",
             photoUrl: "");
-        emit(NotLoggedIn());
+        emit(LoggedIn(user: user));
       }
     });
 
@@ -179,7 +191,16 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       BlocProvider.of<LoadingBloc>(context)
           .add(LoadingStart(loadingReason: "User Login"));
 
-      await Future.delayed(Duration(seconds: 2));
+      final prefs = await SharedPreferences.getInstance();
+      try {
+        var me = await networkService.get('${localIPAddress}/api/auth/me');
+
+        user = await updateUser(me);
+        emit(LoggedIn(user: user));
+        await prefs.setString('id', me["id"]);
+      } catch (err) {
+        print(err);
+      }
 
       BlocProvider.of<LoadingBloc>(context).add(LoadingEnd());
     });
@@ -190,6 +211,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
       final prefs = await SharedPreferences.getInstance();
       await prefs.remove('id');
+      await prefs.remove('cookie');
       await prefs.setStringList('cart', <String>[]);
       user = const UserClass(
           displayName: "",
@@ -207,15 +229,22 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       BlocProvider.of<LoadingBloc>(context)
           .add(LoadingStart(loadingReason: "User fetch"));
 
-      final prefs = await SharedPreferences.getInstance();
-      final String? userId = prefs.getString('id');
+      try {
+        final prefs = await SharedPreferences.getInstance();
+        final String? userId = prefs.getString('id');
+        final String? cookie = prefs.getString('cookie');
 
-      if (userId != null) {
-        user = await updateUser(userId);
-        emit(LoggedIn(user: user));
-      } else {
-        user = await updateLocalUser();
-        emit(LoggedIn(user: user));
+        if (userId != null && cookie != null) {
+          var me = await networkService.get('${localIPAddress}/api/auth/me');
+
+          user = await updateUser(me);
+          emit(LoggedIn(user: user));
+        } else {
+          user = await updateLocalUser();
+          emit(LoggedIn(user: user));
+        }
+      } catch (err) {
+        print(err);
       }
 
       BlocProvider.of<LoadingBloc>(context).add(LoadingEnd());

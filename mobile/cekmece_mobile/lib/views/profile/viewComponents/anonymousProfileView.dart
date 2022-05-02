@@ -43,10 +43,8 @@ class AnonymousProfileView extends StatelessWidget {
                       pageTransitionAnimation:
                           PageTransitionAnimation.cupertino,
                     );
-                    if (res == "google") {
-                      BlocProvider.of<UserBloc>(context)
-                          .add(GoogleLoginButtonPressed());
-                    }
+                    BlocProvider.of<UserBloc>(context)
+                        .add(LoginButtonPressed());
                   },
                   backgroundColor: Colors.black,
                 ),

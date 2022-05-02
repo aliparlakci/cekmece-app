@@ -12,6 +12,7 @@ import Joi from "joi";
 function getUserById(userService: UserService): RequestHandler {
     return async function (req, res, next) {
         const id = req.params.id
+        console.log(id)
 
         try {
             const user = await userService.getUser(id)

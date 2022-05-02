@@ -3,8 +3,10 @@ import 'package:cekmece_mobile/constants/font_constants.dart';
 import 'package:cekmece_mobile/util/bloc/loadingBloc/loading_bloc.dart';
 import 'package:cekmece_mobile/util/bloc/userBloc/user_bloc.dart';
 import 'package:cekmece_mobile/util/blocProviders.dart';
+import 'package:cekmece_mobile/util/network/networkProvider.dart';
 import 'package:cekmece_mobile/views/misc/loadingOverlay.dart';
 import 'package:cekmece_mobile/views/profile/register.dart';
+import 'package:cekmece_mobile/widgets/showSnackBar.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,6 +14,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_signin_button/button_list.dart';
 import 'package:flutter_signin_button/button_view.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -31,10 +34,17 @@ class _LoginScreenState extends State<LoginScreen> {
     _loadingOverlay.show(context);
 
     await Future.delayed(Duration(seconds: 2));
-
+    try {
+      final networkService =
+          Provider.of<NetworkService>(context, listen: false);
+      await networkService.login(email, password);
+      Navigator.pop(context);
+    } catch (err) {
+      showSnackBar(
+          context: context, message: "Wrong email or password", error: true);
+    }
     _loadingOverlay.hide();
     // return to the main screen
-    Navigator.pop(context);
   }
 
   Widget _buildEmailTF() {
