@@ -1,6 +1,6 @@
-import * as React from "react"
+import React from "react"
+import { Link, useHistory } from "react-router-dom"
 import {
-    Avatar,
     AppBar,
     Box,
     createTheme,
@@ -10,14 +10,14 @@ import {
     InputBase,
     Badge,
     ThemeProvider,
-    Pagination, Button,
+    Button,
 } from "@mui/material"
 import { Home, ShoppingCart } from "@mui/icons-material"
 import SearchIcon from "@mui/icons-material/Search"
 import { styled, alpha } from "@mui/material/styles"
-import { deepPurple } from "@mui/material/colors"
-import useAuth from "../../../hooks/useAuth"
-import { Link, useHistory } from "react-router-dom"
+
+import useAuth from "../hooks/useAuth"
+import useCart from "../hooks/useCart"
 
 const theme = createTheme({
     palette: {
@@ -70,53 +70,69 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }))
 
 interface INavBarProps {
-    search: string
-    onSearch: (value: string) => void
+    search?: string
+    onSearch?: (value: string) => void
 }
 
-export default function NavBar({ search, onSearch }) {
-    const { user, logout } = useAuth()
+export default function NavBar({ search, onSearch }: INavBarProps) {
     const history = useHistory()
+    const { user, logout } = useAuth()
+
+    const { cart } = useCart()
 
     return (
         <ThemeProvider theme={theme}>
             <Box sx={{ flexGrow: 1 }}>
                 <AppBar position="fixed">
                     <Toolbar>
-                        <IconButton size="large" edge="start" color="inherit" aria-label="open drawer" sx={{ mr: 2 }}>
+                        <IconButton onClick={() => history.push("/")} size="large" edge="start" color="inherit"
+                                    aria-label="open drawer" sx={{ mr: 2 }}>
                             <Home />
                         </IconButton>
                         <Typography variant="h6" noWrap component="div" sx={{ display: { xs: "none", sm: "block" } }}>
                             Zort Storzt
                         </Typography>
                         <Box sx={{ flexGrow: 1 }} />
-                        <IconButton size="large" edge="start" color="inherit" aria-label="open drawer" sx={{ mr: 2 }}>
-                            <Badge badgeContent={1} color="error">
-                                <ShoppingCart />
-                            </Badge>
-                        </IconButton>
+                        <Link to="/cart">
+                            <IconButton size="large" edge="start" color="inherit" aria-label="open drawer"
+                                        sx={{ mr: 2 }}>
+                                <Badge badgeContent={Object.keys(cart).reduce((prev, id) => cart[id].amount + prev, 0)}
+                                       color="error">
+                                    <ShoppingCart />
+                                </Badge>
+                            </IconButton>
+                        </Link>
                         {
                             // user && <Avatar sx={{ bgcolor: deepPurple[500], mr: 2 }}>{user.displayName}</Avatar>
-                            user && <>
-                                {user.displayName}
-                                <hr />
-                                <Button variant="text" color="inherit" onClick={() => logout()}>Logout</Button>
-                            </>
+                            user && (
+                                <>
+                                    {user.displayName}
+                                    <hr />
+                                    <Button variant="text" color="inherit" onClick={() => logout()}>
+                                        Logout
+                                    </Button>
+                                </>
+                            )
                         }
-                        {
-                            user === null && <div className="flex gap-2">
+                        {user === null && (
+                            <div className="flex gap-2">
                                 <Link to="/register">Register</Link>
                                 <Link to="/login">Login</Link>
                             </div>
-                        }
-                        <Search>
-                            <SearchIconWrapper>
-                                <SearchIcon />
-                            </SearchIconWrapper>
-                            <StyledInputBase placeholder="Search…" value={search}
-                                             onChange={(event) => onSearch(event.target.value)}
-                                             inputProps={{ "aria-label": "search" }} />
-                        </Search>
+                        )}
+                        {search !== undefined && onSearch && (
+                            <Search>
+                                <SearchIconWrapper>
+                                    <SearchIcon />
+                                </SearchIconWrapper>
+                                <StyledInputBase
+                                    placeholder="Search…"
+                                    value={search}
+                                    onChange={(event) => onSearch(event.target.value)}
+                                    inputProps={{ "aria-label": "search" }}
+                                />
+                            </Search>
+                        )}
                     </Toolbar>
                 </AppBar>
             </Box>

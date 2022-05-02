@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react"
 import { Box, Container, createTheme, Grid } from "@mui/material"
 import useSWR from "swr"
+import { useHistory } from "react-router-dom"
 
 import ProductsView from "./components/ProductsView"
 import FilterMenu, { defaultFilterOptions, IFilterOptions } from "./components/FilterMenu"
-import NavBar from "./components/NavBar"
+import NavBar from "../../components/NavBar"
 import { ThemeProvider } from "@mui/styles"
 import ICar from "../../models/car"
 import fetcher from "../../utils/fetcher"
 import ICategory from "../../models/category"
 import IDistributor from "../../models/distributor"
-import { useHistory } from "react-router-dom"
 
 const theme = createTheme({
     palette: {
@@ -44,12 +44,6 @@ export default function HomePage() {
 
     const [search, setSearch] = useState("")
     const [filter, setFilter] = useState(defaultFilterOptions)
-
-    const [carsCache, setCarsCache] = useState<ICar[]>([])
-
-    useEffect(() => {
-        if (cars?.length) setCarsCache(cars)
-    }, [cars])
 
     useEffect(() => {
         setFetchURL(buildFilterURL(search, filter))

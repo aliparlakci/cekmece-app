@@ -1,14 +1,15 @@
-import React from "react"
-import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom"
+import React, { useEffect } from "react"
+import { BrowserRouter as Router, Redirect, Route, Switch } from "react-router-dom"
 
 import AdminPage from "./pages/admin/AdminPage"
 import HomePage from "./pages/home/HomePage"
 import CarDetailPage from "./pages/carDetail/CarDetailPage"
 import LoginPage from "./pages/LoginPage"
 import RegisterPage from "./pages/RegisterPage"
-import CartPage from "./pages/cart/CartPage"
+import CartPage from "./pages/CartPage"
 
-import useAuth, { AuthProvider } from "./hooks/useAuth"
+import useAuth from "./hooks/useAuth"
+import { CartProvider } from "./hooks/useCart"
 import { NotificationProvider } from "./hooks/useNotification"
 import { ConfirmationProvider } from "./hooks/useConfirmation"
 
@@ -21,13 +22,13 @@ function App() {
 
     return (
         <>
-            <AuthProvider>
-                <NotificationProvider>
-                    <ConfirmationProvider>
+            <NotificationProvider>
+                <ConfirmationProvider>
+                    <CartProvider>
                         <Router>
                             <Switch>
                                 <Route path="/admin">
-                                    { !loading &&
+                                    {!loading &&
                                         <>
                                             {user?.role === UserRoles.ADMIN && <AdminPage />}
                                             {user?.role !== UserRoles.ADMIN && <Redirect to="/" />}
@@ -51,9 +52,9 @@ function App() {
                                 </Route>
                             </Switch>
                         </Router>
-                    </ConfirmationProvider>
-                </NotificationProvider>
-            </AuthProvider>
+                    </CartProvider>
+                </ConfirmationProvider>
+            </NotificationProvider>
         </>
     )
 }

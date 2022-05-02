@@ -3,7 +3,6 @@ import { StatusCodes } from "http-status-codes"
 
 import AuthService from "../services/authService"
 import UserService from "../services/userService"
-import { User } from "../models/user"
 import Context from "../utils/context"
 
 function login(authService: AuthService): RequestHandler {

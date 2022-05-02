@@ -1,11 +1,11 @@
 import { Request, Response, NextFunction } from "express"
 import * as jwt from "jsonwebtoken"
+import {StatusCodes} from "http-status-codes";
 
 import UserService from "../services/userService"
 import AuthService from "../services/authService";
 import Context from "../utils/context";
 import config from "../config"
-import {StatusCodes} from "http-status-codes";
 
 export const JWTAuth = (authService: AuthService, userService: UserService) => async (req: Request, res: Response, next: NextFunction) => {
     const token = req.cookies["token"]

@@ -16,6 +16,7 @@ import {
 import { styled } from "@mui/material/styles"
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart"
 import ICar from "../../../models/car"
+import useCart from "../../../hooks/useCart"
 
 const theme = createTheme({
     palette: {
@@ -44,6 +45,7 @@ interface IProductCardProps {
 }
 
 export default function ProductCard({ car }: IProductCardProps) {
+    const { cart, add } = useCart()
 
     return (
         <>
@@ -79,7 +81,7 @@ export default function ProductCard({ car }: IProductCardProps) {
                             </CardActionArea>
                             <Box>
                                 <Button variant="text" endIcon={<AddShoppingCartIcon />} sx={{ borderRadius: 0 }}
-                                        fullWidth={true}>Add to Cart</Button>
+                                        fullWidth={true} onClick={() => car.id && add(car.id)}>Add to Cart</Button>
                             </Box>
                         </Paper>
                     </Box>

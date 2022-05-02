@@ -60,7 +60,7 @@ export default function LoginPage() {
         const password = data.get("password")
 
         handleLogin(email as string, password as string).catch((e) => {
-            notification(NOTIFICATON_TYPES.ERROR, JSON.stringify(e))
+            notification(NOTIFICATON_TYPES.ERROR, e)
         }).finally(() => setLoading(false))
     }
 

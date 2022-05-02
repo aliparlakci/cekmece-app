@@ -14,7 +14,7 @@ const context = createContext<IUseAuth>(defaultValue)
 
 function AuthProvider({ children }) {
     const [user, setUser] = useState<IUser | null>(null)
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
 
     const refresh = async () => {
         setLoading(true)
@@ -22,10 +22,12 @@ function AuthProvider({ children }) {
             const response = await fetch("/api/auth/me")
             if (response.status !== 200) throw `Logout`
             const data = await response.json()
-            setUser(data)
+            console.info(data)
+            setUser({ ...data })
+            setLoading(false)
         } catch (e) {
+            console.error(e)
             setUser(null)
-        } finally {
             setLoading(false)
         }
     }
@@ -33,7 +35,6 @@ function AuthProvider({ children }) {
     useEffect(() => {
         refresh()
     }, [])
-
 
     const logout = async () => {
         await fetch("/api/auth/logout", {
