@@ -2,11 +2,13 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class NetworkService extends ChangeNotifier {
   String clientURL = dotenv.env['CLIENT_URL']!;
   final JsonDecoder _decoder = const JsonDecoder();
   final JsonEncoder _encoder = const JsonEncoder();
+  final prefs = SharedPreferences.getInstance();
 
   Map<String, String> headers = {"content-type": "application/json"};
   Map<String, String> cookies = {};
@@ -29,6 +31,30 @@ class NetworkService extends ChangeNotifier {
     }
   }
 
+  Future<bool> getCookieFromLocalStorage() async {
+    final prefs = await SharedPreferences.getInstance();
+    final List<String>? cookies = prefs.getStringList('cookies');
+
+    if (cookies != null) {
+      for (String cookie in cookies) {
+        _setCookie(cookie);
+      }
+    }
+    return false;
+  }
+
+  void setCookieLocalStorage(String cookie) async {
+    final prefs = await SharedPreferences.getInstance();
+    print("Set cookie ${cookie}");
+    prefs.setString("cookie", cookie);
+  }
+
+  void removeCookieLocalStorage() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    prefs.remove("cookies");
+  }
+
   void _setCookie(String? rawCookie) {
     if (rawCookie != null) {
       var keyValue = rawCookie.split('=');
@@ -39,7 +65,13 @@ class NetworkService extends ChangeNotifier {
         // ignore keys that aren't cookies
         if (key == 'path' || key == 'expires') return;
 
+/*
+key == "Expires" ||
+            key == "Path" ||
+            key == "Max-Age"
+*/
         cookies[key] = value;
+        setCookieLocalStorage(rawCookie);
       }
     }
   }
@@ -87,6 +119,7 @@ class NetworkService extends ChangeNotifier {
       if (statusCode < 200 || statusCode > 400) {
         throw Exception("Error while fetching data");
       }
+      removeCookieLocalStorage();
       notifyListeners();
       return _decoder.convert(res);
     });
@@ -98,7 +131,7 @@ class NetworkService extends ChangeNotifier {
         .then((http.Response response) {
       final String res = response.body;
       final int statusCode = response.statusCode;
-
+      print(response.headers);
       _updateCookie(response);
 
       if (statusCode < 200 || statusCode > 400) {
