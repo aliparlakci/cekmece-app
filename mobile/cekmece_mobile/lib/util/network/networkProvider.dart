@@ -112,8 +112,7 @@ class NetworkService extends ChangeNotifier {
 
   Future<dynamic> logout() {
     return http
-        .post(Uri.parse('$clientURL/api/auth/logout'),
-            body: {}, headers: headers)
+        .post(Uri.parse('$clientURL/api/auth/logout'), headers: headers)
         .then((http.Response response) {
       final String res = response.body;
       final int statusCode = response.statusCode;

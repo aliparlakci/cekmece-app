@@ -257,12 +257,22 @@ class _ProductBottomBarState extends State<ProductBottomBar> {
                                     icon: Icon(Icons.add)),
                               ]),
                         ))
-                  : DefaultButton(
-                      text: "Configure & Add To Cart",
-                      press: () {
-                        addToCart();
-                      },
-                    ),
+                  : widget.product.quantity == 0
+                      ? Container(
+                          child: Center(
+                              child: Text(
+                            "Out of stock",
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          )),
+                          height: getProportionateScreenHeight(56),
+                        )
+                      : DefaultButton(
+                          text: "Configure & Add To Cart",
+                          press: () {
+                            addToCart();
+                          },
+                        ),
             ),
           ],
         ),

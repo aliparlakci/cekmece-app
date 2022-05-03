@@ -208,8 +208,9 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
       final prefs = await SharedPreferences.getInstance();
       await prefs.remove('id');
-      await prefs.remove('cookie');
+      await prefs.remove('cookies');
       await prefs.setStringList('cart', <String>[]);
+      networkService.logout();
       user = const UserClass(
           displayName: "",
           isAnonymous: true,

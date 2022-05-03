@@ -32,7 +32,7 @@ function logout(): RequestHandler {
     return function (req, res) {
         res.removeHeader("set-cookie")
         res.clearCookie("token")
-        res.status(StatusCodes.OK).json()
+        res.status(StatusCodes.OK).json({"Message":"OK"})
     }
 }
 
