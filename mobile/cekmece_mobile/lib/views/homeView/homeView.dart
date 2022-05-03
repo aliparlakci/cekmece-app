@@ -29,48 +29,7 @@ class _HomeViewState extends State<HomeView> {
   NumberFormat numberFormat =
       NumberFormat.simpleCurrency(locale: "en-US", decimalDigits: 0);
   String clientURL = dotenv.env['CLIENT_URL']!;
-  List<Product> cars = [
-    const Product(
-        id: 1,
-        name: "RB-18B",
-        price: 49900,
-        number: 1,
-        model: 2019,
-        quantity: 1,
-        warranty: 1,
-        distributor: {"name": "RedBull"},
-        category: {"name": "Formula 2"}),
-    const Product(
-        id: 1,
-        name: "F1-75",
-        price: 85000,
-        number: 1,
-        model: 2019,
-        quantity: 1,
-        warranty: 1,
-        distributor: {"name": "Ferrari"},
-        category: {"name": "Formula 1"}),
-    const Product(
-        id: 1,
-        name: "W13",
-        price: 49900,
-        number: 1,
-        model: 2019,
-        quantity: 1,
-        warranty: 1,
-        distributor: {"name": "Mercedes"},
-        category: {"name": "Formula 3"}),
-    const Product(
-        id: 1,
-        name: "Guila",
-        price: 38750,
-        number: 1,
-        model: 2021,
-        quantity: 1,
-        warranty: 1,
-        distributor: {"name": "Alfa Romeo"},
-        category: {"name": "Sedan"})
-  ];
+  List<Product> cars = [];
   List<Map<String, dynamic>> distributors = [];
 
   void getCars() async {
