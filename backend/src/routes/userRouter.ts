@@ -12,6 +12,7 @@ import Joi from "joi";
 function getUserById(userService: UserService): RequestHandler {
     return async function (req, res, next) {
         const id = req.params.id
+        console.log(id)
 
         try {
             const user = await userService.getUser(id)
@@ -49,7 +50,7 @@ function newUser(userService: UserService): RequestHandler {
             return
         }
 
-        res.status(StatusCodes.CREATED).json()
+        res.status(StatusCodes.CREATED).json({"Message":"OK"})
     }
 }
 //

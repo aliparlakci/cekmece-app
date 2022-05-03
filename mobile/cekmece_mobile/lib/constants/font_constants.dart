@@ -32,23 +32,24 @@ var textDefault = GoogleFonts.raleway(
     color: neutralColor,
     letterSpacing: 1);
 
-final kHintTextStyle = TextStyle(
-  color: Colors.white54,
-  fontFamily: 'OpenSans',
+final kHintTextStyle = GoogleFonts.raleway(
+  fontSize: 13,
+  fontWeight: FontWeight.w400,
+  color: Colors.black,
 );
 
-final kLabelStyle = TextStyle(
-  color: Colors.white,
-  fontWeight: FontWeight.bold,
-  fontFamily: 'OpenSans',
-);
+final kLabelStyle = GoogleFonts.raleway(
+    fontSize: 15,
+    fontWeight: FontWeight.w600,
+    color: Colors.white,
+    letterSpacing: 1);
 
 final kBoxDecorationStyle = BoxDecoration(
-  color: Color(0xFF6CA8F1),
-  borderRadius: BorderRadius.circular(10.0),
+  color: Colors.white,
+  borderRadius: BorderRadius.circular(5.0),
   boxShadow: [
     BoxShadow(
-      color: Colors.black12,
+      color: Colors.white,
       blurRadius: 6.0,
       offset: Offset(0, 2),
     ),

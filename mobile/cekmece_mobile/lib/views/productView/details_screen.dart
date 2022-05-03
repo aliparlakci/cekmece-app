@@ -107,7 +107,8 @@ class _ProductBottomBarState extends State<ProductBottomBar> {
           throw Exception('Failed to add to cart');
         }
 
-        user = await widget.userBloc.updateUser(widget.userBloc.user.uid);
+        user = await widget.userBloc
+            .updateUser({"id": "${widget.userBloc.user.uid}"});
       } else {
         final prefs = await SharedPreferences.getInstance();
         final List<String> cart = prefs.getStringList('cart')!;
@@ -194,20 +195,16 @@ class _ProductBottomBarState extends State<ProductBottomBar> {
                                               .getInstance();
                                           final List<String>? cart =
                                               prefs.getStringList('cart');
-                                          print(cart);
                                           if (quantity == 1) {
-                                            print("quantity is 1");
                                             cart!.remove(
                                                 "${widget.product.id}-1");
                                           } else {
                                             cart!.remove(
                                                 "${widget.product.id}-${quantity}");
-                                            print(cart);
 
                                             cart.add(
                                                 "${widget.product.id}-${quantity - 1}");
                                           }
-                                          print(cart);
                                           await prefs.setStringList(
                                               'cart', cart);
 
@@ -219,9 +216,9 @@ class _ProductBottomBarState extends State<ProductBottomBar> {
                                                   '$clientURL/api/cart/${widget.userBloc.user.uid}/remove/${widget.product.id}'));
 
                                           user = await widget.userBloc
-                                              .updateUser(
-                                                  widget.userBloc.user.uid);
-                                          print(response.body);
+                                              .updateUser({
+                                            "id": widget.userBloc.user.uid
+                                          });
                                           if (response.statusCode == 200) {
                                           } else {
                                             showSnackBar(

@@ -2,11 +2,13 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class NetworkService extends ChangeNotifier {
   String clientURL = dotenv.env['CLIENT_URL']!;
   final JsonDecoder _decoder = const JsonDecoder();
   final JsonEncoder _encoder = const JsonEncoder();
+  final prefs = SharedPreferences.getInstance();
 
   Map<String, String> headers = {"content-type": "application/json"};
   Map<String, String> cookies = {};
@@ -26,7 +28,41 @@ class NetworkService extends ChangeNotifier {
       }
 
       headers['cookie'] = _generateCookieHeader();
+      setCookieLocalStorage();
     }
+  }
+
+  Future<bool> getCookieFromLocalStorage() async {
+    final prefs = await SharedPreferences.getInstance();
+    final List<String>? cookies = prefs.getStringList('cookies');
+
+    if (cookies != null) {
+      for (String cookie in cookies) {
+        //print("Processing: ${cookie}");
+        _setCookie(cookie);
+      }
+      headers['cookie'] = _generateCookieHeader();
+      return true;
+    }
+    return false;
+  }
+
+  void setCookieLocalStorage() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    List<String> localCookies = [];
+
+    cookies.forEach((key, value) {
+      localCookies.add("${key}=${value}");
+    });
+
+    prefs.setStringList("cookies", localCookies);
+  }
+
+  void removeCookieLocalStorage() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    prefs.remove("cookies");
   }
 
   void _setCookie(String? rawCookie) {
@@ -87,6 +123,7 @@ class NetworkService extends ChangeNotifier {
       if (statusCode < 200 || statusCode > 400) {
         throw Exception("Error while fetching data");
       }
+      removeCookieLocalStorage();
       notifyListeners();
       return _decoder.convert(res);
     });
@@ -98,7 +135,6 @@ class NetworkService extends ChangeNotifier {
         .then((http.Response response) {
       final String res = response.body;
       final int statusCode = response.statusCode;
-
       _updateCookie(response);
 
       if (statusCode < 200 || statusCode > 400) {
@@ -119,7 +155,7 @@ class NetworkService extends ChangeNotifier {
 
       _updateCookie(response);
 
-      if (statusCode < 200 || statusCode > 400) {
+      if (statusCode < 200 || statusCode >= 400) {
         throw Exception("Error while fetching data");
       }
       notifyListeners();

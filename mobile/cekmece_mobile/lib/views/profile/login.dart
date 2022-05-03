@@ -3,8 +3,11 @@ import 'package:cekmece_mobile/constants/font_constants.dart';
 import 'package:cekmece_mobile/util/bloc/loadingBloc/loading_bloc.dart';
 import 'package:cekmece_mobile/util/bloc/userBloc/user_bloc.dart';
 import 'package:cekmece_mobile/util/blocProviders.dart';
+import 'package:cekmece_mobile/util/network/networkProvider.dart';
 import 'package:cekmece_mobile/views/misc/loadingOverlay.dart';
+import 'package:cekmece_mobile/views/productView/components/size.dart';
 import 'package:cekmece_mobile/views/profile/register.dart';
+import 'package:cekmece_mobile/widgets/showSnackBar.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,6 +15,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_signin_button/button_list.dart';
 import 'package:flutter_signin_button/button_view.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -30,11 +34,17 @@ class _LoginScreenState extends State<LoginScreen> {
     // try logging in
     _loadingOverlay.show(context);
 
-    await Future.delayed(Duration(seconds: 2));
-
+    try {
+      final networkService =
+          Provider.of<NetworkService>(context, listen: false);
+      await networkService.login(email, password);
+      Navigator.pop(context);
+    } catch (err) {
+      showSnackBar(
+          context: context, message: "Wrong email or password", error: true);
+    }
     _loadingOverlay.hide();
     // return to the main screen
-    Navigator.pop(context);
   }
 
   Widget _buildEmailTF() {
@@ -48,7 +58,17 @@ class _LoginScreenState extends State<LoginScreen> {
         SizedBox(height: 10.0),
         Container(
           alignment: Alignment.centerLeft,
-          decoration: kBoxDecorationStyle,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(5.0),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 6.0,
+                offset: Offset(0, 2),
+              ),
+            ],
+          ),
           height: 60.0,
           child: TextFormField(
             key: Key("loginEmailField"),
@@ -66,15 +86,15 @@ class _LoginScreenState extends State<LoginScreen> {
               return null;
             },
             style: TextStyle(
-              color: Colors.white,
-              fontFamily: 'OpenSans',
+              color: Colors.black,
+              fontFamily: 'Roboto',
             ),
             decoration: InputDecoration(
               border: InputBorder.none,
               contentPadding: EdgeInsets.only(top: 14.0),
               prefixIcon: Icon(
                 Icons.email,
-                color: Colors.white,
+                color: Colors.black,
               ),
               hintText: 'Enter your Email',
               hintStyle: kHintTextStyle,
@@ -114,15 +134,15 @@ class _LoginScreenState extends State<LoginScreen> {
               return null;
             },
             style: TextStyle(
-              color: Colors.white,
-              fontFamily: 'OpenSans',
+              color: Colors.black,
+              fontFamily: 'Roboto',
             ),
             decoration: InputDecoration(
               border: InputBorder.none,
               contentPadding: EdgeInsets.only(top: 14.0),
               prefixIcon: Icon(
                 Icons.lock,
-                color: Colors.white,
+                color: Colors.black,
               ),
               hintText: 'Enter your Password',
               hintStyle: kHintTextStyle,
@@ -144,7 +164,8 @@ class _LoginScreenState extends State<LoginScreen> {
             'Forgot Password?',
             style: header3.copyWith(
               color: Colors.white,
-              fontSize: 13,
+              fontWeight: FontWeight.w400,
+              fontSize: 11,
             ),
           ),
         ),
@@ -183,6 +204,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 25.0),
       width: double.infinity,
+      height: getProportionateScreenHeight(95),
       child: ElevatedButton(
         key: Key("loginButton"),
         onPressed: () {
@@ -192,9 +214,12 @@ class _LoginScreenState extends State<LoginScreen> {
             loginWithEmailAndPassword();
           }
         },
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(Colors.black),
+        ),
         child: Text(
-          'LOGIN',
-          style: header3.copyWith(color: Colors.blue),
+          'Sign In',
+          style: header3.copyWith(color: Colors.white),
         ),
       ),
     );
@@ -254,13 +279,15 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _buildSignupBtn() {
     return GestureDetector(
       onTap: () async {
-        await pushNewScreen(
+        bool result = await pushNewScreen(
           context,
           screen: RegisterScreen(),
           withNavBar: false, // OPTIONAL VALUE. True by default.
           pageTransitionAnimation: PageTransitionAnimation.cupertino,
         );
-        Navigator.pop(context);
+        if (result != null && result) {
+          Navigator.pop(context);
+        }
       },
       child: RichText(
         text: TextSpan(
@@ -298,12 +325,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       colors: [
-                        Color(0xFF61A4F1),
-                        Color(0xFF61A4F1),
-                        Color(0xFF478DE0),
-                        secondaryColor,
+                        Colors.black,
+                        Colors.white,
                       ],
-                      stops: [0.1, 0.4, 0.7, 0.9],
+                      stops: [0.15, 0.9],
                     ),
                   ),
                 ),
@@ -329,8 +354,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         _buildPasswordTF(),
                         _buildLoginBtn(),
-                        _buildSignInWithText(),
-                        _buildSocialBtnRow(),
+                        //_buildSignInWithText(),
+                        //_buildSocialBtnRow(),
                         _buildSignupBtn(),
                         _buildForgotPasswordBtn(),
                       ],

@@ -133,7 +133,6 @@ Product(
           .timeout(Duration(seconds: 10));
 
       if (response.statusCode == 200) {
-        print(response.body);
         for (var elem in jsonDecode(response.body)) {
           categories[elem["id"]] = elem["name"];
         }
