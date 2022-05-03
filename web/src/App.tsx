@@ -6,6 +6,7 @@ import HomePage from "./pages/home/HomePage"
 import CarDetailPage from "./pages/carDetail/CarDetailPage"
 import LoginPage from "./pages/LoginPage"
 import RegisterPage from "./pages/RegisterPage"
+import CartPage from "./pages/cart/CartPage"
 
 import useAuth, { AuthProvider } from "./hooks/useAuth"
 import { NotificationProvider } from "./hooks/useNotification"
@@ -41,6 +42,9 @@ function App() {
                                 </Route>
                                 <Route path="/register">
                                     <RegisterPage />
+                                </Route>
+                                <Route path="/cart">
+                                    <CartPage />
                                 </Route>
                                 <Route path="/cars/:carId">
                                     <CarDetailPage />
