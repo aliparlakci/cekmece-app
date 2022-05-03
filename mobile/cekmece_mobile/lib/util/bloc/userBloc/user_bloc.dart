@@ -91,8 +91,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     BlocProvider.of<LoadingBloc>(context)
         .add(LoadingStart(loadingReason: "User fetch"));
     List<CartItem> cartList = await getLocalCart();
-    print("update local user");
-    print(cartList);
     UserClass localUser = UserClass(
         displayName: "Anon user",
         isAnonymous: true,
@@ -134,7 +132,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     on<AppStarted>((event, emit) async {
       final prefs = await SharedPreferences.getInstance();
       final String? userId = prefs.getString('id');
-      final String? cookie = prefs.getString('cookie');
 
       networkService = Provider.of<NetworkService>(context, listen: false);
 
@@ -144,9 +141,9 @@ class UserBloc extends Bloc<UserEvent, UserState> {
           if (!localCookie) {
             throw new Exception("No cookie");
           }
-          print("here");
           var me = await networkService.get('${localIPAddress}/api/auth/me');
           user = await updateUser(me);
+
           emit(LoggedIn(user: user));
         } else {
           user = UserClass(
@@ -232,7 +229,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       try {
         final prefs = await SharedPreferences.getInstance();
         final String? userId = prefs.getString('id');
-        final String? cookie = prefs.getString('cookie');
+        final List<String>? cookie = prefs.getStringList('cookies');
 
         if (userId != null && cookie != null) {
           var me = await networkService.get('${localIPAddress}/api/auth/me');

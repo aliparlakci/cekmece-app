@@ -28,6 +28,7 @@ class NetworkService extends ChangeNotifier {
       }
 
       headers['cookie'] = _generateCookieHeader();
+      setCookieLocalStorage();
     }
   }
 
@@ -37,16 +38,25 @@ class NetworkService extends ChangeNotifier {
 
     if (cookies != null) {
       for (String cookie in cookies) {
+        //print("Processing: ${cookie}");
         _setCookie(cookie);
       }
+      headers['cookie'] = _generateCookieHeader();
+      return true;
     }
     return false;
   }
 
-  void setCookieLocalStorage(String cookie) async {
+  void setCookieLocalStorage() async {
     final prefs = await SharedPreferences.getInstance();
-    print("Set cookie ${cookie}");
-    prefs.setString("cookie", cookie);
+
+    List<String> localCookies = [];
+
+    cookies.forEach((key, value) {
+      localCookies.add("${key}=${value}");
+    });
+
+    prefs.setStringList("cookies", localCookies);
   }
 
   void removeCookieLocalStorage() async {
@@ -65,13 +75,7 @@ class NetworkService extends ChangeNotifier {
         // ignore keys that aren't cookies
         if (key == 'path' || key == 'expires') return;
 
-/*
-key == "Expires" ||
-            key == "Path" ||
-            key == "Max-Age"
-*/
         cookies[key] = value;
-        setCookieLocalStorage(rawCookie);
       }
     }
   }
@@ -131,7 +135,6 @@ key == "Expires" ||
         .then((http.Response response) {
       final String res = response.body;
       final int statusCode = response.statusCode;
-      print(response.headers);
       _updateCookie(response);
 
       if (statusCode < 200 || statusCode > 400) {
@@ -152,7 +155,7 @@ key == "Expires" ||
 
       _updateCookie(response);
 
-      if (statusCode < 200 || statusCode > 400) {
+      if (statusCode < 200 || statusCode >= 400) {
         throw Exception("Error while fetching data");
       }
       notifyListeners();

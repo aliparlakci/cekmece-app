@@ -117,7 +117,6 @@ class _HomeViewState extends State<HomeView> {
       distributors = [];
     }
     distributors = result;
-    print(distributors);
     setState(() {});
   }
 

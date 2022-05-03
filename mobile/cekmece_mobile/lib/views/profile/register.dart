@@ -1,14 +1,21 @@
 import 'package:cekmece_mobile/constants/color_contsants.dart';
 import 'package:cekmece_mobile/constants/font_constants.dart';
+import 'package:cekmece_mobile/util/bloc/loadingBloc/loading_bloc.dart';
 import 'package:cekmece_mobile/util/bloc/userBloc/user_bloc.dart';
 import 'package:cekmece_mobile/util/blocProviders.dart';
+import 'package:cekmece_mobile/util/network/networkProvider.dart';
+import 'package:cekmece_mobile/views/misc/loadingOverlay.dart';
+import 'package:cekmece_mobile/views/productView/components/size.dart';
+import 'package:cekmece_mobile/widgets/showSnackBar.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_signin_button/button_list.dart';
 import 'package:flutter_signin_button/button_view.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:provider/provider.dart';
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -17,6 +24,8 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
+  final LoadingOverlay _loadingOverlay = LoadingOverlay();
+
   String email = "";
   String password = "";
   String name = "";
@@ -39,8 +48,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
           child: TextFormField(
             keyboardType: TextInputType.emailAddress,
             style: TextStyle(
-              color: Colors.white,
-              fontFamily: 'OpenSans',
+              color: Colors.black,
+              fontFamily: 'Raleway',
             ),
             onChanged: (val) {
               email = val;
@@ -55,15 +64,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
               return null;
             },
             decoration: InputDecoration(
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.only(top: 14.0),
-              prefixIcon: Icon(
-                Icons.email,
-                color: Colors.white,
-              ),
-              hintText: 'Enter your Email',
-              hintStyle: kHintTextStyle,
-            ),
+                border: InputBorder.none,
+                contentPadding: EdgeInsets.only(top: 14.0),
+                prefixIcon: Icon(
+                  Icons.email,
+                  color: Colors.black,
+                ),
+                hintText: 'Enter your Email',
+                hintStyle: kHintTextStyle,
+                errorStyle: kHintTextStyle),
           ),
         ),
       ],
@@ -86,7 +95,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           child: TextFormField(
             keyboardType: TextInputType.name,
             style: TextStyle(
-              color: Colors.white,
+              color: Colors.black,
               fontFamily: 'OpenSans',
             ),
             onChanged: (val) {
@@ -104,15 +113,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
               return null;
             },
             decoration: InputDecoration(
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.only(top: 14.0),
-              prefixIcon: Icon(
-                Icons.person,
-                color: Colors.white,
-              ),
-              hintText: 'Enter your Email',
-              hintStyle: kHintTextStyle,
-            ),
+                border: InputBorder.none,
+                contentPadding: EdgeInsets.only(top: 14.0),
+                prefixIcon: Icon(
+                  Icons.person,
+                  color: Colors.black,
+                ),
+                hintText: 'Enter your name',
+                hintStyle: kHintTextStyle,
+                errorStyle: kHintTextStyle),
           ),
         ),
       ],
@@ -135,7 +144,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           child: TextFormField(
             obscureText: true,
             style: TextStyle(
-              color: Colors.white,
+              color: Colors.black,
               fontFamily: 'OpenSans',
             ),
             onChanged: (val) {
@@ -151,15 +160,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
               return null;
             },
             decoration: InputDecoration(
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.only(top: 14.0),
-              prefixIcon: Icon(
-                Icons.lock,
-                color: Colors.white,
-              ),
-              hintText: 'Enter your Password',
-              hintStyle: kHintTextStyle,
-            ),
+                border: InputBorder.none,
+                contentPadding: EdgeInsets.only(top: 14.0),
+                prefixIcon: Icon(
+                  Icons.lock,
+                  color: Colors.black,
+                ),
+                hintText: 'Enter your Password',
+                hintStyle: kHintTextStyle,
+                errorStyle: kHintTextStyle),
           ),
         ),
       ],
@@ -169,16 +178,43 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget _buildRegisterBtn() {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 25.0),
+      height: getProportionateScreenHeight(95),
       width: double.infinity,
       child: ElevatedButton(
-        onPressed: () {
+        onPressed: () async {
           if (_formKey.currentState!.validate()) {
-            Navigator.pop(context);
+            //_loadingOverlay.show(context);
+            try {
+              String clientURL = dotenv.env['CLIENT_URL']!;
+              final networkService =
+                  Provider.of<NetworkService>(context, listen: false);
+              var res = await networkService.post(
+                '$clientURL/api/users/',
+                body: {
+                  "email": email,
+                  "displayName": name,
+                  "password": password
+                },
+              );
+              await networkService.login(email, password);
+              Navigator.pop(context, true);
+            } catch (err) {
+              print(err);
+              showSnackBar(
+                  context: context,
+                  message:
+                      "An error happened during registration. Please try again later",
+                  error: true);
+            }
           }
+          //_loadingOverlay.hide();
         },
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(Colors.black),
+        ),
         child: Text(
           'REGISTER',
-          style: header3.copyWith(color: Colors.blue),
+          style: header3.copyWith(color: Colors.white),
         ),
       ),
     );
@@ -203,12 +239,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       colors: [
-                        Color(0xFF61A4F1),
-                        Color(0xFF61A4F1),
-                        Color(0xFF478DE0),
-                        secondaryColor,
+                        Colors.black,
+                        Colors.white,
                       ],
-                      stops: [0.1, 0.4, 0.7, 0.9],
+                      stops: [0.15, 0.9],
                     ),
                   ),
                 ),

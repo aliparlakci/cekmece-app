@@ -50,7 +50,7 @@ function newUser(userService: UserService): RequestHandler {
             return
         }
 
-        res.status(StatusCodes.CREATED).json()
+        res.status(StatusCodes.CREATED).json({"Message":"OK"})
     }
 }
 //

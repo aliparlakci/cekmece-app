@@ -38,7 +38,6 @@ class _ManualSearchState extends State<ManualSearch> {
 
       if (response.statusCode == 200) {
         for (Map<String, dynamic> carData in jsonDecode(response.body)) {
-          print(carData);
           if (carData["name"].toLowerCase().contains(query.toLowerCase())) {
             Product car = Product.fromJson(carData);
             results.add(car);
