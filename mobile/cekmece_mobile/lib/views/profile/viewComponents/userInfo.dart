@@ -16,6 +16,7 @@ class UserInfoView extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             CircleAvatar(
               radius: 30,
@@ -51,7 +52,7 @@ class UserInfoView extends StatelessWidget {
                   BlocProvider.of<UserBloc>(context).add(LogoutButtonPressed());
                 },
                 icon: const Icon(
-                  CupertinoIcons.settings,
+                  CupertinoIcons.arrow_right_to_line_alt,
                   size: 25,
                   color: Colors.black,
                 ))
