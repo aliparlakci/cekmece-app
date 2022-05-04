@@ -145,6 +145,7 @@ class NetworkService extends ChangeNotifier {
   }
 
   Future<dynamic> post(String url, {body, encoding}) {
+    body ??= {};
     return http
         .post(Uri.parse(url),
             body: _encoder.convert(body), headers: headers, encoding: encoding)
@@ -153,6 +154,9 @@ class NetworkService extends ChangeNotifier {
       final int statusCode = response.statusCode;
 
       _updateCookie(response);
+      print(headers);
+      print(statusCode);
+      print(res);
 
       if (statusCode < 200 || statusCode >= 400) {
         throw Exception("Error while fetching data");

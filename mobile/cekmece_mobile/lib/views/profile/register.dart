@@ -1,5 +1,6 @@
 import 'package:cekmece_mobile/constants/color_contsants.dart';
 import 'package:cekmece_mobile/constants/font_constants.dart';
+import 'package:cekmece_mobile/models/cartItem/CartItem.dart';
 import 'package:cekmece_mobile/util/bloc/loadingBloc/loading_bloc.dart';
 import 'package:cekmece_mobile/util/bloc/userBloc/user_bloc.dart';
 import 'package:cekmece_mobile/util/blocProviders.dart';
@@ -197,6 +198,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 },
               );
               await networkService.login(email, password);
+
               Navigator.pop(context, true);
             } catch (err) {
               print(err);
