@@ -17,7 +17,7 @@ function LeaveAReviewButton({ carId }) {
         <div>
             <Box display="flex" justifyContent="center">
                 <Button
-                    variant="text"
+                    variant="outlined"
                     onClick={toggleCreateReviewDrawer(true)}
                     sx={{
                         minWidth: 250,

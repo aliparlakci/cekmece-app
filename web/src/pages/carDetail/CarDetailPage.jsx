@@ -1,5 +1,4 @@
 import { useParams } from "react-router-dom"
-
 import theme from "./theme"
 import { ThemeProvider } from "@emotion/react"
 import ReviewsButton from "./components/buttons/ReviewsButton"
@@ -55,8 +54,10 @@ function CarDetailPage() {
             <p className="mt-2 text-2xl">
               Vendor: <b>XYZCars</b>
             </p>
+            
+          </div>
+            <div className="flex flex-row justify-start items-baseline gap-x-8 mt-5">
             <TextField
-                id="outlined-number"
                 focused
                 defaultValue={1}
                 label="Quantity"
@@ -64,13 +65,12 @@ function CarDetailPage() {
                 InputLabelProps={{
                     shrink: true,
                 }}
-                sx={{ marginTop:2, width:80 }}
+                sx={{ marginTop:2, width:80}}
             />
 
-          </div>
-            <div className="flex flex-row justify-start gap-x-8 mt-5">
-            <Button endIcon={<AddShoppingCartIcon />} className="text-white bg-[#000] p-3 m-5" sx={{
+            <Button endIcon={<AddShoppingCartIcon />} className="text-white bg-[#000] p-3 mr-5" sx={{
                         minWidth: 250,
+                        maxHeight: 35,
                         fontWeight: 700,
                         color: "white",
                         backgroundColor: "black",
