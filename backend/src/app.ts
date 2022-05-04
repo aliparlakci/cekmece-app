@@ -18,6 +18,7 @@ import { JWTAuth } from "./middlewares/JWTAuth"
 import AuthService from "./services/authService"
 import Context from "./utils/context"
 import orderRouter from "./routes/orderRouter"
+import invoiceRouter from "./routes/invoiceRouter"
 
 async function createServer(){
     try {
@@ -52,6 +53,9 @@ async function createServer(){
     v1.use("/users", userRouter())
     v1.use("/auth", authRouter())
     v1.use("/orders", orderRouter())
+    //v1.use("/invoice", invoiceRouter() )
+    v1.use("/invoice", invoiceRouter() )
+
 
     // catch 404 and forward to error handler
     app.use(function (req, res, next) {
