@@ -111,7 +111,7 @@ class _NavigationViewState extends State<NavigationView> {
       items: _navBarsItems(),
       onItemSelected: (idx) async {
         if (!(idx == 0 || idx == 1)) {
-          BlocProvider.of<UserBloc>(context).add(UserUpdate(user: widget.user));
+          BlocProvider.of<UserBloc>(context).add(UserUpdate());
         }
       },
       confineInSafeArea: true,

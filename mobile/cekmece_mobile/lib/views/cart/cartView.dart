@@ -2,15 +2,21 @@ import 'package:cekmece_mobile/constants/font_constants.dart';
 import 'package:cekmece_mobile/models/cartItem/CartItem.dart';
 import 'package:cekmece_mobile/models/product/Product.dart';
 import 'package:cekmece_mobile/models/user/UserClass.dart';
+import 'package:cekmece_mobile/util/bloc/loadingBloc/loading_bloc.dart';
 import 'package:cekmece_mobile/util/bloc/userBloc/user_bloc.dart';
+import 'package:cekmece_mobile/util/network/networkProvider.dart';
+import 'package:cekmece_mobile/views/order/views/mockPayment.dart';
 import 'package:cekmece_mobile/views/productView/components/size.dart';
 import 'package:cekmece_mobile/views/productView/details_screen.dart';
+import 'package:cekmece_mobile/views/profile/register.dart';
 import 'package:cekmece_mobile/widgets/showSnackBar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:provider/provider.dart';
 
 class CartView extends StatefulWidget {
   CartView({Key? key, required this.user}) : super(key: key);
@@ -84,8 +90,7 @@ class _CartViewState extends State<CartView> {
                             pageTransitionAnimation:
                                 PageTransitionAnimation.cupertino,
                           );
-                          BlocProvider.of<UserBloc>(context)
-                              .add(UserUpdate(user: userBloc.user));
+                          BlocProvider.of<UserBloc>(context).add(UserUpdate());
                         },
                         child: Card(
                           elevation: 5,
@@ -200,16 +205,62 @@ class _CartViewState extends State<CartView> {
                   padding: EdgeInsets.symmetric(vertical: 15),
                   child: Text("Complete Order"),
                 ),
-                onPressed: () {
-                  if (widget.user.isAnonymous) {
+                onPressed: () async {
+                  if (widget.user.cart.isEmpty) {
                     showSnackBar(
                         context: context,
-                        message: "You must be logged in in order to proceed",
+                        message: "You don't have any items in cart",
                         error: true);
+                  } else if (widget.user.isAnonymous) {
+                    List<CartItem> localCart = widget.user.cart;
+                    showSnackBar(
+                        context: context,
+                        message: "You must have an account in order to proceed",
+                        error: true);
+                    await pushNewScreen(
+                      context,
+                      screen: RegisterScreen(),
+                      withNavBar: false, // OPTIONAL VALUE. True by default.
+                      pageTransitionAnimation:
+                          PageTransitionAnimation.cupertino,
+                    );
+
+                    BlocProvider.of<UserBloc>(context)
+                        .add(LoginButtonPressed());
+
+                    BlocProvider.of<LoadingBloc>(context)
+                        .add(LoadingStart(loadingReason: "Cart Transfer"));
+
+                    final networkService =
+                        Provider.of<NetworkService>(context, listen: false);
+                    String clientURL = dotenv.env['CLIENT_URL']!;
+
+                    var me =
+                        await networkService.get('${clientURL}/api/auth/me');
+
+                    if (localCart.isNotEmpty) {
+                      for (CartItem item in localCart) {
+                        for (int _ = 0; _ < item.quantity; _++) {
+                          await networkService.post(
+                              '$clientURL/api/cart/${me["id"]}/add/${item.item.id}');
+                        }
+                      }
+                    }
+
+                    BlocProvider.of<LoadingBloc>(context).add(LoadingEnd());
+                    BlocProvider.of<UserBloc>(context).add(UserUpdate());
                   } else {
                     showSnackBar(
                       context: context,
                       message: "Now you will be directed to the payment page",
+                    );
+
+                    pushNewScreen(
+                      context,
+                      screen: MockPayment(),
+                      withNavBar: false, // OPTIONAL VALUE. True by default.
+                      pageTransitionAnimation:
+                          PageTransitionAnimation.cupertino,
                     );
                   }
                 },
