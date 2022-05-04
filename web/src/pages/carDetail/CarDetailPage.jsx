@@ -6,12 +6,15 @@ import LeaveAReviewButton from "./components/buttons/LeaveAReviewButton"
 import NavBar from "./components/NavBar"
 import {Button, TextField} from "@mui/material"
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart"
+import ICar from "../../models/car"
+import Box from '@mui/material/Box';
 
 function CarDetailPage() {
     const params = useParams()
     const { carId } = params
     const averageRating = 4.5
     const reviewCount = 555
+    const quantity = 32
 
     return (
         <>
@@ -20,16 +23,20 @@ function CarDetailPage() {
 <NavBar />
 <div className="mt-20">
       <div className="flex justify-center mobile:flex-col mobile:mt-4 mobile:p-3">
-        <div className="flex-1 flex items-center justify-center m-10">
+        <div className="flex-1 flex-col items-center justify-center m-10">
           <img
             src="https://wallpaperaccess.com/full/8039043.jpg"
             className="product_img"
             alt="product_image"
           />
+        <p className="mt-4 text-2xl"></p>
+        <h6 className="title text-[20px] mobile:text-[10px]" >
+            <u> Items in stock:</u> <b> {quantity} </b>
+        </h6>
         </div>
         <div className="flex-[1.3] flex flex-col items-start w-32 justify-items-center mt-10 mobile:items-center">
         <h1 className="title text-[40px] mobile:text-[30px]">
-            Porsche 
+            Porsche
           </h1>
           <h1 className="title text-[40px] mobile:text-[30px]">
             <b> 911 GT3 Touring</b>

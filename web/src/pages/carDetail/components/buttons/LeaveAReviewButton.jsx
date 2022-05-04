@@ -25,7 +25,7 @@ function LeaveAReviewButton({ carId }) {
                         color: "black",
                         backgroundColor: "white",
                         ":hover": {
-                            backgroundColor: "#DDDDDD",
+                            backgroundColor: "#ffc0cb",
                         },
                     }}
                 >
