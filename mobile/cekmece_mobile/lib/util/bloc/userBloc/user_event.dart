@@ -13,8 +13,6 @@ class AppStarted extends UserEvent {
 }
 
 class UserUpdate extends UserEvent {
-  UserClass user;
-  UserUpdate({required this.user});
   @override
   String toString() => 'User data update event.';
 }

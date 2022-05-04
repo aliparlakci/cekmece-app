@@ -49,8 +49,8 @@ function newUser(userService: UserService): RequestHandler {
             res.status(StatusCodes.BAD_REQUEST).json(e)
             return
         }
-
-        res.status(StatusCodes.CREATED).json({"Message":"OK"})
+        var user = await userService.getUserByEmail(req.body.email);
+        res.status(StatusCodes.CREATED).json({"Message":"OK","user":user?.id})
     }
 }
 //
