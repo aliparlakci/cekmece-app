@@ -5,9 +5,8 @@ import { ThemeProvider } from "@emotion/react"
 import ReviewsButton from "./components/buttons/ReviewsButton"
 import LeaveAReviewButton from "./components/buttons/LeaveAReviewButton"
 import NavBar from "./components/NavBar"
-import {Button} from "@mui/material"
+import {Button, TextField} from "@mui/material"
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart"
-
 
 function CarDetailPage() {
     const params = useParams()
@@ -56,6 +55,17 @@ function CarDetailPage() {
             <p className="mt-2 text-2xl">
               Vendor: <b>XYZCars</b>
             </p>
+            <TextField
+                id="outlined-number"
+                focused
+                defaultValue={1}
+                label="Quantity"
+                type="number"
+                InputLabelProps={{
+                    shrink: true,
+                }}
+                sx={{ marginTop:2, width:80 }}
+            />
 
           </div>
             <div className="flex flex-row justify-start gap-x-8 mt-5">
