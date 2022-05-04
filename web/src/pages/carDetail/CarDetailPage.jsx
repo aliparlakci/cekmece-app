@@ -36,6 +36,7 @@ function CarDetailPage() {
           <h1 className="title text-[40px] mobile:text-[30px]">
             <b> 911 GT3 Touring</b>
           </h1>
+          <ReviewsButton carId={carId} averageRating={averageRating} reviewCount={reviewCount} />
           <p className="pr-[4rem] text-justify mt-4 mobile:pr-0">
             Lorem ipsum, dolor sit amet consectetur adipisicing elit. Laudantium
             accusamus, culpa neque ex sunt placeat. Vitae quia qui quo,
@@ -43,22 +44,36 @@ function CarDetailPage() {
             consectetur delectus nihil!
           </p>
           <div className="flex flex-col place-self-start">
-            <p className="mt-7 text-3xl">
+            <p className="mt-4 text-2xl">
               Price: <b>$206.000</b>
             </p>
+            <p className="mt-2 text-2xl">
+              Year: <b>2022</b>
+            </p>
+            <p className="mt-2 text-2xl">
+              Warranty: <b>2 Years</b>
+            </p>
+            <p className="mt-2 text-2xl">
+              Vendor: <b>XYZCars</b>
+            </p>
 
-            <div className="mt-7">
-              
-            </div>
           </div>
-            <div className="flex ">
-
-            </div>
-          <Button endIcon={<AddShoppingCartIcon />} className="text-white bg-[#000] shadow-md mt-[30px] p-3">
+            <div className="flex flex-row justify-start gap-x-8 mt-5">
+            <Button endIcon={<AddShoppingCartIcon />} className="text-white bg-[#000] p-3 m-5" sx={{
+                        minWidth: 250,
+                        fontWeight: 700,
+                        color: "white",
+                        backgroundColor: "black",
+                        ":hover": {
+                            backgroundColor: "#2D2D2D",
+                        },
+                    }}>
             Add to Cart
-          </Button>
-          <ReviewsButton carId={carId} averageRating={averageRating} reviewCount={reviewCount} />
-          <LeaveAReviewButton carId={carId} />
+            </Button>
+          
+            <LeaveAReviewButton carId={carId} />
+            </div>
+
         </div>
       </div>
     </div>
