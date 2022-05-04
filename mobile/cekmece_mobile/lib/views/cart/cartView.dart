@@ -211,6 +211,7 @@ class _CartViewState extends State<CartView> {
                         context: context,
                         message: "You don't have any items in cart",
                         error: true);
+                    return;
                   } else if (widget.user.isAnonymous) {
                     List<CartItem> localCart = widget.user.cart;
                     showSnackBar(
@@ -250,11 +251,6 @@ class _CartViewState extends State<CartView> {
                     BlocProvider.of<LoadingBloc>(context).add(LoadingEnd());
                     BlocProvider.of<UserBloc>(context).add(UserUpdate());
                   } else {
-                    showSnackBar(
-                      context: context,
-                      message: "Now you will be directed to the payment page",
-                    );
-
                     pushNewScreen(
                       context,
                       screen: MockPayment(),
