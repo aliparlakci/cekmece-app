@@ -17,16 +17,15 @@ function LeaveAReviewButton({ carId }) {
         <div>
             <Box display="flex" justifyContent="center">
                 <Button
-                    variant="contained"
+                    variant="text"
                     onClick={toggleCreateReviewDrawer(true)}
-                    disableElevation
                     sx={{
                         minWidth: 250,
                         fontWeight: 700,
-                        color: "white",
-                        backgroundColor: "black",
+                        color: "black",
+                        backgroundColor: "white",
                         ":hover": {
-                            backgroundColor: "#2D2D2D",
+                            backgroundColor: "#DDDDDD",
                         },
                     }}
                 >
