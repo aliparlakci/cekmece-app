@@ -1,108 +1,200 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pdf Document</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
-</head>
-<body>
-    <table width="100%" border="0" cellspacing="0" cellpadding="0">
-        <tr>
-            <td align="left" valign="top" bgcolor="#ffe77b" style="background-color:#fff;">
-              <img height="100" width="100" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgQ_m4DUpDZtd5CnGPtFUpGMXXEoPWNSVnAA&usqp=CAU" alt="">
-            </td>
-            <td align="left" bgcolor="#ffe77b" style="background-color: #fff;">
-              <h2 style="font-weight: 900;color: brown;">Online Store</h2>
-              <p>227 Cobblestone Road, 30000 Bedrock, Cobblestone County <br/> 
-                http://dinostore.bed | hello@dinostore.bed +555 7 789-1234</p>
-            </td>
-        </tr>
-    </table> 
-    <h1 style="font-size: 30px;font-weight: 600; color: green; margin-top: 10px;">INVOICE</h1>
-    <h4>#1</h4> 
-    <table width="95%" border="0" cellspacing="0" cellpadding="0">
-      <tr>
-          <td width="30%" align="left" valign="top" bgcolor="#ffe77b" style="background-color:#fff;">
-            <p>Invoice To:</p>
-            <h3 style="font-weight: 800;color: brown;">Jhone Carter</h3>
-          </td>
-          <td width="70%" align="left" bgcolor="#ffe77b" style="background-color: #fff;">             
-          </td>
-      </tr>
-      <tr>
-        <td width="30%" align="left" valign="top" bgcolor="#ffe77b" style="background-color:#fff;">
-          <p>Social Media Manager</p>
-          <p>Bolen Tex .Inc</p>
-        </td>
-        <td width="70%" align="left" bgcolor="#ffe77b" style="background-color: #fff;">             
-        </td>
-      </tr>
-  </table>  
-      <table width="95%" border="0" cellspacing="0" cellpadding="0">
-        <tr>
-          <td width="30%" align="left" valign="top" bgcolor="#ffe77b" style="background-color:#fff;">
-            <p>+152 5248 523</p>
-            <p>info@gmail.com</p>
-          </td>
-          <td width="40%" align="left" bgcolor="#ffe77b" style="background-color: #fff;">             
-          </td>
-          <td width="30%" align="right" bgcolor="#ffe77b" style="background-color: #fff;">
-            <h4 style="font-weight: 700;color: #000000;">Date: 01 Dec 2020</h4> 
-            <h4 style="font-weight: 700;color: #000000;">INVOICE NO: DX-5236</h4>            
-          </td>
-        </tr>
-      </table>   
-      <table class="table" width="95%">
-          <thead>
-            <tr>
-              <th scope="col">Photo</th>
-              <th scope="col">Description</th>
-              <th scope="col">Unit</th>
-              <th scope="col">Quantity</th>
-              <th scope="col">Price</th>
-              <th scope="col">Total</th>
-            </tr>
-          </thead>
-          <tbody>
-            {{#each products.prodlist}}
-            <tr>
-              <td width="10%">
-                <img height="70" width="70" src="{{this.imgurl}}" alt="">
-              </td>
-              <th scope="row" width="50%">
-                <h5 style="font-weight: 700;color:chocolate">{{this.name}}</h5>
-                <p>{{this.description}}</p>
-              </th>
-              <td width="10%">{{this.unit}}</td>
-              <td width="10%">{{this.quantity}}</td>
-              <td width="10%">${{this.price}}</td>
-              <td width="10%">${{this.total}}</td>
-            </tr>
-            {{/each}}
-          </tbody>
-        </table>
-        <table width="95%" border="0" cellspacing="0" cellpadding="0">
-          <tr>
-            <td width="90%"  align="right" style="font-size: 25px;font-weight: 700;color:darkred; background-color: #f6f6f6;">Sub Total</td>
-            <td width="10%" align="right" style="background-color: lightgreen;"><h2 style="font-size: 25px;font-weight: 700;color:#fff;">${{products.subtotal}}</h2></td>
+  <head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+		<title>A simple, clean, and responsive HTML invoice template</title>
+
+		<!-- Favicon -->
+		<link rel="icon" href="./images/favicon.png" type="image/x-icon" />
+
+		<!-- Invoice styling -->
+		<style>
+			body {
+				font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+				text-align: center;
+				color: #777;
+			}
+
+			body h1 {
+				font-weight: 300;
+				margin-bottom: 0px;
+				padding-bottom: 0px;
+				color: #000;
+			}
+
+			body h3 {
+				font-weight: 300;
+				margin-top: 10px;
+				margin-bottom: 20px;
+				font-style: italic;
+				color: #555;
+			}
+
+			body a {
+				color: #06f;
+			}
+
+			.invoice-box {
+				max-width: 800px;
+				margin: auto;
+				padding: 30px;
+				border: 1px solid #eee;
+				box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+				font-size: 16px;
+				line-height: 24px;
+				font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+				color: #555;
+			}
+
+			.invoice-box table {
+				width: 100%;
+				line-height: inherit;
+				text-align: left;
+				border-collapse: collapse;
+			}
+
+			.invoice-box table td {
+				padding: 5px;
+				vertical-align: top;
+			}
+
+			.invoice-box table tr td:nth-child(2) {
+				text-align: right;
+			}
+
+			.invoice-box table tr.top table td {
+				padding-bottom: 20px;
+			}
+
+			.invoice-box table tr.top table td.title {
+				font-size: 45px;
+				line-height: 45px;
+				color: #333;
+			}
+
+			.invoice-box table tr.information table td {
+				padding-bottom: 40px;
+			}
+
+			.invoice-box table tr.heading td {
+				background: #eee;
+				border-bottom: 1px solid #ddd;
+				font-weight: bold;
+			}
+
+			.invoice-box table tr.details td {
+				padding-bottom: 20px;
+			}
+
+			.invoice-box table tr.item td {
+				border-bottom: 1px solid #eee;
+			}
+
+			.invoice-box table tr.item.last td {
+				border-bottom: none;
+			}
+
+			.invoice-box table tr.total td:nth-child(2) {
+				border-top: 2px solid #eee;
+				font-weight: bold;
+			}
+
+			@media only screen and (max-width: 600px) {
+				.invoice-box table tr.top table td {
+					width: 100%;
+					display: block;
+					text-align: center;
+				}
+
+				.invoice-box table tr.information table td {
+					width: 100%;
+					display: block;
+					text-align: center;
+				}
+			}
+		</style>
+	</head>
+
+
+	<body>
+		<div class="invoice-box">
+			<table cellpadding="0" cellspacing="0">
+				<tr class="top">
+					<td colspan="2">
+						<table>
+							<tr>
+								<td class="title">
+									<!-- add logo when u have it <img src="https://www.sparksuite.com/images/logo.png" style="width: 100%; max-width: 300px" /> -->
+								</td>
+
+								<td>
+                  <!-- add invoice number here as ${{products.invoiceNum}} -->
+									Invoice Number: 123<br />
+									Created:
+                  <input type="text" id="currentDate">
+                  <script>
+                    var today = new Date();
+                    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+                    document.getElementById("currentDate").value = date;
+                  </script>
+                  <br />
+									
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+
+				<tr class="information">
+					<td colspan="2">
+						<table>
+							<tr>
+								<td>
+									MyAraba, Inc.<br />
+									34956 Universsite Caddesi<br />
+									Istanbul, Turkey 
+								</td>
+
+								<td>
+                  <!-- user address -->
+									{{products.name}} {{products.surname}}<br />
+                  {{products.adress}}<br />
+									{{products.region}}<br />
+                  {{products.email}}<br />
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+
+
+				<tr class="heading">
+					<td>Item</td>
+					<td>Model</td>
+          <td>Unit Cost</td>
+					<td>Quantity</td>
+          <td>Line Total</td>
+				</tr>
+
+        
+          {{#each products.prodlist}}
+          <tr class="item">            
+            <td>{{this.item}}</td>
+            <td>{{this.description}}</td>
+            <td>${{this.unitCost}}</td>
+            <td>${{this.quantity}}</td>
+            <td>${{this.lineTotal}}</td> 
           </tr>
-          <tr>
-            <td width="90%"  align="right" style="font-size: 25px;font-weight: 700;color:darkred; background-color: #f6f6f6;">Tax</td>
-            <td width="10%" align="right" style="background-color: lightcoral;"><h2 style="font-size: 25px;font-weight: 700;color:#fff;">${{products.tax}}</h2></td>
-          </tr>
-          <tr>
-            <td width="90%"  align="right" style="font-size: 25px;font-weight: 700;color:darkred; background-color: #f6f6f6;">Grand Total</td>
-            <td width="10%" align="right" style="background-color: lightgreen;"><h2 style="font-size: 25px;font-weight: 700;color:#fff;">${{products.gtotal}}</h2></td>
-          </tr>
-        </table>
-        <table width="95%" border="0" cellspacing="0" cellpadding="0">
-          <tr>
-            <td width="100%"  align="left" style="font-size: 25px;font-weight: 700;color:red; background-color: #f6f6f6;">Notice:</td>
-          </tr>
-          <tr>
-            <td width="100%"  align="left" style="font-size: 25px;font-weight: 700;color:#000; background-color: #f6f6f6;">A finance charge of 1.5% will be made on unpaid balances after 30 days.</td>
-          </tr>
-        </table>
-</body>
+          {{/each}}
+
+				<tr class="total">
+					<td></td>
+
+					<td>Total: ${{products.subtotal}}</td>
+				</tr>
+			</table>
+		</div>
+	</body>
 </html>
