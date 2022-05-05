@@ -30,6 +30,7 @@ function App() {
                                 <Route path="/admin">
                                     {!loading &&
                                         <>
+                                            {user === null && <Redirect to="/login" />}
                                             {user?.role === UserRoles.ADMIN && <AdminPage />}
                                             {user?.role !== UserRoles.ADMIN && <Redirect to="/" />}
                                         </>
