@@ -5,6 +5,9 @@ import { StatusCodes } from "http-status-codes"
 const fs = require('fs')
 const pdf = require('pdf-creator-node')
 const path = require('path')
+var nodemailer = require("nodemailer");
+var { google } = require("googleapis");
+
 
 
 import UserService from "../services/userService"
@@ -13,6 +16,18 @@ import CarService from "../services/carService"
 import CategoryService from "../services/categoryService"
 var invoiceNum = 0
 
+const CLIENT_ID = '459735410014-abdl6trcqt31ondndig3v7q150o6e6ss.apps.googleusercontent.com'
+const CLIENT_SECRET = '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'
+const REDIRECT_URI = 'https://developers.google.com/oauthplayground'
+const REFRESH_TOKEN = '1//04RHdO6QeVYgLCgYIARAAGAQSNgF-L9Ir90FZtbHxV5XzhocfbHa4FGsgnzCn1O-OGA1GUx-S-o1_Sv0GU4eJkGEMaqNZHUFWag'
+
+const oAuth2Client = new google.auth.OAuth2(
+    CLIENT_ID,
+    CLIENT_SECRET,
+    REDIRECT_URI
+  );
+oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
+  
 
 
 const options = {
@@ -56,6 +71,48 @@ interface invoicee {
     lineTotal: any;
   }
    
+  function sendEmail(){
+    
+    try {
+        const accessToken =  oAuth2Client.getAccessToken();
+    
+        const transport = nodemailer.createTransport({
+          service: 'gmail',
+          auth: {
+            type: 'OAuth2',
+            user: 'cs308myaraba@gmail.com',
+            clientId: CLIENT_ID,
+            clientSecret: CLIENT_SECRET,
+            refreshToken: REFRESH_TOKEN,
+            accessToken: accessToken,
+          },
+          tls: {
+            rejectUnauthorized: true
+        }
+        });
+    
+        const mailOptions = {
+          from: 'myArabaFrom <jerena@sabanciuniv.edu>',
+          to: 'jerena@sabanciuniv.edu',
+          subject: 'Hello from gmail using API',
+          text: 'Hello from gmail email using API',
+          attachments: [
+            {
+                filename: `2purchaserId__doc.pdf`,                                         
+                contentType: 'application/pdf',
+                path: `2purchaserId__doc.pdf`
+            }]
+          
+        };
+    
+        const result =  transport.sendMail(mailOptions);
+        return result;
+      } catch (error) {
+        return error;
+      }
+    }
+   
+
 
 //function generatePdf(userService: UserService, cartService: CartService) {
 function generatePdf() {
@@ -111,12 +168,17 @@ function generatePdf() {
             }).catch(error => {
                 console.log(error);
             });
+        sendEmail()
 
             
 
 
     }
 }
+
+
+
+
 
 function invoiceRouter() {
     const router = Router()
