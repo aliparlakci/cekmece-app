@@ -96,7 +96,7 @@ export default function NavBar({ search, onSearch }: INavBarProps) {
                         <Link to="/cart">
                             <IconButton size="large" edge="start" color="inherit" aria-label="open drawer"
                                         sx={{ mr: 2 }}>
-                                <Badge badgeContent={Object.keys(cart).reduce((prev, id) => cart[id].amount + prev, 0)}
+                                <Badge badgeContent={Object.keys(cart).reduce((prev, id) => cart[id] && cart[id].amount + prev, 0)}
                                        color="error">
                                     <ShoppingCart />
                                 </Badge>

@@ -6,7 +6,7 @@ import HomePage from "./pages/home/HomePage"
 import CarDetailPage from "./pages/carDetail/CarDetailPage"
 import LoginPage from "./pages/LoginPage"
 import RegisterPage from "./pages/RegisterPage"
-import CartPage from "./pages/CartPage"
+import CartPage from "./pages/cart/CartPage"
 
 import useAuth from "./hooks/useAuth"
 import { CartProvider } from "./hooks/useCart"

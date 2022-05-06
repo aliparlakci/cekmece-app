@@ -4,7 +4,7 @@ import { User } from "../models/user"
 
 export const checkRole = (roles: string[]) => {
     return async (req: Request, res: Response, next: NextFunction) => {
-        //Get the user ID from previous midleware
+        //Get the user ID from previous middleware
         const user: User = res.locals.user
 
         //Check if array of authorized roles includes the user's role

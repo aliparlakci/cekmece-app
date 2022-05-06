@@ -67,24 +67,18 @@ export default class ReviewService {
                 car: {
                     id: carId,
                 },
+                isApproved: true
             },
             order: {
                 createdDate: "DESC",
             },
         })
 
-        return reviews.map((review) => {
-            if (review.isApproved === false) {
-                review.comment = "This comment is currently being reviewed by one of our moderators for approval."
-                return review
-            }
-
-            return review
-        })
+        return reviews
     }
 
-    async getReviewCountAndAverageRating(carId: number) {
-        return await this.repository()
+    async getReviewCountAndAverageRating(carId: number): Promise<{ review_count: string, average_rating: string } | undefined> {
+        return this.repository()
             .createQueryBuilder("R")
             .select("COUNT(*)", "review_count")
             .addSelect("AVG(R.rating)", "average_rating")

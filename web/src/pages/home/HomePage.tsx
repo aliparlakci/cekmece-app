@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { Box, Container, createTheme, Grid } from "@mui/material"
 import useSWR from "swr"
-import { useHistory } from "react-router-dom"
 
 import ProductsView from "./components/ProductsView"
 import FilterMenu, { defaultFilterOptions, IFilterOptions } from "./components/FilterMenu"

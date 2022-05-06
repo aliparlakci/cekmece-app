@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, ManyToOne, OneToMany, Index, JoinColumn } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, ManyToOne, OneToMany, Index, JoinColumn,  } from "typeorm"
 import {  Cart } from "./cart"
 import { Category } from "./category"
 import { Distributor } from "./distributor"

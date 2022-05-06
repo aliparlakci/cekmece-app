@@ -4,14 +4,16 @@ import useNotification, { NOTIFICATON_TYPES } from "./useNotification"
 import useAuth from "./useAuth"
 
 interface IUseCart {
-    add: (id: number) => Promise<void>
+    add: (id: number, times: number) => Promise<void>
     decrease: (id: number) => void
+    remove: (id: number) => void
     cart: ICart
 }
 
 const context = createContext<IUseCart>({
     add: () => new Promise(() => null),
     cart: {},
+    remove: () => null,
     decrease: () => null
 })
 
@@ -19,7 +21,7 @@ interface ICart {
     [key: string]: ICartItem
 }
 
-interface ICartItem {
+export interface ICartItem {
     item: ICar,
     amount: number
 }
@@ -31,7 +33,8 @@ const fetchCarDetail = async (id) => {
     return carDetail
 }
 
-function CartProvider({ children }) {
+
+function CartProvider({ children }: { children: any }) {
     const [cart, setCart] = useState<ICart>({})
     const [isLocal, setIsLocal] = useState(true)
 
@@ -48,21 +51,21 @@ function CartProvider({ children }) {
             setCart(JSON.parse(oldCart))
     }, [])
 
-    const add = async (id: number) => {
+    const add = async (id: number, times = 1) => {
         try {
-            if (Object.hasOwn(cart, id)) addExisting(id)
+            if (Object.hasOwn(cart, id)) addExisting(id, times)
             else addNew(id)
         } catch (e) {
             notification(NOTIFICATON_TYPES.ERROR, JSON.stringify(e))
         }
     }
 
-    const addExisting = (id) => {
+    const addExisting = (id, amount) => {
         setCart(old => ({
             ...old,
             [id]: {
                 item: old[id].item,
-                amount: old[id].amount + 1,
+                amount: old[id].amount + amount,
             },
         }))
     }
@@ -78,7 +81,7 @@ function CartProvider({ children }) {
         }))
     }
 
-    const decrease = (id) => {
+    const decrease = async (id) => {
         if (Object.hasOwn(cart, id)) {
             if (cart[id].amount <= 1) {
                 setCart(old => ({
@@ -97,11 +100,18 @@ function CartProvider({ children }) {
         }
     }
 
+    const remove = async (id) => {
+        setCart(old => ({
+            ...old,
+            [id]: undefined,
+        }))
+    }
+
     useEffect(() => {
         localStorage.setItem("cart", JSON.stringify(cart))
     }, [cart])
 
-    return <context.Provider value={{ add, cart, decrease }}>
+    return <context.Provider value={{ add, cart, remove, decrease }}>
         {children}
     </context.Provider>
 }

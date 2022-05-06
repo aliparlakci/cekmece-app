@@ -32,6 +32,7 @@ export default class CarService {
             relations: {
                 distributor: true,
                 category: true,
+                reviews: true
             },
         })
     }

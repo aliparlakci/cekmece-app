@@ -7,8 +7,9 @@ import CarService, { FilterOptions } from "../services/carService"
 import CategoryService from "../services/categoryService"
 import ReviewService from "../services/reviewService"
 import UserService from "../services/userService"
+import Context from "../utils/context";
 
-function getAllCars(carService: CarService): RequestHandler {
+function getAllCars(carService: CarService, reviewService: ReviewService): RequestHandler {
     return async function (req, res, next) {
         const cars = await carService.filterCars({
             category: req.query.category as string,
@@ -20,7 +21,15 @@ function getAllCars(carService: CarService): RequestHandler {
             maxYear: req.query.maxYear as string
         })
 
-        res.status(200).json(cars)
+        const carsWithReviewCount = cars.map(async car => {
+            const result = await reviewService.getReviewCountAndAverageRating(car.id)
+            if (result) {
+                return { ...car, average_rating: parseFloat(result.average_rating || "0"), review_count: parseFloat(result.review_count || "0") }
+            }
+            return { ...car }
+        })
+
+        res.status(200).json(await Promise.all(carsWithReviewCount))
     }
 }
 
@@ -28,13 +37,12 @@ function getCar(carService: CarService, reviewService: ReviewService) {
     return async function (req, res, next) {
         const carId = parseInt(req.params.carId)
         const car = await carService.getCar(carId)
-
-        if (car) {
-            const { review_count, average_rating } = await reviewService.getReviewCountAndAverageRating(carId)
-            res.status(200).json({ ...car, review_count, average_rating })
-        } else {
-            res.status(200).json({})
+        if (car === null) {
+            res.status(StatusCodes.NOT_FOUND).json({})
         }
+
+        const result = await reviewService.getReviewCountAndAverageRating(carId)
+        res.status(200).json({ ...car, ...result })
     }
 }
 
@@ -131,7 +139,17 @@ function getReviews(reviewService: ReviewService): RequestHandler {
 function addNewReview(reviewService: ReviewService): RequestHandler {
     return async function (req, res, next) {
         const carId = parseInt(req.params.carId)
-        const userId = "1"
+        const ctx: Context | null = Context.get(req)
+        if (ctx === null) {
+            res.status(StatusCodes.NOT_FOUND).json()
+            return
+        }
+
+        const user = ctx.user
+        if (user === null) {
+            res.status(StatusCodes.NOT_FOUND).json()
+            return
+        }
 
         console.log(req.body)
 
@@ -149,12 +167,12 @@ function addNewReview(reviewService: ReviewService): RequestHandler {
         try {
             review = await reviewService.newReview({
                 carId,
-                userId,
+                userId: user.id,
                 rating: req.body.rating,
                 comment: req.body.comment,
             })
         } catch (err) {
-            next(createError(404))
+            res.status(StatusCodes.BAD_REQUEST).json({ "error": JSON.stringify(err) })
             return
         }
 
@@ -232,7 +250,7 @@ function carRouter() {
     const carService = new CarService(categoryService)
     const reviewService = new ReviewService(carService, userService)
 
-    router.get("/", getAllCars(carService))
+    router.get("/", getAllCars(carService, reviewService))
     router.get("/search", searchCar(carService))
     router.get("/:carId", getCar(carService, reviewService))
     router.post("/new", addNewCar(carService))
