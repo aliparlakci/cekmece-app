@@ -54,6 +54,23 @@ function removeFromCart(userService: UserService, cartService: CartService) {
     }
 }
 
+function deleteCart(userService: UserService, cartService: CartService) {
+    return async function (req, res, next) {
+        const userId = req.params.userId
+        const removeResult = await cartService.deleteUserCart(userId);
+
+        console.log(removeResult);
+
+        if(removeResult.affected !== 0){
+            res.status(200).json({message:"Success"})
+        }
+        else{
+            res.status(404).json({message:"Error - User cart might be empty already!"})
+        }
+    
+    }
+}
+
 function decreaseItemQuantity(userService: UserService, cartService: CartService) {
     return async function (req, res, next) {
         const carId = parseInt(req.params.carId)
@@ -81,6 +98,8 @@ function cartRouter() {
     router.get("/:userId", getCart(userService,cartService ))
     router.post("/:userId/add/:carId", addToCart(userService,cartService ))
     router.post("/:userId/remove/:carId", decreaseItemQuantity(userService,cartService ))
+    router.post("/:userId/deleteCart", deleteCart(userService,cartService ))
+    
     router.post("/remove/:cartEntityId", removeFromCart(userService,cartService ))
 
 
