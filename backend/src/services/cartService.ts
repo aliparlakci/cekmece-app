@@ -22,7 +22,6 @@ export default class CartService {
         const authUser = await this.userService.getUser(user);
        
         //Confirm the product exists.
-
             if (product && authUser) {
                 //confirm if user has item in cart
                 const cart = cartItems.filter(
@@ -52,6 +51,11 @@ export default class CartService {
     async removeFromCart(cartEntityId: string) {
         console.log(cartEntityId)
             return  this.repository().createQueryBuilder().delete().from(Cart).where("id = :id", { id:cartEntityId }).execute()
+    }
+
+    async deleteUserCart(userId: string) {
+        console.log(userId)
+            return  this.repository().createQueryBuilder().delete().from(Cart).where("user.id = :id", { id:userId }).execute()
     }
 
     async decreaseItemQuantity(productId: number, quantity: number, user: string) {
