@@ -65,6 +65,8 @@ dependencies:
   dio: ^4.0.6
   flutter_credit_card: ^3.0.1
   provider: ^6.0.2
+  place_picker: ^0.9.20-nullsafety
+  google_maps_flutter: ^2.1.4
   
   percent_indicator: ^3.4.0
 

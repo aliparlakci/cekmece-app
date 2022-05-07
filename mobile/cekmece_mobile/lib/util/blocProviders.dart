@@ -8,6 +8,14 @@ import 'package:cekmece_mobile/views/misc/loadingView.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+class MyBehavior extends ScrollBehavior {
+  @override
+  Widget buildOverscrollIndicator(
+      BuildContext context, Widget child, ScrollableDetails details) {
+    return child;
+  }
+}
+
 class BlocProviders extends StatelessWidget {
   BlocProviders({Key? key}) : super(key: key);
   final LoadingOverlay _loadingOverlay = LoadingOverlay();
@@ -18,8 +26,8 @@ class BlocProviders extends StatelessWidget {
     return MaterialApp(
         title: 'Cekmece',
         theme: ThemeData(
-            // primarySwatch: Colors.amber,
-            // canvasColor: neutralColor,
+          // primarySwatch: Colors.amber,
+          // canvasColor: neutralColor,
           primaryColor: primaryColor,
           appBarTheme: AppBarTheme(
             backgroundColor: Colors.white,
@@ -28,13 +36,17 @@ class BlocProviders extends StatelessWidget {
             elevation: 0,
             shape: const Border(
                 bottom: BorderSide(
-                  color: Color(0xFFCFCFCF),
-                  width: 0.3,
-                )
-            ),
-
+              color: Color(0xFFCFCFCF),
+              width: 0.3,
+            )),
           ),
         ),
+        builder: (context, child) {
+          return ScrollConfiguration(
+            behavior: MyBehavior(),
+            child: child!,
+          );
+        },
         home: MultiBlocProvider(
             providers: [
               BlocProvider(create: (context) => LoadingBloc()),
