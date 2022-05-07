@@ -42,7 +42,10 @@ class UserBloc extends Bloc<UserEvent, UserState> {
           quantity: 0,
           warranty: 0,
           distributor: {},
-          category: {});
+          category: {},
+          reviewCount: 0,
+          averageRating: "",
+      );
     }
   }
 
@@ -82,7 +85,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         cart: cartList,
         uid: me["id"],
         photoUrl:
-            "https://pbs.twimg.com/profile_images/1515493247413538826/jhuSAxfO_400x400.jpg");
+            "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
     BlocProvider.of<LoadingBloc>(context).add(LoadingEnd());
     return localUser;
   }

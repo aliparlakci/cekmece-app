@@ -170,7 +170,7 @@ Text(
                           pushNewScreen(
                             context,
                             screen: DetailsScreen(
-                              product: car,
+                              carId: car.id,
                               userBloc: BlocProvider.of<UserBloc>(context),
                             ),
                             withNavBar:
@@ -356,7 +356,7 @@ class CarouselContainer extends StatelessWidget {
         pushNewScreen(
           context,
           screen: DetailsScreen(
-            product: car,
+            carId: car.id,
             userBloc: BlocProvider.of<UserBloc>(context),
           ),
           withNavBar: false, // OPTIONAL VALUE. True by default.

@@ -41,7 +41,7 @@ class _OmerTestState extends State<OmerTest> {
         pushNewScreen(
           context,
           screen: DetailsScreen(
-            product: car,
+            carId: car.id,
             userBloc: userBloc,
           ),
           withNavBar: false, // OPTIONAL VALUE. True by default.
@@ -56,6 +56,7 @@ class _OmerTestState extends State<OmerTest> {
       BlocProvider.of<LoadingBloc>(context).add(LoadingEnd());
     } catch (err) {
       print(err);
+
       BlocProvider.of<LoadingBloc>(context).add(LoadingEnd());
     }
 

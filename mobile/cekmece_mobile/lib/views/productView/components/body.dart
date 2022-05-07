@@ -1,5 +1,6 @@
 import 'package:cekmece_mobile/constants/font_constants.dart';
 import 'package:cekmece_mobile/models/product/Product.dart';
+import 'package:cekmece_mobile/util/bloc/userBloc/user_bloc.dart';
 import 'package:cekmece_mobile/views/productView/components/custom_app_bar.dart';
 import 'package:cekmece_mobile/views/productView/components/size.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -13,8 +14,9 @@ import 'product_images.dart';
 
 class Body extends StatefulWidget {
   final Product product;
+  final UserBloc userBloc;
 
-  Body({Key? key, required this.product}) : super(key: key);
+  Body({Key? key, required this.product, required this.userBloc}) : super(key: key);
 
   @override
   State<Body> createState() => _BodyState();
@@ -56,11 +58,11 @@ class _BodyState extends State<Body> {
           const SizedBox(
             height: 15,
           ),
-          ReviewsButton(carId: 2, reviewCount: 555, reviewAverage: 4.8),
+          ReviewsButton(userId: widget.userBloc.user.uid, carId: widget.product.id, reviewCount: widget.product.reviewCount, reviewAverage: double.parse(widget.product.averageRating)),
           const SizedBox(
             height: 5,
           ),
-          LeaveAReviewButton(carId: 2),
+          if ( widget.product.userCanReviewCar != null && widget.product.userCanReviewCar == true ) LeaveAReviewButton(carId: widget.product.id),
           const SizedBox(
             height: 20,
           ),
@@ -89,7 +91,7 @@ class CarSpecCard extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 2, horizontal: 20),
         child:
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           Text(
             left,
             style: buttonTextStyle,

@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:cekmece_mobile/constants/color_contsants.dart';
 import 'package:cekmece_mobile/models/cartItem/CartItem.dart';
 import 'package:cekmece_mobile/models/product/Product.dart';
@@ -10,6 +9,7 @@ import 'package:cekmece_mobile/util/blocProviders.dart';
 import 'package:cekmece_mobile/views/productView/components/button.dart';
 import 'package:cekmece_mobile/views/productView/components/size.dart';
 import 'package:cekmece_mobile/widgets/showSnackBar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -17,28 +17,87 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../constants/font_constants.dart';
+import '../../util/network/networkProvider.dart';
+import '../reviews/widgets/LoadingScreen.dart';
 import 'components/body.dart';
 import 'components/custom_app_bar.dart';
 
-class DetailsScreen extends StatelessWidget {
+class DetailsScreen extends StatefulWidget {
   static String routeName = "/details";
-  Product product;
+  int carId;
   UserBloc userBloc;
 
-  DetailsScreen({required this.product, required this.userBloc});
+  DetailsScreen({required this.carId, required this.userBloc});
+
+  @override
+  State<DetailsScreen> createState() => _DetailsScreenState();
+}
+
+class _DetailsScreenState extends State<DetailsScreen> {
+  late Product product;
+
+  Future getCar() async {
+    final networkService = Provider.of<NetworkService>(context, listen: false);
+
+    try {
+      var response = await networkService.get(
+          "${dotenv.env['CLIENT_URL']}/api/cars/${widget.carId}");
+      product = Product.fromJson(response);
+    }
+    catch(e) {
+      print(e);
+      return Future.error(e.toString());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return Scaffold(
-      backgroundColor: Color(0xFFF5F6F9),
-      body: Body(product: product),
-      bottomNavigationBar: ProductBottomBar(
-        userBloc: userBloc,
-        product: product,
-      ),
+    return FutureBuilder(
+      future: getCar(),
+      builder: (BuildContext context, snapshot) {
+        Widget child;
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          child = Scaffold(body: LoadingScreen());
+        } else if (snapshot.hasError) {
+          child = Scaffold(
+            appBar: AppBar(
+              title: Text("Error"),
+            ),
+            body: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Icon(CupertinoIcons.exclamationmark_circle, size: 35),
+                const SizedBox(height: 10),
+                Center(
+                    child: Text(
+                        "An error occurred while displaying car details.\nPlease try again later.",
+                        textAlign: TextAlign.center,
+                        style: errorTextStyle)),
+                const SizedBox(height: 50),
+              ],
+            ),
+          );
+        } else {
+          child = Scaffold(
+            backgroundColor: Color(0xFFF5F6F9),
+            body: Body(product: product, userBloc: widget.userBloc),
+            bottomNavigationBar: ProductBottomBar(
+              userBloc: widget.userBloc,
+              product: product,
+            ),
+          );
+        }
+        return AnimatedSwitcher(
+          duration: const Duration(milliseconds: 250),
+          child: child,
+        );
+      },
     );
   }
 }

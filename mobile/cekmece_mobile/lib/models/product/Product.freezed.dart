@@ -30,6 +30,9 @@ class _$ProductTearOff {
       required int model,
       required int quantity,
       required int warranty,
+      required int reviewCount,
+      required String averageRating,
+      bool? userCanReviewCar,
       required Map<String, dynamic> distributor,
       required Map<String, dynamic> category}) {
     return _Product(
@@ -40,6 +43,9 @@ class _$ProductTearOff {
       model: model,
       quantity: quantity,
       warranty: warranty,
+      reviewCount: reviewCount,
+      averageRating: averageRating,
+      userCanReviewCar: userCanReviewCar,
       distributor: distributor,
       category: category,
     );
@@ -62,6 +68,9 @@ mixin _$Product {
   int get model => throw _privateConstructorUsedError;
   int get quantity => throw _privateConstructorUsedError;
   int get warranty => throw _privateConstructorUsedError;
+  int get reviewCount => throw _privateConstructorUsedError;
+  String get averageRating => throw _privateConstructorUsedError;
+  bool? get userCanReviewCar => throw _privateConstructorUsedError;
   Map<String, dynamic> get distributor => throw _privateConstructorUsedError;
   Map<String, dynamic> get category => throw _privateConstructorUsedError;
 
@@ -82,6 +91,9 @@ abstract class $ProductCopyWith<$Res> {
       int model,
       int quantity,
       int warranty,
+      int reviewCount,
+      String averageRating,
+      bool? userCanReviewCar,
       Map<String, dynamic> distributor,
       Map<String, dynamic> category});
 }
@@ -103,6 +115,9 @@ class _$ProductCopyWithImpl<$Res> implements $ProductCopyWith<$Res> {
     Object? model = freezed,
     Object? quantity = freezed,
     Object? warranty = freezed,
+    Object? reviewCount = freezed,
+    Object? averageRating = freezed,
+    Object? userCanReviewCar = freezed,
     Object? distributor = freezed,
     Object? category = freezed,
   }) {
@@ -135,6 +150,18 @@ class _$ProductCopyWithImpl<$Res> implements $ProductCopyWith<$Res> {
           ? _value.warranty
           : warranty // ignore: cast_nullable_to_non_nullable
               as int,
+      reviewCount: reviewCount == freezed
+          ? _value.reviewCount
+          : reviewCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      averageRating: averageRating == freezed
+          ? _value.averageRating
+          : averageRating // ignore: cast_nullable_to_non_nullable
+              as String,
+      userCanReviewCar: userCanReviewCar == freezed
+          ? _value.userCanReviewCar
+          : userCanReviewCar // ignore: cast_nullable_to_non_nullable
+              as bool?,
       distributor: distributor == freezed
           ? _value.distributor
           : distributor // ignore: cast_nullable_to_non_nullable
@@ -160,6 +187,9 @@ abstract class _$ProductCopyWith<$Res> implements $ProductCopyWith<$Res> {
       int model,
       int quantity,
       int warranty,
+      int reviewCount,
+      String averageRating,
+      bool? userCanReviewCar,
       Map<String, dynamic> distributor,
       Map<String, dynamic> category});
 }
@@ -182,6 +212,9 @@ class __$ProductCopyWithImpl<$Res> extends _$ProductCopyWithImpl<$Res>
     Object? model = freezed,
     Object? quantity = freezed,
     Object? warranty = freezed,
+    Object? reviewCount = freezed,
+    Object? averageRating = freezed,
+    Object? userCanReviewCar = freezed,
     Object? distributor = freezed,
     Object? category = freezed,
   }) {
@@ -214,6 +247,18 @@ class __$ProductCopyWithImpl<$Res> extends _$ProductCopyWithImpl<$Res>
           ? _value.warranty
           : warranty // ignore: cast_nullable_to_non_nullable
               as int,
+      reviewCount: reviewCount == freezed
+          ? _value.reviewCount
+          : reviewCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      averageRating: averageRating == freezed
+          ? _value.averageRating
+          : averageRating // ignore: cast_nullable_to_non_nullable
+              as String,
+      userCanReviewCar: userCanReviewCar == freezed
+          ? _value.userCanReviewCar
+          : userCanReviewCar // ignore: cast_nullable_to_non_nullable
+              as bool?,
       distributor: distributor == freezed
           ? _value.distributor
           : distributor // ignore: cast_nullable_to_non_nullable
@@ -237,6 +282,9 @@ class _$_Product implements _Product {
       required this.model,
       required this.quantity,
       required this.warranty,
+      required this.reviewCount,
+      required this.averageRating,
+      this.userCanReviewCar,
       required this.distributor,
       required this.category});
 
@@ -258,13 +306,19 @@ class _$_Product implements _Product {
   @override
   final int warranty;
   @override
+  final int reviewCount;
+  @override
+  final String averageRating;
+  @override
+  final bool? userCanReviewCar;
+  @override
   final Map<String, dynamic> distributor;
   @override
   final Map<String, dynamic> category;
 
   @override
   String toString() {
-    return 'Product(id: $id, name: $name, price: $price, number: $number, model: $model, quantity: $quantity, warranty: $warranty, distributor: $distributor, category: $category)';
+    return 'Product(id: $id, name: $name, price: $price, number: $number, model: $model, quantity: $quantity, warranty: $warranty, reviewCount: $reviewCount, averageRating: $averageRating, userCanReviewCar: $userCanReviewCar, distributor: $distributor, category: $category)';
   }
 
   @override
@@ -280,6 +334,12 @@ class _$_Product implements _Product {
             const DeepCollectionEquality().equals(other.quantity, quantity) &&
             const DeepCollectionEquality().equals(other.warranty, warranty) &&
             const DeepCollectionEquality()
+                .equals(other.reviewCount, reviewCount) &&
+            const DeepCollectionEquality()
+                .equals(other.averageRating, averageRating) &&
+            const DeepCollectionEquality()
+                .equals(other.userCanReviewCar, userCanReviewCar) &&
+            const DeepCollectionEquality()
                 .equals(other.distributor, distributor) &&
             const DeepCollectionEquality().equals(other.category, category));
   }
@@ -294,6 +354,9 @@ class _$_Product implements _Product {
       const DeepCollectionEquality().hash(model),
       const DeepCollectionEquality().hash(quantity),
       const DeepCollectionEquality().hash(warranty),
+      const DeepCollectionEquality().hash(reviewCount),
+      const DeepCollectionEquality().hash(averageRating),
+      const DeepCollectionEquality().hash(userCanReviewCar),
       const DeepCollectionEquality().hash(distributor),
       const DeepCollectionEquality().hash(category));
 
@@ -317,6 +380,9 @@ abstract class _Product implements Product {
       required int model,
       required int quantity,
       required int warranty,
+      required int reviewCount,
+      required String averageRating,
+      bool? userCanReviewCar,
       required Map<String, dynamic> distributor,
       required Map<String, dynamic> category}) = _$_Product;
 
@@ -336,6 +402,12 @@ abstract class _Product implements Product {
   int get quantity;
   @override
   int get warranty;
+  @override
+  int get reviewCount;
+  @override
+  String get averageRating;
+  @override
+  bool? get userCanReviewCar;
   @override
   Map<String, dynamic> get distributor;
   @override

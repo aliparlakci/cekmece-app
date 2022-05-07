@@ -202,6 +202,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               Navigator.pop(context, true);
             } catch (err) {
               print(err);
+
               showSnackBar(
                   context: context,
                   message:
