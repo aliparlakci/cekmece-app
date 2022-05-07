@@ -7,6 +7,7 @@ import CarDetailPage from "./pages/carDetail/CarDetailPage"
 import LoginPage from "./pages/LoginPage"
 import RegisterPage from "./pages/RegisterPage"
 import CartPage from "./pages/cart/CartPage"
+import OrdersPage from "./pages/orderHistory/OrdersPage"
 
 import useAuth from "./hooks/useAuth"
 import { CartProvider } from "./hooks/useCart"
@@ -50,6 +51,9 @@ function App() {
                                 </Route>
                                 <Route path="/cars/:carId">
                                     <CarDetailPage />
+                                </Route>
+                                <Route path="/orderHistory">
+                                    <OrdersPage />
                                 </Route>
                             </Switch>
                         </Router>
