@@ -236,6 +236,7 @@ class OrderItems extends StatelessWidget {
         padding: EdgeInsets.fromLTRB(15, 15, 15, 5),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text("Your items:",
                 style: GoogleFonts.raleway(
@@ -245,6 +246,7 @@ class OrderItems extends StatelessWidget {
               height: 10,
             ),
             ListView.builder(
+                padding: const EdgeInsets.all(0),
                 shrinkWrap: true,
                 itemCount: items.length,
                 itemBuilder: ((context, index) {
