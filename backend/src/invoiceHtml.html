@@ -36,8 +36,12 @@
 				color: #06f;
 			}
 
+			.fontchange {
+				font-family: "Lucida Console", "Courier New", monospace;
+			}
+
 			.invoice-box {
-				max-width: 800px;
+				max-width: 842px;
 				margin: auto;
 				padding: 30px;
 				border: 1px solid #eee;
@@ -82,6 +86,7 @@
 				background: #eee;
 				border-bottom: 1px solid #ddd;
 				font-weight: bold;
+				text-align: left;
 			}
 
 			.invoice-box table tr.details td {
@@ -92,13 +97,12 @@
 				border-bottom: 1px solid #eee;
 			}
 
-			.invoice-box table tr.item.last td {
-				border-bottom: none;
-			}
+			
 
-			.invoice-box table tr.total td:nth-child(2) {
+			.total {
 				border-top: 2px solid #eee;
 				font-weight: bold;
+				text-align: right;
 			}
 
 			@media only screen and (max-width: 600px) {
@@ -119,82 +123,72 @@
 
 
 	<body>
+
+
 		<div class="invoice-box">
-			<table cellpadding="0" cellspacing="0">
-				<tr class="top">
-					<td colspan="2">
-						<table>
-							<tr>
-								<td class="title">
-									<!-- add logo when u have it <img src="https://www.sparksuite.com/images/logo.png" style="width: 100%; max-width: 300px" /> -->
-								</td>
-
-								<td>
-                  <!-- add invoice number here as ${{products.invoiceNum}} -->
-									Invoice Number: 123<br />
-									Created:
-                  <input type="text" id="currentDate">
-                  <script>
-                    var today = new Date();
-                    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-                    document.getElementById("currentDate").value = date;
-                  </script>
-                  <br />
-									
-								</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr class="information">
-					<td colspan="2">
-						<table>
-							<tr>
-								<td>
-									MyAraba, Inc.<br />
-									34956 Universsite Caddesi<br />
-									Istanbul, Turkey 
-								</td>
-
-								<td>
-                  <!-- user address -->
-									{{products.name}} {{products.surname}}<br />
-                  {{products.adress}}<br />
-									{{products.region}}<br />
-                  {{products.email}}<br />
-								</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
+			<div style="text-align:left;vertical-align:top;color:black;font-weight:bold;">
+				Invoice Number: 123<br />
+				Date Created:
+				<span type="text" id="currentDate" style="color:black;font-weight:normal;"></span>
+			<script>
+				var today = new Date();
+				var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+				document.getElementById("currentDate").innerHTML = date;
+			</script>
+			</div>
+			
 
 
-				<tr class="heading">
+	
+	</br>
+    </br>
+	<table ellpadding="0" cellspacing="0">
+		<tr>
+			<td class="fontchange" style="width:50%;font-size:small;" >
+				MyAraba, Inc.<br />
+				34956 University Caddesi<br />
+				Istanbul, Turkey 
+			</td>
+			<td class="fontchange" style="width:50%;font-size:small;">
+				{{products.name}} {{products.surname}}<br />
+                {{products.address}}<br />
+				{{products.region}}<br />
+                {{products.email}}<br />
+			</td>
+		</tr>
+	</table>
+
+</br>
+</br>
+</br>
+		
+			<table>
+			
+				<tr class="heading" style="font-weight:bolder;">
 					<td>Item</td>
 					<td>Model</td>
-          <td>Unit Cost</td>
+					<td>Unit Cost</td>
 					<td>Quantity</td>
-          <td>Line Total</td>
+					<td>Line Total</td>
 				</tr>
 
-        
-          {{#each products.prodlist}}
-          <tr class="item">            
-            <td>{{this.item}}</td>
-            <td>{{this.description}}</td>
-            <td>${{this.unitCost}}</td>
-            <td>${{this.quantity}}</td>
-            <td>${{this.lineTotal}}</td> 
-          </tr>
-          {{/each}}
-
-				<tr class="total">
-					<td></td>
-
-					<td>Total: ${{products.subtotal}}</td>
+			
+				{{#each products.prodlist}}
+				<tr >            
+					<td style="text-align:left;font-size:smaller;">{{this.item}}</td>
+					<td style="text-align:left;font-size:smaller;">{{this.description}}</td>
+					<td style="text-align:left;font-size:smaller;">${{this.unitCost}}</td>
+					<td style="text-align:left;font-size:smaller;">{{this.quantity}}</td>
+					<td style="text-align:left;font-size:smaller;">${{this.lineTotal}}</td> 
 				</tr>
+				{{/each}}
+
+				
 			</table>
+			<div colspan="4"  class="total" >
+				<td>Total: ${{products.subtotal}}</td>
+			</div>
+		
 		</div>
 	</body>
 </html>

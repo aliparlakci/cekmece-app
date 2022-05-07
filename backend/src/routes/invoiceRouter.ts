@@ -21,11 +21,7 @@ const CLIENT_SECRET = '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'
 const REDIRECT_URI = 'https://developers.google.com/oauthplayground'
 const REFRESH_TOKEN = '1//04RHdO6QeVYgLCgYIARAAGAQSNgF-L9Ir90FZtbHxV5XzhocfbHa4FGsgnzCn1O-OGA1GUx-S-o1_Sv0GU4eJkGEMaqNZHUFWag'
 
-const oAuth2Client = new google.auth.OAuth2(
-    CLIENT_ID,
-    CLIENT_SECRET,
-    REDIRECT_URI
-  );
+const oAuth2Client = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI);
 oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
   
 
@@ -92,7 +88,7 @@ interface invoicee {
         });
     
         const mailOptions = {
-          from: 'myArabaFrom <jerena@sabanciuniv.edu>',
+          from: 'myArabaFrom <cs308myaraba@gmail.com>',
           to: 'jerena@sabanciuniv.edu',
           subject: 'Hello from gmail using API',
           text: 'Hello from gmail email using API',
@@ -100,12 +96,13 @@ interface invoicee {
             {
                 filename: `2purchaserId__doc.pdf`,                                         
                 contentType: 'application/pdf',
-                path: `2purchaserId__doc.pdf`
+                path: path.join(__dirname, '../docs/2purchaserId__doc.pdf')
             }]
           
         };
     
         const result =  transport.sendMail(mailOptions);
+        console.log("should send");
         return result;
       } catch (error) {
         return error;
