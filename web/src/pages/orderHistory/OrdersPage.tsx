@@ -19,7 +19,8 @@ export default function OrdersPage() {
                <NavBar/>
                <div className="flex flex-row justify-center mt-20">
                 <div className="max-w-screen-lg flex-nowrap" >
-                <Paper elevation={0} sx={{ borderRadius:0 }} className="max-w-screen-lg mb-2 px-16">
+                <Typography variant="h3" sx={{ fontWeight:"light" }}>Order History</Typography>
+                <Paper elevation={0} sx={{ borderRadius:0 }} className="max-w-screen-lg mt-10 mb-2 px-16">
                   <Box className="grid grid-cols-5 gap-6">
                     <Box>
                       <Typography variant="h6" sx={{ fontWeight:"light" }}>Order ID:</Typography>

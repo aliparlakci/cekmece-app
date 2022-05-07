@@ -16,7 +16,8 @@ export default function OrderSection() {
     return (
         <>
             <ThemeProvider theme={theme}>
-                <Paper elevation={6} sx={{ borderRadius:0 }} className="max-w-screen-lg py-5 px-16 mb-6">
+              <div className="max-w-screen-lg py-5 px-16 mb-10 shadow-md transition-all duration-300 ease-in-out hover:shadow-lg">
+              <Paper elevation={0} sx={{ borderRadius:0 }}>
                   <Box className="grid grid-cols-5 gap-6">
                     <Box>
                       <Typography sx={{ color:"#AAAAAA" }}>#00000001</Typography>
@@ -37,6 +38,7 @@ export default function OrderSection() {
                     </Box>
                   </Box>
                 </Paper>
+              </div>
             </ThemeProvider>
         </>
     )
