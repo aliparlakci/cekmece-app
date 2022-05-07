@@ -1,10 +1,16 @@
 import 'package:cekmece_mobile/constants/font_constants.dart';
+import 'package:cekmece_mobile/models/cartItem/CartItem.dart';
+import 'package:cekmece_mobile/models/order/OrderItem.dart';
 import 'package:cekmece_mobile/models/user/UserClass.dart';
+import 'package:cekmece_mobile/util/network/networkProvider.dart';
 import 'package:cekmece_mobile/views/productView/components/size.dart';
 import 'package:cekmece_mobile/views/profile/viewComponents/anonymousProfileView.dart';
 import 'package:cekmece_mobile/views/profile/viewComponents/userInfo.dart';
+import 'package:cekmece_mobile/widgets/showSnackBar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:skeleton_loader/skeleton_loader.dart';
 
 class ProfileView extends StatefulWidget {
@@ -15,12 +21,50 @@ class ProfileView extends StatefulWidget {
 }
 
 class _ProfileViewState extends State<ProfileView> {
+  String localIPAddress = dotenv.env['LOCALADDRESS']!;
+  List<OrderItem> orders = [];
+
   List<Map<String, dynamic>> quickSettings = [
     {"name": "Change Password", "widget": Container()},
     {"name": "Change Email", "widget": Container()},
     {"name": "Change Profile Photo", "widget": Container()},
     {"name": "Contact Us", "widget": Container()},
   ];
+
+  List<Map<String, dynamic>> processCart(List<dynamic> cart) {
+    List<Map<String, dynamic>> cartList = [];
+    for (Map<String, dynamic> item in cart) {
+      item["item"] = item["car"];
+      cartList.add(item);
+    }
+    return cartList;
+  }
+
+  void getOrders() async {
+    final networkService = Provider.of<NetworkService>(context, listen: false);
+
+    try {
+      var ordersJson = await networkService.get('${localIPAddress}/api/orders');
+      for (dynamic singleOrder in ordersJson) {
+        singleOrder["orderItems"] = processCart(singleOrder["orderItems"]);
+        orders.add(OrderItem.fromJson(singleOrder));
+      }
+    } catch (err) {
+      print(err);
+      showSnackBar(
+          context: context, message: "Could not get orders", error: true);
+    }
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    print(orders);
+    // TODO: implement initState
+    super.initState();
+    getOrders();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,7 +102,11 @@ class _ProfileViewState extends State<ProfileView> {
                       SizedBox(
                         height: getProportionateScreenHeight(20),
                       ),
-                      LatestOrder(),
+                      !orders.isEmpty
+                          ? LatestOrder(
+                              order: orders[orders.length - 1],
+                            )
+                          : Container(),
                       SizedBox(
                         height: getProportionateScreenHeight(20),
                       ),
@@ -108,17 +156,16 @@ class _ProfileViewState extends State<ProfileView> {
 }
 
 class LatestOrder extends StatefulWidget {
-  const LatestOrder({Key? key}) : super(key: key);
+  LatestOrder({Key? key, required this.order}) : super(key: key);
+  OrderItem order;
 
   @override
   State<LatestOrder> createState() => _LatestOrderState();
 }
 
 class _LatestOrderState extends State<LatestOrder> {
-  bool isLoading = true;
-
   Widget _buildBody() {
-    if (isLoading) {
+    if (widget.order == null) {
       return SkeletonLoader(
         builder: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -181,11 +228,21 @@ class _LatestOrderState extends State<LatestOrder> {
           child: Container(
             padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
             height: getProportionateScreenHeight(180),
-            child: _buildBody(),
+            child: OrderStatus(order: widget.order),
           ),
         ),
       ],
     );
+  }
+}
+
+class OrderStatus extends StatelessWidget {
+  OrderStatus({Key? key, required this.order}) : super(key: key);
+  OrderItem order;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
   }
 }
 

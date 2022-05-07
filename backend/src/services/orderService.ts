@@ -22,7 +22,7 @@ export default class OrderService {
 
     async getOrdersByUser(userId: string) {
         return await this.repository().find({
-            relations: ["user", "orderItems", "orderItems.car"],
+            relations: ["user", "orderItems", "orderItems.car","orderItems.car.category","orderItems.car.distributor"],
             select: {
                 user: {
                     id: true,
