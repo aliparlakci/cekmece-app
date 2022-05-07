@@ -1,4 +1,5 @@
 import * as React from "react"
+import { useState } from "react"
 import Grid from "@mui/material/Grid"
 import Typography from "@mui/material/Typography"
 import TextField from "@mui/material/TextField"
@@ -7,18 +8,43 @@ import Checkbox from "@mui/material/Checkbox"
 import Button from "@mui/material/Button"
 import Box from "@mui/material/Box"
 
-interface IAddressForm {
-    onNext: () => void
+export interface IAddressData {
+    firstName: string
+    lastName: string
+    address1: string
+    address2: string
+    city: string
+    zip: string
+    country: string
 }
 
-export default function AddressForm({ onNext }: IAddressForm) {
-    const handleNext = (event) => {
-        event.preventDefault()
+interface IAddressFormProps {
+    onNext: (data: IAddressData) => void
+}
 
-        const data = new FormData(event.target.)
-        console.log(data)
+export default function AddressForm({ onNext }: IAddressFormProps) {
+    const [formData, updateFormData] = useState<IAddressData>({
+        firstName: "",
+        lastName: "",
+        address1: "",
+        address2: "",
+        city: "",
+        zip: "",
+        country: "",
+    })
 
-        onNext()
+    const handleChange = (e) => {
+        updateFormData({
+            ...formData,
+
+            // Trimming any whitespace
+            [e.target.name]: e.target.value.trim(),
+        })
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        onNext(formData)
     }
 
     return (
@@ -26,7 +52,7 @@ export default function AddressForm({ onNext }: IAddressForm) {
             <Typography variant="h6" gutterBottom>
                 Address
             </Typography>
-            <form onSubmit={handleNext}>
+            <form onSubmit={(event) => handleSubmit(event)}>
                 <Grid container spacing={3}>
                     <Grid item xs={12} sm={6}>
                         <TextField
@@ -37,6 +63,7 @@ export default function AddressForm({ onNext }: IAddressForm) {
                             fullWidth
                             autoComplete="given-name"
                             variant="standard"
+                            onChange={handleChange}
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
@@ -48,6 +75,8 @@ export default function AddressForm({ onNext }: IAddressForm) {
                             fullWidth
                             autoComplete="family-name"
                             variant="standard"
+                            onChange={handleChange}
+
                         />
                     </Grid>
                     <Grid item xs={12}>
@@ -59,6 +88,8 @@ export default function AddressForm({ onNext }: IAddressForm) {
                             fullWidth
                             autoComplete="shipping address-line1"
                             variant="standard"
+                            onChange={handleChange}
+
                         />
                     </Grid>
                     <Grid item xs={12}>
@@ -69,6 +100,8 @@ export default function AddressForm({ onNext }: IAddressForm) {
                             fullWidth
                             autoComplete="shipping address-line2"
                             variant="standard"
+                            onChange={handleChange}
+
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
@@ -80,6 +113,8 @@ export default function AddressForm({ onNext }: IAddressForm) {
                             fullWidth
                             autoComplete="shipping address-level2"
                             variant="standard"
+                            onChange={handleChange}
+
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
@@ -94,6 +129,7 @@ export default function AddressForm({ onNext }: IAddressForm) {
                             fullWidth
                             autoComplete="shipping postal-code"
                             variant="standard"
+                            onChange={handleChange}
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
@@ -105,6 +141,7 @@ export default function AddressForm({ onNext }: IAddressForm) {
                             fullWidth
                             autoComplete="shipping country"
                             variant="standard"
+                            onChange={handleChange}
                         />
                     </Grid>
                 </Grid>

@@ -42,7 +42,10 @@ function getCar(carService: CarService, reviewService: ReviewService) {
         }
 
         const result = await reviewService.getReviewCountAndAverageRating(carId)
-        res.status(200).json({ ...car, ...result })
+        if (result)
+            res.status(200).json({ ...car, average_rating: parseFloat(result.average_rating || "0"), review_count: parseFloat(result.review_count || "0")  })
+        else
+            res.status(200).json({ ...car })
     }
 }
 

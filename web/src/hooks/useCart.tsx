@@ -14,7 +14,7 @@ const context = createContext<IUseCart>({
     add: () => new Promise(() => null),
     cart: {},
     remove: () => null,
-    decrease: () => null
+    decrease: () => null,
 })
 
 interface ICart {
@@ -46,9 +46,31 @@ function CartProvider({ children }: { children: any }) {
     }, [user])
 
     useEffect(() => {
-        const oldCart = localStorage.getItem("cart")
-        if (oldCart)
-            setCart(JSON.parse(oldCart))
+        const retrieveCart = async () => {
+            const rawCart = localStorage.getItem("cart")
+            const oldCart: any = JSON.parse(rawCart || "[]")
+            if (oldCart) {
+                const newCart = oldCart.map(async ({ id, amount }): Promise<ICartItem> => {
+                    const response = await fetch(`/api/cars/${id}`)
+                    if (response.status !== 200) throw ``
+                    const data: ICar = await response.json()
+                    return { item: data, amount: amount as number }
+                })
+                try {
+                    const cart: ICart = {}
+                    const resolvedCart: ICartItem[] = await Promise.all(newCart)
+                    resolvedCart.forEach(item => {
+                        if (item.item.id)
+                            cart[item.item.id] = item
+                    })
+                    setCart(cart)
+                } catch (e) {
+                    notification(NOTIFICATON_TYPES.ERROR, "Something happened while fetching cart")
+                }
+            }
+        }
+
+        retrieveCart()
     }, [])
 
     const add = async (id: number, times = 1) => {
@@ -108,7 +130,7 @@ function CartProvider({ children }: { children: any }) {
     }
 
     useEffect(() => {
-        localStorage.setItem("cart", JSON.stringify(cart))
+        localStorage.setItem("cart", JSON.stringify(Object.keys(cart).map(id => ({ id, amount: cart[id].amount }))))
     }, [cart])
 
     return <context.Provider value={{ add, cart, remove, decrease }}>
