@@ -1,7 +1,10 @@
 import { Fragment } from "react"
-import { Box, Rating, TextField } from "@mui/material"
+import { Box, Rating, TextField, FormControl, Select, InputLabel, MenuItem } from "@mui/material"
 import { StarOutlineSharp, StarSharp } from "@mui/icons-material"
 import { styled } from "@mui/material/styles"
+import date from "date-and-time"
+
+const pattern = date.compile("MMM D, YYYY")
 
 const ReviewTextField = styled(TextField)(() => ({
     "& fieldset": {
@@ -20,14 +23,29 @@ const ReviewTextField = styled(TextField)(() => ({
     },
 }))
 
+const StyledSelect = styled(Select)(() => ({
+    "& .MuiSelect-select": {
+        paddingTop: 14,
+        paddingRight: 14,
+        paddingBottom: 14,
+        paddingLeft: 14,
+    },
+    "& .MuiSelect-icon": {
+        color: "white",
+    },
+}))
+
 function LeaveAReviewFields({
     rating,
     comment,
+    orderItemID,
+    handleOrderOnChange,
     handleRatingOnChange,
     handleTextFieldOnBlur,
     handleTextFieldOnChange,
     formValidationError,
     formValidationErrorMessage,
+    unreviewedOrderItems,
 }) {
     return (
         <Fragment>
@@ -42,7 +60,35 @@ function LeaveAReviewFields({
                     alignItems: "center",
                 }}
             >
-                <Box sx={{ mt: 2, mb: 2 }}>
+                <FormControl fullWidth>
+                    <StyledSelect
+                        value={orderItemID}
+                        displayEmpty
+                        onChange={handleOrderOnChange}
+                        sx={{
+                            borderRadius: 0,
+                            background: "linear-gradient(62deg, #6faeed 0%, #c899f5 100%)",
+                            color: "white",
+                            fontWeight: 500,
+                            margin: 0,
+                        }}
+                        disabled={!unreviewedOrderItems}
+                    >
+                        <MenuItem disabled value={""}>
+                            Select Order
+                        </MenuItem>
+                        {unreviewedOrderItems &&
+                            unreviewedOrderItems.map((unreviewedOrderItem) => {
+                                return (
+                                    <MenuItem value={unreviewedOrderItem.id}>{`Delivered on ${date.format(
+                                        new Date(unreviewedOrderItem.order.updatedDate),
+                                        pattern
+                                    )} - Order #${unreviewedOrderItem.order.id}`}</MenuItem>
+                                )
+                            })}
+                    </StyledSelect>
+                </FormControl>
+                <Box sx={{ mt: 2.5, mb: 2 }}>
                     <Rating
                         name="read-only"
                         defaultValue={3}

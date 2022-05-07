@@ -1,6 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, JoinColumn } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, JoinColumn, OneToOne } from "typeorm"
 import { Car } from "./car"
 import { User } from "./user"
+import { OrderItem } from "./orderItem"
 
 export type Ratings = 1 | 2 | 3 | 4 | 5
 
@@ -35,4 +36,10 @@ export class Review {
 
     @ManyToOne(() => User, (user) => user.reviews, { cascade: true, onDelete: "CASCADE" })
     user: User
+
+    @OneToOne(() => OrderItem, (orderItem) => orderItem.review, {
+        cascade: true,
+    })
+    @JoinColumn()
+    orderItem: OrderItem
 }

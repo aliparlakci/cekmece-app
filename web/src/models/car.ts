@@ -1,5 +1,5 @@
 import IDistributor from "./distributor"
-import ICategory from './category'
+import ICategory from "./category"
 import IReview from "./review"
 
 interface ICar {
@@ -13,8 +13,9 @@ interface ICar {
     distributor?: IDistributor
     category?: ICategory
     reviews?: IReview[]
-    review_count: number,
-    average_rating: number
+    reviewCount: number
+    averageRating: number
+    userCanReviewCar: boolean
 }
 
 export default ICar

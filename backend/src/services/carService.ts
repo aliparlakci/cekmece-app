@@ -32,7 +32,6 @@ export default class CarService {
             relations: {
                 distributor: true,
                 category: true,
-                reviews: true
             },
         })
     }
@@ -68,11 +67,11 @@ export default class CarService {
         if (options.sort) {
             if (options.sort === "priceLow") {
                 query = query.orderBy({
-                    price: "ASC"
+                    price: "ASC",
                 })
             } else if (options.sort === "priceHigh") {
                 query = query.orderBy({
-                    price: "DESC"
+                    price: "DESC",
                 })
             }
         }
@@ -93,11 +92,12 @@ export default class CarService {
                 category: true,
                 distributor: true,
             },
-            order: { // Sorts by the price, popularity should added.
+            order: {
+                // Sorts by the price, popularity should added.
                 price: {
-                    direction: sortBy as "ASC" | "DESC" | "asc" | "desc" | undefined
-                }
-            }
+                    direction: sortBy as "ASC" | "DESC" | "asc" | "desc" | undefined,
+                },
+            },
         })
     }
 
@@ -108,7 +108,7 @@ export default class CarService {
         return this.repository().find({
             where: {
                 category: {
-                    id: categoryId
+                    id: categoryId,
                 },
             },
         })
@@ -135,17 +135,49 @@ export default class CarService {
     }
 
     async searchCars(query: string) {
-        return this.repository().createQueryBuilder().select()
-          .where(`MATCH(name) AGAINST ('${query}' IN NATURAL LANGUAGE MODE)`)
-          .getMany();
+        return this.repository()
+            .createQueryBuilder()
+            .select()
+            .where(`MATCH(name) AGAINST ('${query}' IN NATURAL LANGUAGE MODE)`)
+            .getMany()
     }
 
     async deleteCar(id: number) {
-        return this.repository().createQueryBuilder()
-            .delete()
-            .from(Car)
-            .where("id = :id", { id })
-            .execute()
+        return this.repository().createQueryBuilder().delete().from(Car).where("id = :id", { id }).execute()
+    }
+
+    async decreaseStock(carId: number, count: number) {
+        const car = await this.repository().findOne({
+            where: { id: carId },
+        })
+        if (car === null) throw `Car with id ${carId} does not exist.`
+        if (car.quantity - count < 0) {
+            const stockError = new Error(
+                `There is not enough stock for Car with id ${carId}. Requested stock is ${count} while remaining stock is ${car.quantity}.`
+            )
+            stockError.name = "StockError"
+            throw stockError
+        } else {
+            car.quantity = car.quantity - count
+            car.unitsSold = car.unitsSold + count
+            return await this.repository().save(car)
+        }
+    }
+    async increaseStock(carId: number, count: number) {
+        const car = await this.repository().findOne({
+            where: { id: carId },
+        })
+        if (car === null) throw `Car with id ${carId} does not exist.`
+        car.quantity = car.quantity + count
+        return await this.repository().save(car)
+    }
+    async updateReviewCountAndAverage(carId: number, reviewCount: number, averageRating: number) {
+        const car = await this.repository().findOne({
+            where: { id: carId },
+        })
+        if (car === null) throw `Car with id ${carId} does not exist.`
+        car.reviewCount = reviewCount
+        car.averageRating = averageRating ? averageRating : 0
+        return await this.repository().save(car)
     }
 }
-

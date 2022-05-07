@@ -7,9 +7,12 @@ import CarService, { FilterOptions } from "../services/carService"
 import CategoryService from "../services/categoryService"
 import ReviewService from "../services/reviewService"
 import UserService from "../services/userService"
-import Context from "../utils/context";
+import Context from "../utils/context"
+import CartService from "../services/cartService"
+import OrderService from "../services/orderService"
+import reviewRouter from "./reviewRouter"
 
-function getAllCars(carService: CarService, reviewService: ReviewService): RequestHandler {
+function getAllCars(carService: CarService): RequestHandler {
     return async function (req, res, next) {
         const cars = await carService.filterCars({
             category: req.query.category as string,
@@ -18,34 +21,23 @@ function getAllCars(carService: CarService, reviewService: ReviewService): Reque
             minPrice: req.query.minPrice as string,
             maxPrice: req.query.maxPrice as string,
             minYear: req.query.minYear as string,
-            maxYear: req.query.maxYear as string
+            maxYear: req.query.maxYear as string,
         })
-
-        const carsWithReviewCount = cars.map(async car => {
-            const result = await reviewService.getReviewCountAndAverageRating(car.id)
-            if (result) {
-                return { ...car, average_rating: parseFloat(result.average_rating || "0"), review_count: parseFloat(result.review_count || "0") }
-            }
-            return { ...car }
-        })
-
-        res.status(200).json(await Promise.all(carsWithReviewCount))
+        res.status(200).json(cars)
     }
 }
 
-function getCar(carService: CarService, reviewService: ReviewService) {
+function getCar(carService: CarService, orderService: OrderService) {
     return async function (req, res, next) {
         const carId = parseInt(req.params.carId)
         const car = await carService.getCar(carId)
-        if (car === null) {
-            res.status(StatusCodes.NOT_FOUND).json({})
+        const ctx: Context | null = Context.get(req)
+        if (ctx !== null && ctx.user !== null) {
+            const userCanReviewCar = await orderService.checkUserCanReviewCar(ctx.user.id, carId)
+            res.status(200).json({ ...car, userCanReviewCar })
+        } else {
+            res.status(200).json(car)
         }
-
-        const result = await reviewService.getReviewCountAndAverageRating(carId)
-        if (result)
-            res.status(200).json({ ...car, average_rating: parseFloat(result.average_rating || "0"), review_count: parseFloat(result.review_count || "0")  })
-        else
-            res.status(200).json({ ...car })
     }
 }
 
@@ -90,7 +82,7 @@ function updateNewCar(carService: CarService): RequestHandler {
             price: Joi.number().positive().required(),
             warranty: Joi.number().positive().required(),
             distributor: Joi.number().required(),
-            category: Joi.number().required()
+            category: Joi.number().required(),
         })
         const { error } = carFormat.validate(req.body)
         if (error) {
@@ -130,59 +122,6 @@ function removeCategory(carService: CarService): RequestHandler {
     }
 }
 
-function getReviews(reviewService: ReviewService): RequestHandler {
-    return async function (req, res, next) {
-        const carId = parseInt(req.params.carId)
-        const reviews = await reviewService.getReviewsOfCar(carId)
-
-        res.status(200).json(reviews)
-    }
-}
-
-function addNewReview(reviewService: ReviewService): RequestHandler {
-    return async function (req, res, next) {
-        const carId = parseInt(req.params.carId)
-        const ctx: Context | null = Context.get(req)
-        if (ctx === null) {
-            res.status(StatusCodes.NOT_FOUND).json()
-            return
-        }
-
-        const user = ctx.user
-        if (user === null) {
-            res.status(StatusCodes.NOT_FOUND).json()
-            return
-        }
-
-        console.log(req.body)
-
-        const reviewFormat = Joi.object().keys({
-            rating: Joi.number().valid(1, 2, 3, 4, 5).required(),
-            comment: Joi.string().min(3).max(1000).optional(),
-        })
-
-        const { error } = reviewFormat.validate(req.body)
-        if (error) {
-            next(createError(400))
-            return
-        }
-        let review
-        try {
-            review = await reviewService.newReview({
-                carId,
-                userId: user.id,
-                rating: req.body.rating,
-                comment: req.body.comment,
-            })
-        } catch (err) {
-            res.status(StatusCodes.BAD_REQUEST).json({ "error": JSON.stringify(err) })
-            return
-        }
-
-        res.status(StatusCodes.CREATED).json(review)
-    }
-}
-
 function searchCar(carService: CarService): RequestHandler {
     return async function (req, res, next) {
         const query = req.query.q || ""
@@ -198,20 +137,6 @@ function searchCar(carService: CarService): RequestHandler {
         } catch (error) {
             res.status(500).json("error")
         }
-    }
-}
-
-function deleteReview(reviewService: ReviewService): RequestHandler {
-    return async function (req, res, next) {
-        const reviewId = parseInt(req.params.reviewId)
-        const result = await reviewService.deleteReview(reviewId)
-
-        if (!result.affected || result.affected === 0) {
-            res.status(StatusCodes.BAD_REQUEST).json({ Result: "Error" })
-            return
-        }
-
-        res.status(StatusCodes.OK).json({ Result: "Success" })
     }
 }
 
@@ -251,11 +176,12 @@ function carRouter() {
     const categoryService = new CategoryService()
     const userService = new UserService()
     const carService = new CarService(categoryService)
-    const reviewService = new ReviewService(carService, userService)
+    const cartService = new CartService(userService, carService)
+    const orderService = new OrderService(carService, cartService)
 
-    router.get("/", getAllCars(carService, reviewService))
+    router.get("/", getAllCars(carService))
     router.get("/search", searchCar(carService))
-    router.get("/:carId", getCar(carService, reviewService))
+    router.get("/:carId", getCar(carService, orderService))
     router.post("/new", addNewCar(carService))
     router.post("/update", updateNewCar(carService))
     router.post("/:carId/delete", deleteCar(carService))
@@ -263,10 +189,7 @@ function carRouter() {
     router.delete("/:carId/category/:categoryId", removeCategory(carService))
     router.get("/category/:categoryId", getCarsByCategory(carService))
 
-    /* CODE REVIEW */
-    router.get("/:carId/reviews", getReviews(reviewService))
-    router.post("/:carId/reviews/new", addNewReview(reviewService))
-    router.delete("/:carId/reviews/:reviewId", deleteReview(reviewService))
+    router.use("/:carId/reviews", reviewRouter())
 
     return router
 }

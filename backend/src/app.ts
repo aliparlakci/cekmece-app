@@ -17,6 +17,7 @@ import UserService from "./services/userService"
 import { JWTAuth } from "./middlewares/JWTAuth"
 import AuthService from "./services/authService"
 import Context from "./utils/context"
+import orderRouter from "./routes/orderRouter"
 
 async function main() {
     try {
@@ -50,6 +51,7 @@ async function main() {
     v1.use("/cart", cartRouter())
     v1.use("/users", userRouter())
     v1.use("/auth", authRouter())
+    v1.use("/orders", orderRouter())
 
     // catch 404 and forward to error handler
     app.use(function (req, res, next) {
@@ -64,7 +66,7 @@ async function main() {
 
         // render the error page
         res.status(err.status || 500)
-        res.json(err)
+        res.json({ ...err, message: err.message })
     })
 
     app.listen(5001, () => {
