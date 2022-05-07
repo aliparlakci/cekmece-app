@@ -1,6 +1,7 @@
 import 'package:cekmece_mobile/models/cartItem/CartItem.dart';
 import 'package:cekmece_mobile/util/bloc/userBloc/user_bloc.dart';
 import 'package:cekmece_mobile/views/order/views/mockPayment.dart';
+import 'package:cekmece_mobile/views/order/views/succesfulOrder.dart';
 import 'package:cekmece_mobile/views/productView/components/size.dart';
 import 'package:cekmece_mobile/widgets/showSnackBar.dart';
 import 'package:flutter/material.dart';
@@ -39,12 +40,27 @@ class _AddressPickerState extends State<AddressPicker> {
   }
 
   void processOrder() async {
-    var result = await pushNewScreen(
+    var paymentResult = await pushNewScreen(
       context,
       screen: MockPayment(),
       withNavBar: false, // OPTIONAL VALUE. True by default.
       pageTransitionAnimation: PageTransitionAnimation.cupertino,
     );
+
+    if (paymentResult) {
+      await pushNewScreen(
+        context,
+        screen: SuccesfulOrder(
+          address: result,
+          items: cart,
+        ),
+        withNavBar: false, // OPTIONAL VALUE. True by default.
+        pageTransitionAnimation: PageTransitionAnimation.cupertino,
+      );
+      BlocProvider.of<UserBloc>(widget.prevContext).add(UserUpdate());
+
+      Navigator.pop(context);
+    }
   }
 
   void updateCart() async {
