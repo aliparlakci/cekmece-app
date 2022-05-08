@@ -45,7 +45,7 @@ class SuccesfulOrder extends StatelessWidget {
                   height: 5,
                 ),
                 OrderSummary(
-                    deliveryAddress: address,
+                    deliveryAddress: address.formattedAddress!,
                     showResetAddress: false,
                     resetAddress: () {},
                     items: items),

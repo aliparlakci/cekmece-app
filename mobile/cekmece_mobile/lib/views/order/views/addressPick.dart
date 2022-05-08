@@ -1,17 +1,20 @@
 import 'package:cekmece_mobile/models/cartItem/CartItem.dart';
 import 'package:cekmece_mobile/util/bloc/userBloc/user_bloc.dart';
+import 'package:cekmece_mobile/util/network/networkProvider.dart';
 import 'package:cekmece_mobile/views/order/views/mockPayment.dart';
 import 'package:cekmece_mobile/views/order/views/succesfulOrder.dart';
 import 'package:cekmece_mobile/views/productView/components/size.dart';
 import 'package:cekmece_mobile/widgets/showSnackBar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_signin_button/button_list.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:place_picker/entities/entities.dart';
 import 'package:place_picker/place_picker.dart';
+import 'package:provider/provider.dart';
 
 class AddressPicker extends StatefulWidget {
   AddressPicker({Key? key, required this.prevContext}) : super(key: key);
@@ -40,6 +43,8 @@ class _AddressPickerState extends State<AddressPicker> {
   }
 
   void processOrder() async {
+    String localIPAddress = dotenv.env['LOCALADDRESS']!;
+
     var paymentResult = await pushNewScreen(
       context,
       screen: MockPayment(),
@@ -48,15 +53,36 @@ class _AddressPickerState extends State<AddressPicker> {
     );
 
     if (paymentResult) {
-      await pushNewScreen(
-        context,
-        screen: SuccesfulOrder(
-          address: result,
-          items: cart,
-        ),
-        withNavBar: false, // OPTIONAL VALUE. True by default.
-        pageTransitionAnimation: PageTransitionAnimation.cupertino,
-      );
+      try {
+        NetworkService networkService =
+            Provider.of<NetworkService>(context, listen: false);
+        var body = {
+          "addressLine1": result.formattedAddress!.substring(0, 45),
+          "addressLine2": result.formattedAddress!.substring(45),
+          "city": result.city!.name,
+          "province": result.city!.name,
+          "country": result.country!.name,
+          "zipCode": result.postalCode
+        };
+        networkService.post('${localIPAddress}/api/orders/new', body: body);
+
+        await pushNewScreen(
+          context,
+          screen: SuccesfulOrder(
+            address: result,
+            items: cart,
+          ),
+          withNavBar: false, // OPTIONAL VALUE. True by default.
+          pageTransitionAnimation: PageTransitionAnimation.cupertino,
+        );
+      } catch (err) {
+        showSnackBar(
+            context: context,
+            message:
+                "We can not process your payment at the moment, please try again later",
+            error: true);
+      }
+
       BlocProvider.of<UserBloc>(widget.prevContext).add(UserUpdate());
 
       Navigator.pop(context);
@@ -111,7 +137,7 @@ class _AddressPickerState extends State<AddressPicker> {
         child: Column(
           children: [
             OrderSummary(
-              deliveryAddress: result,
+              deliveryAddress: result.formattedAddress!,
               resetAddress: showPlacePicker,
               showResetAddress: true,
               items: cart,
@@ -171,7 +197,7 @@ class OrderSummary extends StatelessWidget {
       required this.resetAddress,
       required this.items})
       : super(key: key);
-  LocationResult deliveryAddress;
+  String deliveryAddress;
   bool showResetAddress;
   VoidCallback resetAddress;
   List<CartItem> items;
@@ -195,7 +221,7 @@ class OrderSummary extends StatelessWidget {
             height: 10,
           ),
           DeliverAddress(
-            address: deliveryAddress.formattedAddress!,
+            address: deliveryAddress,
             onPressed: resetAddress,
             showResetButton: showResetAddress,
           ),
@@ -293,10 +319,12 @@ class OrderItemSummary extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-              "${item.item.model} ${item.item.distributor["name"]} ${item.item.name} x ${item.quantity}",
-              style: GoogleFonts.raleway(
-                  fontSize: getProportionateScreenHeight(15),
-                  fontWeight: FontWeight.w600)),
+            "${item.item.model} ${item.item.distributor["name"]} ${item.item.name} x ${item.quantity}",
+            style: GoogleFonts.raleway(
+                fontSize: getProportionateScreenHeight(15),
+                fontWeight: FontWeight.w600),
+            maxLines: 2,
+          ),
           Text(numberFormat.format(item.total),
               style: GoogleFonts.raleway(
                   fontSize: getProportionateScreenHeight(16),
