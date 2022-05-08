@@ -119,7 +119,7 @@ class _ProfileViewState extends State<ProfileView> {
                       ),
                       !orders.isEmpty
                           ? LatestOrder(
-                              order: orders[orders.length - 1],
+                              order: orders[0],
                             )
                           : Container(),
                       SizedBox(

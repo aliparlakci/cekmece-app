@@ -25,10 +25,8 @@ const StyledList = styled(List)(() => ({
 }))
 
 export default function ReviewList({ carId }: Car) {
-    const { data, mutate, error } = useSWR<IReviewsDetails>(`/api/cars/${carId}/reviews`, fetcher)
+    const { data, error } = useSWR<IReviewsDetails>(`/api/cars/${carId}/reviews`, fetcher)
     const { user } = useAuth()
-    const [successNotification, setSuccessNotification] = useState(false)
-    const [errorNotification, setErrorNotification] = useState(false)
     const { del, response, loading } = useFetch(`/api/cars/${carId}/reviews`, {
         cachePolicy: CachePolicies.NO_CACHE,
         headers: { "Content-Type": "application/json" },
@@ -38,20 +36,7 @@ export default function ReviewList({ carId }: Car) {
 
     if (!data) return <LoadingReviewListView />
 
-    if (data.reviews.length == 0)
-        return (
-            <>
-                <SnackbarHandler
-                    isSuccess={successNotification}
-                    isError={errorNotification}
-                    successMessage="Review deleted successfully."
-                    errorMessage="An error occurred while deleting the review."
-                    onSuccessClose={() => setSuccessNotification(false)}
-                    onErrorClose={() => setErrorNotification(false)}
-                />
-                <NoReviewsView />
-            </>
-        )
+    if (data.reviews.length == 0) return <NoReviewsView />
 
     const yourReviews: IReview[] = []
     let reviews: IReview[] = []
@@ -70,14 +55,6 @@ export default function ReviewList({ carId }: Car) {
 
     return (
         <Fragment>
-            <SnackbarHandler
-                isSuccess={successNotification}
-                isError={errorNotification}
-                successMessage="Review deleted successfully."
-                errorMessage="An error occurred while deleting the review."
-                onSuccessClose={() => setSuccessNotification(false)}
-                onErrorClose={() => setErrorNotification(false)}
-            />
             <Backdrop sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }} open={loading}>
                 <CircularProgress color="inherit" />
             </Backdrop>
@@ -87,15 +64,7 @@ export default function ReviewList({ carId }: Car) {
                 reviewRatioByRating={data.reviewRatioByRating}
             />
             {yourReviews.length != 0 && (
-                <YourReviewsList
-                    carId={carId}
-                    yourReviews={yourReviews}
-                    mutate={mutate}
-                    onSuccess={() => setSuccessNotification(true)}
-                    onError={() => setErrorNotification(true)}
-                    del={del}
-                    response={response}
-                />
+                <YourReviewsList carId={carId} yourReviews={yourReviews} del={del} response={response} />
             )}
             <StyledList sx={{ width: "100%", bgcolor: "background.paper" }}>
                 {reviews.map((review, index) => (
@@ -110,9 +79,6 @@ export default function ReviewList({ carId }: Car) {
                             createdDate={review.createdDate}
                             isApproved={review.isApproved}
                             isYourReview={false}
-                            mutate={mutate}
-                            onSuccess={() => setSuccessNotification(true)}
-                            onError={() => setErrorNotification(true)}
                             del={del}
                             response={response}
                         />

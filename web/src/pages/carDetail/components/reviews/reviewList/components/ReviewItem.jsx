@@ -3,35 +3,27 @@ import { StarOutlineSharp, StarSharp } from "@mui/icons-material"
 import date from "date-and-time"
 import ReadMore from "./ReadMore"
 import { DeleteForever } from "@mui/icons-material"
+import { mutate } from "swr"
+import useNotification, { NOTIFICATON_TYPES } from "../../../../../../hooks/useNotification"
 
 const pattern = date.compile("MMM D, YYYY")
 
-function ReviewItem({
-    key,
-    reviewId,
-    carId,
-    rating,
-    comment,
-    createdDate,
-    isApproved,
-    isYourReview,
-    mutate,
-    onSuccess,
-    onError,
-    del,
-    response,
-}) {
+function ReviewItem({ key, reviewId, carId, rating, comment, createdDate, isApproved, isYourReview, del, response }) {
+    const notification = useNotification()
+
     const handleOnClick = async (event) => {
         event.preventDefault()
 
         await del(`/${reviewId}`)
 
         if (response.ok) {
-            onSuccess()
+            notification(NOTIFICATON_TYPES.SUCCESS, "Review deleted successfully.")
         } else {
-            onError()
+            notification(NOTIFICATON_TYPES.ERROR, "An error occured while deleting review.")
         }
-        mutate()
+
+        mutate(`/api/cars/${carId}/reviews`)
+        mutate(`/api/cars/${carId}`)
     }
 
     return (

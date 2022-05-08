@@ -1,16 +1,26 @@
 import React, { createContext, useContext, useState } from "react"
 import { Snackbar, Alert } from "@mui/material"
+import { createTheme } from "@mui/material"
+import { ThemeProvider } from "@emotion/react"
 
 type IUseNotification = (type: NOTIFICATON_TYPES, message: string) => void
 
 const context = createContext<IUseNotification>(() => null)
 
 export enum NOTIFICATON_TYPES {
-    ERROR="error",
-    INFO="info",
-    SUCCESS="success",
-    WARNING="warning"
+    ERROR = "error",
+    INFO = "info",
+    SUCCESS = "success",
+    WARNING = "warning",
 }
+
+const fontTheme = createTheme({
+    typography: {
+        allVariants: {
+            fontFamily: "Raleway",
+        },
+    },
+})
 
 export function NotificationProvider({ children }: any) {
     const [open, setOpen] = useState(false)
@@ -25,17 +35,19 @@ export function NotificationProvider({ children }: any) {
 
     return (
         <context.Provider value={show}>
-            <Snackbar
-                open={open}
-                autoHideDuration={5000}
-                onClose={() => setOpen(false)}
-                anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-            >
-                <Alert onClose={() => setOpen(false)} severity={type} sx={{ width: "100%" }}>
-                    {message}
-                </Alert>
-            </Snackbar>
-            {children}
+            <ThemeProvider theme={fontTheme}>
+                <Snackbar
+                    open={open}
+                    autoHideDuration={5000}
+                    onClose={() => setOpen(false)}
+                    anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+                >
+                    <Alert onClose={() => setOpen(false)} severity={type} sx={{ width: "100%" }}>
+                        {message}
+                    </Alert>
+                </Snackbar>
+                {children}
+            </ThemeProvider>
         </context.Provider>
     )
 }

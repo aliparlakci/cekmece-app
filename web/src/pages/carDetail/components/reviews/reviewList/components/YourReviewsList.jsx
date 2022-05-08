@@ -8,7 +8,7 @@ const StyledList = styled(List)(() => ({
     paddingBottom: 0,
 }))
 
-function YourReviewsList({ carId, yourReviews, mutate, onSuccess, onError, del, response }) {
+function YourReviewsList({ carId, yourReviews, del, response }) {
     return (
         <Box sx={{ background: "linear-gradient(62deg, #6faeed 0%, #c899f5 100%)", pl: 1.5, pr: 1.5, pb: 1.5 }}>
             <Box
@@ -38,9 +38,6 @@ function YourReviewsList({ carId, yourReviews, mutate, onSuccess, onError, del, 
                             createdDate={review.createdDate}
                             isApproved={review.isApproved}
                             isYourReview={true}
-                            mutate={mutate}
-                            onSuccess={onSuccess}
-                            onError={onError}
                             del={del}
                             response={response}
                         />
