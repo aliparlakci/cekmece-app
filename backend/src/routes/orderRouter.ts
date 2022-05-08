@@ -10,6 +10,7 @@ import CartService from "../services/cartService"
 import OrderService from "../services/orderService"
 import { Order, OrderStatus, ShippingOption } from "../models/order"
 import Context from "../utils/context"
+import InvoiceService from "../services/invoiceService"
 
 function getOrders(orderService: OrderService) {
     return async function (req, res, next) {
@@ -165,7 +166,8 @@ function orderRouter() {
     const categoryService = new CategoryService()
     const carService = new CarService(categoryService)
     const cartService = new CartService(userService, carService)
-    const orderService = new OrderService(carService, cartService)
+    const invoiceService = new InvoiceService(userService)
+    const orderService = new OrderService(carService, cartService, invoiceService)
 
     router.get("/", getOrders(orderService))
     router.post("/new", addNewOrder(orderService))

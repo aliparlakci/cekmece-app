@@ -11,6 +11,7 @@ import ReviewService from "../services/reviewService"
 import OrderService from "../services/orderService"
 import CartService from "../services/cartService"
 import { DeleteResult } from "typeorm"
+import InvoiceService from "../services/invoiceService"
 
 function getReviews(reviewService: ReviewService): RequestHandler {
     return async function (req, res, next) {
@@ -147,7 +148,8 @@ function reviewRouter() {
     const userService = new UserService()
     const carService = new CarService(categoryService)
     const cartService = new CartService(userService, carService)
-    const orderService = new OrderService(carService, cartService)
+    const invoiceService = new InvoiceService(userService)
+    const orderService = new OrderService(carService, cartService, invoiceService)
     const reviewService = new ReviewService(carService, userService, orderService)
 
     router.get("/", getReviews(reviewService))

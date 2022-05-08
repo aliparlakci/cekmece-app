@@ -12,10 +12,8 @@ export class Cart {
  
     @Column()
     quantity: number
-
-    @Column()
-    status: string
    
+
     @ManyToOne(type => Car)
     @JoinColumn()
     item: Car
