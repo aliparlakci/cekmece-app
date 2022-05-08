@@ -45,10 +45,6 @@ function addToCart(userService: UserService, cartService: CartService) {
             return
         }
 
-        console.log("printlesene amınakoyim")
-        console.log(userId)
-        console.log(user.id)
-
         const cartItem = await cartService.addToCart(carId, 1, user)
 
         if (cartItem === 404) {
