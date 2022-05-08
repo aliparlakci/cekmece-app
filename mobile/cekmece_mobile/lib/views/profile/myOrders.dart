@@ -120,7 +120,7 @@ class OrderDetail extends StatelessWidget {
                 deliveryAddress: order.addressLine1 +
                     (order.addressLine2 ?? "") +
                     ', ' +
-                    order.province +
+                    (order.province ?? "") +
                     ', ' +
                     order.country,
                 items: order.orderItems,
