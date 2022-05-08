@@ -16,7 +16,7 @@ import { RemoveShoppingCart } from "@mui/icons-material"
 
 function CarDetailPage() {
     const [amount, setAmount] = useState(1)
-    const { add, decrease } = useCart()
+    const { add, cart } = useCart()
 
     const { carId } = useParams<{ carId?: string | undefined }>()
     if (!carId) return <Redirect to="/" />
@@ -77,7 +77,7 @@ function CarDetailPage() {
                                         focused
                                         value={amount}
                                         onChange={(event) =>
-                                            setAmount(Math.max(Math.min(parseInt(event.target.value), car.quantity), 1))
+                                            setAmount(Math.max(Math.min(parseInt(event.target.value), car.quantity + (car.id ? (cart[car.id] ? cart[car.id].amount : 0) : 0)), 1))
                                         }
                                         label="Quantity"
                                         type="number"

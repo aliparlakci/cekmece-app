@@ -10,8 +10,10 @@ import { createTheme, ThemeProvider } from "@mui/material/styles"
 import AddressForm, { IAddressData } from "./AddressForm"
 import PaymentForm, { IPaymentData } from "./PaymentForm"
 import Review from "./Review"
-import { Redirect, Route, Switch, useHistory, useLocation } from "react-router-dom"
+import { Redirect, Route, useHistory, useLocation } from "react-router-dom"
 import useCart from "../../hooks/useCart"
+import Button from "@mui/material/Button"
+import useNotification, { NOTIFICATON_TYPES } from "../../hooks/useNotification"
 
 const steps = ["Address", "Payment details", "Review your order"]
 
@@ -31,7 +33,7 @@ const defaultPayment = {
     cardNumber: "XXXX XXXX XXXX XXXX",
     cardName: "",
     expDate: "MM/YY",
-    cvv: "XXX"
+    cvv: "XXX",
 }
 
 export default function Checkout() {
@@ -39,9 +41,13 @@ export default function Checkout() {
     const [addressData, setAddressData] = useState<IAddressData>(defaultAddress)
     const [paymentData, setPaymentData] = useState<IPaymentData>(defaultPayment)
 
+    const [loading, setLoading] = useState(false)
+
+    const notification = useNotification()
+
     const location = useLocation()
     const history = useHistory()
-    const { cart } = useCart()
+    const { cart, pushCart } = useCart()
 
     useEffect(() => {
         if (location.pathname.includes("address")) setActiveStep(1)
@@ -49,6 +55,36 @@ export default function Checkout() {
         if (location.pathname.includes("review")) setActiveStep(3)
         if (location.pathname.includes("complete")) setActiveStep(4)
     }, [location])
+
+    const handleOrderSubmit = async () => {
+        setLoading(true)
+        try {
+            await pushCart()
+            const response = await fetch("/api/orders/new", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(
+                    {
+                        "addressLine1": addressData.address1,
+                        "addressLine2": addressData.address2,
+                        "city": addressData.city,
+                        "zipCode": addressData.zip,
+                        "country": addressData.country
+                    },
+                ),
+            })
+            if (response.status !== 200) throw `Response status is ${response.status}`
+
+            history.push("/checkout/completed")
+        } catch (e) {
+            notification(NOTIFICATON_TYPES.ERROR, "Something happened")
+            console.error(e)
+        } finally {
+            setLoading(false)
+        }
+    }
 
     return (
         <ThemeProvider theme={theme}>
@@ -66,22 +102,35 @@ export default function Checkout() {
                         ))}
                     </Stepper>
                     <Route path="/checkout/address">
-                        <AddressForm onNext={() => history.push("/checkout/payment")} />
+                        <AddressForm onNext={(data) => {
+                            setAddressData(data)
+                            history.push("/checkout/payment")
+                        }} />
                     </Route>
                     <Route path="/checkout/payment">
-                        <PaymentForm onNext={() => history.push("/checkout/review")} />
+                        <PaymentForm onNext={(data) => {
+                            setPaymentData(data)
+                            history.push("/checkout/review")
+                        }} />
                     </Route>
                     <Route path="/checkout/review">
-                        <Review />
+                        <Review address={addressData} payment={paymentData}
+                                items={Object.keys(cart).map(id => cart[id])}
+                                onConfirm={handleOrderSubmit}
+                                loading={loading}
+                        />
                     </Route>
                     <Route path="/checkout/completed">
                         <Typography variant="h5" gutterBottom>
                             Thank you for your order.
                         </Typography>
                         <Typography variant="subtitle1">
-                            Your order number is #2001539. We have emailed your order confirmation, and will
+                            Your order is received. We have emailed your receipt, and will
                             send you an update when your order has shipped.
                         </Typography>
+                        <Button variant="contained" sx={{ mt: 3, ml: 1 }} onClick={() => history.push("/")}>
+                            Return to home page
+                        </Button>
                     </Route>
                     <Route exact path="/checkout">
                         <Redirect to="/checkout/address" />

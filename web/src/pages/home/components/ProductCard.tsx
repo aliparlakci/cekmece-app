@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import {
     Button,
     Box,
@@ -48,6 +48,13 @@ interface IProductCardProps {
 
 export default function ProductCard({ car }: IProductCardProps) {
     const { cart, add } = useCart()
+    const [loading, setLoading] = useState(false)
+
+    const handleAddToCart = async () => {
+        setLoading(true)
+        await add(car.id, 1)
+        setLoading(false)
+    }
 
     return (
         <>
@@ -98,7 +105,7 @@ export default function ProductCard({ car }: IProductCardProps) {
                                         readOnly
                                     />
                                     <Typography variant="body2" marginLeft={0.5}>
-                                        {car.averageRating}
+                                        {parseFloat(car.averageRating)}
                                     </Typography>
                                     <Typography variant="body2" marginLeft={0.5}>
                                         {" "}
@@ -120,7 +127,8 @@ export default function ProductCard({ car }: IProductCardProps) {
                                             endIcon={<AddShoppingCartIcon />}
                                             sx={{ borderRadius: 0 }}
                                             fullWidth={true}
-                                            onClick={() => car.id && add(car.id, 1)}
+                                            onClick={handleAddToCart}
+                                            disabled={car.quantity <= (cart[car.id] ? cart[car.id].amount : 0) || loading}
                                         >
                                             Add to Cart
                                         </Button>

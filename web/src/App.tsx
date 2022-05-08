@@ -50,7 +50,8 @@ function App() {
                                     <CartPage />
                                 </Route>
                                 <Route path="/checkout">
-                                    <CheckoutPage />
+                                    {user && <CheckoutPage />}
+                                    {user === null && <Redirect to="/login" />}
                                 </Route>
                                 <Route path="/cars/:carId">
                                     <CarDetailPage />

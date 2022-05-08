@@ -85,7 +85,7 @@ export default function PaymentForm({ onNext }: IPaymentFormProps) {
                             name="expDate"
                             label="Expiry date"
                             inputProps={{
-                                "pattern": "([0_9][0_9]|[0_9])/([0_9][0_9]|[0_9])"
+                                "pattern": "([0-9][0-9]|[0-9])/([0-9][0-9]|[0-9])"
                             }}
                             fullWidth
                             autoComplete="cc-exp"
@@ -102,6 +102,9 @@ export default function PaymentForm({ onNext }: IPaymentFormProps) {
                             label="CVV"
                             helperText="Last three digits on signature strip"
                             fullWidth
+                            inputProps={{
+                                "pattern": "[0-9]{3}"
+                            }}
                             autoComplete="cc-csc"
                             variant="standard"
                             placeholder="XXX"
