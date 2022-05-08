@@ -12,6 +12,7 @@ import * as bcrypt from "bcryptjs"
 
 import { Review } from "./review"
 import { Cart } from "./cart"
+import { Order } from "./order"
 
 @Entity()
 @Unique(["email"])
@@ -53,4 +54,7 @@ export class User {
     verifyPassword(unencryptedPassword: string) {
         return bcrypt.compareSync(unencryptedPassword, this.password)
     }
+
+    @OneToMany(() => Order, (order) => order.user)
+    orders: Order[]
 }

@@ -2,34 +2,54 @@ import { Repository } from "typeorm"
 
 import db from "../dataSource"
 import { Review, Ratings } from "../models/review"
+import { User } from "../models/user"
 import CarService from "./carService"
 import UserService from "./userService"
+import OrderService from "./orderService"
+import { OrderStatus } from "../models/order"
 
 export default class ReviewService {
     private repository: () => Repository<Review>
 
-    constructor(private carService: CarService, private userService: UserService) {
+    constructor(private carService: CarService, private userService: UserService, private orderService: OrderService) {
         this.repository = () => db.getRepository(Review)
     }
 
-    async newReview(body: { carId: number; userId: string; rating: number; comment?: string }) {
-        const { carId, userId, rating, comment } = body
+    async newReview(body: { carId: number; orderItemId: string; user: User; rating: number; comment?: string }) {
+        const { carId, orderItemId, user, rating, comment } = body
 
         const car = await this.carService.getCar(carId)
-        if (car === null) throw `Car does not exist: id=${carId}`
+        if (car === null) throw `Car with id ${carId} does not exist.`
 
-        const user = await this.userService.getUser(userId)
-        if (user === null) throw `User does not exist: id=${carId}`
+        const orderItem = await this.orderService.getOrderItem(orderItemId)
+        if (orderItem === null) throw `Order item with id ${orderItemId} does not exist.`
 
-        return (
-            await this.repository().save({
-                car,
-                comment: comment,
-                isApproved: comment ? false : true,
-                rating: rating as Ratings,
-                user,
-            })
-        ).id
+        if (orderItem.car.id !== carId) {
+            throw `Order item's car id ${orderItem.car.id} does not match with the provided car id ${carId}.`
+        }
+
+        if (orderItem.order.status !== OrderStatus.DELIVERED) {
+            throw `Attempt to review a not yet delivered car.`
+        }
+
+        if (orderItem.review) {
+            console.log(orderItem)
+            throw `Attempt to review an already reviewed order.`
+        }
+
+        const review = await this.repository().save({
+            car,
+            orderItem,
+            comment: comment,
+            isApproved: comment ? false : true,
+            rating: rating as Ratings,
+            user,
+        })
+
+        const { reviewCount, averageRating } = await this.getReviewCountAndAverageRating(carId)
+        await this.carService.updateReviewCountAndAverage(carId, reviewCount, averageRating)
+
+        return review
     }
 
     async getAllReviews() {
@@ -37,18 +57,42 @@ export default class ReviewService {
     }
 
     async getReview(id: number) {
-        return await this.repository().findOne({ where: { id } })
+        return await this.repository().findOne({ where: { id }, relations: { car: true } })
     }
 
-    async approveReview(id: number) {
-        return await this.repository().save({
-            id: id,
-            isApproved: true,
+    async deleteReview(id: number, userId: string) {
+        const carId = (await this.getReview(id))?.car.id
+
+        const review = await this.repository().findOne({
+            where: { id: id },
+            relations: { user: true },
         })
-    }
 
-    async deleteReview(id: number) {
-        return this.repository().createQueryBuilder().delete().from(Review).where("id = :id", { id }).execute()
+        if (review === null) {
+            const error = new Error(`Review with id ${id} does not exist.`)
+            error.name = "ReviewError"
+            throw error
+        }
+
+        if (review.user.id !== userId) {
+            const error = new Error(`Unauthorized attempt to delete another user's review.`)
+            error.name = "AuthError"
+            throw error
+        }
+
+        const deleteResult = await this.repository()
+            .createQueryBuilder()
+            .delete()
+            .from(Review)
+            .where("id = :id", { id })
+            .execute()
+
+        if (carId) {
+            const { reviewCount, averageRating } = await this.getReviewCountAndAverageRating(carId)
+            await this.carService.updateReviewCountAndAverage(carId, reviewCount, averageRating)
+        }
+
+        return deleteResult
     }
 
     async getReviewsOfCar(carId: number) {
@@ -67,21 +111,41 @@ export default class ReviewService {
                 car: {
                     id: carId,
                 },
-                isApproved: true
             },
             order: {
                 createdDate: "DESC",
             },
         })
 
-        return reviews
+        const reviewCount = reviews.length
+        let averageRating = 0
+        const reviewRatioByRating: { [key: number]: number } = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 }
+
+        reviews.map((review) => {
+            reviewRatioByRating[review.rating] += 100 / reviewCount
+            averageRating += review.rating / reviewCount
+
+            if (review.isApproved === false) {
+                review.comment = "This comment is currently being reviewed by one of our moderators for approval."
+                return review
+            }
+
+            return review
+        })
+
+        return {
+            reviewCount,
+            averageRating: averageRating.toFixed(1),
+            reviewRatioByRating,
+            reviews,
+        }
     }
 
-    async getReviewCountAndAverageRating(carId: number): Promise<{ review_count: string, average_rating: string } | undefined> {
-        return this.repository()
+    async getReviewCountAndAverageRating(carId: number) {
+        return await this.repository()
             .createQueryBuilder("R")
-            .select("COUNT(*)", "review_count")
-            .addSelect("AVG(R.rating)", "average_rating")
+            .select("COUNT(*)", "reviewCount")
+            .addSelect("AVG(R.rating)", "averageRating")
             .where("carId = :carId", { carId })
             .getRawOne()
     }
@@ -101,5 +165,16 @@ export default class ReviewService {
                 createdDate: "ASC",
             },
         })
+    }
+
+    async updateApprovedStatus(id: number, status: boolean) {
+        const review = await this.repository().findOne({
+            where: { id: id },
+        })
+
+        if (review === null) throw `Review with id ${id} does not exist.`
+        review.isApproved = status
+
+        return await this.repository().save(review)
     }
 }

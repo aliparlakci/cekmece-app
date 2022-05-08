@@ -26,7 +26,7 @@ class _TempViewState extends State<TempView> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          ReviewsButton(carId: carId, reviewCount: 555, reviewAverage: 4.1),
+          // ReviewsButton(carId: carId, reviewCount: 555, reviewAverage: 4.1),
           const SizedBox(
             height: 5,
           ),

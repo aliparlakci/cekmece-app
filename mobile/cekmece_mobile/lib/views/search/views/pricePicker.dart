@@ -130,7 +130,7 @@ class _PricePickerState extends State<PricePicker> {
                 widget.setPrice(-1);
               }
             },
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
                 counterText: "",
                 hintText: "Price",
                 // [enabledBorder], displayed when [TextField, InputDecoration.enabled] is true

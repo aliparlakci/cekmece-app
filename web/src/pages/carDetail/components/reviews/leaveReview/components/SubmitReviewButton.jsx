@@ -1,6 +1,6 @@
 import { Box, Button } from "@mui/material"
 
-function SubmitReviewButton({ formValidationError }) {
+function SubmitReviewButton({ formValidationError, orderIsSelected }) {
     return (
         <Box
             sx={{
@@ -12,7 +12,7 @@ function SubmitReviewButton({ formValidationError }) {
                 type="submit"
                 variant="contained"
                 disableElevation
-                disabled={formValidationError}
+                disabled={formValidationError || !orderIsSelected}
                 sx={{
                     width: "100%",
                     fontWeight: 700,

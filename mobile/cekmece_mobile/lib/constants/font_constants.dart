@@ -98,6 +98,50 @@ final errorTextStyle = GoogleFonts.raleway(
   color: Colors.black,
 );
 
+/* ReviewsListHeader.dart */
+
+final reviewCountHeader700 = GoogleFonts.raleway(
+  fontSize: 20,
+  fontWeight: FontWeight.w700,
+  color: Colors.black,
+);
+
+final reviewCountHeader500 = GoogleFonts.raleway(
+  fontSize: 20,
+  fontWeight: FontWeight.w500,
+  color: Colors.black,
+);
+
+final yourReviewsHeader700 = GoogleFonts.raleway(
+  fontSize: 20,
+  fontWeight: FontWeight.w800,
+  color: Colors.white,
+);
+
+final yourReviewsHeader400 = GoogleFonts.raleway(
+  fontSize: 20,
+  fontWeight: FontWeight.w500,
+  color: Colors.white,
+);
+
+final averageRatingHeader = GoogleFonts.raleway(
+  fontSize: 24,
+  fontWeight: FontWeight.w700,
+  color: Colors.black,
+);
+
+final linearProgressLabelStyle = GoogleFonts.raleway(
+  fontSize: 15,
+  fontWeight: FontWeight.w500,
+  color: Colors.black,
+);
+
+final linearProgressLabelStyleAlt = GoogleFonts.raleway(
+  fontSize: 13,
+  fontWeight: FontWeight.w500,
+  color: Colors.black,
+);
+
 /* ReviewTile.dart */
 
 final reviewTileDateStyle = GoogleFonts.raleway(
@@ -129,6 +173,18 @@ final popUpMenuItemTextStyle = GoogleFonts.raleway(
   fontSize: 15,
   fontWeight: FontWeight.w600,
   color: Colors.black,
+);
+
+final popUpMenuItemSelectedTextStyle = GoogleFonts.raleway(
+  fontSize: 15,
+  fontWeight: FontWeight.w600,
+  color: Colors.white,
+);
+
+final popUpMenuItemDisabledTextStyle = GoogleFonts.raleway(
+  fontSize: 15,
+  fontWeight: FontWeight.w600,
+  color: Colors.grey,
 );
 
 /* NewReviewView.dart */
@@ -168,3 +224,5 @@ final newReviewTextFormFieldErrorFillStyle = GoogleFonts.raleway(
   fontSize: 15,
   color: Colors.red,
 );
+
+

@@ -60,7 +60,7 @@ function ReviewListHeader({ averageRating, reviewCount, reviewRatioByRating }) {
                         }}
                         component="span"
                     >
-                        {averageRating.toFixed(1)}
+                        {averageRating}
                     </Typography>
                 </Box>
                 <Box sx={{ paddingTop: 3, width: "100%" }}>

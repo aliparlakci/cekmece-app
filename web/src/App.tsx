@@ -8,6 +8,7 @@ import LoginPage from "./pages/LoginPage"
 import RegisterPage from "./pages/RegisterPage"
 import CartPage from "./pages/cart/CartPage"
 import OrdersPage from "./pages/orderHistory/OrdersPage"
+import CheckoutPage from "./pages/checkout"
 
 import useAuth from "./hooks/useAuth"
 import { CartProvider } from "./hooks/useCart"
@@ -29,13 +30,13 @@ function App() {
                         <Router>
                             <Switch>
                                 <Route path="/admin">
-                                    {!loading &&
+                                    {!loading && (
                                         <>
                                             {user === null && <Redirect to="/login" />}
                                             {user?.role === UserRoles.ADMIN && <AdminPage />}
                                             {user?.role !== UserRoles.ADMIN && <Redirect to="/" />}
                                         </>
-                                    }
+                                    )}
                                 </Route>
                                 <Route exact path="/">
                                     <HomePage />
@@ -48,6 +49,10 @@ function App() {
                                 </Route>
                                 <Route path="/cart">
                                     <CartPage />
+                                </Route>
+                                <Route path="/checkout">
+                                    {user && <CheckoutPage />}
+                                    {user === null && <Redirect to="/login" />}
                                 </Route>
                                 <Route path="/cars/:carId">
                                     <CarDetailPage />

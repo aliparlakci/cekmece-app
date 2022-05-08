@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import {
     Button,
     Box,
@@ -48,6 +48,13 @@ interface IProductCardProps {
 
 export default function ProductCard({ car }: IProductCardProps) {
     const { cart, add } = useCart()
+    const [loading, setLoading] = useState(false)
+
+    const handleAddToCart = async () => {
+        setLoading(true)
+        await add(car.id, 1)
+        setLoading(false)
+    }
 
     return (
         <>
@@ -60,51 +67,86 @@ export default function ProductCard({ car }: IProductCardProps) {
                                     <img src={"https://wallpaperaccess.com/full/8039043.jpg"} alt="" />
                                 </Link>
                             </Box>
-                            <Box marginX={0.5} marginTop={0.5}
-                                 sx={{ alignItems: "center", direction: "column", justifyContent: "center" }}>
+                            <Box
+                                marginX={0.5}
+                                marginTop={0.5}
+                                sx={{ alignItems: "center", direction: "column", justifyContent: "center" }}
+                            >
                                 <Link to={`/cars/${car.id}`}>
-                                    <Typography variant="h6" marginX={0.5} fontWeight="Light"
-                                                textAlign="left">{car.distributor?.name}</Typography>
-                                    <Typography variant="h5" marginX={0.5} fontWeight="Bold"
-                                                textAlign="left">{car.name}</Typography>
+                                    <Typography variant="h6" marginX={0.5} fontWeight="Light" textAlign="left">
+                                        {car.distributor?.name}
+                                    </Typography>
+                                    <Typography variant="h5" marginX={0.5} fontWeight="Bold" textAlign="left">
+                                        {car.name}
+                                    </Typography>
                                 </Link>
                             </Box>
-                            <Box marginX={0.5} marginTop={0.5}
-                                 sx={{ alignItems: "center", direction: "column", justifyContent: "center" }}>
-                                    <Typography variant="body1" marginX={0.5} fontWeight="lighter"
-                                                textAlign="left">{car.quantity} in stock</Typography>
+                            <Box
+                                marginX={0.5}
+                                marginTop={0.5}
+                                sx={{ alignItems: "center", direction: "column", justifyContent: "center" }}
+                            >
+                                <Typography variant="body1" marginX={0.5} fontWeight="lighter" textAlign="left">
+                                    {car.quantity} in stock
+                                </Typography>
                             </Box>
-                            <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}
-                                 marginTop={1} marginBottom={1} marginX={1}>
+                            <Box
+                                sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}
+                                marginTop={1}
+                                marginBottom={1}
+                                marginX={1}
+                            >
                                 <Box sx={{ display: "flex", alignItems: "center" }}>
-                                    <Rating name="size-small" size="small" defaultValue={car.average_rating}
-                                            precision={0.25}
-                                            readOnly />
-                                    <Typography variant="body2" marginLeft={0.5}>{car.average_rating}</Typography>
-                                    <Typography variant="body2"
-                                                marginLeft={0.5}> ({car.review_count || "0"} reviews)</Typography>
+                                    <Rating
+                                        name="size-small"
+                                        size="small"
+                                        defaultValue={parseFloat(car.averageRating)}
+                                        precision={0.25}
+                                        readOnly
+                                    />
+                                    <Typography variant="body2" marginLeft={0.5}>
+                                        {parseFloat(car.averageRating)}
+                                    </Typography>
+                                    <Typography variant="body2" marginLeft={0.5}>
+                                        {" "}
+                                        ({car.reviewCount || "0"} reviews)
+                                    </Typography>
                                 </Box>
                                 <Box paddingBottom={0.5}>
-                                    <Typography variant="h5" fontWeight="bold"
-                                                textAlign="right">${car.price}</Typography>
+                                    <Typography variant="h5" fontWeight="bold" textAlign="right">
+                                        ${car.price}
+                                    </Typography>
                                 </Box>
                             </Box>
 
                             <Box>
-                                {
-                                    car.quantity ? <>
-                                        <Button variant="text" endIcon={<AddShoppingCartIcon />}
-                                                sx={{ borderRadius: 0 }} fullWidth={true}
-                                                onClick={() => car.id && add(car.id, 1)}>Add to
-                                            Cart</Button>
-                                    </> : null
-                                }
-                                {
-                                    !car.quantity && <>
-                                        <Button disabled variant="text" endIcon={<RemoveShoppingCart />}
-                                                sx={{ borderRadius: 0 }} fullWidth={true}>Out of stock</Button>
+                                {car.quantity ? (
+                                    <>
+                                        <Button
+                                            variant="text"
+                                            endIcon={<AddShoppingCartIcon />}
+                                            sx={{ borderRadius: 0 }}
+                                            fullWidth={true}
+                                            onClick={handleAddToCart}
+                                            disabled={car.quantity <= (cart[car.id] ? cart[car.id].amount : 0) || loading}
+                                        >
+                                            Add to Cart
+                                        </Button>
                                     </>
-                                }
+                                ) : null}
+                                {!car.quantity && (
+                                    <>
+                                        <Button
+                                            disabled
+                                            variant="text"
+                                            endIcon={<RemoveShoppingCart />}
+                                            sx={{ borderRadius: 0 }}
+                                            fullWidth={true}
+                                        >
+                                            Out of stock
+                                        </Button>
+                                    </>
+                                )}
                             </Box>
                         </Paper>
                     </Box>

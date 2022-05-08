@@ -10,7 +10,7 @@ class NetworkService extends ChangeNotifier {
   final JsonEncoder _encoder = const JsonEncoder();
   final prefs = SharedPreferences.getInstance();
 
-  Map<String, String> headers = {"content-type": "application/json"};
+  Map<String, String> headers = {"content-type": "application/json; charset=UTF-8"};
   Map<String, String> cookies = {};
 
   void _updateCookie(http.Response response) {
@@ -131,12 +131,14 @@ class NetworkService extends ChangeNotifier {
   Future<dynamic> get(String url) {
     return http
         .get(Uri.parse(url), headers: headers)
+        .timeout(const Duration(seconds: 10))
         .then((http.Response response) {
       final String res = response.body;
       final int statusCode = response.statusCode;
       _updateCookie(response);
 
       if (statusCode < 200 || statusCode > 400) {
+        print(response.body);
         throw Exception("Error while fetching data");
       }
       notifyListeners();
@@ -148,7 +150,29 @@ class NetworkService extends ChangeNotifier {
     body ??= {};
     return http
         .post(Uri.parse(url),
-            body: _encoder.convert(body), headers: headers, encoding: encoding)
+            body: _encoder.convert(body), headers: headers, encoding: encoding).timeout(const Duration(seconds: 5))
+        .then((http.Response response) {
+      final String res = response.body;
+      final int statusCode = response.statusCode;
+
+      _updateCookie(response);
+      print(headers);
+      print(statusCode);
+      print(res);
+
+      if (statusCode < 200 || statusCode >= 400) {
+        throw Exception("Error while fetching data");
+      }
+      notifyListeners();
+      return _decoder.convert(res);
+    });
+  }
+
+  Future<dynamic> delete(String url, {body, encoding}) {
+    body ??= {};
+    return http
+        .delete(Uri.parse(url),
+            body: _encoder.convert(body), headers: headers, encoding: encoding).timeout(const Duration(seconds: 5))
         .then((http.Response response) {
       final String res = response.body;
       final int statusCode = response.statusCode;

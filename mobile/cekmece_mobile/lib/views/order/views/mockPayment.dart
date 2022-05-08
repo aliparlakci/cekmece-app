@@ -1,8 +1,10 @@
+import 'package:cekmece_mobile/views/order/views/addressPick.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_credit_card/credit_card_brand.dart';
 import 'package:flutter_credit_card/credit_card_form.dart';
 import 'package:flutter_credit_card/credit_card_model.dart';
 import 'package:flutter_credit_card/flutter_credit_card.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 class MockPayment extends StatefulWidget {
   @override
@@ -137,8 +139,10 @@ class MockPaymentState extends State<MockPayment> {
               onPressed: () {
                 if (formKey.currentState!.validate()) {
                   print('valid!');
+                  Navigator.pop(context, true);
                 } else {
                   print('invalid!');
+                  Navigator.pop(context, false);
                 }
               },
             ),

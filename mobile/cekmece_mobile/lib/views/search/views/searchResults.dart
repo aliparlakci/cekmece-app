@@ -186,7 +186,7 @@ class _SearchResultsState extends State<SearchResults> {
                           pushNewScreen(
                             context,
                             screen: DetailsScreen(
-                              product: car,
+                              carId: car.id,
                               userBloc: userBloc,
                             ),
                             withNavBar:

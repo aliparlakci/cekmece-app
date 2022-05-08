@@ -5,6 +5,7 @@ import 'package:cekmece_mobile/models/user/UserClass.dart';
 import 'package:cekmece_mobile/util/bloc/loadingBloc/loading_bloc.dart';
 import 'package:cekmece_mobile/util/bloc/userBloc/user_bloc.dart';
 import 'package:cekmece_mobile/util/network/networkProvider.dart';
+import 'package:cekmece_mobile/views/order/views/addressPick.dart';
 import 'package:cekmece_mobile/views/order/views/mockPayment.dart';
 import 'package:cekmece_mobile/views/productView/components/size.dart';
 import 'package:cekmece_mobile/views/productView/details_screen.dart';
@@ -82,7 +83,7 @@ class _CartViewState extends State<CartView> {
                           await pushNewScreen(
                             context,
                             screen: DetailsScreen(
-                              product: car,
+                              carId: car.id,
                               userBloc: userBloc,
                             ),
                             withNavBar:
@@ -253,11 +254,14 @@ class _CartViewState extends State<CartView> {
                   } else {
                     pushNewScreen(
                       context,
-                      screen: MockPayment(),
+                      screen: AddressPicker(
+                        prevContext: context,
+                      ),
                       withNavBar: false, // OPTIONAL VALUE. True by default.
                       pageTransitionAnimation:
                           PageTransitionAnimation.cupertino,
                     );
+                    BlocProvider.of<UserBloc>(context).add(UserUpdate());
                   }
                 },
               ))
