@@ -21,7 +21,7 @@ class UserInfoView extends StatelessWidget {
             CircleAvatar(
               radius: 30,
               backgroundImage: NetworkImage(user.photoUrl ??
-                  "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png"),
+                  "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"),
             ),
             const SizedBox(
               width: 20,

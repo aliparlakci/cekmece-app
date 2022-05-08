@@ -77,25 +77,24 @@ class ReviewTile extends StatelessWidget {
                         style: reviewTileDateStyle),
                   ],
                 ),
-                if (true)
-                  PopupMenuButton(
-                    child: const Icon(Icons.more_horiz_outlined),
-                    onSelected: (value) {
-                      if (value == 1) {
-                        if (onDelete != null) {
-                          onDelete!();
-                        }
+                if (onDelete != null) PopupMenuButton(
+                  child: const Icon(Icons.more_horiz_outlined),
+                  onSelected: (value) {
+                    if (value == 1) {
+                      if (onDelete != null) {
+                        onDelete!();
                       }
-                    },
-                    itemBuilder: (BuildContext context) => [
-                      PopupMenuItem(
-                        child: Text("Delete review",
-                            style: popUpMenuItemTextStyle),
-                        onTap: () {},
-                        value: 1,
-                      )
-                    ],
-                  )
+                    }
+                  },
+                  itemBuilder: (BuildContext context) => [
+                    PopupMenuItem(
+                      child:
+                          Text("Delete review", style: popUpMenuItemTextStyle),
+                      onTap: () {},
+                      value: 1,
+                    )
+                  ],
+                )
               ],
             ),
             if (comment != null) const SizedBox(height: 10),

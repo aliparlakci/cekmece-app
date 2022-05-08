@@ -13,6 +13,9 @@ class Product with _$Product {
     required int model,
     required int quantity,
     required int warranty,
+    required int reviewCount,
+    required String averageRating,
+    bool? userCanReviewCar,
     required Map<String, dynamic> distributor,
     required Map<String, dynamic> category,
   }) = _Product;

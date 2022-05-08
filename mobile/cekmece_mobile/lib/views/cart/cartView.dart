@@ -83,7 +83,7 @@ class _CartViewState extends State<CartView> {
                           await pushNewScreen(
                             context,
                             screen: DetailsScreen(
-                              product: car,
+                              carId: car.id,
                               userBloc: userBloc,
                             ),
                             withNavBar:

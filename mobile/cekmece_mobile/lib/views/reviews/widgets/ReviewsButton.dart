@@ -5,7 +5,8 @@ import '../../../constants/font_constants.dart';
 import '../ReviewsView.dart';
 
 class ReviewsButton extends StatelessWidget {
-  const ReviewsButton({Key? key, required this.carId, required this.reviewCount, this.reviewAverage}) : super(key: key);
+  const ReviewsButton({Key? key, required this.userId, required this.carId, required this.reviewCount, this.reviewAverage}) : super(key: key);
+  final String userId;
   final int carId;
   final int reviewCount;
   final double? reviewAverage;
@@ -27,7 +28,7 @@ class ReviewsButton extends StatelessWidget {
         onPressed: () {
           pushNewScreen(
             context,
-            screen: ReviewsView(carId: carId),
+            screen: ReviewsView(userId: userId, carId: carId),
             withNavBar: false,
             pageTransitionAnimation: PageTransitionAnimation.cupertino,
           );

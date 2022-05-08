@@ -128,9 +128,11 @@ class _LoginScreenState extends State<LoginScreen> {
               if (val == "") {
                 return "Please enter password";
               }
+              /*
               if (val!.length < 8) {
                 return "Password must be at least 8 characters";
               }
+               */
               return null;
             },
             style: TextStyle(

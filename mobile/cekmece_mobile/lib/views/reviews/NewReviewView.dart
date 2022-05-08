@@ -1,12 +1,16 @@
 import 'dart:convert';
 import 'package:cekmece_mobile/constants/font_constants.dart';
+import 'package:cekmece_mobile/models/unreviewedOrderItem/UnreviewedOrderItem.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
+import '../../util/network/networkProvider.dart';
 import '../../widgets/linearProgressBar.dart';
 import '../../widgets/showSnackBar.dart';
+import 'package:intl/intl.dart';
 
 class NewReviewView extends StatefulWidget {
   const NewReviewView({Key? key, required this.carId, required this.onSuccess})
@@ -20,10 +24,49 @@ class NewReviewView extends StatefulWidget {
 
 class _NewReviewViewState extends State<NewReviewView> {
   final _formKey = GlobalKey<FormState>();
-  String comment = "";
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    getUnreviewedOrderItems();
+    super.initState();
+  }
+
+  bool isLoading = false;
+  List<UnreviewedOrderItem> unreviewedOrderItems = [];
+
+  String orderItemId = "";
+
   double rating = 3;
+  String comment = "";
   bool isUploading = false;
   bool autoValidate = false;
+
+  Future getUnreviewedOrderItems() async {
+    final networkService = Provider.of<NetworkService>(context, listen: false);
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      var response = await networkService.get(
+          "${dotenv.env['CLIENT_URL']}/api/orders/unreviewed/${widget.carId}");
+
+      unreviewedOrderItems = (response as List)
+          .map((jsonObj) => UnreviewedOrderItem.fromJson(jsonObj))
+          .toList();
+
+      setState(() {
+        isLoading = false;
+      });
+    }
+    catch(e) {
+      print(e);
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
 
   Future submitReview(context) async {
     try {
@@ -31,28 +74,20 @@ class _NewReviewViewState extends State<NewReviewView> {
         isUploading = true;
       });
 
-      var response = await http
-          .post(
-              Uri.parse(
-                  "${dotenv.env['CLIENT_URL']}/api/cars/${widget.carId}/reviews/new"),
-              headers: <String, String>{
-                'Content-Type': 'application/json; charset=UTF-8',
-              },
-              body: comment.isNotEmpty
-                  ? jsonEncode(
-                      <String, dynamic>{"rating": rating, "comment": comment})
-                  : jsonEncode(<String, dynamic>{"rating": rating}))
-          .timeout(const Duration(seconds: 5));
+      final networkService =
+          Provider.of<NetworkService>(context, listen: false);
+      var response = await networkService.post(
+          "${dotenv.env['CLIENT_URL']}/api/cars/${widget.carId}/reviews/new",
+          body: comment.isNotEmpty
+              ? {
+                  "rating": rating,
+                  "comment": comment,
+                  "orderItemId": orderItemId
+                }
+              : {"rating": rating, "orderItemId": orderItemId});
 
-      if (response.statusCode < 400) {
-        Navigator.of(context).pop();
-        widget.onSuccess();
-      } else {
-        showSnackBar(
-            context: context,
-            message: "An error occurred while submitting the review.",
-            error: true);
-      }
+      Navigator.of(context).pop();
+      widget.onSuccess();
     } catch (e) {
       showSnackBar(
           context: context,
@@ -86,7 +121,9 @@ class _NewReviewViewState extends State<NewReviewView> {
           child: Padding(
             padding: const EdgeInsets.all(5.0),
             child: TextButton(
-              onPressed: isUploading
+              onPressed: isUploading ||
+                      orderItemId == "" ||
+                      !_formKey.currentState!.validate()
                   ? null
                   : () {
                       if (_formKey.currentState!.validate()) {
@@ -99,12 +136,17 @@ class _NewReviewViewState extends State<NewReviewView> {
                         });
                       }
                     },
-              style: TextButton.styleFrom(
+              style: ButtonStyle(
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                backgroundColor: Colors.black,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(0),
-                ),
+                backgroundColor: MaterialStateProperty.resolveWith<Color>((states) {
+                  if (states.contains(MaterialState.disabled)) {
+                    return Color(0xFF515151); // Disabled color
+                  }
+                  return Colors.black; // Regular color
+                }),
+                shape: MaterialStateProperty.resolveWith<RoundedRectangleBorder>((states) {
+                  return RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(0)));
+                }),
               ),
               child:
                   Text("SUBMIT REVIEW", style: bottomBarBlackButtonTextStyle),
@@ -115,10 +157,94 @@ class _NewReviewViewState extends State<NewReviewView> {
           child: Stack(children: [
             if (isUploading) LinearProgressBar(),
             Padding(
-              padding: const EdgeInsets.fromLTRB(3.9, 20, 3.9, 3.9),
+              padding: const EdgeInsets.fromLTRB(3.9, 15, 3.9, 3.9),
               child: ListTile(
                 title: Column(
                   children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Color(0x40000000)),
+                        gradient: const LinearGradient(
+                          colors: [
+                            Color(0xFF6faeed),
+                            Color(0xFFc899f5),
+                          ],
+                        ),
+                      ),
+                      child: DropdownButton(
+                        underline: Container(),
+                        isExpanded: true,
+                        value: orderItemId,
+                        style: popUpMenuItemSelectedTextStyle,
+                        icon: const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          child: Icon(
+                            Icons.expand_more,
+                            color: Colors.white,
+                          ),
+                        ),
+                        onChanged: (String? newValue) {
+                          print(newValue);
+                          setState(() {
+                            orderItemId = newValue!;
+                          });
+                        },
+                        selectedItemBuilder: (BuildContext ctx) {
+                          return [
+                                DropdownMenuItem<String>(
+                                  value: "",
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 15.0),
+                                    child: Text("Select Order",
+                                        style: popUpMenuItemSelectedTextStyle),
+                                  ),
+                                  enabled: false,
+                                )
+                              ] +
+                              unreviewedOrderItems.map<
+                                      DropdownMenuItem<String>>(
+                                  (UnreviewedOrderItem unreviewedOrderItem) {
+                                return DropdownMenuItem<String>(
+                                  value: unreviewedOrderItem.id,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 15.0),
+                                    child: Text(
+                                        "Delivered on ${DateFormat.yMMMd().format(unreviewedOrderItem.order.updatedDate)} - Order #${unreviewedOrderItem.order.id}",
+                                        style: popUpMenuItemSelectedTextStyle),
+                                  ),
+                                );
+                              }).toList();
+                        },
+                        items: [
+                              DropdownMenuItem<String>(
+                                value: "",
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15.0),
+                                  child: Text("Select Order",
+                                      style: popUpMenuItemDisabledTextStyle),
+                                ),
+                                enabled: false,
+                              )
+                            ] +
+                            unreviewedOrderItems.map<DropdownMenuItem<String>>(
+                                (UnreviewedOrderItem unreviewedOrderItem) {
+                              return DropdownMenuItem<String>(
+                                value: unreviewedOrderItem.id,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15.0),
+                                  child: Text(
+                                      "Delivered on ${DateFormat.yMMMd().format(unreviewedOrderItem.order.updatedDate)} - Order ${unreviewedOrderItem.order.id}",
+                                      style: popUpMenuItemTextStyle),
+                                ),
+                              );
+                            }).toList(),
+                      ),
+                    ),
+                    const SizedBox(height: 17),
                     RatingBar(
                       initialRating: 3,
                       glow: false,
