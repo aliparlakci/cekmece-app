@@ -1,5 +1,5 @@
-import {RequestHandler, Router} from "express"
-import {StatusCodes} from "http-status-codes"
+import { RequestHandler, Router } from "express"
+import { StatusCodes } from "http-status-codes"
 import Joi from "joi"
 import createError from "http-errors"
 
@@ -7,8 +7,8 @@ import CarService from "../services/carService"
 import CartService from "../services/cartService"
 import CategoryService from "../services/categoryService"
 import UserService from "../services/userService"
-import Context from "../utils/context";
-import {Cart} from "../models/cart";
+import Context from "../utils/context"
+import { Cart } from "../models/cart"
 
 function getCart(userService: UserService, cartService: CartService) {
     return async function (req, res, next) {
@@ -45,7 +45,11 @@ function addToCart(userService: UserService, cartService: CartService) {
             return
         }
 
-        const cartItem = await cartService.addToCart(carId, 1, userId)
+        console.log("printlesene amınakoyim")
+        console.log(userId)
+        console.log(user.id)
+
+        const cartItem = await cartService.addToCart(carId, 1, user)
 
         if (cartItem === 404) {
             res.status(404).json({ cartItem: {}, message: "An error happened" })
@@ -72,7 +76,7 @@ function removeFromCart(userService: UserService, cartService: CartService) {
 function deleteCart(userService: UserService, cartService: CartService) {
     return async function (req, res, next) {
         const userId = req.params.userId
-        const removeResult = await cartService.deleteUserCart(userId);
+        const removeResult = await cartService.deleteUserCart(userId)
 
         const ctx: Context | null = Context.get(req)
         if (ctx === null) {
@@ -91,13 +95,11 @@ function deleteCart(userService: UserService, cartService: CartService) {
             return
         }
 
-        if(removeResult.affected !== 0){
-            res.status(200).json({message:"Success"})
+        if (removeResult.affected !== 0) {
+            res.status(200).json({ message: "Success" })
+        } else {
+            res.status(404).json({ message: "Error - User cart might be empty already!" })
         }
-        else{
-            res.status(404).json({message:"Error - User cart might be empty already!"})
-        }
-
     }
 }
 
@@ -131,10 +133,14 @@ function replaceCart(cartService: CartService): RequestHandler {
         }
 
         const cartFormat = Joi.object().keys({
-            items: Joi.array().items(Joi.object().keys({
-                id: Joi.number(),
-                amount: Joi.number()
-            })).required()
+            items: Joi.array()
+                .items(
+                    Joi.object().keys({
+                        id: Joi.number(),
+                        amount: Joi.number(),
+                    })
+                )
+                .required(),
         })
         const { error } = cartFormat.validate(req.body)
         if (error) {

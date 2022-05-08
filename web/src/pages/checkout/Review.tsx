@@ -26,17 +26,16 @@ export default function Review({ address, payment, items, onConfirm, loading }: 
                 Order summary
             </Typography>
             <List disablePadding>
-                {items.map(({ item, amount }) => <>
-                        {
-                            [...Array(amount).keys()].map(i =>
-                                <ListItem key={item.id || 0} sx={{ py: 1, px: 0 }}>
-                                    <ListItemText primary={item.name} secondary={item.distributor?.name || ""} />
-                                    <Typography variant="body2">${item.price}</Typography>
-                                </ListItem>,
-                            )
-                        }
-                    </>,
-                )}
+                {items.map(({ item, amount }) => (
+                    <>
+                        {[...Array(amount).keys()].map((i) => (
+                            <ListItem key={item.id || 0} sx={{ py: 1, px: 0 }}>
+                                <ListItemText primary={item.name} secondary={item.distributor?.name || ""} />
+                                <Typography variant="body2">${item.price}</Typography>
+                            </ListItem>
+                        ))}
+                    </>
+                ))}
                 <ListItem sx={{ py: 1, px: 0 }}>
                     <ListItemText primary="Total" />
                     <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
@@ -49,9 +48,12 @@ export default function Review({ address, payment, items, onConfirm, loading }: 
                     <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
                         Shipping
                     </Typography>
-                    <Typography gutterBottom>{address.firstName} {address.lastName}</Typography>
-                    <Typography
-                        gutterBottom>{[address.address1, address.address2, address.zip, address.city, address.country].join(", ")}</Typography>
+                    <Typography gutterBottom>
+                        {address.firstName} {address.lastName}
+                    </Typography>
+                    <Typography gutterBottom>
+                        {[address.address1, address.address2, address.zip, address.city, address.country].join(", ")}
+                    </Typography>
                 </Grid>
                 <Grid item container direction="column" xs={12} sm={6}>
                     <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
