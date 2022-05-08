@@ -29,10 +29,11 @@ class _$OrderItemTearOff {
       required int discount,
       required int total,
       required String status,
-      required String promoCode,
+      String? promoCode,
       required String createdDate,
       required String updatedDate,
       required String addressLine1,
+      String? addressLine2,
       required String province,
       required int zipCode,
       required String country,
@@ -49,6 +50,7 @@ class _$OrderItemTearOff {
       createdDate: createdDate,
       updatedDate: updatedDate,
       addressLine1: addressLine1,
+      addressLine2: addressLine2,
       province: province,
       zipCode: zipCode,
       country: country,
@@ -73,10 +75,11 @@ mixin _$OrderItem {
   int get discount => throw _privateConstructorUsedError;
   int get total => throw _privateConstructorUsedError;
   String get status => throw _privateConstructorUsedError;
-  String get promoCode => throw _privateConstructorUsedError;
+  String? get promoCode => throw _privateConstructorUsedError;
   String get createdDate => throw _privateConstructorUsedError;
   String get updatedDate => throw _privateConstructorUsedError;
   String get addressLine1 => throw _privateConstructorUsedError;
+  String? get addressLine2 => throw _privateConstructorUsedError;
   String get province => throw _privateConstructorUsedError;
   int get zipCode => throw _privateConstructorUsedError;
   String get country => throw _privateConstructorUsedError;
@@ -100,10 +103,11 @@ abstract class $OrderItemCopyWith<$Res> {
       int discount,
       int total,
       String status,
-      String promoCode,
+      String? promoCode,
       String createdDate,
       String updatedDate,
       String addressLine1,
+      String? addressLine2,
       String province,
       int zipCode,
       String country,
@@ -131,6 +135,7 @@ class _$OrderItemCopyWithImpl<$Res> implements $OrderItemCopyWith<$Res> {
     Object? createdDate = freezed,
     Object? updatedDate = freezed,
     Object? addressLine1 = freezed,
+    Object? addressLine2 = freezed,
     Object? province = freezed,
     Object? zipCode = freezed,
     Object? country = freezed,
@@ -165,7 +170,7 @@ class _$OrderItemCopyWithImpl<$Res> implements $OrderItemCopyWith<$Res> {
       promoCode: promoCode == freezed
           ? _value.promoCode
           : promoCode // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       createdDate: createdDate == freezed
           ? _value.createdDate
           : createdDate // ignore: cast_nullable_to_non_nullable
@@ -178,6 +183,10 @@ class _$OrderItemCopyWithImpl<$Res> implements $OrderItemCopyWith<$Res> {
           ? _value.addressLine1
           : addressLine1 // ignore: cast_nullable_to_non_nullable
               as String,
+      addressLine2: addressLine2 == freezed
+          ? _value.addressLine2
+          : addressLine2 // ignore: cast_nullable_to_non_nullable
+              as String?,
       province: province == freezed
           ? _value.province
           : province // ignore: cast_nullable_to_non_nullable
@@ -215,10 +224,11 @@ abstract class _$OrderItemCopyWith<$Res> implements $OrderItemCopyWith<$Res> {
       int discount,
       int total,
       String status,
-      String promoCode,
+      String? promoCode,
       String createdDate,
       String updatedDate,
       String addressLine1,
+      String? addressLine2,
       String province,
       int zipCode,
       String country,
@@ -247,6 +257,7 @@ class __$OrderItemCopyWithImpl<$Res> extends _$OrderItemCopyWithImpl<$Res>
     Object? createdDate = freezed,
     Object? updatedDate = freezed,
     Object? addressLine1 = freezed,
+    Object? addressLine2 = freezed,
     Object? province = freezed,
     Object? zipCode = freezed,
     Object? country = freezed,
@@ -281,7 +292,7 @@ class __$OrderItemCopyWithImpl<$Res> extends _$OrderItemCopyWithImpl<$Res>
       promoCode: promoCode == freezed
           ? _value.promoCode
           : promoCode // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       createdDate: createdDate == freezed
           ? _value.createdDate
           : createdDate // ignore: cast_nullable_to_non_nullable
@@ -294,6 +305,10 @@ class __$OrderItemCopyWithImpl<$Res> extends _$OrderItemCopyWithImpl<$Res>
           ? _value.addressLine1
           : addressLine1 // ignore: cast_nullable_to_non_nullable
               as String,
+      addressLine2: addressLine2 == freezed
+          ? _value.addressLine2
+          : addressLine2 // ignore: cast_nullable_to_non_nullable
+              as String?,
       province: province == freezed
           ? _value.province
           : province // ignore: cast_nullable_to_non_nullable
@@ -328,10 +343,11 @@ class _$_OrderItem implements _OrderItem {
       required this.discount,
       required this.total,
       required this.status,
-      required this.promoCode,
+      this.promoCode,
       required this.createdDate,
       required this.updatedDate,
       required this.addressLine1,
+      this.addressLine2,
       required this.province,
       required this.zipCode,
       required this.country,
@@ -354,13 +370,15 @@ class _$_OrderItem implements _OrderItem {
   @override
   final String status;
   @override
-  final String promoCode;
+  final String? promoCode;
   @override
   final String createdDate;
   @override
   final String updatedDate;
   @override
   final String addressLine1;
+  @override
+  final String? addressLine2;
   @override
   final String province;
   @override
@@ -374,7 +392,7 @@ class _$_OrderItem implements _OrderItem {
 
   @override
   String toString() {
-    return 'OrderItem(id: $id, subTotal: $subTotal, shipping: $shipping, discount: $discount, total: $total, status: $status, promoCode: $promoCode, createdDate: $createdDate, updatedDate: $updatedDate, addressLine1: $addressLine1, province: $province, zipCode: $zipCode, country: $country, shippingOption: $shippingOption, orderItems: $orderItems)';
+    return 'OrderItem(id: $id, subTotal: $subTotal, shipping: $shipping, discount: $discount, total: $total, status: $status, promoCode: $promoCode, createdDate: $createdDate, updatedDate: $updatedDate, addressLine1: $addressLine1, addressLine2: $addressLine2, province: $province, zipCode: $zipCode, country: $country, shippingOption: $shippingOption, orderItems: $orderItems)';
   }
 
   @override
@@ -395,6 +413,8 @@ class _$_OrderItem implements _OrderItem {
                 .equals(other.updatedDate, updatedDate) &&
             const DeepCollectionEquality()
                 .equals(other.addressLine1, addressLine1) &&
+            const DeepCollectionEquality()
+                .equals(other.addressLine2, addressLine2) &&
             const DeepCollectionEquality().equals(other.province, province) &&
             const DeepCollectionEquality().equals(other.zipCode, zipCode) &&
             const DeepCollectionEquality().equals(other.country, country) &&
@@ -417,6 +437,7 @@ class _$_OrderItem implements _OrderItem {
       const DeepCollectionEquality().hash(createdDate),
       const DeepCollectionEquality().hash(updatedDate),
       const DeepCollectionEquality().hash(addressLine1),
+      const DeepCollectionEquality().hash(addressLine2),
       const DeepCollectionEquality().hash(province),
       const DeepCollectionEquality().hash(zipCode),
       const DeepCollectionEquality().hash(country),
@@ -442,10 +463,11 @@ abstract class _OrderItem implements OrderItem {
       required int discount,
       required int total,
       required String status,
-      required String promoCode,
+      String? promoCode,
       required String createdDate,
       required String updatedDate,
       required String addressLine1,
+      String? addressLine2,
       required String province,
       required int zipCode,
       required String country,
@@ -468,13 +490,15 @@ abstract class _OrderItem implements OrderItem {
   @override
   String get status;
   @override
-  String get promoCode;
+  String? get promoCode;
   @override
   String get createdDate;
   @override
   String get updatedDate;
   @override
   String get addressLine1;
+  @override
+  String? get addressLine2;
   @override
   String get province;
   @override

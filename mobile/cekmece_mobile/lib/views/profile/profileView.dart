@@ -5,12 +5,14 @@ import 'package:cekmece_mobile/models/user/UserClass.dart';
 import 'package:cekmece_mobile/util/network/networkProvider.dart';
 import 'package:cekmece_mobile/views/order/views/addressPick.dart';
 import 'package:cekmece_mobile/views/productView/components/size.dart';
+import 'package:cekmece_mobile/views/profile/myOrders.dart';
 import 'package:cekmece_mobile/views/profile/viewComponents/anonymousProfileView.dart';
 import 'package:cekmece_mobile/views/profile/viewComponents/userInfo.dart';
 import 'package:cekmece_mobile/widgets/showSnackBar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 import 'package:skeleton_loader/skeleton_loader.dart';
 import 'package:intl/intl.dart' show NumberFormat, toBeginningOfSentenceCase;
@@ -61,7 +63,6 @@ class _ProfileViewState extends State<ProfileView> {
 
   @override
   void initState() {
-    print(orders);
     // TODO: implement initState
     super.initState();
     getOrders();
@@ -92,7 +93,19 @@ class _ProfileViewState extends State<ProfileView> {
                           ProfileButton(
                             text: "My Orders",
                             icon: Icons.inventory_outlined,
-                            onPressed: () {},
+                            onPressed: () async {
+                              print("hello");
+                              var res = await pushNewScreen(
+                                context,
+                                screen: MyOrders(
+                                  orders: orders,
+                                ),
+                                withNavBar:
+                                    true, // OPTIONAL VALUE. True by default.
+                                pageTransitionAnimation:
+                                    PageTransitionAnimation.cupertino,
+                              );
+                            },
                           ),
                           ProfileButton(
                             text: "My Addresses",
@@ -256,58 +269,17 @@ class OrderStatus extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text("Order placed on:",
-                  style: GoogleFonts.raleway(
-                      fontSize: getProportionateScreenHeight(16),
-                      fontWeight: FontWeight.w500)),
-              Text(
-                  toBeginningOfSentenceCase(
-                      order.createdDate.substring(0, 10))!,
-                  style: GoogleFonts.raleway(
-                      fontSize: getProportionateScreenHeight(16),
-                      fontWeight: FontWeight.w700))
-            ],
-          ),
-          SizedBox(
-            height: 14,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text("Order Status:",
-                  style: GoogleFonts.raleway(
-                      fontSize: getProportionateScreenHeight(16),
-                      fontWeight: FontWeight.w500)),
-              Text(toBeginningOfSentenceCase(order.status)!,
-                  style: GoogleFonts.raleway(
-                      fontSize: getProportionateScreenHeight(16),
-                      fontWeight: FontWeight.w700))
-            ],
-          ),
-          SizedBox(
-            height: 14,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text("Delivery Address:",
-                  style: GoogleFonts.raleway(
-                      fontSize: getProportionateScreenHeight(16),
-                      fontWeight: FontWeight.w500)),
-              Text(
-                  toBeginningOfSentenceCase(
-                      "${order.province}, ${order.country}")!,
-                  style: GoogleFonts.raleway(
-                      fontSize: getProportionateScreenHeight(16),
-                      fontWeight: FontWeight.w700))
-            ],
-          ),
-          SizedBox(
-            height: 14,
-          ),
+          OrderDetailRow(
+              left: "Order placed on:",
+              right: toBeginningOfSentenceCase(
+                  order.createdDate.substring(0, 10))!),
+          OrderDetailRow(
+              left: "Order Status:",
+              right: toBeginningOfSentenceCase(order.status)!),
+          OrderDetailRow(
+              left: "Delivery Address:",
+              right: toBeginningOfSentenceCase(
+                  "${order.province}, ${order.country}")!),
           Text(
             "Ordered Items:",
             style: GoogleFonts.raleway(
@@ -355,7 +327,7 @@ class OrderStatus extends StatelessWidget {
 class ProfileButton extends StatelessWidget {
   String text;
   IconData icon;
-  Function onPressed;
+  VoidCallback onPressed;
 
   ProfileButton(
       {Key? key,
@@ -368,7 +340,7 @@ class ProfileButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
         child: GestureDetector(
-      onTap: onPressed(),
+      onTap: onPressed,
       child: SizedBox(
         height: getProportionateScreenHeight(105),
         child: Card(
