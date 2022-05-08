@@ -10,6 +10,7 @@ interface IUseCart {
     remove: (id: number) => void
     cart: ILocalCart
     pushCart: () => void
+    reset: CallableFunction
 }
 
 const context = createContext<IUseCart>({
@@ -17,7 +18,8 @@ const context = createContext<IUseCart>({
     cart: {},
     remove: () => null,
     decrease: () => null,
-    pushCart: () => null
+    pushCart: () => null,
+    reset: () => null,
 })
 
 interface ILocalCart {
@@ -186,7 +188,7 @@ function CartProvider({ children }: { children: any }) {
         localStorage.setItem("cart", JSON.stringify(Object.keys(cart).map(id => ({ id, amount: cart[id].amount }))))
     }, [cart])
 
-    return <context.Provider value={{ add, cart, remove, decrease, pushCart: () => replaceCart(cart) }}>
+    return <context.Provider value={{ add, cart, remove, decrease, pushCart: () => replaceCart(cart), reset: () => setCart({}) }}>
         {children}
     </context.Provider>
 }

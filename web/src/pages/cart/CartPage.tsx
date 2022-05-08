@@ -68,15 +68,15 @@ export default function CartPage() {
 
                                 <Box className="w-[100%] mt-20">
                                     {user && <Button variant="contained" fullWidth={true} sx={{ borderRadius: 0 }}
-                                                     onClick={() => history.push("/checkout")}>
+                                                     onClick={() => history.push("/checkout")} disabled={!Object.keys(cart).length}>
                                         Checkout
                                     </Button>
                                     }
                                     {
                                         user === null &&
                                         <Button variant="contained" fullWidth={true} sx={{ borderRadius: 0 }}
-                                                onClick={() => history.push("/register")}>
-                                            Register to purchase
+                                                onClick={() => history.push("/login")}>
+                                            Login to purchase
                                         </Button>
                                     }
                                 </Box>

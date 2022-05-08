@@ -47,7 +47,7 @@ export default function Checkout() {
 
     const location = useLocation()
     const history = useHistory()
-    const { cart, pushCart } = useCart()
+    const { cart, pushCart, reset: resetCart } = useCart()
 
     useEffect(() => {
         if (location.pathname.includes("address")) setActiveStep(1)
@@ -77,6 +77,7 @@ export default function Checkout() {
             })
             if (response.status !== 200) throw `Response status is ${response.status}`
 
+            resetCart()
             history.push("/checkout/completed")
         } catch (e) {
             notification(NOTIFICATON_TYPES.ERROR, "Something happened")

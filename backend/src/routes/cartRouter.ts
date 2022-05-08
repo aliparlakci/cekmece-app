@@ -142,7 +142,7 @@ function replaceCart(cartService: CartService): RequestHandler {
         }
 
         try {
-            await cartService.replaceCart(req.body.ids, user)
+            await cartService.replaceCart(req.body.items, user)
         } catch (e) {
             return next(createError(400, e))
         }
