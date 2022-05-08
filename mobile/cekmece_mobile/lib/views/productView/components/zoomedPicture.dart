@@ -10,7 +10,7 @@ class ZoomedPicture extends StatelessWidget {
         child: PhotoView(
       maxScale: 2.0,
       minScale: 0.1,
-      imageProvider: AssetImage(url),
+      imageProvider: NetworkImage(url),
     ));
   }
 }

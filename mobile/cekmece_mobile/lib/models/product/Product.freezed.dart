@@ -25,6 +25,8 @@ class _$ProductTearOff {
   _Product call(
       {required int id,
       required String name,
+      required String photoUrl,
+      required String description,
       required int price,
       required int number,
       required int model,
@@ -38,6 +40,8 @@ class _$ProductTearOff {
     return _Product(
       id: id,
       name: name,
+      photoUrl: photoUrl,
+      description: description,
       price: price,
       number: number,
       model: model,
@@ -63,6 +67,8 @@ const $Product = _$ProductTearOff();
 mixin _$Product {
   int get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
+  String get photoUrl => throw _privateConstructorUsedError;
+  String get description => throw _privateConstructorUsedError;
   int get price => throw _privateConstructorUsedError;
   int get number => throw _privateConstructorUsedError;
   int get model => throw _privateConstructorUsedError;
@@ -86,6 +92,8 @@ abstract class $ProductCopyWith<$Res> {
   $Res call(
       {int id,
       String name,
+      String photoUrl,
+      String description,
       int price,
       int number,
       int model,
@@ -110,6 +118,8 @@ class _$ProductCopyWithImpl<$Res> implements $ProductCopyWith<$Res> {
   $Res call({
     Object? id = freezed,
     Object? name = freezed,
+    Object? photoUrl = freezed,
+    Object? description = freezed,
     Object? price = freezed,
     Object? number = freezed,
     Object? model = freezed,
@@ -129,6 +139,14 @@ class _$ProductCopyWithImpl<$Res> implements $ProductCopyWith<$Res> {
       name: name == freezed
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      photoUrl: photoUrl == freezed
+          ? _value.photoUrl
+          : photoUrl // ignore: cast_nullable_to_non_nullable
+              as String,
+      description: description == freezed
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
               as String,
       price: price == freezed
           ? _value.price
@@ -182,6 +200,8 @@ abstract class _$ProductCopyWith<$Res> implements $ProductCopyWith<$Res> {
   $Res call(
       {int id,
       String name,
+      String photoUrl,
+      String description,
       int price,
       int number,
       int model,
@@ -207,6 +227,8 @@ class __$ProductCopyWithImpl<$Res> extends _$ProductCopyWithImpl<$Res>
   $Res call({
     Object? id = freezed,
     Object? name = freezed,
+    Object? photoUrl = freezed,
+    Object? description = freezed,
     Object? price = freezed,
     Object? number = freezed,
     Object? model = freezed,
@@ -226,6 +248,14 @@ class __$ProductCopyWithImpl<$Res> extends _$ProductCopyWithImpl<$Res>
       name: name == freezed
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      photoUrl: photoUrl == freezed
+          ? _value.photoUrl
+          : photoUrl // ignore: cast_nullable_to_non_nullable
+              as String,
+      description: description == freezed
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
               as String,
       price: price == freezed
           ? _value.price
@@ -277,6 +307,8 @@ class _$_Product implements _Product {
   const _$_Product(
       {required this.id,
       required this.name,
+      required this.photoUrl,
+      required this.description,
       required this.price,
       required this.number,
       required this.model,
@@ -295,6 +327,10 @@ class _$_Product implements _Product {
   final int id;
   @override
   final String name;
+  @override
+  final String photoUrl;
+  @override
+  final String description;
   @override
   final int price;
   @override
@@ -318,7 +354,7 @@ class _$_Product implements _Product {
 
   @override
   String toString() {
-    return 'Product(id: $id, name: $name, price: $price, number: $number, model: $model, quantity: $quantity, warranty: $warranty, reviewCount: $reviewCount, averageRating: $averageRating, userCanReviewCar: $userCanReviewCar, distributor: $distributor, category: $category)';
+    return 'Product(id: $id, name: $name, photoUrl: $photoUrl, description: $description, price: $price, number: $number, model: $model, quantity: $quantity, warranty: $warranty, reviewCount: $reviewCount, averageRating: $averageRating, userCanReviewCar: $userCanReviewCar, distributor: $distributor, category: $category)';
   }
 
   @override
@@ -328,6 +364,9 @@ class _$_Product implements _Product {
             other is _Product &&
             const DeepCollectionEquality().equals(other.id, id) &&
             const DeepCollectionEquality().equals(other.name, name) &&
+            const DeepCollectionEquality().equals(other.photoUrl, photoUrl) &&
+            const DeepCollectionEquality()
+                .equals(other.description, description) &&
             const DeepCollectionEquality().equals(other.price, price) &&
             const DeepCollectionEquality().equals(other.number, number) &&
             const DeepCollectionEquality().equals(other.model, model) &&
@@ -349,6 +388,8 @@ class _$_Product implements _Product {
       runtimeType,
       const DeepCollectionEquality().hash(id),
       const DeepCollectionEquality().hash(name),
+      const DeepCollectionEquality().hash(photoUrl),
+      const DeepCollectionEquality().hash(description),
       const DeepCollectionEquality().hash(price),
       const DeepCollectionEquality().hash(number),
       const DeepCollectionEquality().hash(model),
@@ -375,6 +416,8 @@ abstract class _Product implements Product {
   const factory _Product(
       {required int id,
       required String name,
+      required String photoUrl,
+      required String description,
       required int price,
       required int number,
       required int model,
@@ -392,6 +435,10 @@ abstract class _Product implements Product {
   int get id;
   @override
   String get name;
+  @override
+  String get photoUrl;
+  @override
+  String get description;
   @override
   int get price;
   @override
