@@ -34,7 +34,7 @@ class _$OrderItemTearOff {
       required String updatedDate,
       required String addressLine1,
       String? addressLine2,
-      required String province,
+      String? province,
       required int zipCode,
       required String country,
       required String shippingOption,
@@ -80,7 +80,7 @@ mixin _$OrderItem {
   String get updatedDate => throw _privateConstructorUsedError;
   String get addressLine1 => throw _privateConstructorUsedError;
   String? get addressLine2 => throw _privateConstructorUsedError;
-  String get province => throw _privateConstructorUsedError;
+  String? get province => throw _privateConstructorUsedError;
   int get zipCode => throw _privateConstructorUsedError;
   String get country => throw _privateConstructorUsedError;
   String get shippingOption => throw _privateConstructorUsedError;
@@ -108,7 +108,7 @@ abstract class $OrderItemCopyWith<$Res> {
       String updatedDate,
       String addressLine1,
       String? addressLine2,
-      String province,
+      String? province,
       int zipCode,
       String country,
       String shippingOption,
@@ -190,7 +190,7 @@ class _$OrderItemCopyWithImpl<$Res> implements $OrderItemCopyWith<$Res> {
       province: province == freezed
           ? _value.province
           : province // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       zipCode: zipCode == freezed
           ? _value.zipCode
           : zipCode // ignore: cast_nullable_to_non_nullable
@@ -229,7 +229,7 @@ abstract class _$OrderItemCopyWith<$Res> implements $OrderItemCopyWith<$Res> {
       String updatedDate,
       String addressLine1,
       String? addressLine2,
-      String province,
+      String? province,
       int zipCode,
       String country,
       String shippingOption,
@@ -312,7 +312,7 @@ class __$OrderItemCopyWithImpl<$Res> extends _$OrderItemCopyWithImpl<$Res>
       province: province == freezed
           ? _value.province
           : province // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       zipCode: zipCode == freezed
           ? _value.zipCode
           : zipCode // ignore: cast_nullable_to_non_nullable
@@ -348,7 +348,7 @@ class _$_OrderItem implements _OrderItem {
       required this.updatedDate,
       required this.addressLine1,
       this.addressLine2,
-      required this.province,
+      this.province,
       required this.zipCode,
       required this.country,
       required this.shippingOption,
@@ -380,7 +380,7 @@ class _$_OrderItem implements _OrderItem {
   @override
   final String? addressLine2;
   @override
-  final String province;
+  final String? province;
   @override
   final int zipCode;
   @override
@@ -468,7 +468,7 @@ abstract class _OrderItem implements OrderItem {
       required String updatedDate,
       required String addressLine1,
       String? addressLine2,
-      required String province,
+      String? province,
       required int zipCode,
       required String country,
       required String shippingOption,
@@ -500,7 +500,7 @@ abstract class _OrderItem implements OrderItem {
   @override
   String? get addressLine2;
   @override
-  String get province;
+  String? get province;
   @override
   int get zipCode;
   @override

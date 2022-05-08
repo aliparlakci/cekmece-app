@@ -19,7 +19,7 @@ class OrderItem with _$OrderItem {
     required String updatedDate,
     required String addressLine1,
     String? addressLine2,
-    required String province,
+    String? province,
     required int zipCode,
     required String country,
     required String shippingOption,

@@ -44,11 +44,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
     final networkService = Provider.of<NetworkService>(context, listen: false);
 
     try {
-      var response = await networkService.get(
-          "${dotenv.env['CLIENT_URL']}/api/cars/${widget.carId}");
+      var response = await networkService
+          .get("${dotenv.env['CLIENT_URL']}/api/cars/${widget.carId}");
       product = Product.fromJson(response);
-    }
-    catch(e) {
+    } catch (e) {
       print(e);
       return Future.error(e.toString());
     }
@@ -153,18 +152,10 @@ class _ProductBottomBarState extends State<ProductBottomBar> {
     }
     try {
       if (widget.userBloc.user.isAnonymous == false) {
-        final response = await http.post(Uri.parse(
-            '$clientURL/api/cart/${widget.userBloc.user.uid}/add/${widget.product.id}'));
-
-        if (response.statusCode == 200) {
-        } else {
-          showSnackBar(
-            context: context,
-            error: true,
-            message: "Could not add item to the cart!",
-          );
-          throw Exception('Failed to add to cart');
-        }
+        final networkService =
+            Provider.of<NetworkService>(context, listen: false);
+        final response = await networkService.post(
+            '$clientURL/api/cart/${widget.userBloc.user.uid}/add/${widget.product.id}');
 
         user = await widget.userBloc
             .updateUser({"id": "${widget.userBloc.user.uid}"});
@@ -183,6 +174,11 @@ class _ProductBottomBarState extends State<ProductBottomBar> {
         user = await widget.userBloc.updateLocalUser();
       }
     } catch (err) {
+      showSnackBar(
+        context: context,
+        error: true,
+        message: "Could not add item to the cart!",
+      );
       print(err);
     }
 

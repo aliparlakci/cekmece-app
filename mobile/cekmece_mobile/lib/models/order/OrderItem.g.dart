@@ -18,7 +18,7 @@ _$_OrderItem _$$_OrderItemFromJson(Map<String, dynamic> json) => _$_OrderItem(
       updatedDate: json['updatedDate'] as String,
       addressLine1: json['addressLine1'] as String,
       addressLine2: json['addressLine2'] as String?,
-      province: json['province'] as String,
+      province: json['province'] as String?,
       zipCode: json['zipCode'] as int,
       country: json['country'] as String,
       shippingOption: json['shippingOption'] as String,
