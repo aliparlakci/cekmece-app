@@ -1,4 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react"
+import _ from "lodash"
+
 import ICar from "../models/car"
 import useNotification, { NOTIFICATON_TYPES } from "./useNotification"
 import useAuth from "./useAuth"
@@ -158,13 +160,10 @@ function CartProvider({ children }: { children: any }) {
         }))
     }
 
-    const decrease = async (id) => {
+    const decrease = (id) => {
         if (Object.hasOwn(cart, id)) {
             if (cart[id].amount <= 1) {
-                setCart(old => ({
-                    ...old,
-                    [id]: undefined,
-                }))
+                setCart(old => _.omit(old, id))
             } else {
                 setCart(old => ({
                     ...old,

@@ -16,6 +16,8 @@ const PriceQuantityStyle = "flex-auto flex flex-col justify-center items-center 
 export default function ProductSection({ item }: IProductSelectionProps) {
     const { add, decrease, remove } = useCart()
 
+    if (!item) return <></>
+
     return (
         <>
             <div className={ProductDivStyle}>
