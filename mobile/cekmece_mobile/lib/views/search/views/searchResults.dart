@@ -205,8 +205,7 @@ class _SearchResultsState extends State<SearchResults> {
                               children: [
                                 Expanded(
                                   flex: 2,
-                                  child: Image.network(
-                                      "https://cdn.motor1.com/images/mgl/g1gW9/s1/nuova-bmw-z4.webp"),
+                                  child: Image.network(car.photoUrl),
                                 ),
                                 Expanded(
                                     flex: 5,
