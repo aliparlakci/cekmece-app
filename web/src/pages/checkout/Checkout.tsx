@@ -10,7 +10,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles"
 import AddressForm, { IAddressData } from "./AddressForm"
 import PaymentForm, { IPaymentData } from "./PaymentForm"
 import Review from "./Review"
-import { Redirect, Route, useHistory, useLocation } from "react-router-dom"
+import { Link, Redirect, Route, useHistory, useLocation } from "react-router-dom"
 import useCart from "../../hooks/useCart"
 import Button from "@mui/material/Button"
 import useNotification, { NOTIFICATON_TYPES } from "../../hooks/useNotification"
@@ -40,6 +40,7 @@ export default function Checkout() {
     const [activeStep, setActiveStep] = useState(1)
     const [addressData, setAddressData] = useState<IAddressData>(defaultAddress)
     const [paymentData, setPaymentData] = useState<IPaymentData>(defaultPayment)
+    const [pdfLocation, setPdfLocation] = useState("")
 
     const [loading, setLoading] = useState(false)
 
@@ -71,11 +72,13 @@ export default function Checkout() {
                         "addressLine2": addressData.address2,
                         "city": addressData.city,
                         "zipCode": addressData.zip,
-                        "country": addressData.country
+                        "country": addressData.country,
                     },
                 ),
             })
             if (response.status !== 200) throw `Response status is ${response.status}`
+            const data = await response.json()
+            setPdfLocation(data.pdf)
 
             resetCart()
             history.push("/checkout/completed")
@@ -129,7 +132,10 @@ export default function Checkout() {
                             Your order is received. We have emailed your receipt, and will
                             send you an update when your order has shipped.
                         </Typography>
-                        <Button variant="contained" sx={{ mt: 3, ml: 1 }} onClick={() => history.push("/")}>
+                        <Button variant="contained" sx={{ mt: 3, ml: 1 }} onClick={() => window.location.href = `http://localhost:5001/api/orders/invoice/${pdfLocation}`}>
+                            View invoice
+                        </Button>
+                        <Button variant="outlined" sx={{ mt: 3, ml: 1 }} onClick={() => history.push("/")}>
                             Return to home page
                         </Button>
                     </Route>

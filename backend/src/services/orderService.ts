@@ -176,13 +176,11 @@ export default class OrderService {
             candidate.total = candidate.subTotal + candidate.shipping - candidate.discount
             const result: Order = await this.repository().save(candidate)
           
-//////////////////
-            this.invoiceService.sendInvoice(result, result.user)
-
-
+            await this.invoiceService.sendInvoice(result, result.user)
+            const pdfLocation = `${result.id}_${candidate.user.id}.pdf`
 
             await this.cartService.deleteUserCart(candidate.user.id)
-            return result
+            return [result, pdfLocation]
         } catch (err) {
             for (let j = i - 1; j >= 0; j--) {
                 await this.carService.increaseStock(cartItems[j].item.id, cartItems[j].quantity)

@@ -11,6 +11,8 @@ import OrderService from "../services/orderService"
 import { Order, OrderStatus, ShippingOption } from "../models/order"
 import Context from "../utils/context"
 import InvoiceService from "../services/invoiceService"
+import path from "path";
+import * as fs from "fs";
 
 function getOrders(orderService: OrderService) {
     return async function (req, res, next) {
@@ -72,9 +74,8 @@ function addNewOrder(orderService: OrderService): RequestHandler {
             return next(createError(400, error))
         }
 
-        let order
         try {
-            order = await orderService.newOrder({
+            const [_, pdf] = await orderService.newOrder({
                 shippingOption,
                 promoCode,
                 addressLine1,
@@ -85,6 +86,11 @@ function addNewOrder(orderService: OrderService): RequestHandler {
                 country,
                 user,
             } as Order)
+
+            res.status(200).json({
+                message: "success",
+                pdf
+            })
         } catch (err) {
             if (err instanceof Error) {
                 if (err.name === "CartError") {
@@ -96,12 +102,8 @@ function addNewOrder(orderService: OrderService): RequestHandler {
                 }
             }
 
-            return next(createError(404, err))
+            next(createError(404, err))
         }
-
-        res.status(200).json({
-            message: "success",
-        })
     }
 }
 
@@ -160,6 +162,14 @@ function getUnreviewedOrderItems(orderService: OrderService) {
     }
 }
 
+function getInvoice(): RequestHandler {
+    return function (req, res, next) {
+        const filename = req.params.file
+        const file = fs.readFileSync(path.join(__dirname, "..", "invoices", filename))
+        res.contentType("application/pdf").send(file)
+    }
+}
+
 function orderRouter() {
     const router = Router()
     const userService = new UserService()
@@ -173,6 +183,7 @@ function orderRouter() {
     router.post("/new", addNewOrder(orderService))
     router.patch("/:orderId", updateOrderStatus(orderService))
     router.get("/unreviewed/:carId", getUnreviewedOrderItems(orderService))
+    router.get("/invoice/:file", getInvoice())
 
     return router
 }

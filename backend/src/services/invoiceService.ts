@@ -69,7 +69,7 @@ async function generatePdf(order: Order, user: User) {
     //var date = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate()
     const html = fs.readFileSync(path.join(__dirname, "../invoiceHtml.html"), "utf-8")
     invoiceNum = invoiceNum + 1
-    const filename = invoiceNum + user.id + "_invoice" + ".pdf"
+    const filename = `${order.id}_${user.id}.pdf`
 
 
     const data: IInvoiceData[] = []
@@ -77,7 +77,7 @@ async function generatePdf(order: Order, user: User) {
     for (; i < order.orderItems.length; i++) {
         data.push({
             item: order.orderItems[i].car.name,
-            description: order.orderItems[i].car.description,
+            description: order.orderItems[i].car.name,
             unitCost: order.orderItems[i].car.price,
             quantity: order.orderItems[i].quantity
         })
@@ -112,8 +112,6 @@ async function generatePdf(order: Order, user: User) {
         .catch((error) => {
             console.log(error)
         })
-    
-    
 }
 
 
@@ -154,7 +152,7 @@ export default class InvoiceService {
                     {
                         filename: invoiceNum + user.id + "_invoice" + ".pdf" ,
                         contentType: "application/pdf",
-                        path: path.join(__dirname, "../invoices/"+ invoiceNum + user.id + "_invoice" + ".pdf"),
+                        path: path.join(__dirname, "..", "invoices", `${order.id}_${user.id}.pdf`),
                     },
                 ],
             }
@@ -167,8 +165,4 @@ export default class InvoiceService {
             return error
         }
     }
-
-    
-
-
 }
