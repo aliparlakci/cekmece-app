@@ -63,4 +63,15 @@ export class Car {
 
     @Column("decimal", { precision: 3, scale: 2, default: 0.0 })
     averageRating: number
+
+    @Column({
+        length: 1000,
+        default: "Temporary description.",
+    })
+    description: string
+
+    @Column({
+        default: "https://i.imgur.com/awxaf0x.png",
+    })
+    photoUrl: string
 }
