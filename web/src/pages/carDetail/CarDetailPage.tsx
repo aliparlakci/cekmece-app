@@ -42,7 +42,8 @@ function CarDetailPage() {
                                 <u> Items in stock:</u> <b> {car?.quantity} </b>
                             </h6>
                         </div>
-                        <div className="flex-[1.3] flex flex-col items-start w-32 justify-items-center mt-10 mobile:items-center">
+                        <div
+                            className="flex-[1.3] flex flex-col items-start w-32 justify-items-center mt-10 mobile:items-center">
                             <h1 className="title text-[40px] mobile:text-[30px]">
                                 {car.distributor ? car.distributor.name : "Porsche"}
                             </h1>
@@ -141,7 +142,7 @@ function CarDetailPage() {
                             >
                                 <ReviewsButton
                                     carId={carId}
-                                    averageRating={car.averageRating}
+                                    averageRating={parseFloat(car.averageRating)}
                                     reviewCount={car.reviewCount}
                                 />
                                 {car.userCanReviewCar && <LeaveAReviewButton carId={carId} />}

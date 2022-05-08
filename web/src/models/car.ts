@@ -14,7 +14,7 @@ interface ICar {
     category?: ICategory
     reviews?: IReview[]
     reviewCount: number
-    averageRating: number
+    averageRating: string
     userCanReviewCar: boolean
 }
 

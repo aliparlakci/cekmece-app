@@ -100,7 +100,7 @@ export default function ProductCard({ car }: IProductCardProps) {
                                     <Rating
                                         name="size-small"
                                         size="small"
-                                        defaultValue={car.averageRating}
+                                        defaultValue={parseFloat(car.averageRating)}
                                         precision={0.25}
                                         readOnly
                                     />
