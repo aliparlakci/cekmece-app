@@ -131,6 +131,7 @@ class NetworkService extends ChangeNotifier {
   Future<dynamic> get(String url) {
     return http
         .get(Uri.parse(url), headers: headers)
+        .timeout(const Duration(seconds: 10))
         .then((http.Response response) {
       final String res = response.body;
       final int statusCode = response.statusCode;
