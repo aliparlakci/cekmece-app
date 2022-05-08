@@ -19,7 +19,8 @@
         "linebreak-style": "off",
         "quotes": "off",
         "semi": "off",
-        "no-empty-function": "off"
+        "no-empty-function": "off",
+        "@typescript-eslint/no-explicit-any": "off"
     },
     "globals": {
         "require": "readonly",

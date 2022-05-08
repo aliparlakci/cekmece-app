@@ -6,12 +6,14 @@ import UserService from "./userService"
 import CartService from "./cartService"
 import { OrderItem } from "../models/orderItem"
 import { isNull } from "util"
+import InvoiceService from "./invoiceService"
 
 export default class OrderService {
     private repository: () => Repository<Order>
     private orderItemRepository: () => Repository<OrderItem>
 
-    constructor(private carService: CarService, private cartService: CartService) {
+
+    constructor(private carService: CarService, private cartService: CartService, private invoiceService: InvoiceService) {
         this.repository = () => db.getRepository(Order)
         this.orderItemRepository = () => db.getRepository(OrderItem)
     }
@@ -173,6 +175,12 @@ export default class OrderService {
 
             candidate.total = candidate.subTotal + candidate.shipping - candidate.discount
             const result: Order = await this.repository().save(candidate)
+          
+//////////////////
+            this.invoiceService.sendInvoice(result, result.user)
+
+
+
             await this.cartService.deleteUserCart(candidate.user.id)
             return result
         } catch (err) {

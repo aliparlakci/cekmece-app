@@ -11,6 +11,7 @@ import Context from "../utils/context"
 import CartService from "../services/cartService"
 import OrderService from "../services/orderService"
 import reviewRouter from "./reviewRouter"
+import InvoiceService from "../services/invoiceService"
 
 function getAllCars(carService: CarService): RequestHandler {
     return async function (req, res, next) {
@@ -186,7 +187,8 @@ function carRouter() {
     const userService = new UserService()
     const carService = new CarService(categoryService)
     const cartService = new CartService(userService, carService)
-    const orderService = new OrderService(carService, cartService)
+    const invoiceService = new InvoiceService(userService)
+    const orderService = new OrderService(carService, cartService, invoiceService)
 
     router.get("/", getAllCars(carService))
     router.get("/search", searchCar(carService))

@@ -53,6 +53,7 @@ async function createServer(){
     v1.use("/auth", authRouter())
     v1.use("/orders", orderRouter())
 
+
     // catch 404 and forward to error handler
     app.use(function (req, res, next) {
         next(createError(404))
