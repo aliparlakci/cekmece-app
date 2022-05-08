@@ -68,7 +68,12 @@ export default function ProductCard({ car }: IProductCardProps) {
                                         src={car.photoUrl}
                                         className="product_img"
                                         alt="product_image"
-                                        style={{ aspectRatio: "9/5", objectFit: "fill", width: "100%", minWidth: "12rem" }}
+                                        style={{
+                                            aspectRatio: "9/5",
+                                            objectFit: "cover",
+                                            width: "100%",
+                                            minWidth: "12rem",
+                                        }}
                                     />
                                 </Link>
                             </Box>
@@ -133,7 +138,9 @@ export default function ProductCard({ car }: IProductCardProps) {
                                             sx={{ borderRadius: 0 }}
                                             fullWidth={true}
                                             onClick={handleAddToCart}
-                                            disabled={car.quantity <= (cart[car.id] ? cart[car.id].amount : 0) || loading}
+                                            disabled={
+                                                car.quantity <= (cart[car.id] ? cart[car.id].amount : 0) || loading
+                                            }
                                         >
                                             Add to Cart
                                         </Button>
