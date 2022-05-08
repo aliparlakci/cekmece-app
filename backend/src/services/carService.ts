@@ -73,6 +73,14 @@ export default class CarService {
                 query = query.orderBy({
                     price: "DESC",
                 })
+            } else if (options.sort === "mostPopular") {
+                query = query.orderBy({
+                    unitsSold: "DESC"
+                })
+            } else if (options.sort === "leastPopular") {
+                query = query.orderBy({
+                    unitsSold: "ASC"
+                })
             }
         }
 

@@ -77,7 +77,7 @@ function CarDetailPage() {
                                         focused
                                         value={amount}
                                         onChange={(event) =>
-                                            setAmount(Math.max(Math.min(parseInt(event.target.value), car.quantity + (car.id ? (cart[car.id] ? cart[car.id].amount : 0) : 0)), 1))
+                                            setAmount(Math.max(Math.min(parseInt(event.target.value), car.quantity - (car.id ? (cart[car.id] ? cart[car.id].amount : 0) : 0)), 1))
                                         }
                                         label="Quantity"
                                         type="number"

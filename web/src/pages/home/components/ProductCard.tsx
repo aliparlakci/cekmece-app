@@ -68,7 +68,7 @@ export default function ProductCard({ car }: IProductCardProps) {
                                         src={car.photoUrl}
                                         className="product_img"
                                         alt="product_image"
-                                        style={{ aspectRatio: "9/5", objectFit: "cover", width: "100%" }}
+                                        style={{ aspectRatio: "9/5", objectFit: "fill", width: "100%", minWidth: "12rem" }}
                                     />
                                 </Link>
                             </Box>
@@ -105,7 +105,7 @@ export default function ProductCard({ car }: IProductCardProps) {
                                     <Rating
                                         name="size-small"
                                         size="small"
-                                        defaultValue={parseFloat(car.averageRating)}
+                                        value={parseFloat(car.averageRating)}
                                         precision={0.25}
                                         readOnly
                                     />
