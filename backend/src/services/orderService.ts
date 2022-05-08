@@ -22,7 +22,13 @@ export default class OrderService {
 
     async getOrdersByUser(userId: string) {
         return await this.repository().find({
-            relations: ["user", "orderItems", "orderItems.car","orderItems.car.category","orderItems.car.distributor"],
+            relations: [
+                "user",
+                "orderItems",
+                "orderItems.car",
+                "orderItems.car.category",
+                "orderItems.car.distributor",
+            ],
             select: {
                 user: {
                     id: true,
@@ -162,7 +168,9 @@ export default class OrderService {
             }
 
             candidate.total = candidate.subTotal + candidate.shipping - candidate.discount
-            return this.repository().save(candidate)
+            const result: Order = await this.repository().save(candidate)
+            await this.cartService.deleteUserCart(candidate.user.id)
+            return result
         } catch (err) {
             for (let j = i - 1; j >= 0; j--) {
                 await this.carService.increaseStock(cartItems[j].item.id, cartItems[j].quantity)
