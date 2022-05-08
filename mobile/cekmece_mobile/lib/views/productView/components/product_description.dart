@@ -50,8 +50,7 @@ class ProductDescription extends StatelessWidget {
               pushNewScreen(
                 context,
                 screen: DescriptionDetail(
-                  description:
-                      "${product.model} Model ${product.name}, ${product.warranty} years of warranty. Sold by ${product.distributor["name"]}",
+                  description: product.description,
                 ),
                 withNavBar: false, // OPTIONAL VALUE. True by default.
                 pageTransitionAnimation: PageTransitionAnimation.cupertino,
