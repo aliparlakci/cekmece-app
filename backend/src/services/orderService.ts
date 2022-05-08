@@ -159,10 +159,10 @@ export default class OrderService {
             candidate.subTotal = subTotal
             candidate.orderItems = orderItems
 
-            if (candidate.shippingOption === "free" || candidate.shippingOption === null) {
-                candidate.shipping = 0
-            } else {
+            if (candidate.shippingOption === ShippingOption.ONEDAY) {
                 candidate.shipping = 15
+            } else {
+                candidate.shipping = 0
             }
 
             if (candidate.promoCode === "ADMIN") {
