@@ -3,7 +3,7 @@ import ICategory from "./category"
 import IReview from "./review"
 
 interface ICar {
-    id?: number
+    id: number
     name: string
     model: number
     number: number
@@ -14,7 +14,7 @@ interface ICar {
     category?: ICategory
     reviews?: IReview[]
     reviewCount: number
-    averageRating: number
+    averageRating: string
     userCanReviewCar: boolean
 }
 

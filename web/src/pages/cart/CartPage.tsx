@@ -1,9 +1,11 @@
 import React from "react"
+import { useHistory } from "react-router-dom"
 import NavBar from "../../components/NavBar"
 import Counter from "./components/Counter"
 import { Box, Button, createTheme, ThemeProvider, Typography } from "@mui/material"
 import ProductSection from "./components/ProductSection"
 import useCart from "../../hooks/useCart"
+import useAuth from "../../hooks/useAuth"
 
 const theme = createTheme({
     palette: {
@@ -19,6 +21,8 @@ const PriceQuantityStyle = "flex-auto flex flex-col justify-center items-center 
 
 export default function CartPage() {
     const { cart } = useCart()
+    const { user } = useAuth()
+    const history = useHistory()
 
     return (
         <>
@@ -42,7 +46,8 @@ export default function CartPage() {
                                 {/* Product Sections Below */}
                                 {Object.keys(cart).map((id, i) => <ProductSection key={i} item={cart[id]} />)}
                             </div>
-                            <div className="Summary flex-[0.4] flex flex-col items-center w-auto h-auto border-2 border-[#000] ml-6 mr-6 p-5 shadow-lg text-lg mobile:mb-6">
+                            <div
+                                className="Summary flex-[0.4] flex flex-col items-center w-auto h-auto border-2 border-[#000] ml-6 mr-6 p-5 shadow-lg text-lg mobile:mb-6">
                                 <h1 className="text-[2rem]">SUMMARY</h1>
                                 {/*<div className={SummaryItemStyle}>*/}
                                 {/*    <p>SubTotal:</p>*/}
@@ -62,9 +67,18 @@ export default function CartPage() {
                                 </div>
 
                                 <Box className="w-[100%] mt-20">
-                                    <Button variant="contained" fullWidth={true} sx={{ borderRadius: 0 }}>
+                                    {user && <Button variant="contained" fullWidth={true} sx={{ borderRadius: 0 }}
+                                                     onClick={() => history.push("/checkout")} disabled={!Object.keys(cart).length}>
                                         Checkout
                                     </Button>
+                                    }
+                                    {
+                                        user === null &&
+                                        <Button variant="contained" fullWidth={true} sx={{ borderRadius: 0 }}
+                                                onClick={() => history.push("/login")}>
+                                            Login to purchase
+                                        </Button>
+                                    }
                                 </Box>
                             </div>
                         </div>

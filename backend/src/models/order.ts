@@ -69,24 +69,18 @@ export class Order {
 
     // BEGIN: ADDRESS DETAILS
 
-    @Column({
-        length: 50,
-    })
+    @Column()
     addressLine1: string
 
     @Column({
-        length: 50,
         nullable: true,
     })
     addressLine2: string
 
-    @Column({
-        length: 50,
-    })
+    @Column()
     city: string
 
     @Column({
-        length: 50,
         nullable: true,
     })
     province: string
@@ -94,9 +88,7 @@ export class Order {
     @Column()
     zipCode: number
 
-    @Column({
-        length: 50,
-    })
+    @Column()
     country: string
 
     // END: ADDRESS DETAILS

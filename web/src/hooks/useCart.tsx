@@ -2,12 +2,15 @@ import React, { createContext, useContext, useEffect, useState } from "react"
 import ICar from "../models/car"
 import useNotification, { NOTIFICATON_TYPES } from "./useNotification"
 import useAuth from "./useAuth"
+import ICart from "../models/cart"
 
 interface IUseCart {
     add: (id: number, times: number) => Promise<void>
     decrease: (id: number) => void
     remove: (id: number) => void
-    cart: ICart
+    cart: ILocalCart
+    pushCart: () => void
+    reset: CallableFunction
 }
 
 const context = createContext<IUseCart>({
@@ -15,9 +18,11 @@ const context = createContext<IUseCart>({
     cart: {},
     remove: () => null,
     decrease: () => null,
+    pushCart: () => null,
+    reset: () => null,
 })
 
-interface ICart {
+interface ILocalCart {
     [key: string]: ICartItem
 }
 
@@ -26,27 +31,42 @@ export interface ICartItem {
     amount: number
 }
 
-const fetchCarDetail = async (id) => {
+async function fetchCarDetail(id) {
     const response = await fetch(`/api/cars/${id}`)
     if (response.status !== 200) throw `Cannot add car to cart!`
     const carDetail: ICar = await response.json()
     return carDetail
 }
 
+async function replaceCart(cart: ILocalCart) {
+    const data = Object.keys(cart).map(id => ({ id: parseInt(id), amount: cart[id].amount }))
+    if (!data.length) return
+    const response = await fetch("/api/cart/replace", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            items: data
+        }),
+    })
+    if (response.status !== 201) throw `Response status is ${response.status}`
+}
+
+async function getCar(id: number) {
+    const response = await fetch(`/api/cars/${id}`)
+    if (response.status !== 200) throw ``
+    const data: ICar = await response.json()
+    return data
+}
 
 function CartProvider({ children }: { children: any }) {
-    const [cart, setCart] = useState<ICart>({})
-    const [isLocal, setIsLocal] = useState(true)
-
+    const [cart, setCart] = useState<ILocalCart>({})
+    const { user } = useAuth()
     const notification = useNotification()
 
-    const { user } = useAuth()
     useEffect(() => {
-        setIsLocal(user === null)
-    }, [user])
-
-    useEffect(() => {
-        const retrieveCart = async () => {
+        const retrieveCartFromLocalStorage = async () => {
             const rawCart = localStorage.getItem("cart")
             const oldCart: any = JSON.parse(rawCart || "[]")
             if (oldCart) {
@@ -57,7 +77,7 @@ function CartProvider({ children }: { children: any }) {
                     return { item: data, amount: amount as number }
                 })
                 try {
-                    const cart: ICart = {}
+                    const cart: ILocalCart = {}
                     const resolvedCart: ICartItem[] = await Promise.all(newCart)
                     resolvedCart.forEach(item => {
                         if (item.item.id)
@@ -70,16 +90,51 @@ function CartProvider({ children }: { children: any }) {
             }
         }
 
-        retrieveCart()
-    }, [])
+        const retreiveCartFromBackend = async () => {
+            try {
+                const reponse = await fetch(`/api/cart/${user?.id}`)
+                const data: { cart: ICart[] } = await reponse.json()
+
+                const newCart: ILocalCart = {}
+                data.cart.forEach((item) => {
+                    if (Object.hasOwn(cart, item.id)) {
+                        newCart[item.id].amount += item.quantity
+                    } else {
+                        newCart[item.id] = {
+                            item: item.item,
+                            amount: item.quantity,
+                        }
+                    }
+                })
+                setCart(newCart)
+            } catch (e) {
+                console.error(e)
+                notification(NOTIFICATON_TYPES.ERROR, "Something happened")
+            }
+        }
+
+        retrieveCartFromLocalStorage()
+    }, [user])
 
     const add = async (id: number, times = 1) => {
+        let car: ICar
+        try {
+            car = await getCar(id)
+        } catch (e) {
+            notification(NOTIFICATON_TYPES.ERROR, "Something happened")
+            return
+        }
+        const currentAmount = cart[id] ? cart[id].amount : 0
+        const quantity = car.quantity
+        if (currentAmount + times > quantity) return
+
         try {
             if (Object.hasOwn(cart, id)) addExisting(id, times)
-            else addNew(id)
+            else addNew(id, times)
         } catch (e) {
             notification(NOTIFICATON_TYPES.ERROR, JSON.stringify(e))
         }
+
     }
 
     const addExisting = (id, amount) => {
@@ -92,13 +147,13 @@ function CartProvider({ children }: { children: any }) {
         }))
     }
 
-    const addNew = async (id) => {
+    const addNew = async (id, amount) => {
         const carDetails = await fetchCarDetail(id)
         setCart(old => ({
             ...old,
             [id]: {
                 item: carDetails,
-                amount: 1,
+                amount: amount,
             },
         }))
     }
@@ -133,7 +188,7 @@ function CartProvider({ children }: { children: any }) {
         localStorage.setItem("cart", JSON.stringify(Object.keys(cart).map(id => ({ id, amount: cart[id].amount }))))
     }, [cart])
 
-    return <context.Provider value={{ add, cart, remove, decrease }}>
+    return <context.Provider value={{ add, cart, remove, decrease, pushCart: () => replaceCart(cart), reset: () => setCart({}) }}>
         {children}
     </context.Provider>
 }

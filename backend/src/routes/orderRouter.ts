@@ -34,7 +34,7 @@ function getOrders(orderService: OrderService) {
     }
 }
 
-function addNewOrder(orderService: OrderService) {
+function addNewOrder(orderService: OrderService): RequestHandler {
     return async function (req, res, next) {
         const ctx: Context | null = Context.get(req)
         if (ctx === null) {
@@ -58,13 +58,13 @@ function addNewOrder(orderService: OrderService) {
             shippingOption: Joi.string()
                 .valid(...Object.values(ShippingOption))
                 .optional(),
-            promoCode: Joi.string().max(50).optional(),
-            addressLine1: Joi.string().max(50).required(),
-            addressLine2: Joi.string().max(50).optional(),
-            city: Joi.string().max(50).required(),
-            province: Joi.string().max(50).optional(),
+            promoCode: Joi.string(),
+            addressLine1: Joi.string().required(),
+            addressLine2: Joi.string().min(0).optional(),
+            city: Joi.string().required(),
+            province: Joi.string().min(0).optional(),
             zipCode: Joi.number().required(),
-            country: Joi.string().max(50).required(),
+            country: Joi.string().required(),
         })
         const { error } = orderFormat.validate(req.body)
         if (error) {

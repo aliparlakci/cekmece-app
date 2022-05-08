@@ -16,7 +16,7 @@ import { RemoveShoppingCart } from "@mui/icons-material"
 
 function CarDetailPage() {
     const [amount, setAmount] = useState(1)
-    const { add, decrease } = useCart()
+    const { add, cart } = useCart()
 
     const { carId } = useParams<{ carId?: string | undefined }>()
     if (!carId) return <Redirect to="/" />
@@ -42,7 +42,8 @@ function CarDetailPage() {
                                 <u> Items in stock:</u> <b> {car?.quantity} </b>
                             </h6>
                         </div>
-                        <div className="flex-[1.3] flex flex-col items-start w-32 justify-items-center mt-10 mobile:items-center">
+                        <div
+                            className="flex-[1.3] flex flex-col items-start w-32 justify-items-center mt-10 mobile:items-center">
                             <h1 className="title text-[40px] mobile:text-[30px]">
                                 {car.distributor ? car.distributor.name : "Porsche"}
                             </h1>
@@ -77,7 +78,7 @@ function CarDetailPage() {
                                         focused
                                         value={amount}
                                         onChange={(event) =>
-                                            setAmount(Math.max(Math.min(parseInt(event.target.value), car.quantity), 1))
+                                            setAmount(Math.max(Math.min(parseInt(event.target.value), car.quantity + (car.id ? (cart[car.id] ? cart[car.id].amount : 0) : 0)), 1))
                                         }
                                         label="Quantity"
                                         type="number"
@@ -141,7 +142,7 @@ function CarDetailPage() {
                             >
                                 <ReviewsButton
                                     carId={carId}
-                                    averageRating={car.averageRating}
+                                    averageRating={parseFloat(car.averageRating)}
                                     reviewCount={car.reviewCount}
                                 />
                                 {car.userCanReviewCar && <LeaveAReviewButton carId={carId} />}
