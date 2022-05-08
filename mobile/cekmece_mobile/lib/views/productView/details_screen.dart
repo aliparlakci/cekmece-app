@@ -266,9 +266,13 @@ class _ProductBottomBarState extends State<ProductBottomBar> {
                                           user = await widget.userBloc
                                               .updateLocalUser();
                                         } else {
-                                          final response = await http.post(
-                                              Uri.parse(
-                                                  '$clientURL/api/cart/${widget.userBloc.user.uid}/remove/${widget.product.id}'));
+                                          final networkService =
+                                              Provider.of<NetworkService>(
+                                                  context,
+                                                  listen: false);
+                                          final response =
+                                              await networkService.post(
+                                                  '$clientURL/api/cart/${widget.userBloc.user.uid}/remove/${widget.product.id}');
 
                                           user = await widget.userBloc
                                               .updateUser({

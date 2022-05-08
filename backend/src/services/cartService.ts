@@ -103,7 +103,7 @@ export default class CartService {
                     return "Removed From Cart"
                 }
                 const quantity = (cart[0].quantity -= 1)
-                const total = cart[0].total * quantity
+                const total = cart[0].item.price * quantity
 
                 await this.repository().update(cart[0].id, {quantity, total})
 
