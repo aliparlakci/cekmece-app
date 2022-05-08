@@ -24,11 +24,13 @@ export default function OrderSection({ order }: { order: IOrder }) {
                                 <Typography sx={{ color: "#AAAAAA" }}>#{order.id}</Typography>
                             </Box>
                             <Box>
-                                <Typography sx={{}}>
-                                    {order.orderItems.map((orderItem) => {
-                                        return `${orderItem.car.model} ${orderItem.car.distributor?.name} ${orderItem.car.name} - x${orderItem.quantity}`
-                                    })}
-                                </Typography>
+                                {order.orderItems.map((orderItem) => {
+                                    return (
+                                        <Typography sx={{}}>
+                                            {`${orderItem.car.model} ${orderItem.car.distributor?.name} ${orderItem.car.name} (x${orderItem.quantity})`}
+                                        </Typography>
+                                    )
+                                })}
                             </Box>
                             <Box>
                                 <Typography sx={{}}>{date.format(new Date(order.createdDate), pattern)}</Typography>
