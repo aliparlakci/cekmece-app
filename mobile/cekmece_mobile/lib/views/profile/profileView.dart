@@ -44,9 +44,9 @@ class _ProfileViewState extends State<ProfileView> {
     return cartList;
   }
 
-  void getOrders() async {
+  Future getOrders() async {
     final networkService = Provider.of<NetworkService>(context, listen: false);
-
+    orders = [];
     try {
       var ordersJson = await networkService.get('${localIPAddress}/api/orders');
       for (dynamic singleOrder in ordersJson) {
@@ -94,7 +94,7 @@ class _ProfileViewState extends State<ProfileView> {
                             text: "My Orders",
                             icon: Icons.inventory_outlined,
                             onPressed: () async {
-                              print("hello");
+                              await getOrders();
                               var res = await pushNewScreen(
                                 context,
                                 screen: MyOrders(
