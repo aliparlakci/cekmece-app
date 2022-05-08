@@ -21,9 +21,10 @@ export default function ProductSection({ item }: IProductSelectionProps) {
             <div className={ProductDivStyle}>
                 <div className=" product flex pl-5 self-start">
                     <img
-                        className="product_img w-auto h-[7rem]"
-                        src="https://wallpaperaccess.com/full/8039043.jpg"
-                        alt="product_img"
+                        src={item.item.photoUrl}
+                        className="product_img"
+                        alt="product_image"
+                        style={{ aspectRatio: "9/5", objectFit: "cover", maxHeight: "5rem" }}
                     />
 
                     <div className="disc flex items-start justify-between h-auto flex-col ml-6">

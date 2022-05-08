@@ -30,6 +30,8 @@ const defaultState = Object.freeze({
     warranty: "1",
     price: "0",
     number: "1",
+    photoUrl: "",
+    description: "",
 })
 
 function NewCarDialog({ open, onClose, update }: NewCarDialogProps) {
@@ -57,6 +59,8 @@ function NewCarDialog({ open, onClose, update }: NewCarDialogProps) {
                 warranty: data.warranty,
                 price: data.price,
                 number: data.number,
+                photoUrl: data.photoUrl,
+                description: data.description,
             })
 
             setLoading(false)
@@ -78,7 +82,7 @@ function NewCarDialog({ open, onClose, update }: NewCarDialogProps) {
 
         setLoading(true)
         try {
-            const endpoint = update ? "/api/cars/update" : "/api/cars/new" 
+            const endpoint = update ? "/api/cars/update" : "/api/cars/new"
             const response = await fetch(endpoint, {
                 method: "POST",
                 headers: {
@@ -94,6 +98,8 @@ function NewCarDialog({ open, onClose, update }: NewCarDialogProps) {
                     warranty: input.warranty,
                     price: input.price,
                     number: input.number,
+                    photoUrl: input.photoUrl,
+                    description: input.description,
                 }),
             })
 
@@ -231,6 +237,34 @@ function NewCarDialog({ open, onClose, update }: NewCarDialogProps) {
                                     onChange={(event) => setInput((state) => ({ ...state, price: event.target.value }))}
                                 />
                             </FormControl>
+                            <FormControl variant="filled" sx={{ m: 1, minWidth: 120 }}>
+                                <TextField
+                                    autoFocus
+                                    margin="dense"
+                                    id="description"
+                                    label="description"
+                                    type="text"
+                                    fullWidth
+                                    disabled={loading}
+                                    value={input.description}
+                                    onChange={(event) => setInput((state) => ({
+                                        ...state,
+                                        description: event.target.value,
+                                    }))}
+                                />
+                            </FormControl> <FormControl variant="filled" sx={{ m: 1, minWidth: 120 }}>
+                            <TextField
+                                autoFocus
+                                margin="dense"
+                                id="photoUrl"
+                                label="Photo URL"
+                                type="text"
+                                fullWidth
+                                disabled={loading}
+                                value={input.photoUrl}
+                                onChange={(event) => setInput((state) => ({ ...state, photoUrl: event.target.value }))}
+                            />
+                        </FormControl>
                             <FormControl variant="filled" sx={{ m: 1, minWidth: 120 }}>
                                 <TextField
                                     autoFocus

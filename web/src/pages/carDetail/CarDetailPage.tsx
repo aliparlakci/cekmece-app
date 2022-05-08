@@ -33,9 +33,10 @@ function CarDetailPage() {
                     <div className="flex justify-center mobile:flex-col mobile:mt-4 mobile:p-3">
                         <div className="flex-1 flex-col items-center justify-center m-10">
                             <img
-                                src="https://wallpaperaccess.com/full/8039043.jpg"
+                                src={car.photoUrl}
                                 className="product_img"
                                 alt="product_image"
+                                style={{ aspectRatio: "9/5", objectFit: "cover", width: "100%" }}
                             />
                             <p className="mt-4 text-2xl"></p>
                             <h6 className="title text-[20px] mobile:text-[10px]">
@@ -51,9 +52,7 @@ function CarDetailPage() {
                                 <b>{car.name ? car.name : "Panamera"}</b>
                             </h1>
                             <p className="pr-[4rem] text-justify mt-4 mobile:pr-0">
-                                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Laudantium accusamus, culpa
-                                neque ex sunt placeat. Vitae quia qui quo, doloribus dolore aliquam veniam. Natus totam
-                                odit consequatur consectetur delectus nihil!
+                                {car.description}
                             </p>
                             <div className="flex flex-col place-self-start">
                                 <p className="mt-4 text-2xl">

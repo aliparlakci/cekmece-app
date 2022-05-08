@@ -14,6 +14,8 @@ interface ICar {
     category?: ICategory
     reviews?: IReview[]
     reviewCount: number
+    description: string
+    photoUrl: string
     averageRating: string
     userCanReviewCar: boolean
 }

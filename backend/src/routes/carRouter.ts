@@ -22,6 +22,7 @@ function getAllCars(carService: CarService): RequestHandler {
             maxPrice: req.query.maxPrice as string,
             minYear: req.query.minYear as string,
             maxYear: req.query.maxYear as string,
+            q: req.query.q as string
         })
         res.status(200).json(cars)
     }

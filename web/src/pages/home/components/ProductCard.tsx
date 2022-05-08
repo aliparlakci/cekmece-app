@@ -64,7 +64,12 @@ export default function ProductCard({ car }: IProductCardProps) {
                         <Paper elevation={8} className="paper" sx={{ borderRadius: 0 }}>
                             <Box>
                                 <Link to={`/cars/${car.id}`}>
-                                    <img src={"https://wallpaperaccess.com/full/8039043.jpg"} alt="" />
+                                    <img
+                                        src={car.photoUrl}
+                                        className="product_img"
+                                        alt="product_image"
+                                        style={{ aspectRatio: "9/5", objectFit: "cover", width: "100%" }}
+                                    />
                                 </Link>
                             </Box>
                             <Box
