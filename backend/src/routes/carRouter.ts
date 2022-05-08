@@ -34,7 +34,11 @@ function getCar(carService: CarService, orderService: OrderService) {
         const ctx: Context | null = Context.get(req)
         if (ctx !== null && ctx.user !== null) {
             const userCanReviewCar = await orderService.checkUserCanReviewCar(ctx.user.id, carId)
-            res.status(200).json({ ...car, userCanReviewCar })
+            if (car) {
+                res.status(200).json({ ...car, userCanReviewCar })
+            } else {
+                res.status(404).json({})
+            }
         } else {
             res.status(200).json(car)
         }
@@ -52,6 +56,8 @@ function addNewCar(carService: CarService): RequestHandler {
             warranty: Joi.number().positive().required(),
             distributor: Joi.number().required(),
             category: Joi.number().required(),
+            description: Joi.string().optional(),
+            photoUrl: Joi.string().optional(),
         })
         const { error } = carFormat.validate(req.body)
         if (error) {
@@ -83,6 +89,8 @@ function updateNewCar(carService: CarService): RequestHandler {
             warranty: Joi.number().positive().required(),
             distributor: Joi.number().required(),
             category: Joi.number().required(),
+            description: Joi.string().optional(),
+            photoUrl: Joi.string().optional(),
         })
         const { error } = carFormat.validate(req.body)
         if (error) {
