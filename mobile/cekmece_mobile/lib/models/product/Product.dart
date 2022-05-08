@@ -8,6 +8,8 @@ class Product with _$Product {
   const factory Product({
     required int id,
     required String name,
+    required String photoUrl,
+    required String description,
     required int price,
     required int number,
     required int model,

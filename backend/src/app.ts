@@ -1,4 +1,4 @@
-import express, { Router } from "express"
+import express, { application, Router } from "express"
 import createError from "http-errors"
 import path from "path"
 import cookieParser from "cookie-parser"
@@ -19,7 +19,7 @@ import AuthService from "./services/authService"
 import Context from "./utils/context"
 import orderRouter from "./routes/orderRouter"
 
-async function main() {
+async function createServer(){
     try {
         await db.initialize()
         console.log("Data Source has been initialized!")
@@ -69,9 +69,11 @@ async function main() {
         res.json({ ...err, message: err.message })
     })
 
-    app.listen(5001, () => {
-        console.log("Listening on http://localhost:5001")
-    })
+    return app;
 }
 
-main()
+
+
+module.exports = createServer().then((server) => server.listen(5001, () => {
+    console.log("Listening on http://localhost:5001")
+}))

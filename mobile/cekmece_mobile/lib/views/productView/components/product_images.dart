@@ -8,10 +8,6 @@ import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 List<String> images = [
   "assets/images/rb16b-1.jpg",
-  "assets/images/rb16b-2.jpg",
-  "assets/images/rb16b-3.jpg",
-  "assets/images/rb16b-4.jpg",
-  "assets/images/rb16b-5.jpg",
 ];
 
 class ProductImages extends StatefulWidget {
@@ -35,7 +31,7 @@ class _ProductImagesState extends State<ProductImages> {
     return Column(
       children: [
         CarouselSlider.builder(
-          itemCount: 5,
+          itemCount: 1,
           carouselController: _controller,
           options: CarouselOptions(
               aspectRatio: 16 / 9,
@@ -54,13 +50,13 @@ class _ProductImagesState extends State<ProductImages> {
                   pushNewScreen(
                     context,
                     screen: ZoomedPicture(
-                      url: "assets/images/rb16b-${itemIndex + 1}.jpg",
+                      url: widget.product.photoUrl,
                     ),
                     withNavBar: false, // OPTIONAL VALUE. True by default.
                     pageTransitionAnimation: PageTransitionAnimation.cupertino,
                   );
                 },
-                child: Image.asset("assets/images/rb16b-${itemIndex + 1}.jpg")),
+                child: Image.network(widget.product.photoUrl)),
           ),
         ),
         Row(

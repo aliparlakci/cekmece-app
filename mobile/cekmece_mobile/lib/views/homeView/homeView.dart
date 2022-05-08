@@ -189,8 +189,7 @@ Text(
                               children: [
                                 Expanded(
                                   flex: 2,
-                                  child: Image.network(
-                                      "https://cdn.motor1.com/images/mgl/g1gW9/s1/nuova-bmw-z4.webp"),
+                                  child: Image.network(cars[index].photoUrl),
                                 ),
                                 Expanded(
                                     flex: 5,
@@ -377,8 +376,7 @@ class CarouselContainer extends StatelessWidget {
           ]),
           child: Stack(
             children: [
-              Image.network(
-                  "https://cdn.motor1.com/images/mgl/KpgwG/s1/alfa-romeo-giulia-quadrifoglio-drift.jpg"),
+              Image.network(car.photoUrl),
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Container(

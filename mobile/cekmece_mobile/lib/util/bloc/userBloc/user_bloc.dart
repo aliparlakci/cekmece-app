@@ -34,17 +34,19 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       }
     } catch (err) {
       return const Product(
-          id: 1,
-          name: "",
-          price: 0,
-          number: 0,
-          model: 0,
-          quantity: 0,
-          warranty: 0,
-          distributor: {},
-          category: {},
-          reviewCount: 0,
-          averageRating: "",
+        id: 1,
+        name: "",
+        photoUrl: "",
+        description: "",
+        price: 0,
+        number: 0,
+        model: 0,
+        quantity: 0,
+        warranty: 0,
+        distributor: {},
+        category: {},
+        reviewCount: 0,
+        averageRating: "",
       );
     }
   }
