@@ -8,17 +8,21 @@ import SnackbarHandler from "../SnackbarHandler"
 import LeaveAReviewFields from "./components/LeaveAReviewFields"
 import SubmitReviewButton from "./components/SubmitReviewButton"
 import ErrorLeaveAReviewForm from "./components/ErrorLeaveAReviewForm"
+import { mutate } from "swr"
 
 import IUnreviewedOrderItem from "../../../../../models/unreviewedOrderItem"
 
+import useNotification, { NOTIFICATON_TYPES } from "../../../../../hooks/useNotification"
+
 function LeaveAReviewForm({ carId }) {
-    const { data, mutate, error } = useSWR<IUnreviewedOrderItem[]>(`/api/orders/unreviewed/${carId}`, fetcher)
+    const { data, error } = useSWR<IUnreviewedOrderItem[]>(`/api/orders/unreviewed/${carId}`, fetcher)
     const [orderItemID, setOrderItemID] = useState("")
     const [rating, setRating] = useState(3)
     const [comment, setComment] = useState("")
     const [validationFailedAtLeastOnce, setValidationFailedAtLeastOnce] = useState(false)
     const [formValidationError, setFormValidationError] = useState(false)
     const [formValidationErrorMessage, setFormValidationErrorMessage] = useState("")
+    const notification = useNotification()
 
     const [successNotification, setSuccessNotification] = useState(false)
     const [errorNotification, setErrorNotification] = useState(false)
@@ -85,25 +89,19 @@ function LeaveAReviewForm({ carId }) {
             setComment("")
             setRating(3)
             setOrderItemID("")
-            setSuccessNotification(true)
+            notification(NOTIFICATON_TYPES.SUCCESS, "Review submitted successfully.")
         } else {
-            setErrorNotification(true)
+            notification(NOTIFICATON_TYPES.ERROR, "An error occured while submitting review.")
         }
-        mutate()
+
+        mutate(`/api/orders/unreviewed/${carId}`)
+        mutate(`/api/cars/${carId}`)
     }
 
     if (error) return <ErrorLeaveAReviewForm />
 
     return (
         <form style={{ height: "100%" }} onSubmit={handleFormSubmit}>
-            <SnackbarHandler
-                isSuccess={successNotification}
-                isError={errorNotification}
-                successMessage="Review submitted successfully."
-                errorMessage="An error occurred while submitting the review."
-                onSuccessClose={() => setSuccessNotification(false)}
-                onErrorClose={() => setErrorNotification(false)}
-            />
             <Backdrop sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }} open={loading}>
                 <CircularProgress color="inherit" />
             </Backdrop>

@@ -11,6 +11,8 @@ import {
     Badge,
     ThemeProvider,
     Button,
+    Menu,
+    MenuItem,
 } from "@mui/material"
 import { Home, ShoppingCart } from "@mui/icons-material"
 import SearchIcon from "@mui/icons-material/Search"
@@ -77,27 +79,51 @@ interface INavBarProps {
 export default function NavBar({ search, onSearch }: INavBarProps) {
     const history = useHistory()
     const { user, logout } = useAuth()
-
     const { cart } = useCart()
+
+    const [anchorEl, setAnchorEl] = React.useState(null)
+    const open = Boolean(anchorEl)
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget)
+    }
+    const handleClose = () => {
+        setAnchorEl(null)
+    }
 
     return (
         <ThemeProvider theme={theme}>
             <Box sx={{ flexGrow: 1 }}>
                 <AppBar position="fixed">
                     <Toolbar>
-                        <IconButton onClick={() => history.push("/")} size="large" edge="start" color="inherit"
-                                    aria-label="open drawer" sx={{ mr: 2 }}>
+                        <IconButton
+                            onClick={() => history.push("/")}
+                            size="large"
+                            edge="start"
+                            color="inherit"
+                            aria-label="open drawer"
+                            sx={{ mr: 2 }}
+                        >
                             <Home />
                         </IconButton>
                         <Typography variant="h6" noWrap component="div" sx={{ display: { xs: "none", sm: "block" } }}>
-                            Zort Storzt
+                            CarWow
                         </Typography>
                         <Box sx={{ flexGrow: 1 }} />
                         <Link to="/cart">
-                            <IconButton size="large" edge="start" color="inherit" aria-label="open drawer"
-                                        sx={{ mr: 2 }}>
-                                <Badge badgeContent={Object.keys(cart).reduce((prev, id) => cart[id] && cart[id].amount + prev, 0)}
-                                       color="error">
+                            <IconButton
+                                size="large"
+                                edge="start"
+                                color="inherit"
+                                aria-label="open drawer"
+                                sx={{ mr: 2 }}
+                            >
+                                <Badge
+                                    badgeContent={Object.keys(cart).reduce(
+                                        (prev, id) => cart[id] && cart[id].amount + prev,
+                                        0
+                                    )}
+                                    color="error"
+                                >
                                     <ShoppingCart />
                                 </Badge>
                             </IconButton>
@@ -106,7 +132,30 @@ export default function NavBar({ search, onSearch }: INavBarProps) {
                             // user && <Avatar sx={{ bgcolor: deepPurple[500], mr: 2 }}>{user.displayName}</Avatar>
                             user && (
                                 <>
-                                    {user.displayName}
+                                    <Button
+                                        id="basic-button"
+                                        aria-controls={open ? "basic-menu" : undefined}
+                                        aria-haspopup="true"
+                                        aria-expanded={open ? "true" : undefined}
+                                        onClick={handleClick}
+                                    >
+                                        <Typography sx={{ color: "white" }}>{user.displayName}</Typography>
+                                    </Button>
+                                    <Menu
+                                        id="basic-menu"
+                                        anchorEl={anchorEl}
+                                        open={open}
+                                        onClose={handleClose}
+                                        MenuListProps={{
+                                            "aria-labelledby": "basic-button",
+                                        }}
+                                    >
+                                        <MenuItem onClick={handleClose}>Profile</MenuItem>
+                                        <MenuItem onClick={handleClose}>
+                                            <Link to={`/orderHistory`}>My Orders</Link>
+                                        </MenuItem>
+                                    </Menu>
+
                                     <hr />
                                     <Button variant="text" color="inherit" onClick={() => logout()}>
                                         Logout

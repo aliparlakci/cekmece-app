@@ -40,6 +40,10 @@ export default class OrderService {
                     id: userId,
                 },
             },
+
+            order: {
+                createdDate: "DESC",
+            },
         })
     }
 

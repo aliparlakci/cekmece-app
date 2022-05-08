@@ -22,7 +22,6 @@ class MyOrders extends StatelessWidget {
         child: ListView.builder(
             itemCount: orders.length,
             shrinkWrap: true,
-            reverse: true,
             itemBuilder: ((context, i) {
               return OrderTile(order: orders[i]);
             })),
