@@ -83,6 +83,9 @@ export default function ProductCard({ car }: IProductCardProps) {
                                 sx={{ alignItems: "center", direction: "column", justifyContent: "center" }}
                             >
                                 <Link to={`/cars/${car.id}`}>
+                                    <Typography variant="body1" marginX={0.5} fontWeight="Light" textAlign="left">
+                                        {car.model}
+                                    </Typography>
                                     <Typography variant="h6" marginX={0.5} fontWeight="Light" textAlign="left">
                                         {car.distributor?.name}
                                     </Typography>
