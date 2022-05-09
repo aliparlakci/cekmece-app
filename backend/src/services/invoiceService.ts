@@ -142,10 +142,10 @@ export default class InvoiceService {
             })
     
             const mailOptions = {
-                from: "myAraba <cs308myaraba@gmail.com>",
+                from: "CarWow <cs308myaraba@gmail.com>",
                 to: user.email,
                 subject: "Purchase Invoice",
-                text: "Please find attached invoice below! Thank you for choosing myAraba!",
+                text: "Please find attached invoice below! Thank you for choosing CarWow!",
        
                 
                 attachments: [
