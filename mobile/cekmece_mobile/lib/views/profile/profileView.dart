@@ -5,6 +5,7 @@ import 'package:cekmece_mobile/models/user/UserClass.dart';
 import 'package:cekmece_mobile/util/network/networkProvider.dart';
 import 'package:cekmece_mobile/views/order/views/addressPick.dart';
 import 'package:cekmece_mobile/views/productView/components/size.dart';
+import 'package:cekmece_mobile/views/profile/myAddress.dart';
 import 'package:cekmece_mobile/views/profile/myOrders.dart';
 import 'package:cekmece_mobile/views/profile/viewComponents/anonymousProfileView.dart';
 import 'package:cekmece_mobile/views/profile/viewComponents/userInfo.dart';
@@ -110,7 +111,16 @@ class _ProfileViewState extends State<ProfileView> {
                           ProfileButton(
                             text: "My Addresses",
                             icon: Icons.home,
-                            onPressed: () {},
+                            onPressed: () {
+                              pushNewScreen(
+                                context,
+                                screen: MyAddressView(),
+                                withNavBar:
+                                    true, // OPTIONAL VALUE. True by default.
+                                pageTransitionAnimation:
+                                    PageTransitionAnimation.cupertino,
+                              );
+                            },
                           ),
                         ],
                       ),
