@@ -5,6 +5,7 @@ import 'package:cekmece_mobile/models/user/UserClass.dart';
 import 'package:cekmece_mobile/util/network/networkProvider.dart';
 import 'package:cekmece_mobile/views/order/views/addressPick.dart';
 import 'package:cekmece_mobile/views/productView/components/size.dart';
+import 'package:cekmece_mobile/views/profile/changePassword.dart';
 import 'package:cekmece_mobile/views/profile/myAddress.dart';
 import 'package:cekmece_mobile/views/profile/myOrders.dart';
 import 'package:cekmece_mobile/views/profile/viewComponents/anonymousProfileView.dart';
@@ -30,7 +31,7 @@ class _ProfileViewState extends State<ProfileView> {
   List<OrderItem> orders = [];
 
   List<Map<String, dynamic>> quickSettings = [
-    {"name": "Change Password", "widget": Container()},
+    {"name": "Change Password", "widget": ChangePasswordView()},
     {"name": "Change Email", "widget": Container()},
     {"name": "Change Profile Photo", "widget": Container()},
     {"name": "Contact Us", "widget": Container()},
@@ -160,6 +161,16 @@ class _ProfileViewState extends State<ProfileView> {
                                 itemCount: quickSettings.length,
                                 itemBuilder: ((context, index) {
                                   return ListTile(
+                                    onTap: () {
+                                      pushNewScreen(
+                                        context,
+                                        screen: quickSettings[index]["widget"],
+                                        withNavBar:
+                                            false, // OPTIONAL VALUE. True by default.
+                                        pageTransitionAnimation:
+                                            PageTransitionAnimation.cupertino,
+                                      );
+                                    },
                                     title: Text(
                                       quickSettings[index]["name"],
                                       style: GoogleFonts.raleway(
