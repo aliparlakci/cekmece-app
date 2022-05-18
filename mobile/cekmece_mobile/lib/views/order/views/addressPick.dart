@@ -17,8 +17,11 @@ import 'package:place_picker/place_picker.dart';
 import 'package:provider/provider.dart';
 
 class AddressPicker extends StatefulWidget {
-  AddressPicker({Key? key, required this.prevContext}) : super(key: key);
+  AddressPicker(
+      {Key? key, required this.prevContext, required this.returnAddress})
+      : super(key: key);
   BuildContext prevContext;
+  bool returnAddress;
 
   @override
   State<AddressPicker> createState() => _AddressPickerState();
@@ -116,6 +119,18 @@ class _AddressPickerState extends State<AddressPicker> {
           builder: (context) => PlacePicker(
                 "AIzaSyDwmB4puUZeHnjiNCVcqnDBPKESXxJ-9h8",
               )));
+
+      if (widget.returnAddress) {
+        var body = {
+          "addressLine1": result.formattedAddress!.substring(0, 45),
+          "addressLine2": result.formattedAddress!.substring(45),
+          "city": result.city!.name,
+          "province": result.city!.name,
+          "country": result.country!.name,
+          "zipCode": result.postalCode,
+        };
+        Navigator.pop(context, body);
+      }
       setState(() {
         addressSelected = true;
       });

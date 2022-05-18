@@ -255,6 +255,7 @@ class _CartViewState extends State<CartView> {
                       context,
                       screen: AddressPicker(
                         prevContext: context,
+                        returnAddress: false,
                       ),
                       withNavBar: false, // OPTIONAL VALUE. True by default.
                       pageTransitionAnimation:
