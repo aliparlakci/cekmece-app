@@ -33,18 +33,30 @@ export default function WishlistPage() {
                         <div className="flex justify-center text-5xl">Cart</div>
 
                         {/* Heading */}
-                        <div className="flex items-center justify-between ml-4 mt-4 mobile:flex-col">
-                            <div className="flex text-lg hover:cursor-pointer mobile:m-5">
-                                <Typography variant="h4">Wishlist ♥</Typography>
-                            </div>
-                        </div>
+
+                        <Box
+                                sx={{
+                                    mt: 2,
+                                    mb: 2,
+                                }}
+                            ></Box>
+                           
+                  
+
+                        <Typography  align="center" variant="h3" color="error" > ♥   Wishlist   ♥</Typography>
+                                
+
 
                         {/* vertically center parent div */}
                         <div className="flex flex-row mt-7 mobile:flex-col">
                             {/* product div */}
                             <div className="flex flex-col flex-1">
                                 {/* Product Sections Below */}
+                               
                                 {Object.keys(cart).map((id, i) => <ProductSection key={i} item={cart[id]} />)}
+                                <Button variant="contained" color="success">
+                                Add Selected to the Cart
+                                </Button>
                             </div>
  
                         </div>

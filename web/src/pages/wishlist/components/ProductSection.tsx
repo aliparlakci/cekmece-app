@@ -1,6 +1,9 @@
 import React from "react"
 import ClearIcon from "@mui/icons-material/Clear"
 import { IconButton } from "@mui/material"
+import { Checkbox } from '@mui/material';
+import { FormControlLabel } from '@mui/material'
+
 
 import Counter from "./Counter"
 import useCart, { ICartItem } from "../../../hooks/useCart"
@@ -22,39 +25,30 @@ export default function ProductSection({ item }: IProductSelectionProps) {
         <>
             <div className={ProductDivStyle}>
                 <div className=" product flex pl-5 self-start">
+
+                    <FormControlLabel control={<Checkbox defaultChecked color="success"/>} label="" />
+
                     <img
                         src={item.item.photoUrl}
                         className="product_img"
                         alt="product_image"
-                        style={{ aspectRatio: "9/5", objectFit: "cover", maxHeight: "5rem" }}
+                        style={{ aspectRatio: "8/5", objectFit: "cover", maxHeight: "5rem" }}
                     />
 
-                    <div className="disc flex items-start justify-between h-auto flex-col ml-6">
+                    <div className="flex items-center justify-center text-xl mt-3">
                         <p>
-                            <b className="mr-2">Brand:</b>{item.item.distributor?.name}
+                        <b className="mr-9"> {"\t"}</b><b className="mr-2"> {"\t"} Brand:</b>{item.item.distributor?.name} | <b className="mr-2">Brand:</b>{item.item.name} | <b className="mr-2">Year:</b>{item.item.model}
                         </p>
-                        <p>
-                            <b className="mr-2">Model:</b>{item.item.name}
-                        </p>
-                        <p>
-                            <b className="mr-2">Year:</b>{item.item.model}
-                        </p>
+                       
                     </div>
                 </div>
 
                 {/*Price and Quantity Div*/}
                 <div className={PriceQuantityStyle}>
                     <div>
-                        <div className="counter flex items-center text-2xl justify-start">
-                            Quantity
-                            <div className="ml-5 shadow-md flex">
-                                <button onClick={() => item.item.id && decrease(item.item.id)} className="bg-[#000] text-white w-8 flex items-center justify-center cursor-pointer pb-1">-</button>
-                                <div className="w-8 flex items-center justify-center border-[2px] border-[#000]">{item.amount}</div>
-                                <button onClick={() => item.item.id && add(item.item.id, 1)} className="bg-[#000] text-white w-8 flex items-center justify-center cursor-pointer pb-1">+</button>
-                            </div>
-                        </div>
+           
                     </div>
-                    <p className="flex items-center justify-center text-4xl mt-3">
+                    <p className="flex items-center justify-center text-xl mt-3">
                         <b>${item.item.price * item.amount}</b>
                     </p>
                 </div>
@@ -68,7 +62,7 @@ export default function ProductSection({ item }: IProductSelectionProps) {
             </div>
 
 
-            <hr className="mb-7 mt-7 mobile:mt-0" />
+            <hr className="mb-3 mt-3 mobile:mt-0" />
         </>
     )
 }

@@ -12,7 +12,7 @@ import NavBar from "../../components/NavBar"
 import fetcher from "../../utils/fetcher"
 import ICar from "../../models/car"
 import useCart from "../../hooks/useCart"
-import { RemoveShoppingCart } from "@mui/icons-material"
+import { FavoriteBorderTwoTone, RemoveShoppingCart } from "@mui/icons-material"
 
 function CarDetailPage() {
     const [amount, setAmount] = useState(1)
@@ -42,6 +42,17 @@ function CarDetailPage() {
                             <h6 className="title text-[20px] mobile:text-[10px]">
                                 <u> Items in stock:</u> <b> {car?.quantity} </b>
                             </h6>
+
+                            <Box
+                                sx={{
+                                    mt: 2,
+                                    mb: 2,
+                                }}
+                            ></Box>
+                           
+                            <Button variant="outlined" color="error"  startIcon={<FavoriteBorderTwoTone /> }>
+                                Add to Wishlist
+                                </Button>
                         </div>
                         <div
                             className="flex-[1.3] flex flex-col items-start w-32 justify-items-center mt-10 mobile:items-center">
