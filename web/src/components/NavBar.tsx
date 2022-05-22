@@ -14,7 +14,7 @@ import {
     Menu,
     MenuItem,
 } from "@mui/material"
-import { Home, ShoppingCart } from "@mui/icons-material"
+import { FavoriteBorder, Home, ShoppingCart } from "@mui/icons-material"
 import SearchIcon from "@mui/icons-material/Search"
 import { styled, alpha } from "@mui/material/styles"
 
@@ -109,6 +109,25 @@ export default function NavBar({ search, onSearch }: INavBarProps) {
                             CarWow
                         </Typography>
                         <Box sx={{ flexGrow: 1 }} />
+                        <Link to="/wishlist">
+                            <IconButton
+                                size="large"
+                                edge="start"
+                                color="inherit"
+                                aria-label="open drawer"
+                                sx={{ mr: 2 }}
+                            >
+                                <Badge
+                                    badgeContent={Object.keys(cart).reduce(
+                                        (prev, id) => cart[id] && cart[id].amount + prev,
+                                        0
+                                    )}
+                                    color="error"
+                                >
+                                    <FavoriteBorder />
+                                </Badge>
+                            </IconButton>
+                        </Link>
                         <Link to="/cart">
                             <IconButton
                                 size="large"

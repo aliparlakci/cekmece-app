@@ -18,7 +18,7 @@ import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart"
 import ICar from "../../../models/car"
 import useCart from "../../../hooks/useCart"
 import { Link } from "react-router-dom"
-import { RemoveShoppingCart } from "@mui/icons-material"
+import { FavoriteBorderOutlined, RemoveShoppingCart } from "@mui/icons-material"
 
 const theme = createTheme({
     palette: {
@@ -51,6 +51,12 @@ export default function ProductCard({ car }: IProductCardProps) {
     const [loading, setLoading] = useState(false)
 
     const handleAddToCart = async () => {
+        setLoading(true)
+        await add(car.id, 1)
+        setLoading(false)
+    }
+
+    const handleAddToWishlist = async () => {
         setLoading(true)
         await add(car.id, 1)
         setLoading(false)
@@ -162,6 +168,20 @@ export default function ProductCard({ car }: IProductCardProps) {
                                         </Button>
                                     </>
                                 )}
+
+<>
+                                        <Button
+                                            variant="text"
+                                            endIcon={<FavoriteBorderOutlined />}
+                                            sx={{ borderRadius: 0 }}
+                                            fullWidth={true}
+                                            onClick={handleAddToWishlist}
+                                        >
+                                            Add to Wishlist
+                                        </Button>
+                                    </>
+
+
                             </Box>
                         </Paper>
                     </Box>

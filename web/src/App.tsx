@@ -18,6 +18,7 @@ import { ConfirmationProvider } from "./hooks/useConfirmation"
 import UserRoles from "./models/userRoles"
 
 import "./App.css"
+import WishlistPage from "./pages/wishlist/WishlistPage"
 
 
 function App() {
@@ -60,6 +61,9 @@ function App() {
                                 </Route>
                                 <Route path="/orderHistory">
                                     <OrdersPage />
+                                </Route>
+                                <Route path="/wishlist">
+                                    <WishlistPage />
                                 </Route>
                             </Switch>
                         </Router>
