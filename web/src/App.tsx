@@ -1,5 +1,5 @@
 import React, { useEffect } from "react"
-import { BrowserRouter as Router, Redirect, Route, Switch } from "react-router-dom"
+import { BrowserRouter as Router, Link, Redirect, Route, Switch } from "react-router-dom"
 
 import AdminPage from "./pages/admin/AdminPage"
 import HomePage from "./pages/home/HomePage"
@@ -18,6 +18,8 @@ import { ConfirmationProvider } from "./hooks/useConfirmation"
 import UserRoles from "./models/userRoles"
 
 import "./App.css"
+import NavBar from "./components/NavBar"
+import { Typography } from "@mui/material"
 
 
 function App() {
@@ -29,39 +31,47 @@ function App() {
                 <ConfirmationProvider>
                     <CartProvider>
                         <Router>
-                            <Switch>
-                                <Route path="/admin">
-                                    {!loading && (
-                                        <>
-                                            {user === null && <Redirect to="/login" />}
-                                            {user?.role === UserRoles.ADMIN && <AdminPage />}
-                                            {user?.role !== UserRoles.ADMIN && <Redirect to="/" />}
-                                        </>
-                                    )}
-                                </Route>
-                                <Route exact path="/">
-                                    <HomePage />
-                                </Route>
-                                <Route path="/login">
-                                    <LoginPage />
-                                </Route>
-                                <Route path="/register">
-                                    <RegisterPage />
-                                </Route>
-                                <Route path="/cart">
-                                    <CartPage />
-                                </Route>
-                                <Route path="/checkout">
-                                    {user && <CheckoutPage />}
-                                    {user === null && <Redirect to="/login" />}
-                                </Route>
-                                <Route path="/cars/:carId">
-                                    <CarDetailPage />
-                                </Route>
-                                <Route path="/orderHistory">
-                                    <OrdersPage />
-                                </Route>
-                            </Switch>
+                            <NavBar>
+                                {user && user.role !== "Customer" &&
+                                    <Typography noWrap sx={{ display: { xs: "none", sm: "block" } }}>
+                                        <Link to="/admin/cars">Moderation</Link>
+                                    </Typography>}
+                            </NavBar>
+                            <div className="mt-16">
+                                <Switch>
+                                    <Route path="/admin">
+                                        {!loading && (
+                                            <>
+                                                {user === null && <Redirect to="/login" />}
+                                                {user?.role === UserRoles.ADMIN && <AdminPage />}
+                                                {user?.role !== UserRoles.ADMIN && <Redirect to="/" />}
+                                            </>
+                                        )}
+                                    </Route>
+                                    <Route exact path="/">
+                                        <HomePage />
+                                    </Route>
+                                    <Route path="/login">
+                                        <LoginPage />
+                                    </Route>
+                                    <Route path="/register">
+                                        <RegisterPage />
+                                    </Route>
+                                    <Route path="/cart">
+                                        <CartPage />
+                                    </Route>
+                                    <Route path="/checkout">
+                                        {user && <CheckoutPage />}
+                                        {user === null && <Redirect to="/login" />}
+                                    </Route>
+                                    <Route path="/cars/:carId">
+                                        <CarDetailPage />
+                                    </Route>
+                                    <Route path="/orderHistory">
+                                        <OrdersPage />
+                                    </Route>
+                                </Switch>
+                            </div>
                         </Router>
                     </CartProvider>
                 </ConfirmationProvider>

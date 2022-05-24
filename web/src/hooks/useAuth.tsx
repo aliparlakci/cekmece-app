@@ -1,8 +1,9 @@
 import React, { createContext, useContext, useEffect, useState } from "react"
 import IUser from "../models/user"
+import useSWR, { mutate } from "swr"
 
 interface IUseAuth {
-    user: IUser | null
+    user?: IUser | null
     loading: boolean
     refresh: CallableFunction
     logout: CallableFunction
@@ -13,37 +14,27 @@ const defaultValue = Object.freeze({ user: null, refresh: () => null, logout: ()
 const context = createContext<IUseAuth>(defaultValue)
 
 function AuthProvider({ children }) {
-    const [user, setUser] = useState<IUser | null>(null)
-    const [loading, setLoading] = useState(true)
-
-    const refresh = async () => {
-        setLoading(true)
+    const { data: user, isValidating: loading } = useSWR<IUser | null>("/api/auth/me", async (endpoint) => {
         try {
-            const response = await fetch("/api/auth/me")
+            const response = await fetch(endpoint)
             if (response.status !== 200) throw `Logout`
             const data = await response.json()
             console.info(data)
-            setUser({ ...data })
-            setLoading(false)
+            return data
         } catch (e) {
             console.error(e)
-            setUser(null)
-            setLoading(false)
+            return null
         }
-    }
-
-    useEffect(() => {
-        refresh()
-    }, [])
+    })
 
     const logout = async () => {
         await fetch("/api/auth/logout", {
             method: "POST",
         })
-        refresh()
+        mutate("/api/auth/me")
     }
 
-    return <context.Provider value={{ user, refresh, logout, loading }}>
+    return <context.Provider value={{ user, refresh: () => mutate("/api/auth/me"), logout, loading }}>
         {children}
     </context.Provider>
 }
