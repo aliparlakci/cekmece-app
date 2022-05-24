@@ -177,10 +177,7 @@ function CartProvider({ children }: { children: any }) {
     }
 
     const remove = async (id) => {
-        setCart(old => ({
-            ...old,
-            [id]: undefined,
-        }))
+        setCart(old => _.omit(old, id))
     }
 
     useEffect(() => {
