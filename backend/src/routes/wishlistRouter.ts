@@ -1,14 +1,9 @@
 import { RequestHandler, Router } from "express"
 import { StatusCodes } from "http-status-codes"
-import Joi from "joi"
-import createError from "http-errors"
-
 import CarService from "../services/carService"
-import CartService from "../services/cartService"
 import CategoryService from "../services/categoryService"
 import UserService from "../services/userService"
 import Context from "../utils/context"
-import { Cart } from "../models/cart"
 import WishlistService from "../services/wishlistService"
 
 function getWishlist(userService: UserService,  wlService: WishlistService) {
@@ -70,83 +65,12 @@ function removeFromWishlist(userService: UserService, wlService: WishlistService
     }
 }
 
-function deleteCart(userService: UserService, cartService: CartService) {
-    return async function (req, res, next) {
-        const userId = req.params.userId
-        const removeResult = await cartService.deleteUserCart(userId)
-
-        const ctx: Context | null = Context.get(req)
-        if (ctx === null) {
-            res.status(StatusCodes.NOT_FOUND).json()
-            return
-        }
-
-        const user = ctx.user
-        if (user === null) {
-            res.status(StatusCodes.NOT_FOUND).json()
-            return
-        }
-
-        if (userId !== user.id) {
-            res.status(StatusCodes.UNAUTHORIZED).json({})
-            return
-        }
-
-        if (removeResult.affected !== 0) {
-            res.status(200).json({ message: "Success" })
-        } else {
-            res.status(404).json({ message: "Error - User cart might be empty already!" })
-        }
-    }
-}
-
-
-function replaceCart(cartService: CartService): RequestHandler {
-    return async function (req, res, next) {
-        const ctx: Context | null = Context.get(req)
-        if (ctx === null) {
-            res.status(StatusCodes.NOT_FOUND).json()
-            return
-        }
-
-        const user = ctx.user
-        if (user === null) {
-            res.status(StatusCodes.NOT_FOUND).json()
-            return
-        }
-
-        const cartFormat = Joi.object().keys({
-            items: Joi.array()
-                .items(
-                    Joi.object().keys({
-                        id: Joi.number(),
-                        amount: Joi.number(),
-                    })
-                )
-                .required(),
-        })
-        const { error } = cartFormat.validate(req.body)
-        if (error) {
-            return next(createError(400, error))
-        }
-
-        try {
-            await cartService.replaceCart(req.body.items, user)
-        } catch (e) {
-            return next(createError(400, e))
-        }
-
-        res.status(201).json({})
-    }
-}
-
 function wishlistRouter() {
     const router = Router()
 
     const userService = new UserService()
     const categoryService = new CategoryService()
     const carService = new CarService(categoryService)
-    const cartService = new CartService(userService, carService)
     const wishlistService = new WishlistService(userService,carService);
 
     router.get("/:userId",getWishlist(userService,wishlistService));
