@@ -47,5 +47,19 @@ export default class WishlistService {
 
     }
 
+    async removeFromWishlist(wishlistEntityID: string) {
+        return this.repository()
+            .createQueryBuilder()
+            .delete()
+            .from(WishlistItem)
+            .where("id = :id", {id: wishlistEntityID})
+            .execute()
+    }
+
+    async getWishlist(user: string): Promise<WishlistItem[]> {
+        const userWishlist = await this.repository().find({relations: ["item", "user"]})
+        return (await userWishlist).filter((item) => item.user.id === user)
+    }
+
     
 }

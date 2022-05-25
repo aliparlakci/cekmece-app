@@ -11,13 +11,13 @@ import Context from "../utils/context"
 import { Cart } from "../models/cart"
 import WishlistService from "../services/wishlistService"
 
-function getCart(userService: UserService, cartService: CartService) {
+function getWishlist(userService: UserService,  wlService: WishlistService) {
     return async function (req, res, next) {
         const userId = req.params.userId
-        const cart = await cartService.getItemsInCard(userId)
+        const wishlist = await wlService.getWishlist(userId)
 
-        if (cart) {
-            res.status(200).json({ user: userId, cart })
+        if (wishlist) {
+            res.status(200).json({ user: userId, wishlist })
         } else {
             res.status(404).json({})
         }
@@ -56,11 +56,11 @@ function addToWishlist(userService: UserService, wlService: WishlistService) {
     }
 }
 
-function removeFromCart(userService: UserService, cartService: CartService) {
+function removeFromWishlist(userService: UserService, wlService: WishlistService) {
     return async function (req, res, next) {
-        const cartEntityId = req.params.cartEntityId
+        const wishlistItemEID = req.params.wishlistItemEID
 
-        const removeResult = await cartService.removeFromCart(cartEntityId)
+        const removeResult = await wlService.removeFromWishlist(wishlistItemEID)
 
         if (removeResult.affected !== 0) {
             res.status(200).json({ message: "Success" })
@@ -100,20 +100,6 @@ function deleteCart(userService: UserService, cartService: CartService) {
     }
 }
 
-function decreaseItemQuantity(userService: UserService, cartService: CartService) {
-    return async function (req, res, next) {
-        const carId = parseInt(req.params.carId)
-        const userId = req.params.userId
-
-        const cartItem = await cartService.decreaseItemQuantity(carId, 1, userId)
-
-        if (cartItem === 404) {
-            res.status(404).json({ cartItem: {}, message: "Wrong parameters" })
-        } else {
-            res.status(200).json({ cartItem, message: "Success" })
-        }
-    }
-}
 
 function replaceCart(cartService: CartService): RequestHandler {
     return async function (req, res, next) {
@@ -163,7 +149,10 @@ function wishlistRouter() {
     const cartService = new CartService(userService, carService)
     const wishlistService = new WishlistService(userService,carService);
 
+    router.get("/:userId",getWishlist(userService,wishlistService));
     router.post("/:userId/add/:carId", addToWishlist(userService, wishlistService))
+    router.post("/:userId/remove/:wishlistItemEID", removeFromWishlist(userService, wishlistService))
+
 
     return router
 }
