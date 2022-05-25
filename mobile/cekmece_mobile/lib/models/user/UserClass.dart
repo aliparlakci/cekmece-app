@@ -1,4 +1,5 @@
 import 'package:cekmece_mobile/models/cartItem/CartItem.dart';
+import 'package:cekmece_mobile/models/wishlistItem/WishlistItem.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'UserClass.freezed.dart';
@@ -11,6 +12,7 @@ class UserClass with _$UserClass {
       required bool isAnonymous,
       required String uid,
       required List<CartItem> cart,
+      required List<WishlistItem> wishlist,
       String? email,
       String? photoUrl}) = _UserClass;
 

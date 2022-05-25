@@ -13,6 +13,7 @@ import 'package:cekmece_mobile/views/search/search.dart';
 import 'package:cekmece_mobile/views/search/searchWrapper.dart';
 import 'package:cekmece_mobile/views/temp/TempView.dart';
 import 'package:cekmece_mobile/views/temp/omerTemp.dart';
+import 'package:cekmece_mobile/views/wishlist/wishlistview.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -42,14 +43,7 @@ class _NavigationViewState extends State<NavigationView> {
         tabController: _controller,
       ),
       SearchWrapper(),
-      Container(
-        child: Center(
-          child: Text(
-            "Favorites",
-            style: header,
-          ),
-        ),
-      ),
+      WishlistView(),
       CartView(user: widget.user),
       ProfileView(
         user: widget.user,

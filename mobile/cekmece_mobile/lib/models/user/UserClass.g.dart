@@ -13,6 +13,9 @@ _$_UserClass _$$_UserClassFromJson(Map<String, dynamic> json) => _$_UserClass(
       cart: (json['cart'] as List<dynamic>)
           .map((e) => CartItem.fromJson(e as Map<String, dynamic>))
           .toList(),
+      wishlist: (json['wishlist'] as List<dynamic>)
+          .map((e) => WishlistItem.fromJson(e as Map<String, dynamic>))
+          .toList(),
       email: json['email'] as String?,
       photoUrl: json['photoUrl'] as String?,
     );
@@ -23,6 +26,7 @@ Map<String, dynamic> _$$_UserClassToJson(_$_UserClass instance) =>
       'isAnonymous': instance.isAnonymous,
       'uid': instance.uid,
       'cart': instance.cart,
+      'wishlist': instance.wishlist,
       'email': instance.email,
       'photoUrl': instance.photoUrl,
     };

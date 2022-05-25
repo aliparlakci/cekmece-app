@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:cekmece_mobile/models/cartItem/CartItem.dart';
 import 'package:cekmece_mobile/models/product/Product.dart';
 import 'package:cekmece_mobile/models/user/UserClass.dart';
+import 'package:cekmece_mobile/models/wishlistItem/WishlistItem.dart';
 import 'package:cekmece_mobile/util/bloc/loadingBloc/loading_bloc.dart';
 import 'package:cekmece_mobile/util/network/networkProvider.dart';
 import 'package:flutter/cupertino.dart';
@@ -76,6 +77,31 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     return cart;
   }
 
+  Future<List<WishlistItem>> getWishlist(String userId) async {
+    List<WishlistItem> cart = [];
+    try {
+      final response =
+          await http.get(Uri.parse('${localIPAddress}/api/wishlist/${userId}'));
+
+      List<dynamic> cartJson = jsonDecode(response.body)["wishlist"];
+
+      if (response.statusCode == 200) {
+        for (Map<String, dynamic> wlItem in cartJson) {
+          Product car = await getCar(wlItem["item"]["id"]);
+
+          wlItem["item"] = car.toJson();
+          WishlistItem item = WishlistItem.fromJson(wlItem);
+          cart.add(item);
+        }
+      } else {
+        throw Exception('Failed to load cart');
+      }
+    } catch (err) {
+      print(err);
+    }
+    return cart;
+  }
+
   Future<UserClass> updateUser(dynamic me) async {
     BlocProvider.of<LoadingBloc>(context)
         .add(LoadingStart(loadingReason: "User fetch"));
@@ -85,6 +111,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         isAnonymous: false,
         email: me["email"],
         cart: cartList,
+        wishlist: await getWishlist(me["id"]),
         uid: me["id"],
         photoUrl:
             "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
@@ -100,6 +127,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         displayName: "Anon user",
         isAnonymous: true,
         email: "",
+        wishlist: [],
         cart: cartList,
         uid: "0",
         photoUrl: "");
@@ -155,6 +183,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
               displayName: "",
               isAnonymous: true,
               uid: "0",
+              wishlist: [],
               cart: await getLocalCart(),
               email: "",
               photoUrl: "");
@@ -166,6 +195,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
             displayName: "",
             isAnonymous: true,
             uid: "0",
+            wishlist: [],
             cart: [],
             email: "",
             photoUrl: "");
@@ -221,6 +251,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
           isAnonymous: true,
           uid: "0",
           cart: [],
+          wishlist: [],
           email: "",
           photoUrl: "");
       emit(LoggedIn(user: user));
