@@ -13,6 +13,7 @@ import * as bcrypt from "bcryptjs"
 import { Review } from "./review"
 import { Cart } from "./cart"
 import { Order } from "./order"
+import { WishlistItem } from "./wishlist"
 
 @Entity()
 @Unique(["email"])
@@ -46,6 +47,10 @@ export class User {
     @OneToMany((type) => Cart, (cart) => cart.id)
     @JoinColumn()
     cart: Cart[]
+
+    @OneToMany((type) => WishlistItem, (wlItem) => wlItem.id)
+    @JoinColumn()
+    wishlist: WishlistItem[]
 
     setPassword(plainPassword: string) {
         this.password = bcrypt.hashSync(plainPassword, 8)

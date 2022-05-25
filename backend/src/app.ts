@@ -18,6 +18,7 @@ import { JWTAuth } from "./middlewares/JWTAuth"
 import AuthService from "./services/authService"
 import Context from "./utils/context"
 import orderRouter from "./routes/orderRouter"
+import wishlistRouter from "./routes/wishlistRouter"
 
 async function createServer(){
     try {
@@ -49,6 +50,7 @@ async function createServer(){
     v1.use("/categories", categoryRouter())
     v1.use("/distributors", distributorRouter())
     v1.use("/cart", cartRouter())
+    v1.use("/wishlist",wishlistRouter())
     v1.use("/users", userRouter())
     v1.use("/auth", authRouter())
     v1.use("/orders", orderRouter())
