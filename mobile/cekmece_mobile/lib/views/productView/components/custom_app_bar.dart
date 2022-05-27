@@ -42,14 +42,6 @@ class CustomAppBar extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  Text(
-                    "$rating",
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  const SizedBox(width: 5),
                   Icon(Icons.favorite),
                 ],
               ),

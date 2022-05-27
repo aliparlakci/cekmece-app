@@ -365,8 +365,7 @@ class CarouselContainer extends StatelessWidget {
       child: Container(
           width: MediaQuery.of(context).size.width,
           margin: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 5),
-          decoration:
-              const BoxDecoration(color: Colors.transparent, boxShadow: [
+          decoration: const BoxDecoration(color: Colors.white, boxShadow: [
             BoxShadow(
               color: Colors.black,
               blurRadius: 2.0,
@@ -376,7 +375,7 @@ class CarouselContainer extends StatelessWidget {
           ]),
           child: Stack(
             children: [
-              Image.network(car.photoUrl),
+              Center(child: Image.network(car.photoUrl)),
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Container(
