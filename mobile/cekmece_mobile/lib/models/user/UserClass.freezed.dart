@@ -27,6 +27,7 @@ class _$UserClassTearOff {
       required bool isAnonymous,
       required String uid,
       required List<CartItem> cart,
+      required List<WishlistItem> wishlist,
       String? email,
       String? photoUrl}) {
     return _UserClass(
@@ -34,6 +35,7 @@ class _$UserClassTearOff {
       isAnonymous: isAnonymous,
       uid: uid,
       cart: cart,
+      wishlist: wishlist,
       email: email,
       photoUrl: photoUrl,
     );
@@ -53,6 +55,7 @@ mixin _$UserClass {
   bool get isAnonymous => throw _privateConstructorUsedError;
   String get uid => throw _privateConstructorUsedError;
   List<CartItem> get cart => throw _privateConstructorUsedError;
+  List<WishlistItem> get wishlist => throw _privateConstructorUsedError;
   String? get email => throw _privateConstructorUsedError;
   String? get photoUrl => throw _privateConstructorUsedError;
 
@@ -71,6 +74,7 @@ abstract class $UserClassCopyWith<$Res> {
       bool isAnonymous,
       String uid,
       List<CartItem> cart,
+      List<WishlistItem> wishlist,
       String? email,
       String? photoUrl});
 }
@@ -89,6 +93,7 @@ class _$UserClassCopyWithImpl<$Res> implements $UserClassCopyWith<$Res> {
     Object? isAnonymous = freezed,
     Object? uid = freezed,
     Object? cart = freezed,
+    Object? wishlist = freezed,
     Object? email = freezed,
     Object? photoUrl = freezed,
   }) {
@@ -109,6 +114,10 @@ class _$UserClassCopyWithImpl<$Res> implements $UserClassCopyWith<$Res> {
           ? _value.cart
           : cart // ignore: cast_nullable_to_non_nullable
               as List<CartItem>,
+      wishlist: wishlist == freezed
+          ? _value.wishlist
+          : wishlist // ignore: cast_nullable_to_non_nullable
+              as List<WishlistItem>,
       email: email == freezed
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
@@ -132,6 +141,7 @@ abstract class _$UserClassCopyWith<$Res> implements $UserClassCopyWith<$Res> {
       bool isAnonymous,
       String uid,
       List<CartItem> cart,
+      List<WishlistItem> wishlist,
       String? email,
       String? photoUrl});
 }
@@ -151,6 +161,7 @@ class __$UserClassCopyWithImpl<$Res> extends _$UserClassCopyWithImpl<$Res>
     Object? isAnonymous = freezed,
     Object? uid = freezed,
     Object? cart = freezed,
+    Object? wishlist = freezed,
     Object? email = freezed,
     Object? photoUrl = freezed,
   }) {
@@ -171,6 +182,10 @@ class __$UserClassCopyWithImpl<$Res> extends _$UserClassCopyWithImpl<$Res>
           ? _value.cart
           : cart // ignore: cast_nullable_to_non_nullable
               as List<CartItem>,
+      wishlist: wishlist == freezed
+          ? _value.wishlist
+          : wishlist // ignore: cast_nullable_to_non_nullable
+              as List<WishlistItem>,
       email: email == freezed
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
@@ -191,6 +206,7 @@ class _$_UserClass implements _UserClass {
       required this.isAnonymous,
       required this.uid,
       required this.cart,
+      required this.wishlist,
       this.email,
       this.photoUrl});
 
@@ -206,13 +222,15 @@ class _$_UserClass implements _UserClass {
   @override
   final List<CartItem> cart;
   @override
+  final List<WishlistItem> wishlist;
+  @override
   final String? email;
   @override
   final String? photoUrl;
 
   @override
   String toString() {
-    return 'UserClass(displayName: $displayName, isAnonymous: $isAnonymous, uid: $uid, cart: $cart, email: $email, photoUrl: $photoUrl)';
+    return 'UserClass(displayName: $displayName, isAnonymous: $isAnonymous, uid: $uid, cart: $cart, wishlist: $wishlist, email: $email, photoUrl: $photoUrl)';
   }
 
   @override
@@ -226,6 +244,7 @@ class _$_UserClass implements _UserClass {
                 .equals(other.isAnonymous, isAnonymous) &&
             const DeepCollectionEquality().equals(other.uid, uid) &&
             const DeepCollectionEquality().equals(other.cart, cart) &&
+            const DeepCollectionEquality().equals(other.wishlist, wishlist) &&
             const DeepCollectionEquality().equals(other.email, email) &&
             const DeepCollectionEquality().equals(other.photoUrl, photoUrl));
   }
@@ -237,6 +256,7 @@ class _$_UserClass implements _UserClass {
       const DeepCollectionEquality().hash(isAnonymous),
       const DeepCollectionEquality().hash(uid),
       const DeepCollectionEquality().hash(cart),
+      const DeepCollectionEquality().hash(wishlist),
       const DeepCollectionEquality().hash(email),
       const DeepCollectionEquality().hash(photoUrl));
 
@@ -257,6 +277,7 @@ abstract class _UserClass implements UserClass {
       required bool isAnonymous,
       required String uid,
       required List<CartItem> cart,
+      required List<WishlistItem> wishlist,
       String? email,
       String? photoUrl}) = _$_UserClass;
 
@@ -271,6 +292,8 @@ abstract class _UserClass implements UserClass {
   String get uid;
   @override
   List<CartItem> get cart;
+  @override
+  List<WishlistItem> get wishlist;
   @override
   String? get email;
   @override
