@@ -5,8 +5,10 @@ import 'package:cekmece_mobile/models/user/UserClass.dart';
 import 'package:cekmece_mobile/util/bloc/userBloc/user_bloc.dart';
 import 'package:cekmece_mobile/views/cart/cartView.dart';
 import 'package:cekmece_mobile/views/homeView/homeView.dart';
+import 'package:cekmece_mobile/views/mainView/mainView.dart';
 import 'package:cekmece_mobile/views/productView/components/size.dart';
 import 'package:cekmece_mobile/views/productView/details_screen.dart';
+import 'package:cekmece_mobile/views/productsView/productsView.dart';
 import 'package:cekmece_mobile/views/profile/profileView.dart';
 import 'package:cekmece_mobile/views/reviews/ReviewsView.dart';
 import 'package:cekmece_mobile/views/search/search.dart';
@@ -39,9 +41,7 @@ class _NavigationViewState extends State<NavigationView> {
 
   List<Widget> _buildScreens() {
     return [
-      HomeView(
-        tabController: _controller,
-      ),
+      MainView(),
       SearchWrapper(),
       WishlistView(),
       CartView(user: widget.user),

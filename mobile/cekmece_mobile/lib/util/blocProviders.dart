@@ -25,9 +25,11 @@ class BlocProviders extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         title: 'Cekmece',
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
           // primarySwatch: Colors.amber,
           // canvasColor: neutralColor,
+          fontFamily: 'Raleway',
           primaryColor: primaryColor,
           appBarTheme: AppBarTheme(
             backgroundColor: Colors.white,

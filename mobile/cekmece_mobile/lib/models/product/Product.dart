@@ -15,6 +15,7 @@ class Product with _$Product {
     required int model,
     required int quantity,
     required int warranty,
+    required int unitsSold,
     required int reviewCount,
     required String averageRating,
     bool? userCanReviewCar,

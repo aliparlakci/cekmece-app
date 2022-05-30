@@ -225,4 +225,99 @@ final newReviewTextFormFieldErrorFillStyle = GoogleFonts.raleway(
   color: Colors.red,
 );
 
+/* Products View */
 
+final productCardModelAndDistributorTextStyle = GoogleFonts.raleway(
+  fontSize: 15,
+  fontWeight: FontWeight.w600,
+  color: Colors.black,
+);
+
+final productCardNameTextStyle = GoogleFonts.raleway(
+  fontSize: 15,
+  fontWeight: FontWeight.w500,
+  color: Colors.black,
+);
+
+final productCardPriceTextStyle = GoogleFonts.raleway(
+  fontSize: 15,
+  fontWeight: FontWeight.w700,
+  color: Colors.black,
+);
+
+/* Filter Products View */
+
+final filterProductsTitlesTextStyle = GoogleFonts.raleway(
+  fontSize: 18,
+  fontWeight: FontWeight.w700,
+  color: Colors.black,
+);
+
+final filterProductsOptionsTextStyle = GoogleFonts.raleway(
+  fontSize: 16,
+  fontWeight: FontWeight.w500,
+  color: Colors.black,
+);
+
+final filterProductsOptionsErrorTextStyle = GoogleFonts.raleway(
+  fontSize: 15,
+  fontWeight: FontWeight.w600,
+  color: Colors.red,
+);
+
+final filterProductsOptionsSelectedTextStyle = GoogleFonts.raleway(
+  fontSize: 16,
+  fontWeight: FontWeight.w700,
+  color: Colors.black,
+);
+
+final filterProductsUnselectedCategoryChipTextStyle = GoogleFonts.raleway(
+  fontSize: 16,
+  fontWeight: FontWeight.w600,
+  color: Colors.black,
+);
+
+final filterProductsSelectedCategoryChipTextStyle = GoogleFonts.raleway(
+  fontSize: 16,
+  fontWeight: FontWeight.w600,
+  color: Colors.white,
+);
+
+/* Main View */
+
+final mainViewTitle = GoogleFonts.raleway(
+  fontSize: 24,
+  fontWeight: FontWeight.w600,
+  color: Colors.black,
+);
+
+final mainViewSubTitle = GoogleFonts.raleway(
+  fontSize: 18,
+  fontWeight: FontWeight.w400,
+  color: Colors.black,
+  fontStyle: FontStyle.italic
+);
+
+final mainViewCardText = GoogleFonts.raleway(
+    fontSize: 18,
+    fontWeight: FontWeight.w500,
+    color: Colors.white,
+);
+
+final mainViewCardTextAlternate = GoogleFonts.raleway(
+  fontSize: 20,
+  fontWeight: FontWeight.w800,
+  color: Colors.white,
+);
+
+final mainViewCardTextBlack = GoogleFonts.raleway(
+  fontSize: 18,
+  fontWeight: FontWeight.w500,
+  color: Colors.black,
+);
+
+final mainViewCardTextAlternateBlack = GoogleFonts.raleway(
+  fontSize: 20,
+  fontWeight: FontWeight.w800,
+  color: Colors.black,
+);
