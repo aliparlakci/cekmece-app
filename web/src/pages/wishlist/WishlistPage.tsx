@@ -52,7 +52,6 @@ export default function WishlistPage() {
                             {/* product div */}
                             <div className="flex flex-col flex-1">
                                 {/* Product Sections Below */}
-                               
                                 {Object.keys(cart).map((id, i) => <ProductSection key={i} item={cart[id]} />)}
                                 <Button variant="contained" color="success">
                                 Add Selected to the Cart

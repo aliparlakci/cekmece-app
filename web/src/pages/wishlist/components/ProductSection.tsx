@@ -37,7 +37,7 @@ export default function ProductSection({ item }: IProductSelectionProps) {
 
                     <div className="flex items-center justify-center text-xl mt-3">
                         <p>
-                        <b className="mr-9"> {"\t"}</b><b className="mr-2"> {"\t"} Brand:</b>{item.item.distributor?.name} | <b className="mr-2">Brand:</b>{item.item.name} | <b className="mr-2">Year:</b>{item.item.model}
+                        <b className="mr-9"> {"\t"}</b><b className="mr-2"> {"\t"} Brand:</b>{item.item.distributor?.name} | <b className="mr-2">Brand:</b>{item.item.name} | <b className="mr-2">Year:</b>{item.item.model} | {"\t"} {"\t"} {"\t"} <b className="mr-2">Price:</b>${item.item.price * item.amount} 
                         </p>
                        
                     </div>
@@ -48,8 +48,8 @@ export default function ProductSection({ item }: IProductSelectionProps) {
                     <div>
            
                     </div>
-                    <p className="flex items-center justify-center text-xl mt-3">
-                        <b>${item.item.price * item.amount}</b>
+                    <p className="mr-2">
+                        
                     </p>
                 </div>
 
