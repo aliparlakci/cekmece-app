@@ -1,13 +1,10 @@
 import * as React from "react"
-import { Link, Route, Switch } from "react-router-dom"
-import { AppBar, IconButton, Toolbar, Typography, createTheme, Grid, Button } from "@mui/material"
-import { ThemeProvider } from "@mui/styles"
-import { Box } from "@mui/system"
+import { Route, Switch } from "react-router-dom"
 
 import CarListView from "./components/CarListView"
 import CategoryListView from "./components/CategoryListView"
 import DistributorListView from "./components/DistributorListView"
-import NavBar from "../../components/NavBar"
+import OrdersListView from "./components/OrdersListView"
 
 export default function AdminPage() {
     return (
@@ -21,6 +18,9 @@ export default function AdminPage() {
                 </Route>
                 <Route path="/admin/distributors">
                     <DistributorListView />
+                </Route>
+                <Route path="/admin/orders">
+                    <OrdersListView />
                 </Route>
                 <Route path="/admin/reviews">
                     Reviews

@@ -58,6 +58,7 @@ export default function CategoryListView() {
                                 <Link to="/admin/cars"><Button variant="text">Cars</Button></Link>
                                 <Link to="/admin/categories"><Button variant="text">Categories</Button></Link>
                                 <Link to="/admin/distributors"><Button variant="text">Distributors</Button></Link>
+                                <Link to="/admin/orders"><Button variant="text">Orders</Button></Link>
                                 <Link to="/admin/reviews"><Button variant="text">Reviews</Button></Link>
                             </div>
                             <div>

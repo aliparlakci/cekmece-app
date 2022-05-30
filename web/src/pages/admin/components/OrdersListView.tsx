@@ -1,41 +1,71 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { DataGrid } from "@mui/x-data-grid"
 import { Box, Button, CssBaseline } from "@mui/material"
-import useSWR from "swr"
+import useSWR, { mutate } from "swr"
 
-import NewDistributorDialog from "./NewDistributorDialog"
-import IDistributor from "../../../models/distributor"
+import NewCarDialog from "./NewCarDialog"
+import ICar from "../../../models/car"
 import fetcher from "../../../utils/fetcher"
+import useConfirmation from "../../../hooks/useConfirmation"
+import useNotification, { NOTIFICATON_TYPES } from "../../../hooks/useNotification"
 import { Link } from "react-router-dom"
+import IOrder from "../../../models/order"
 
 const columns = [
-    { field: "id", headerName: "ID" },
-    { field: "name", headerName: "Name", flex: 1 },
+    { field: "id", headerName: "ID", flex: 1 },
+    { field: "status", headerName: "Status", flex: 1 },
+    { field: "discount", headerName: "Discount" },
+    { field: "total", headerName: "Amount" },
+    { field: "createdDate", headerName: "Created At", flex: 1 },
+    { field: "updatedDate", headerName: "Last Updated", flex: 1 },
 ]
 
-export default function DistributorListView() {
-    const { data, error } = useSWR<IDistributor[]>("/api/distributors", fetcher)
+export default function OrdersListView() {
+    const { data, error } = useSWR<IOrder[]>("/api/orders/all", fetcher)
 
-    const [isNewDistributorDialogOpen, setNewDistributorDialogOpen] = useState(false)
+    const confirm = useConfirmation()
+    const notification = useNotification()
+
     const [selected, setSelected] = useState<any[]>([])
+    const [isNewCarModalOpen, setNewCarModalOpen] = useState(false)
     const [update, setUpdate] = useState<number | undefined>(undefined)
 
     const handleClose = () => {
+        setNewCarModalOpen(false)
         setUpdate(undefined)
-        setNewDistributorDialogOpen(false)
     }
 
-    const onCategoryEdit = (id: number) => {
+    const onCarEdit = (id: number) => {
         setUpdate(id)
-        setNewDistributorDialogOpen(true)
+        setNewCarModalOpen(true)
     }
+    //
+    // const onDelete = (id: number) => {
+    //     confirm({
+    //         title: "Do you want to delete the car?",
+    //         message: "",
+    //     }, async () => {
+    //         try {
+    //             const response = await fetch(`/api/cars/${id}/delete`, {
+    //                 method: "POST",
+    //             })
+    //
+    //             if (response.status !== 200) {
+    //                 throw `Couldn't delete the car, server responded with ${response.status}`
+    //             }
+    //
+    //             mutate("/api/cars")
+    //         } catch (err) {
+    //             notification(NOTIFICATON_TYPES.ERROR, JSON.stringify(err))
+    //         }
+    //     })
+    // }
 
     if (!data) return <></>
 
     return (
         <>
-            <NewDistributorDialog open={isNewDistributorDialogOpen} onClose={() => setNewDistributorDialogOpen(false)}
-                                  update={update} />
+            <NewCarDialog open={isNewCarModalOpen} onClose={handleClose} update={update} />
             <Box sx={{ display: "flex", minHeight: "calc(100vh - 4rem)" }}>
                 <CssBaseline />
                 <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
@@ -61,20 +91,15 @@ export default function DistributorListView() {
                                 <Link to="/admin/orders"><Button variant="text">Orders</Button></Link>
                                 <Link to="/admin/reviews"><Button variant="text">Reviews</Button></Link>
                             </div>
-                            <div>
-                                <Button variant="contained">
-                                    <span className="whitespace-nowrap" onClick={() => setNewDistributorDialogOpen(true)}>New Distributor</span>
-                                </Button>
-                            </div>
+                            <div></div>
                         </Box>
                         <div className="w-full h-full bg-white rounded-lg">
                             <DataGrid
                                 rows={data || []}
                                 columns={columns}
-                                pageSize={5}
-                                rowsPerPageOptions={[5]}
+                                rowsPerPageOptions={[5, 10, 25, 50, 100]}
                                 onSelectionModelChange={(model, details) => setSelected(model)}
-                                onCellDoubleClick={(params) => onCategoryEdit(params.row.id)}
+                                onCellDoubleClick={(params) => onCarEdit(params.row.id)}
                             />
                         </div>
                     </Box>
