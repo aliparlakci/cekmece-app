@@ -49,6 +49,7 @@ function getCar(carService: CarService, orderService: OrderService) {
 
 function setDiscount(carService: CarService) {
     return async function (req, res, next) {
+/*
         const ctx: Context | null = Context.get(req)
         if (ctx === null) {
             res.status(StatusCodes.UNAUTHORIZED).json({
@@ -64,6 +65,7 @@ function setDiscount(carService: CarService) {
             })
             return
         }
+*/
 
         const carId = parseInt(req.params.carId)
         const discount = parseInt(req.params.amount)
