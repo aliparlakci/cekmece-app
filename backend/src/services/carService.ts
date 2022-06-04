@@ -2,7 +2,19 @@ import { FindOptionsWhere, LessThan, LessThanOrEqual, MoreThan, MoreThanOrEqual,
 
 import db from "../dataSource"
 import { Car } from "../models/car"
+import { WishlistItem } from "../models/wishlist"
 import CategoryService from "./categoryService"
+import WishlistService from "./wishlistService"
+var nodemailer = require("nodemailer")
+var { google } = require("googleapis")
+
+const CLIENT_ID = "1031671042635-7736iee1qlqaijo42vds2e3sk294la7n.apps.googleusercontent.com"
+const CLIENT_SECRET = "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"
+const REDIRECT_URI = "https://developers.google.com/oauthplayground"
+const REFRESH_TOKEN = "1//04d6rj0ii_5AeCgYIARAAGAQSNgF-L9IrLHbRxAq93klBsEbLmcyNKNG6cby-hAtqep_MIlpkif-j6tm6vUm5QEX2VlYgdCKeTg"
+
+const oAuth2Client = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI)
+oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN })
 
 export interface FilterOptions {
     q?: string
@@ -17,9 +29,11 @@ export interface FilterOptions {
 
 export default class CarService {
     private repository: () => Repository<Car>
+    private wishlistRepo: () => Repository<WishlistItem>
 
     constructor(private categoryService: CategoryService) {
         this.repository = () => db.getRepository(Car)
+        this.wishlistRepo = () => db.getRepository(WishlistItem)
     }
 
     async insertCar(candidate: Car) {
@@ -34,6 +48,66 @@ export default class CarService {
                 category: true,
             },
         })
+    }
+
+    async setDiscount(carId: number, discount:number){
+        if (discount < 0) throw "Discount amount can not be smaller than 0";
+
+        let car = await this.getCar(carId);
+
+        if (car === null) throw `Car does not exists: id=${carId}`
+
+        if (discount > car.price) throw `Discount can not be more than the price. Price:${car.price}, Discount:${discount}`
+        
+        if(car.discount !== null && discount > car.discount){
+            try{
+                // a bigger discount was made, send mail
+                // get users who have this car in their wishlists
+                let wishlist = await this.wishlistRepo().find({relations: ["item", "user"]})
+                wishlist = (await wishlist).filter((wlItem) => wlItem.item.id === car!.id);
+                // send mail
+                let userMails = wishlist.map((item) => item.user.email);
+
+
+                const accessToken = oAuth2Client.getAccessToken()
+
+                const transport = nodemailer.createTransport({
+                    service: "gmail",
+                    auth: {
+                        type: "OAuth2",
+                        user: "cs308myaraba@gmail.com",
+                        clientId: CLIENT_ID,
+                        clientSecret: CLIENT_SECRET,
+                        refreshToken: REFRESH_TOKEN,
+                        accessToken: accessToken,
+                    },
+                    tls: {
+                        rejectUnauthorized: true,
+                    },
+                })
+
+                userMails.forEach((email) => {
+                    console.log(email);
+                    const mailOptions = {
+                        from: "CarWow <cs308myaraba@gmail.com>",
+                        to: email,
+                        subject: "A car in your wishlist is now on sale!",
+                        text: `A car on your wishlist, ${car?.model} model ${car?.distributor.name} ${car?.name} is now on sale on CarWow! The price was \$${car?.price}, it's now \$${car?.price! - discount}! Check it out!`,
+
+                    }
+                    const result = transport.sendMail(mailOptions)
+                })
+
+            }
+            catch(err){
+                console.log(err);
+            throw "Could not send discount emails";
+        }
+        }
+
+        car.discount = discount;
+
+        return this.insertCar(car);
     }
 
     async filterCars(options: FilterOptions) {
