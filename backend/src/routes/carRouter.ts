@@ -47,6 +47,39 @@ function getCar(carService: CarService, orderService: OrderService) {
     }
 }
 
+function setDiscount(carService: CarService) {
+    return async function (req, res, next) {
+        const ctx: Context | null = Context.get(req)
+        if (ctx === null) {
+            res.status(StatusCodes.UNAUTHORIZED).json({
+                message: "You must be logged in and be a product manager or an admin to be able to set discount.",
+            })
+            return
+        }
+
+        const user = ctx.user
+        if (user === null) {
+            res.status(StatusCodes.UNAUTHORIZED).json({
+                message: "You must be logged in and be a product manager or an admin to be able to set discount.",
+            })
+            return
+        }
+
+        const carId = parseInt(req.params.carId)
+        const discount = parseInt(req.params.amount)
+
+        try{
+            let car = await carService.setDiscount(carId,discount);
+            res.status(StatusCodes.OK).json(car);
+            return
+        }
+        catch(err){
+            res.status(500).json(err)
+            return
+        }
+    }
+}
+
 function addNewCar(carService: CarService): RequestHandler {
     return async function (req, res, next) {
         const carFormat = Joi.object().keys({
@@ -60,6 +93,7 @@ function addNewCar(carService: CarService): RequestHandler {
             category: Joi.number().required(),
             description: Joi.string().optional(),
             photoUrl: Joi.string().optional(),
+            discount: Joi.number().positive().optional()
         })
         const { error } = carFormat.validate(req.body)
         if (error) {
@@ -93,6 +127,7 @@ function updateNewCar(carService: CarService): RequestHandler {
             category: Joi.number().required(),
             description: Joi.string().optional(),
             photoUrl: Joi.string().optional(),
+            discount: Joi.number().positive().optional()
         })
         const { error } = carFormat.validate(req.body)
         if (error) {
@@ -199,6 +234,10 @@ function carRouter() {
     router.post("/:carId/category/:categoryId", assignNewCategory(carService))
     router.delete("/:carId/category/:categoryId", removeCategory(carService))
     router.get("/category/:categoryId", getCarsByCategory(carService))
+
+    //discount routes
+    router.post("/:carId/setDiscount/:amount", setDiscount(carService))
+
 
     router.use("/:carId/reviews", reviewRouter())
 

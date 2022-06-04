@@ -2,7 +2,9 @@ import { FindOptionsWhere, LessThan, LessThanOrEqual, MoreThan, MoreThanOrEqual,
 
 import db from "../dataSource"
 import { Car } from "../models/car"
+import { WishlistItem } from "../models/wishlist"
 import CategoryService from "./categoryService"
+import WishlistService from "./wishlistService"
 
 export interface FilterOptions {
     q?: string
@@ -17,9 +19,11 @@ export interface FilterOptions {
 
 export default class CarService {
     private repository: () => Repository<Car>
+    private wishlistRepo: () => Repository<WishlistItem>
 
     constructor(private categoryService: CategoryService) {
         this.repository = () => db.getRepository(Car)
+        this.wishlistRepo = () => db.getRepository(WishlistItem)
     }
 
     async insertCar(candidate: Car) {
@@ -34,6 +38,33 @@ export default class CarService {
                 category: true,
             },
         })
+    }
+
+    async setDiscount(carId: number, discount:number){
+        let car = await this.getCar(carId);
+
+        if (car === null) throw `Car does not exists: id=${carId}`
+
+        if (discount > car.price) throw `Discount can not be more than the price. Price:${car.price}, Discount:${discount}`
+        
+        if(car.discount !== null && discount > car.discount){
+            try{
+                // a bigger discount was made, send mail
+                // get users who have this car in their wishlists
+                let wishlist = await this.wishlistRepo().find({relations: ["item", "user"]})
+                wishlist = (await wishlist).filter((wlItem) => wlItem.item.id === car!.id);
+                // send mail
+
+                let userMails = wishlist.map((item) => item.user.email);
+
+                console.log(userMails);
+            }
+            catch(err){console.log(err);}
+        }
+
+        car.discount = discount;
+
+        return this.insertCar(car);
     }
 
     async filterCars(options: FilterOptions) {

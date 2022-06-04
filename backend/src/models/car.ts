@@ -37,6 +37,9 @@ export class Car {
     price: number
 
     @Column()
+    discount: number
+
+    @Column()
     warranty: number
 
     @ManyToOne(() => Distributor, (distributor) => distributor.cars, { cascade: true })
