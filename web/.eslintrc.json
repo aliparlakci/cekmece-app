@@ -20,7 +20,8 @@
         "quotes": "off",
         "semi": "off",
         "no-empty-function": "off",
-        "@typescript-eslint/no-explicit-any": "off"
+        "@typescript-eslint/no-explicit-any": "off",
+        "no-debugger": "off"
     },
     "globals": {
         "require": "readonly",

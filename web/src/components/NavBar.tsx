@@ -20,6 +20,7 @@ import { styled, alpha } from "@mui/material/styles"
 
 import useAuth from "../hooks/useAuth"
 import useCart from "../hooks/useCart"
+import useWishlist from "../hooks/useWishlist"
 
 const theme = createTheme({
     palette: {
@@ -80,6 +81,7 @@ export default function NavBar({ search, onSearch }: INavBarProps) {
     const history = useHistory()
     const { user, logout } = useAuth()
     const { cart } = useCart()
+    const { wishlist } = useWishlist()
 
     const [anchorEl, setAnchorEl] = React.useState(null)
     const open = Boolean(anchorEl)
@@ -109,7 +111,7 @@ export default function NavBar({ search, onSearch }: INavBarProps) {
                             CarWow
                         </Typography>
                         <Box sx={{ flexGrow: 1 }} />
-                        <Link to="/wishlist">
+                        {user && <Link to="/wishlist">
                             <IconButton
                                 size="large"
                                 edge="start"
@@ -118,16 +120,13 @@ export default function NavBar({ search, onSearch }: INavBarProps) {
                                 sx={{ mr: 2 }}
                             >
                                 <Badge
-                                    badgeContent={Object.keys(cart).reduce(
-                                        (prev, id) => cart[id] && cart[id].amount + prev,
-                                        0
-                                    )}
+                                    badgeContent={wishlist.length}
                                     color="error"
                                 >
                                     <FavoriteBorder />
                                 </Badge>
                             </IconButton>
-                        </Link>
+                        </Link>}
                         <Link to="/cart">
                             <IconButton
                                 size="large"

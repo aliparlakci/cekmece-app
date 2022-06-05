@@ -14,6 +14,7 @@ import useAuth from "./hooks/useAuth"
 import { CartProvider } from "./hooks/useCart"
 import { NotificationProvider } from "./hooks/useNotification"
 import { ConfirmationProvider } from "./hooks/useConfirmation"
+import { WishlistProvider } from "./hooks/useWishlist"
 
 import UserRoles from "./models/userRoles"
 
@@ -29,44 +30,46 @@ function App() {
             <NotificationProvider>
                 <ConfirmationProvider>
                     <CartProvider>
-                        <Router>
-                            <Switch>
-                                <Route path="/admin">
-                                    {!loading && (
-                                        <>
-                                            {user === null && <Redirect to="/login" />}
-                                            {user?.role === UserRoles.ADMIN && <AdminPage />}
-                                            {user?.role !== UserRoles.ADMIN && <Redirect to="/" />}
-                                        </>
-                                    )}
-                                </Route>
-                                <Route exact path="/">
-                                    <HomePage />
-                                </Route>
-                                <Route path="/login">
-                                    <LoginPage />
-                                </Route>
-                                <Route path="/register">
-                                    <RegisterPage />
-                                </Route>
-                                <Route path="/cart">
-                                    <CartPage />
-                                </Route>
-                                <Route path="/checkout">
-                                    {user && <CheckoutPage />}
-                                    {user === null && <Redirect to="/login" />}
-                                </Route>
-                                <Route path="/cars/:carId">
-                                    <CarDetailPage />
-                                </Route>
-                                <Route path="/orderHistory">
-                                    <OrdersPage />
-                                </Route>
-                                <Route path="/wishlist">
-                                    <WishlistPage />
-                                </Route>
-                            </Switch>
-                        </Router>
+                        <WishlistProvider>
+                            <Router>
+                                <Switch>
+                                    <Route path="/admin">
+                                        {!loading && (
+                                            <>
+                                                {user === null && <Redirect to="/login" />}
+                                                {user?.role === UserRoles.ADMIN && <AdminPage />}
+                                                {user?.role !== UserRoles.ADMIN && <Redirect to="/" />}
+                                            </>
+                                        )}
+                                    </Route>
+                                    <Route exact path="/">
+                                        <HomePage />
+                                    </Route>
+                                    <Route path="/login">
+                                        <LoginPage />
+                                    </Route>
+                                    <Route path="/register">
+                                        <RegisterPage />
+                                    </Route>
+                                    <Route path="/cart">
+                                        <CartPage />
+                                    </Route>
+                                    <Route path="/checkout">
+                                        {user && <CheckoutPage />}
+                                        {user === null && <Redirect to="/login" />}
+                                    </Route>
+                                    <Route path="/cars/:carId">
+                                        <CarDetailPage />
+                                    </Route>
+                                    <Route path="/orderHistory">
+                                        <OrdersPage />
+                                    </Route>
+                                    <Route path="/wishlist">
+                                        <WishlistPage />
+                                    </Route>
+                                </Switch>
+                            </Router>
+                        </WishlistProvider>
                     </CartProvider>
                 </ConfirmationProvider>
             </NotificationProvider>

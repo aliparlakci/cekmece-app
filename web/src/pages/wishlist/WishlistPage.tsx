@@ -3,9 +3,8 @@ import { useHistory } from "react-router-dom"
 import NavBar from "../../components/NavBar"
 import { Box, Button, createTheme, ThemeProvider, Typography } from "@mui/material"
 import ProductSection from "./components/ProductSection"
-import Counter from "./components/Counter"
-import useCart from "../../hooks/useCart"
 import useAuth from "../../hooks/useAuth"
+import useWishlist from "../../hooks/useWishlist"
 
 const theme = createTheme({
     palette: {
@@ -15,12 +14,8 @@ const theme = createTheme({
     },
 })
 
-const SummaryItemStyle = "SummaryItem flex justify-between mt-3 w-[100%]"
-const ProductDivStyle = "flex w-[100%] h-auto items-center mobile:flex-col"
-const PriceQuantityStyle = "flex-auto flex flex-col justify-center items-center mobile:mt-7 mobile:mb-7"
-
 export default function WishlistPage() {
-    const { cart } = useCart()
+    const { wishlist } = useWishlist()
     const { user } = useAuth()
     const history = useHistory()
 
@@ -29,35 +24,23 @@ export default function WishlistPage() {
             <ThemeProvider theme={theme}>
                 <div>
                     <NavBar />
-                    <div className="p-3">
-                        <div className="flex justify-center text-5xl">Cart</div>
-
+                    <div className="p-3 w-full md:max-w-3xl mx-auto mt-20">
                         {/* Heading */}
-
                         <Box
-                                sx={{
-                                    mt: 2,
-                                    mb: 2,
-                                }}
-                            ></Box>
-                           
-                  
-
-                        <Typography  align="center" variant="h3" color="error" > ♥   Wishlist   ♥</Typography>
-                                
-
-
+                            sx={{
+                                mt: 2,
+                                mb: 2,
+                            }}
+                        ></Box>
+                        <Typography align="center" variant="h3" color="error"> ♥ Wishlist ♥</Typography>
                         {/* vertically center parent div */}
                         <div className="flex flex-row mt-7 mobile:flex-col">
                             {/* product div */}
                             <div className="flex flex-col flex-1">
                                 {/* Product Sections Below */}
-                                {Object.keys(cart).map((id, i) => <ProductSection key={i} item={cart[id]} />)}
-                                <Button variant="contained" color="success">
-                                Add Selected to the Cart
-                                </Button>
+                                {wishlist.map((item, i) => <ProductSection key={i} item={item} />)}
                             </div>
- 
+
                         </div>
                     </div>
                 </div>

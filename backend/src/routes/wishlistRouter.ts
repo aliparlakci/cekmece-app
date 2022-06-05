@@ -5,6 +5,7 @@ import CategoryService from "../services/categoryService"
 import UserService from "../services/userService"
 import Context from "../utils/context"
 import WishlistService from "../services/wishlistService"
+import Joi from "joi";
 
 function getWishlist(userService: UserService,  wlService: WishlistService) {
     return async function (req, res, next) {
@@ -76,7 +77,6 @@ function wishlistRouter() {
     router.get("/:userId",getWishlist(userService,wishlistService));
     router.post("/:userId/add/:carId", addToWishlist(userService, wishlistService))
     router.post("/:userId/remove/:wishlistItemEID", removeFromWishlist(userService, wishlistService))
-
 
     return router
 }

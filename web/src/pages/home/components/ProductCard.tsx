@@ -13,12 +13,14 @@ import {
     Typography,
     Rating,
 } from "@mui/material"
-import { styled } from "@mui/material/styles"
+import Fab from "@mui/material/Fab"
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart"
 import ICar from "../../../models/car"
 import useCart from "../../../hooks/useCart"
+import useWishlist from "../../../hooks/useWishlist"
 import { Link } from "react-router-dom"
-import { FavoriteBorderOutlined, RemoveShoppingCart } from "@mui/icons-material"
+import { Favorite, FavoriteBorderOutlined, RemoveShoppingCart } from "@mui/icons-material"
+import useAuth from "../../../hooks/useAuth"
 
 const theme = createTheme({
     palette: {
@@ -48,7 +50,9 @@ interface IProductCardProps {
 
 export default function ProductCard({ car }: IProductCardProps) {
     const { cart, add } = useCart()
+    const { wishlist, exists, toggle } = useWishlist()
     const [loading, setLoading] = useState(false)
+    const { user } = useAuth()
 
     const handleAddToCart = async () => {
         setLoading(true)
@@ -56,9 +60,9 @@ export default function ProductCard({ car }: IProductCardProps) {
         setLoading(false)
     }
 
-    const handleAddToWishlist = async () => {
+    const handleToggleToWishlist = async () => {
         setLoading(true)
-        await add(car.id, 1)
+        await toggle(car.id)
         setLoading(false)
     }
 
@@ -68,6 +72,14 @@ export default function ProductCard({ car }: IProductCardProps) {
                 <Grid item xs={12} md={4}>
                     <Box marginX={2} marginBottom={4}>
                         <Paper elevation={8} className="paper" sx={{ borderRadius: 0 }}>
+                            {user && <div className="absolute m-1">
+                                <Fab size="small" color="primary" aria-label="add" onClick={handleToggleToWishlist}
+                                     disabled={loading}>
+                                    {
+                                        exists(car.id) ? <Favorite /> : <FavoriteBorderOutlined />
+                                    }
+                                </Fab>
+                            </div>}
                             <Box>
                                 <Link to={`/cars/${car.id}`}>
                                     <img
@@ -168,20 +180,6 @@ export default function ProductCard({ car }: IProductCardProps) {
                                         </Button>
                                     </>
                                 )}
-
-<>
-                                        <Button
-                                            variant="text"
-                                            endIcon={<FavoriteBorderOutlined />}
-                                            sx={{ borderRadius: 0 }}
-                                            fullWidth={true}
-                                            onClick={handleAddToWishlist}
-                                        >
-                                            Add to Wishlist
-                                        </Button>
-                                    </>
-
-
                             </Box>
                         </Paper>
                     </Box>
