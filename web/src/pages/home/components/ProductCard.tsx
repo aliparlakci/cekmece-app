@@ -144,9 +144,32 @@ export default function ProductCard({ car }: IProductCardProps) {
                                     </Typography>
                                 </Box>
                                 <Box paddingBottom={0.5}>
-                                    <Typography variant="h5" fontWeight="bold" textAlign="right">
-                                        ${car.price}
-                                    </Typography>
+                                        
+                                        {car.discount !== 0 &&
+                                            <Typography variant="h5" fontWeight="bold" textAlign="right" color="green">
+                                                ${car.price - car.discount}
+                                            </Typography>
+                                    }
+
+                                        {car.discount !== 0 &&
+                                            <Typography variant="h6" textAlign="right" color="error"> $<s>{car.price}</s> </Typography>
+                                        }
+
+
+                                        {car.discount === 0 &&
+                                            
+                                            <Typography variant="h5" fontWeight="bold" textAlign="right">
+                                                ${car.price}
+                                            </Typography>
+                                        }
+
+                                        {car.discount === 0 &&
+                                        
+                                        <Typography variant="h6" fontWeight="bold" textAlign="right">
+                                            <br />
+                                        </Typography>
+                                        }
+
                                 </Box>
                             </Box>
 
