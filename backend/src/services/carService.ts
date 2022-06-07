@@ -8,10 +8,10 @@ import WishlistService from "./wishlistService"
 var nodemailer = require("nodemailer")
 var { google } = require("googleapis")
 
-const CLIENT_ID = "1031671042635-7736iee1qlqaijo42vds2e3sk294la7n.apps.googleusercontent.com"
-const CLIENT_SECRET = "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"
+const CLIENT_ID = "1031671042635-2o9nh80hb5ftf73udu11kerq9busm86k.apps.googleusercontent.com"
+const CLIENT_SECRET = "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"
 const REDIRECT_URI = "https://developers.google.com/oauthplayground"
-const REFRESH_TOKEN = "1//04d6rj0ii_5AeCgYIARAAGAQSNgF-L9IrLHbRxAq93klBsEbLmcyNKNG6cby-hAtqep_MIlpkif-j6tm6vUm5QEX2VlYgdCKeTg"
+const REFRESH_TOKEN = "1//04NRrydOL4e0aCgYIARAAGAQSNgF-L9IrzXIzuDmQaZQOkiuGs4aVyfrtbY8K1SUch0b66a1N_CKFiwnWL3ai_UkWlfL4niEsWg"
 
 const oAuth2Client = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI)
 oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN })
