@@ -76,7 +76,7 @@ async function generatePdf(order: Order, user: User) {
     let i = 0
     for (; i < order.orderItems.length; i++) {
         data.push({
-            item: order.orderItems[i].car.distributor.name,
+            item: order.orderItems[i].car.name,
             description: order.orderItems[i].car.name,
             unitCost: order.orderItems[i].car.price,
             quantity: order.orderItems[i].quantity

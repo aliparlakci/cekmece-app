@@ -124,7 +124,8 @@ class _WishlistViewState extends State<WishlistView> {
                                                 fontSize: 12),
                                           ),
                                           Text(
-                                            numberFormat.format(car.price),
+                                            numberFormat.format(
+                                                car.price - car.discount),
                                             style: GoogleFonts.raleway(
                                               fontWeight: FontWeight.w600,
                                               fontSize: 15,

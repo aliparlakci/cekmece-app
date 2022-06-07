@@ -28,6 +28,7 @@ class _$ProductTearOff {
       required String photoUrl,
       required String description,
       required int price,
+      required int discount,
       required int number,
       required int model,
       required int quantity,
@@ -44,6 +45,7 @@ class _$ProductTearOff {
       photoUrl: photoUrl,
       description: description,
       price: price,
+      discount: discount,
       number: number,
       model: model,
       quantity: quantity,
@@ -72,6 +74,7 @@ mixin _$Product {
   String get photoUrl => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
   int get price => throw _privateConstructorUsedError;
+  int get discount => throw _privateConstructorUsedError;
   int get number => throw _privateConstructorUsedError;
   int get model => throw _privateConstructorUsedError;
   int get quantity => throw _privateConstructorUsedError;
@@ -98,6 +101,7 @@ abstract class $ProductCopyWith<$Res> {
       String photoUrl,
       String description,
       int price,
+      int discount,
       int number,
       int model,
       int quantity,
@@ -125,6 +129,7 @@ class _$ProductCopyWithImpl<$Res> implements $ProductCopyWith<$Res> {
     Object? photoUrl = freezed,
     Object? description = freezed,
     Object? price = freezed,
+    Object? discount = freezed,
     Object? number = freezed,
     Object? model = freezed,
     Object? quantity = freezed,
@@ -156,6 +161,10 @@ class _$ProductCopyWithImpl<$Res> implements $ProductCopyWith<$Res> {
       price: price == freezed
           ? _value.price
           : price // ignore: cast_nullable_to_non_nullable
+              as int,
+      discount: discount == freezed
+          ? _value.discount
+          : discount // ignore: cast_nullable_to_non_nullable
               as int,
       number: number == freezed
           ? _value.number
@@ -212,6 +221,7 @@ abstract class _$ProductCopyWith<$Res> implements $ProductCopyWith<$Res> {
       String photoUrl,
       String description,
       int price,
+      int discount,
       int number,
       int model,
       int quantity,
@@ -240,6 +250,7 @@ class __$ProductCopyWithImpl<$Res> extends _$ProductCopyWithImpl<$Res>
     Object? photoUrl = freezed,
     Object? description = freezed,
     Object? price = freezed,
+    Object? discount = freezed,
     Object? number = freezed,
     Object? model = freezed,
     Object? quantity = freezed,
@@ -271,6 +282,10 @@ class __$ProductCopyWithImpl<$Res> extends _$ProductCopyWithImpl<$Res>
       price: price == freezed
           ? _value.price
           : price // ignore: cast_nullable_to_non_nullable
+              as int,
+      discount: discount == freezed
+          ? _value.discount
+          : discount // ignore: cast_nullable_to_non_nullable
               as int,
       number: number == freezed
           ? _value.number
@@ -325,6 +340,7 @@ class _$_Product implements _Product {
       required this.photoUrl,
       required this.description,
       required this.price,
+      required this.discount,
       required this.number,
       required this.model,
       required this.quantity,
@@ -350,6 +366,8 @@ class _$_Product implements _Product {
   @override
   final int price;
   @override
+  final int discount;
+  @override
   final int number;
   @override
   final int model;
@@ -372,7 +390,7 @@ class _$_Product implements _Product {
 
   @override
   String toString() {
-    return 'Product(id: $id, name: $name, photoUrl: $photoUrl, description: $description, price: $price, number: $number, model: $model, quantity: $quantity, warranty: $warranty, unitsSold: $unitsSold, reviewCount: $reviewCount, averageRating: $averageRating, userCanReviewCar: $userCanReviewCar, distributor: $distributor, category: $category)';
+    return 'Product(id: $id, name: $name, photoUrl: $photoUrl, description: $description, price: $price, discount: $discount, number: $number, model: $model, quantity: $quantity, warranty: $warranty, unitsSold: $unitsSold, reviewCount: $reviewCount, averageRating: $averageRating, userCanReviewCar: $userCanReviewCar, distributor: $distributor, category: $category)';
   }
 
   @override
@@ -386,6 +404,7 @@ class _$_Product implements _Product {
             const DeepCollectionEquality()
                 .equals(other.description, description) &&
             const DeepCollectionEquality().equals(other.price, price) &&
+            const DeepCollectionEquality().equals(other.discount, discount) &&
             const DeepCollectionEquality().equals(other.number, number) &&
             const DeepCollectionEquality().equals(other.model, model) &&
             const DeepCollectionEquality().equals(other.quantity, quantity) &&
@@ -410,6 +429,7 @@ class _$_Product implements _Product {
       const DeepCollectionEquality().hash(photoUrl),
       const DeepCollectionEquality().hash(description),
       const DeepCollectionEquality().hash(price),
+      const DeepCollectionEquality().hash(discount),
       const DeepCollectionEquality().hash(number),
       const DeepCollectionEquality().hash(model),
       const DeepCollectionEquality().hash(quantity),
@@ -439,6 +459,7 @@ abstract class _Product implements Product {
       required String photoUrl,
       required String description,
       required int price,
+      required int discount,
       required int number,
       required int model,
       required int quantity,
@@ -462,6 +483,8 @@ abstract class _Product implements Product {
   String get description;
   @override
   int get price;
+  @override
+  int get discount;
   @override
   int get number;
   @override

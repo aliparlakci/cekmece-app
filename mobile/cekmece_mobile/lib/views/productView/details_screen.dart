@@ -208,21 +208,47 @@ class _ProductBottomBarState extends State<ProductBottomBar> {
                   color: secondaryColor.withOpacity(0.5), width: 2))),
       child: Padding(
         padding: EdgeInsets.only(
-          left: SizeConfig.screenWidth * 0.10,
-          right: SizeConfig.screenWidth * 0.10,
+          left: SizeConfig.screenWidth * 0.05,
+          right: SizeConfig.screenWidth * 0.05,
           bottom: getProportionateScreenWidth(10),
           top: getProportionateScreenWidth(10),
         ),
         child: Row(
           children: [
             Expanded(
-                child: Text(
-              numberFormat.format(widget.product.price),
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                  fontSize: getProportionateScreenWidth(16)),
-            )),
+                child: widget.product.discount != 0
+                    ? Container(
+                        height: getProportionateScreenHeight(50),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              numberFormat.format(widget.product.price),
+                              style: TextStyle(
+                                  fontWeight: FontWeight.normal,
+                                  color: Colors.red,
+                                  decoration: TextDecoration.lineThrough,
+                                  fontSize: getProportionateScreenWidth(12)),
+                            ),
+                            Text(
+                              numberFormat.format(widget.product.price -
+                                  widget.product.discount),
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.green,
+                                  fontSize: getProportionateScreenWidth(18)),
+                            )
+                          ],
+                        ),
+                      )
+                    : Text(
+                        numberFormat.format(widget.product.price),
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                            fontSize: getProportionateScreenWidth(16)),
+                      )),
             Expanded(
               flex: 1,
               child: inCart

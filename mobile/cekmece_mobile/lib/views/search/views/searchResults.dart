@@ -218,10 +218,37 @@ class _SearchResultsState extends State<SearchResults> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Text(
-                                            widget.results[index].name,
-                                            style: appBarTextStyle,
-                                          ),
+                                          car.discount != 0
+                                              ? Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Text(
+                                                      widget
+                                                          .results[index].name,
+                                                      style: appBarTextStyle,
+                                                    ),
+                                                    Text(
+                                                      numberFormat
+                                                          .format(car.price),
+                                                      style:
+                                                          GoogleFonts.raleway(
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        fontSize: 14,
+                                                        decoration:
+                                                            TextDecoration
+                                                                .lineThrough,
+                                                        color: Colors.black,
+                                                      ),
+                                                    )
+                                                  ],
+                                                )
+                                              : Text(
+                                                  widget.results[index].name,
+                                                  style: appBarTextStyle,
+                                                ),
                                           Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
@@ -232,7 +259,8 @@ class _SearchResultsState extends State<SearchResults> {
                                                     fontSize: 12),
                                               ),
                                               Text(
-                                                numberFormat.format(car.price),
+                                                numberFormat.format(
+                                                    car.price - car.discount),
                                                 style: GoogleFonts.raleway(
                                                   fontWeight: FontWeight.w600,
                                                   fontSize: 15,

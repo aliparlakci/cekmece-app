@@ -118,12 +118,27 @@ class _CartViewState extends State<CartView> {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
-                                              Text(
-                                                car.name,
-                                                style: appBarTextStyle,
+                                              Expanded(
+                                                child: Text(
+                                                  car.name,
+                                                  style: appBarTextStyle,
+                                                ),
+                                              ),
+                                              car.discount != 0
+                                                  ? Text(
+                                                      "${numberFormat.format(car.price)}",
+                                                      style: const TextStyle(
+                                                        decoration:
+                                                            TextDecoration
+                                                                .lineThrough,
+                                                      ),
+                                                    )
+                                                  : Container(),
+                                              const SizedBox(
+                                                width: 10,
                                               ),
                                               Text(
-                                                "${numberFormat.format(car.price)} x ${widget.user.cart[index].quantity}",
+                                                "${numberFormat.format(car.price - car.discount)} x ${widget.user.cart[index].quantity}",
                                                 style: GoogleFonts.raleway(
                                                   fontWeight: FontWeight.w600,
                                                   fontSize: 15,
@@ -142,9 +157,10 @@ class _CartViewState extends State<CartView> {
                                                     fontSize: 12),
                                               ),
                                               Text(
-                                                numberFormat.format(car.price *
-                                                    widget.user.cart[index]
-                                                        .quantity),
+                                                numberFormat.format(
+                                                    (car.price - car.discount) *
+                                                        widget.user.cart[index]
+                                                            .quantity),
                                                 style: GoogleFonts.raleway(
                                                   fontWeight: FontWeight.w600,
                                                   fontSize: 15,

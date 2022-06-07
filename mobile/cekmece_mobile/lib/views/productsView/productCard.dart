@@ -26,14 +26,20 @@ class _ProductCardState extends State<ProductCard> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        pushNewScreen(context, screen: DetailsScreen(carId: widget.product.id, userBloc: BlocProvider.of<UserBloc>(context)), withNavBar: false);
+        pushNewScreen(context,
+            screen: DetailsScreen(
+                carId: widget.product.id,
+                userBloc: BlocProvider.of<UserBloc>(context)),
+            withNavBar: false);
       },
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CachedNetworkImage(
-              imageUrl: widget.product.photoUrl, fit: BoxFit.cover, height: 150),
+              imageUrl: widget.product.photoUrl,
+              fit: BoxFit.cover,
+              height: 150),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Stack(
@@ -55,7 +61,9 @@ class _ProductCardState extends State<ProductCard> {
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                       ),
-                      Text(numberFormat.format(widget.product.price),
+                      Text(
+                          numberFormat.format(
+                              widget.product.price - widget.product.discount),
                           style: productCardPriceTextStyle),
                     ],
                   ),

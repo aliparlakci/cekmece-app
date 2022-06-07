@@ -45,6 +45,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         quantity: 0,
         warranty: 0,
         unitsSold: 0,
+        discount: 0,
         distributor: {},
         category: {},
         reviewCount: 0,

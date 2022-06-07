@@ -11,6 +11,7 @@ class Product with _$Product {
     required String photoUrl,
     required String description,
     required int price,
+    required int discount,
     required int number,
     required int model,
     required int quantity,
