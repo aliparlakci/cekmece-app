@@ -157,6 +157,7 @@ export default class OrderService {
             }
 
             const subTotal = orderItems.map((item) => item.total).reduce((acc, next) => acc + next)
+            const discountTotal = orderItems.map((item) => item.car.discount * item.quantity).reduce((acc, next) => acc + next)
 
             candidate.subTotal = subTotal
             candidate.orderItems = orderItems
@@ -169,8 +170,9 @@ export default class OrderService {
 
             if (candidate.promoCode === "ADMIN") {
                 candidate.discount = candidate.shipping + candidate.subTotal
-            } else {
-                candidate.discount = 0
+            } 
+            else {
+                candidate.discount = discountTotal
             }
 
             candidate.total = candidate.subTotal + candidate.shipping - candidate.discount

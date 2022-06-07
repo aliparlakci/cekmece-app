@@ -40,6 +40,7 @@ class _AddressPickerState extends State<AddressPicker> {
       if (prevCart[i].quantity != newCart[i].quantity) return true;
       if (prevCart[i].total != newCart[i].total) return true;
       if (prevCart[i].item.price != newCart[i].item.price) return true;
+      if (prevCart[i].item.discount != newCart[i].item.discount) return true;
     }
 
     return false;
