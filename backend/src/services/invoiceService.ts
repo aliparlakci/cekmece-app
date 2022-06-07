@@ -13,10 +13,10 @@ var nodemailer = require("nodemailer")
 var { google } = require("googleapis")
 
 
-const CLIENT_ID = "459735410014-abdl6trcqt31ondndig3v7q150o6e6ss.apps.googleusercontent.com"
-const CLIENT_SECRET = "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"
+const CLIENT_ID = "1031671042635-7736iee1qlqaijo42vds2e3sk294la7n.apps.googleusercontent.com"
+const CLIENT_SECRET = "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"
 const REDIRECT_URI = "https://developers.google.com/oauthplayground"
-const REFRESH_TOKEN = "1//04RHdO6QeVYgLCgYIARAAGAQSNgF-L9Ir90FZtbHxV5XzhocfbHa4FGsgnzCn1O-OGA1GUx-S-o1_Sv0GU4eJkGEMaqNZHUFWag"
+const REFRESH_TOKEN = "1//04d6rj0ii_5AeCgYIARAAGAQSNgF-L9IrLHbRxAq93klBsEbLmcyNKNG6cby-hAtqep_MIlpkif-j6tm6vUm5QEX2VlYgdCKeTg"
 
 
 const oAuth2Client = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI)
@@ -76,7 +76,7 @@ async function generatePdf(order: Order, user: User) {
     let i = 0
     for (; i < order.orderItems.length; i++) {
         data.push({
-            item: order.orderItems[i].car.distributor.name,
+            item: order.orderItems[i].car.name,
             description: order.orderItems[i].car.name,
             unitCost: order.orderItems[i].car.price,
             quantity: order.orderItems[i].quantity
