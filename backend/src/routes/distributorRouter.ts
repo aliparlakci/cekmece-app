@@ -5,14 +5,15 @@ import Joi from "joi"
 
 import DistributorService from "../services/distributorService"
 
-function addNewDistributor(distributorService: DistributorService): RequestHandler {
+export function addNewDistributor(distributorService: DistributorService): RequestHandler {
     return async function (req, res, next) {
         const distributorFormat = Joi.object().keys({
             name: Joi.string().required(),
         })
         const {error} = distributorFormat.validate(req.body)
         if (error) {
-            next(createError(StatusCodes.BAD_REQUEST))
+            res.status(StatusCodes.BAD_REQUEST).json({})
+            return
         }
 
         let id
@@ -27,7 +28,7 @@ function addNewDistributor(distributorService: DistributorService): RequestHandl
     }
 }
 
-function getDistributors(distributorService: DistributorService): RequestHandler {
+export function getDistributors(distributorService: DistributorService): RequestHandler {
     return async function (req, res, next) {
         const categories = await distributorService.getAllDistributors()
 
@@ -35,7 +36,7 @@ function getDistributors(distributorService: DistributorService): RequestHandler
     }
 }
 
-function getDistributor(distributorService: DistributorService): RequestHandler {
+export function getDistributor(distributorService: DistributorService): RequestHandler {
     return async function (req, res, next) {
         const distributorId = parseInt(req.params.distributorId)
         if (isNaN(distributorId)) {
@@ -47,7 +48,7 @@ function getDistributor(distributorService: DistributorService): RequestHandler 
     }
 }
 
-function updateDistributor(distributorService: DistributorService): RequestHandler {
+export function updateDistributor(distributorService: DistributorService): RequestHandler {
     return async function (req, res, next) {
         const distributorUpdateFormat = Joi.object().keys({
             id: Joi.not().allow(),
@@ -70,7 +71,7 @@ function updateDistributor(distributorService: DistributorService): RequestHandl
     }
 }
 
-function deleteDistributor(distributorService: DistributorService): RequestHandler {
+export function deleteDistributor(distributorService: DistributorService): RequestHandler {
     return async function (req, res, next) {
         const distributorId = parseInt(req.params.distributorId)
         await distributorService.deleteDistributor(distributorId)

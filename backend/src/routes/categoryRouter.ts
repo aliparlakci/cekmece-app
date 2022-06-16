@@ -5,14 +5,15 @@ import Joi from "joi"
 
 import CategoryService from "../services/categoryService"
 
-function addNewCategory(categoryService: CategoryService): RequestHandler {
+export function addNewCategory(categoryService: CategoryService): RequestHandler {
     return async function (req, res, next) {
         const categoryFormat = Joi.object().keys({
             name: Joi.string().required(),
         })
         const { error } = categoryFormat.validate(req.body)
         if (error) {
-            next(createError(StatusCodes.BAD_REQUEST))
+            res.status(StatusCodes.BAD_REQUEST).json({})
+            return
         }
         
         // batu
@@ -29,7 +30,7 @@ function addNewCategory(categoryService: CategoryService): RequestHandler {
     }
 }
 
-function getCategories(categoryService: CategoryService): RequestHandler {
+export function getCategories(categoryService: CategoryService): RequestHandler {
     return async function (req, res, next) {
         const categories = await categoryService.getAllCategories()
 
@@ -37,7 +38,7 @@ function getCategories(categoryService: CategoryService): RequestHandler {
     }
 }
 
-function getCategory(categoryService: CategoryService): RequestHandler {
+export function getCategory(categoryService: CategoryService): RequestHandler {
     return async function (req, res, next) {
         const categoryId = parseInt(req.params.categoryId)
         const category = await categoryService.getCategory(categoryId)
@@ -50,7 +51,7 @@ function getCategory(categoryService: CategoryService): RequestHandler {
     }
 }
 
-function deleteCategory(categoryService: CategoryService): RequestHandler {
+export function deleteCategory(categoryService: CategoryService): RequestHandler {
     return async function (req, res, next) {
         const categoryId = parseInt(req.params.categoryId)
         await categoryService.deleteCategory(categoryId)
@@ -59,7 +60,7 @@ function deleteCategory(categoryService: CategoryService): RequestHandler {
     }
 }
 
-function updateCategory(categoryService: CategoryService): RequestHandler {
+export function updateCategory(categoryService: CategoryService): RequestHandler {
     return async function (req, res, next) {
         const categoryUpdateFormat = Joi.object().keys({
             id: Joi.not().allow(),
