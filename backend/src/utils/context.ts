@@ -6,6 +6,10 @@ export default class Context {
 
     public user: User | null = null;
 
+    static reset(): void {
+        Context._bindings = new WeakMap<Request, Context>()
+    }
+
     static bind(req: Request): void {
         const ctx = new Context();
         Context._bindings.set(req, ctx);
