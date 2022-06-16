@@ -13,7 +13,7 @@ import OrderService from "../services/orderService"
 import reviewRouter from "./reviewRouter"
 import InvoiceService from "../services/invoiceService"
 
-function getAllCars(carService: CarService): RequestHandler {
+export function getAllCars(carService: CarService): RequestHandler {
     return async function (req, res, next) {
         const cars = await carService.filterCars({
             category: req.query.category as string,
@@ -29,7 +29,7 @@ function getAllCars(carService: CarService): RequestHandler {
     }
 }
 
-function getCar(carService: CarService, orderService: OrderService) {
+export function getCar(carService: CarService, orderService: OrderService) {
     return async function (req, res, next) {
         const carId = parseInt(req.params.carId)
         const car = await carService.getCar(carId)
@@ -47,7 +47,7 @@ function getCar(carService: CarService, orderService: OrderService) {
     }
 }
 
-function setDiscount(carService: CarService) {
+export function setDiscount(carService: CarService) {
     return async function (req, res, next) {
 /*
         const ctx: Context | null = Context.get(req)
@@ -82,7 +82,7 @@ function setDiscount(carService: CarService) {
     }
 }
 
-function addNewCar(carService: CarService): RequestHandler {
+export function addNewCar(carService: CarService): RequestHandler {
     return async function (req, res, next) {
         const carFormat = Joi.object().keys({
             name: Joi.string().required(),
@@ -115,7 +115,7 @@ function addNewCar(carService: CarService): RequestHandler {
     }
 }
 
-function updateNewCar(carService: CarService): RequestHandler {
+export function updateNewCar(carService: CarService): RequestHandler {
     return async function (req, res, next) {
         const carFormat = Joi.object().keys({
             id: Joi.number().positive().required(),
@@ -149,7 +149,7 @@ function updateNewCar(carService: CarService): RequestHandler {
     }
 }
 
-function assignNewCategory(carService: CarService): RequestHandler {
+export function assignNewCategory(carService: CarService): RequestHandler {
     return async function (req, res, next) {
         const carId = parseInt(req.params.carId)
         const categoryId = parseInt(req.params.categoryId)
@@ -159,7 +159,7 @@ function assignNewCategory(carService: CarService): RequestHandler {
     }
 }
 
-function removeCategory(carService: CarService): RequestHandler {
+export function removeCategory(carService: CarService): RequestHandler {
     return async function (req, res, next) {
         const carId = parseInt(req.params.carId)
         const categoryId = parseInt(req.params.categoryId)
@@ -169,7 +169,7 @@ function removeCategory(carService: CarService): RequestHandler {
     }
 }
 
-function searchCar(carService: CarService): RequestHandler {
+export function searchCar(carService: CarService): RequestHandler {
     return async function (req, res, next) {
         const query = req.query.q || ""
         if (!query) {
@@ -187,7 +187,7 @@ function searchCar(carService: CarService): RequestHandler {
     }
 }
 
-function getCarsByCategory(carService: CarService) {
+export function getCarsByCategory(carService: CarService) {
     return async function (req, res, next) {
         const categoryId = parseInt(req.params.categoryId)
 
@@ -197,7 +197,7 @@ function getCarsByCategory(carService: CarService) {
     }
 }
 
-function deleteCar(carService: CarService): RequestHandler {
+export function deleteCar(carService: CarService): RequestHandler {
     return async function (req, res, next) {
         const carId = parseInt(req.params.carId)
         if (isNaN(carId)) {
