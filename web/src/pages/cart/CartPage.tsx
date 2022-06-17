@@ -47,7 +47,7 @@ export default function CartPage() {
                                 {Object.keys(cart).map((id, i) => <ProductSection key={i} item={cart[id]} />)}
                             </div>
                             <div
-                                className="Summary flex-[0.4] flex flex-col items-center w-auto h-auto border-2 border-[#000] ml-6 mr-6 p-5 shadow-lg text-lg mobile:mb-6">
+                                className="Summary flex-[0.4] flex flex-col items-center w-auto h-72 ml-6 mr-6 p-5 shadow-xl transition-all duration-300 ease-in-out hover:shadow-2xl text-lg mobile:mb-6">
                                 <h1 className="text-[2rem]">SUMMARY</h1>
                                 {/*<div className={SummaryItemStyle}>*/}
                                 {/*    <p>SubTotal:</p>*/}
@@ -66,7 +66,7 @@ export default function CartPage() {
                                     <p>${Object.keys(cart).reduce((prev, id) => cart[id] && cart[id].item.price * cart[id].amount + prev, 0)}</p>
                                 </div>
 
-                                <Box className="w-[100%] mt-20">
+                                <Box className="w-[100%] mt-[30%]">
                                     {user && <Button variant="contained" fullWidth={true} sx={{ borderRadius: 0 }}
                                                      onClick={() => history.push("/checkout")} disabled={!Object.keys(cart).length}>
                                         Checkout
