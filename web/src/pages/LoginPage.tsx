@@ -16,7 +16,13 @@ import Grid from "@mui/material/Grid"
 import useNotification, { NOTIFICATON_TYPES } from "../hooks/useNotification"
 import useAuth from "../hooks/useAuth"
 
-const theme = createTheme()
+const theme = createTheme({
+    palette: {
+        primary: {
+            main: "#000000",
+        },
+    },
+})
 
 export default function LoginPage() {
     const [loading, setLoading] = useState(false)
