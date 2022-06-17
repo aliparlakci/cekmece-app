@@ -48,9 +48,9 @@ export default function ProductSection({ item }: IProductSelectionProps) {
                         <div className="counter flex items-center text-2xl justify-start">
                             Quantity
                             <div className="ml-5 shadow-md flex">
-                                <button onClick={() => item.item.id && decrease(item.item.id)} className="bg-[#000] text-white w-8 flex items-center justify-center cursor-pointer pb-1">-</button>
-                                <div className="w-8 flex items-center justify-center border-[2px] border-[#000]">{item.amount}</div>
-                                <button onClick={() => item.item.id && add(item.item.id, 1)} className="bg-[#000] text-white w-8 flex items-center justify-center cursor-pointer pb-1">+</button>
+                                <button onClick={() => item.item.id && decrease(item.item.id)} className="bg-[#fff] transition-all hover:bg-[#ccc] text-black w-8 flex items-center justify-center cursor-pointer pb-1">-</button>
+                                <div className="w-8 flex items-center justify-center">{item.amount}</div>
+                                <button onClick={() => item.item.id && add(item.item.id, 1)} className="bg-[#fff] transition-all hover:bg-[#ccc] text-black w-8 flex items-center justify-center cursor-pointer pb-1">+</button>
                             </div>
                         </div>
                     </div>
