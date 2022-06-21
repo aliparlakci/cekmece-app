@@ -17,7 +17,13 @@ import useNotification, { NOTIFICATON_TYPES } from "../../hooks/useNotification"
 
 const steps = ["Address", "Payment details", "Review your order"]
 
-const theme = createTheme()
+const theme = createTheme({
+    palette: {
+        primary: {
+            main: "#000000",
+        },
+    },
+})
 
 const defaultAddress = {
     firstName: "",

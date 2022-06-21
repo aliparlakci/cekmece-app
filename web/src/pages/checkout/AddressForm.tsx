@@ -7,6 +7,7 @@ import FormControlLabel from "@mui/material/FormControlLabel"
 import Checkbox from "@mui/material/Checkbox"
 import Button from "@mui/material/Button"
 import Box from "@mui/material/Box"
+import { createTheme, ThemeProvider } from "@mui/material/styles"
 
 export interface IAddressData {
     firstName: string
@@ -21,6 +22,14 @@ export interface IAddressData {
 interface IAddressFormProps {
     onNext: (data: IAddressData) => void
 }
+
+const theme = createTheme({
+    palette: {
+        primary: {
+            main: "#000000",
+        },
+    },
+})
 
 export default function AddressForm({ onNext }: IAddressFormProps) {
     const [formData, updateFormData] = useState<IAddressData>({
@@ -49,6 +58,7 @@ export default function AddressForm({ onNext }: IAddressFormProps) {
 
     return (
         <>
+        <ThemeProvider theme={theme}>
             <Typography variant="h6" gutterBottom>
                 Address
             </Typography>
@@ -151,6 +161,7 @@ export default function AddressForm({ onNext }: IAddressFormProps) {
                     </Button>
                 </Box>
             </form>
+            </ThemeProvider>
         </>
     )
 }

@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import ClearIcon from "@mui/icons-material/Clear"
-import { IconButton } from "@mui/material"
+import { IconButton, Box } from "@mui/material"
 import Button from "@mui/material/Button"
 import useWishlist, { IWishlistItem } from "../../../hooks/useWishlist"
 import useCart from "../../../hooks/useCart"
@@ -35,8 +35,9 @@ export default function ProductSection({ item }: IProductSelectionProps) {
 
     return (
         <>
-            <div className="flex justify-between w-[100%] h-auto items-center mobile:flex-col">
-                <div className="product flex items-center pl-5 self-start">
+            <div className="max-w-screen-lg py-2 px-2 mb-10 shadow-md transition-all duration-300 ease-in-out hover:shadow-lg">
+                <Box className="grid grid-cols-2 gap-6 flex">
+                <div className="product flex items-center pl-5 self-start basis-8/12">
                     <img
                         src={item.item.photoUrl}
                         className="product_img"
@@ -63,15 +64,12 @@ export default function ProductSection({ item }: IProductSelectionProps) {
                     </div>
                 </div>
 
-                <div className="flex flex-col">
+                <div className="flex flex-col justify-center w-40 justify-self-end pr-5">
                     <Button variant="text" color="success" disabled={loading || item.item.quantity <= (cart[item.item.id] ? cart[item.item.id].amount : 0)} onClick={handleAddToCart}>Add to cart</Button>
                     <Button variant="text" color="error" disabled={loading} onClick={handleRemoveFromWishlist}>Remove</Button>
                 </div>
-
+                </Box>
             </div>
-
-
-            <hr className="mb-3 mt-3 mobile:mt-0" />
         </>
     )
 }
