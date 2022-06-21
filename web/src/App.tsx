@@ -20,6 +20,7 @@ import UserRoles from "./models/userRoles"
 
 import "./App.css"
 import WishlistPage from "./pages/wishlist/WishlistPage"
+import ProfilePage from "./pages/profile/ProfilePage"
 
 
 function App() {
@@ -64,6 +65,9 @@ function App() {
                                     <Route path="/orderHistory">
                                         <OrdersPage />
                                     </Route>
+                                    <Route path="/profile">
+                                    <ProfilePage />
+                                  </Route>
                                     <Route path="/wishlist">
                                         {user === null && <Redirect to="/login" />}
                                         {user && <WishlistPage />}

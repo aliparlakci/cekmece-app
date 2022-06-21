@@ -168,7 +168,9 @@ export default function NavBar({ search, onSearch }: INavBarProps) {
                                             "aria-labelledby": "basic-button",
                                         }}
                                     >
-                                        <MenuItem onClick={handleClose}>Profile</MenuItem>
+                                        <MenuItem onClick={handleClose}>
+                                        <Link to={`/profile`}>Profile</Link>
+                                            </MenuItem>
                                         <MenuItem onClick={handleClose}>
                                             <Link to={`/orderHistory`}>My Orders</Link>
                                         </MenuItem>
