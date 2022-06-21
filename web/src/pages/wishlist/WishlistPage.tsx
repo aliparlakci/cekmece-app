@@ -5,6 +5,9 @@ import { Box, Button, createTheme, ThemeProvider, Typography } from "@mui/materi
 import ProductSection from "./components/ProductSection"
 import useAuth from "../../hooks/useAuth"
 import useWishlist from "../../hooks/useWishlist"
+import { pink } from '@mui/material/colors';
+
+const pinky = pink['A400'];
 
 const theme = createTheme({
     palette: {
@@ -32,7 +35,7 @@ export default function WishlistPage() {
                                 mb: 2,
                             }}
                         ></Box>
-                        <Typography align="center" variant="h3" color="error"> ♥ Wishlist ♥</Typography>
+                        <Typography align="center" variant="h3" sx={{ color: pinky }}> ♥ Wishlist ♥</Typography>
                         {/* vertically center parent div */}
                         <div className="flex flex-row mt-7 mobile:flex-col">
                             {/* product div */}

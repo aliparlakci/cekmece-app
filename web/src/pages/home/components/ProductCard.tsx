@@ -71,9 +71,13 @@ export default function ProductCard({ car }: IProductCardProps) {
             <ThemeProvider theme={theme}>
                 <Grid item xs={12} md={4}>
                     <Box marginX={2} marginBottom={4}>
-                        <Paper elevation={8} className="paper" sx={{ borderRadius: 0 }}>
+                        <Box className="shadow-lg hover:transition-all duration-500 ease-in-out hover:shadow-2xl hover:scale-105" sx={{ borderRadius: 0 }}>
                             {user && <div className="absolute m-1">
-                                <Fab size="small" color="primary" aria-label="add" onClick={handleToggleToWishlist}
+                                <Fab size="small" 
+                                     color="primary"
+                                     className="opacity-40 hover:transition-opacity hover:duration-300 hover:opacity-100"
+                                     aria-label="add" 
+                                     onClick={handleToggleToWishlist}
                                      disabled={loading}>
                                     {
                                         exists(car.id) ? <Favorite /> : <FavoriteBorderOutlined />
@@ -181,7 +185,7 @@ export default function ProductCard({ car }: IProductCardProps) {
                                     </>
                                 )}
                             </Box>
-                        </Paper>
+                        </Box>
                     </Box>
                 </Grid>
             </ThemeProvider>

@@ -10,8 +10,8 @@ interface IProductSelectionProps {
 }
 
 const SummaryItemStyle = "SummaryItem flex justify-between mt-3 w-[100%]"
-const ProductDivStyle = "flex w-[100%] h-auto items-center mobile:flex-col"
-const PriceQuantityStyle = "flex-auto flex flex-col justify-center items-center mobile:mt-7 mobile:mb-7"
+const ProductDivStyle = "w-[100%] h-auto py-6 mb-6 items-center mobile:flex-col shadow-md transition-all duration-300 ease-in-out hover:shadow-lg grid grid-cols-5"
+const PriceQuantityStyle = "flex-auto flex flex-col justify-center items-center mobile:mt-7 mobile:mb-7 col-span-2"
 
 export default function ProductSection({ item }: IProductSelectionProps) {
     const { add, decrease, remove } = useCart()
@@ -21,7 +21,7 @@ export default function ProductSection({ item }: IProductSelectionProps) {
     return (
         <>
             <div className={ProductDivStyle}>
-                <div className=" product flex pl-5 self-start">
+                <div className=" product flex pl-5 self-start col-span-2">
                     <img
                         src={item.item.photoUrl}
                         className="product_img"
@@ -48,9 +48,9 @@ export default function ProductSection({ item }: IProductSelectionProps) {
                         <div className="counter flex items-center text-2xl justify-start">
                             Quantity
                             <div className="ml-5 shadow-md flex">
-                                <button onClick={() => item.item.id && decrease(item.item.id)} className="bg-[#000] text-white w-8 flex items-center justify-center cursor-pointer pb-1">-</button>
-                                <div className="w-8 flex items-center justify-center border-[2px] border-[#000]">{item.amount}</div>
-                                <button onClick={() => item.item.id && add(item.item.id, 1)} className="bg-[#000] text-white w-8 flex items-center justify-center cursor-pointer pb-1">+</button>
+                                <button onClick={() => item.item.id && decrease(item.item.id)} className="bg-[#fff] transition-all hover:bg-[#ccc] text-black w-8 flex items-center justify-center cursor-pointer pb-1">-</button>
+                                <div className="w-8 flex items-center justify-center">{item.amount}</div>
+                                <button onClick={() => item.item.id && add(item.item.id, 1)} className="bg-[#fff] transition-all hover:bg-[#ccc] text-black w-8 flex items-center justify-center cursor-pointer pb-1">+</button>
                             </div>
                         </div>
                     </div>
@@ -59,16 +59,19 @@ export default function ProductSection({ item }: IProductSelectionProps) {
                     </p>
                 </div>
 
-                <div className="flex mr-10">
+                <div className="grid grid-cols-2">
+                    <div></div>
+                    <div>
                     <IconButton onClick={() => item.item.id && remove(item.item.id)}>
                         <ClearIcon />
                     </IconButton>
+                    </div>
                 </div>
 
             </div>
 
 
-            <hr className="mb-7 mt-7 mobile:mt-0" />
+            
         </>
     )
 }
