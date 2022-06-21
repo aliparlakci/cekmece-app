@@ -69,6 +69,7 @@ export default class CarService {
                 let userMails = wishlist.map((item) => item.user.email);
 
 
+                /*
                 const accessToken = oAuth2Client.getAccessToken()
 
                 const transport = nodemailer.createTransport({
@@ -97,6 +98,7 @@ export default class CarService {
                     }
                     const result = transport.sendMail(mailOptions)
                 })
+                */
 
             }
             catch(err){
