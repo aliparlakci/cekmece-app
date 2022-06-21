@@ -8,6 +8,7 @@ import 'package:cekmece_mobile/views/productView/components/size.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cekmece_mobile/views/reviews/widgets/LeaveAReviewButton.dart';
 import 'package:cekmece_mobile/views/reviews/widgets/ReviewsButton.dart';
+import 'package:cekmece_mobile/widgets/showSnackBar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:like_button/like_button.dart';
@@ -56,6 +57,11 @@ class _BodyState extends State<Body> {
     var networkService = Provider.of<NetworkService>(context, listen: false);
 
     try {
+      if (widget.userBloc.user.isAnonymous) {
+        showSnackBar(
+            context: context, message: "You need to be logged in", error: true);
+        throw "User not logged in";
+      }
       if (_isOnWishlist) {
         await networkService.post(
             '${dotenv.env['CLIENT_URL']}/api/wishlist/${widget.userBloc.user.uid}/remove/${wlID}');
