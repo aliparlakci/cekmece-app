@@ -12,6 +12,7 @@ import OrderService from "../services/orderService"
 import CartService from "../services/cartService"
 import { DeleteResult } from "typeorm"
 import InvoiceService from "../services/invoiceService"
+import { ApprovalStatus } from "../models/review"
 
 function getReviews(reviewService: ReviewService): RequestHandler {
     return async function (req, res, next) {
@@ -114,14 +115,16 @@ function deleteReview(reviewService: ReviewService): RequestHandler {
     }
 }
 
-function approveReview(reviewService: ReviewService) {
+function updateApprovalStatus(reviewService: ReviewService) {
     return async function (req, res, next) {
         const reviewId = parseInt(req.params.reviewId)
-        const { isApproved } = req.body
+        const { approvalStatus } = req.body
 
         const approvedStatusFormat = Joi.object()
             .keys({
-                isApproved: Joi.boolean().required(),
+                approvalStatus: Joi.string()
+                    .valid(...Object.values(ApprovalStatus))
+                    .required(),
             })
             .required()
 
@@ -132,7 +135,7 @@ function approveReview(reviewService: ReviewService) {
         }
 
         try {
-            await reviewService.updateApprovedStatus(reviewId, isApproved)
+            await reviewService.updateApprovalStatus(reviewId, approvalStatus)
             res.status(200).json({
                 message: "success",
             })
@@ -155,7 +158,7 @@ function reviewRouter() {
     router.get("/", getReviews(reviewService))
     router.post("/new", addNewReview(reviewService))
     router.delete("/:reviewId", deleteReview(reviewService))
-    router.patch("/:reviewId", approveReview(reviewService))
+    router.patch("/:reviewId", updateApprovalStatus(reviewService))
 
     return router
 }

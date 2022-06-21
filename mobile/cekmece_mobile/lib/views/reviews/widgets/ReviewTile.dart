@@ -11,7 +11,7 @@ class ReviewTile extends StatelessWidget {
       required this.rating,
       required this.comment,
       required this.createdDate,
-      required this.isApproved,
+      required this.approvalStatus,
       required this.userId,
       this.onDelete})
       : super(key: key);
@@ -19,7 +19,7 @@ class ReviewTile extends StatelessWidget {
   final int rating;
   final String? comment;
   final DateTime createdDate;
-  final bool isApproved;
+  final String approvalStatus;
   final String userId;
   final Future Function()? onDelete;
 
@@ -28,7 +28,7 @@ class ReviewTile extends StatelessWidget {
         rating: review.rating,
         comment: review.comment,
         createdDate: review.createdDate,
-        isApproved: review.isApproved,
+        approvalStatus: review.approvalStatus,
         userId: review.user["id"]);
   }
 
@@ -38,7 +38,7 @@ class ReviewTile extends StatelessWidget {
       rating: review.rating,
       comment: review.comment,
       createdDate: review.createdDate,
-      isApproved: review.isApproved,
+      approvalStatus: review.approvalStatus,
       userId: review.user["id"],
       onDelete: onDelete,
     );
@@ -102,7 +102,7 @@ class ReviewTile extends StatelessWidget {
               ReadMoreText(
                 comment!,
                 textAlign: TextAlign.left,
-                style: isApproved
+                style: approvalStatus == "approved"
                     ? reviewTileCommentStyle
                     : reviewTileUnapprovedCommentStyle,
                 trimMode: TrimMode.Line,

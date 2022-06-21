@@ -1,7 +1,7 @@
 import { Repository } from "typeorm"
 
 import db from "../dataSource"
-import { Review, Ratings } from "../models/review"
+import { Review, Ratings, ApprovalStatus } from "../models/review"
 import { User } from "../models/user"
 import CarService from "./carService"
 import UserService from "./userService"
@@ -41,7 +41,7 @@ export default class ReviewService {
             car,
             orderItem,
             comment: comment,
-            isApproved: comment ? false : true,
+            approvalStatus: comment ? ApprovalStatus.IN_PROGRESS : ApprovalStatus.APPROVED,
             rating: rating as Ratings,
             user,
         })
@@ -125,7 +125,7 @@ export default class ReviewService {
             reviewRatioByRating[review.rating] += 100 / reviewCount
             averageRating += review.rating / reviewCount
 
-            if (review.isApproved === false) {
+            if (review.approvalStatus === ApprovalStatus.IN_PROGRESS) {
                 review.comment = "This comment is currently being reviewed by one of our moderators for approval."
                 return review
             }
@@ -158,7 +158,7 @@ export default class ReviewService {
             },
 
             where: {
-                isApproved: false,
+                approvalStatus: ApprovalStatus.IN_PROGRESS,
             },
 
             order: {
@@ -167,13 +167,13 @@ export default class ReviewService {
         })
     }
 
-    async updateApprovedStatus(id: number, status: boolean) {
+    async updateApprovalStatus(id: number, status: ApprovalStatus) {
         const review = await this.repository().findOne({
             where: { id: id },
         })
 
         if (review === null) throw `Review with id ${id} does not exist.`
-        review.isApproved = status
+        review.approvalStatus = status
 
         return await this.repository().save(review)
     }

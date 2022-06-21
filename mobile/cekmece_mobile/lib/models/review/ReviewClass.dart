@@ -10,7 +10,7 @@ class ReviewClass with _$ReviewClass {
     required int rating,
     String? comment,
     required DateTime createdDate,
-    required bool isApproved,
+    required String approvalStatus,
     required Map user,
   }) = _ReviewClass;
 
