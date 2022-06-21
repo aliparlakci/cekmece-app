@@ -5,6 +5,11 @@ import { OrderItem } from "./orderItem"
 
 export type Ratings = 1 | 2 | 3 | 4 | 5
 
+export enum ApprovalStatus {
+    IN_PROGRESS = "in-progress",
+    APPROVED = "approved",
+}
+
 @Entity()
 export class Review {
     @PrimaryGeneratedColumn()
@@ -26,10 +31,11 @@ export class Review {
     createdDate: Date
 
     @Column({
-        type: "boolean",
-        default: false,
+        type: "enum",
+        enum: ApprovalStatus,
+        default: ApprovalStatus.IN_PROGRESS,
     })
-    isApproved: boolean
+    approvalStatus: ApprovalStatus
 
     @ManyToOne(() => Car, (car) => car.reviews, { cascade: true, onDelete: "CASCADE" })
     car: Car

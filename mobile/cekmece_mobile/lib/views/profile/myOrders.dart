@@ -3,11 +3,14 @@ import 'package:cekmece_mobile/views/order/views/addressPick.dart';
 import 'package:cekmece_mobile/views/order/views/succesfulOrder.dart';
 import 'package:cekmece_mobile/views/productView/components/size.dart';
 import 'package:cekmece_mobile/views/profile/profileView.dart';
+import 'package:cekmece_mobile/widgets/showSnackBar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:place_picker/entities/entities.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MyOrders extends StatelessWidget {
   MyOrders({Key? key, required this.orders}) : super(key: key);
@@ -190,9 +193,22 @@ class OrderDetail extends StatelessWidget {
                     onPressed: () async {},
                   ),
                   ProfileButton(
-                    text: "Call Us",
-                    icon: Icons.phone,
-                    onPressed: () {},
+                    text: "Get Invoice",
+                    icon: Icons.inventory,
+                    onPressed: () async {
+                      try {
+                        String localIPAddress = dotenv.env['LOCALADDRESS']!;
+
+                        launch(
+                            '${localIPAddress}/api/orders/invoice/${order.id}');
+                      } catch (err) {
+                        showSnackBar(
+                            context: context,
+                            message:
+                                "Could not get invoice, please contact support.",
+                            error: true);
+                      }
+                    },
                   ),
                 ],
               ),

@@ -1,4 +1,5 @@
 import 'package:cekmece_mobile/models/cartItem/CartItem.dart';
+import 'package:cekmece_mobile/util/bloc/loadingBloc/loading_bloc.dart';
 import 'package:cekmece_mobile/util/bloc/userBloc/user_bloc.dart';
 import 'package:cekmece_mobile/util/network/networkProvider.dart';
 import 'package:cekmece_mobile/views/order/views/mockPayment.dart';
@@ -68,7 +69,12 @@ class _AddressPickerState extends State<AddressPicker> {
           "country": result.country!.name,
           "zipCode": result.postalCode
         };
-        networkService.post('${localIPAddress}/api/orders/new', body: body);
+
+        BlocProvider.of<LoadingBloc>(widget.prevContext)
+            .add(LoadingStart(loadingReason: "order create"));
+        await networkService.post('${localIPAddress}/api/orders/new',
+            body: body);
+        BlocProvider.of<LoadingBloc>(widget.prevContext).add(LoadingEnd());
 
         await pushNewScreen(
           context,
@@ -265,7 +271,7 @@ class OrderItems extends StatelessWidget {
   int getTotal() {
     int sum = 0;
     for (CartItem item in items) {
-      sum += item.total;
+      sum += item.total - (item.item.discount * item.quantity);
     }
     return sum;
   }
@@ -341,7 +347,9 @@ class OrderItemSummary extends StatelessWidget {
                 fontWeight: FontWeight.w600),
             maxLines: 2,
           ),
-          Text(numberFormat.format(item.total),
+          Text(
+              numberFormat
+                  .format(item.total - (item.quantity * item.item.discount)),
               style: GoogleFonts.raleway(
                   fontSize: getProportionateScreenHeight(16),
                   fontWeight: FontWeight.w800))

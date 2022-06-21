@@ -46,6 +46,17 @@ void main() async {
       expect(user.cart[0].item.quantity, 2);
     });
 
+    test('JSON Parse - User Wishlist', () {
+      expect(user.cart.length, 1);
+      expect(user.wishlist[0].id, "e357dd8c-53b6-4207-9ea7-15f7edcd4903");
+    });
+
+    test('JSON Parse - Item in User Wishlist', () {
+      expect(user.wishlist[0].item.name, "W13");
+      expect(user.wishlist[0].item.category["name"], "Formula 3");
+      expect(user.wishlist[0].item.quantity, 0);
+    });
+
     test('JSON Parse - Order Item', () {
       order = OrderItem.fromJson(orderJSON);
       expect(1, order.id);
@@ -73,6 +84,10 @@ void main() async {
       expect(25, review.createdDate.day);
       expect(12, review.createdDate.month);
     });
+
+    test('JSON Parse - Reviewer User', () {
+      expect(review.user["id"], "555");
+    });
   });
 }
 
@@ -94,12 +109,37 @@ const userJson = {
         "number": 65,
         "quantity": 2,
         "price": 45000,
+        "discount": 0,
         "warranty": 3,
         "unitsSold": 5,
         "reviewCount": 0,
         "category": {"id": 2, "name": "Formula 1"},
         "distributor": {"id": 2, "name": "Mercedes"},
-        "averageRating": "0.00"
+        "averageRating": "0.00",
+        "description": "Temporary description.",
+        "photoUrl": "https://i.imgur.com/awxaf0x.png"
+      }
+    }
+  ],
+  "wishlist": [
+    {
+      "id": "e357dd8c-53b6-4207-9ea7-15f7edcd4903",
+      "item": {
+        "id": 6,
+        "name": "W13",
+        "model": 2021,
+        "number": 44,
+        "quantity": 0,
+        "price": 1350999,
+        "discount": 0,
+        "warranty": 2,
+        "unitsSold": 1,
+        "reviewCount": 0,
+        "averageRating": "0.00",
+        "description": "Temporary description.",
+        "photoUrl": "https://i.imgur.com/awxaf0x.png",
+        "distributor": {"id": 3, "name": "Mercedes"},
+        "category": {"id": 3, "name": "Formula 3"}
       }
     }
   ]
@@ -144,12 +184,15 @@ const orderJSON = {
         "number": 44,
         "quantity": 0,
         "price": 150000,
+        "discount": 0,
         "warranty": 2,
         "unitsSold": 1,
         "reviewCount": 0,
         "averageRating": "0.00",
         "category": {"id": 4, "name": "Formula 2"},
-        "distributor": {"id": 3, "name": "Mercedes"}
+        "distributor": {"id": 3, "name": "Mercedes"},
+        "description": "Temporary description.",
+        "photoUrl": "https://i.imgur.com/awxaf0x.png"
       }
     },
     {
@@ -163,12 +206,15 @@ const orderJSON = {
         "number": 65,
         "quantity": 0,
         "price": 45000,
+        "discount": 0,
         "warranty": 3,
         "unitsSold": 5,
         "reviewCount": 0,
         "averageRating": "0.00",
         "category": {"id": 3, "name": "Formula 1"},
-        "distributor": {"id": 1, "name": "Ferrari"}
+        "distributor": {"id": 1, "name": "Ferrari"},
+        "description": "Temporary description.",
+        "photoUrl": "https://i.imgur.com/awxaf0x.png"
       }
     },
     {
@@ -182,12 +228,15 @@ const orderJSON = {
         "number": 33,
         "quantity": 0,
         "price": 329000,
+        "discount": 0,
         "warranty": 2,
         "unitsSold": 1,
         "reviewCount": 0,
         "averageRating": "0.00",
         "category": {"id": 3, "name": "Formula 1"},
-        "distributor": {"id": 2, "name": "RedBull"}
+        "distributor": {"id": 2, "name": "RedBull"},
+        "description": "Temporary description.",
+        "photoUrl": "https://i.imgur.com/awxaf0x.png"
       }
     }
   ]

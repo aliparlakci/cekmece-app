@@ -42,7 +42,7 @@ class _CartViewState extends State<CartView> {
   int getTotal() {
     int sum = 0;
     for (CartItem item in widget.user.cart) {
-      sum += item.total;
+      sum += item.total - (item.item.discount * item.quantity);
     }
     return sum;
   }
