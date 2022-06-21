@@ -75,8 +75,7 @@ export default function ProductCard({ car }: IProductCardProps) {
                             {user && <div className="absolute m-1">
                                 <Fab size="small" 
                                      color="primary"
-                                     className="opacity-40 hover:transition-opacity hover:duration-300 hover:opacity-100"
-                                     aria-label="add" 
+                                     aria-label="add"
                                      onClick={handleToggleToWishlist}
                                      disabled={loading}>
                                     {

@@ -1,11 +1,9 @@
-import { Equal, IsNull, Not, Repository } from "typeorm"
+import {Repository} from "typeorm"
 import db from "../dataSource"
-import { Order, OrderStatus, ShippingOption } from "../models/order"
+import {Order, OrderStatus, ShippingOption} from "../models/order"
 import CarService from "./carService"
-import UserService from "./userService"
 import CartService from "./cartService"
-import { OrderItem } from "../models/orderItem"
-import { isNull } from "util"
+import {OrderItem} from "../models/orderItem"
 import InvoiceService from "./invoiceService"
 
 export default class OrderService {
@@ -179,10 +177,11 @@ export default class OrderService {
             for (; i < cartItems.length; i++) {
                 await this.carService.decreaseStock(cartItems[i].item.id, cartItems[i].quantity)
                 orderItems.push({
-                    total: cartItems[i].total,
+                    total: cartItems[i].total * (100 - cartItems[i].item.discount),
                     quantity: cartItems[i].quantity,
                     car: cartItems[i].item,
                     order: candidate,
+                    status: OrderStatus.PROCESSING
                 } as OrderItem)
             }
 
@@ -200,12 +199,12 @@ export default class OrderService {
 
             if (candidate.promoCode === "ADMIN") {
                 candidate.discount = candidate.shipping + candidate.subTotal
-            } 
+            }
             else {
                 candidate.discount = discountTotal
             }
 
-            candidate.total = candidate.subTotal + candidate.shipping - candidate.discount
+            candidate.total = candidate.subTotal + candidate.shipping
             const result: Order = await this.repository().save(candidate)
             const order = await this.repository().findOne({
                 where: {
@@ -245,6 +244,10 @@ export default class OrderService {
         order.status = status
 
         return await this.repository().save(order)
+    }
+
+    async changeOrderItemStatus(id: number, status: OrderStatus) {
+        return await this.repository().update({id: id}, {status: status})
     }
 
     /*

@@ -16,6 +16,8 @@ export class Category {
     @DeleteDateColumn()
     deletedAt?: Date
 
-    @Column()
+    @Column({
+        default: false
+    })
     isDeleted: boolean
 }

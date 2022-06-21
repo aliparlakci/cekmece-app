@@ -36,7 +36,9 @@ export class Car {
     @Column()
     price: number
 
-    @Column()
+    @Column({
+        default: 0
+    })
     discount: number
 
     @Column()

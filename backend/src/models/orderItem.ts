@@ -3,6 +3,12 @@ import { Car } from "./car"
 import { Order } from "./order"
 import { Review } from "./review"
 
+export enum OrderStatus {
+    PROCESSING = "processing",
+    INTRANSIT = "in-transit",
+    DELIVERED = "delivered",
+}
+
 @Entity()
 export class OrderItem {
     @PrimaryGeneratedColumn("uuid")
@@ -22,4 +28,11 @@ export class OrderItem {
 
     @OneToOne(() => Review, (review) => review.orderItem)
     review: Review
+
+    @Column({
+        type: "enum",
+        enum: OrderStatus,
+        default: OrderStatus.PROCESSING,
+    })
+    status: OrderStatus
 }

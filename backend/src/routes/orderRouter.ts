@@ -185,6 +185,36 @@ function updateOrderStatus(orderService: OrderService) {
     }
 }
 
+function updateOrderItemStatus(orderService: OrderService) {
+    return async function (req, res, next) {
+        const orderItemId = parseInt(req.params.orderItemId)
+        const { status } = req.body
+
+        const orderStatusFormat = Joi.object()
+            .keys({
+                status: Joi.string()
+                    .valid(...Object.values(OrderStatus))
+                    .required(),
+            })
+            .required()
+
+        const { error } = orderStatusFormat.validate(req.body)
+
+        if (error) {
+            return next(createError(400, error))
+        }
+
+        try {
+            await orderService.changeOrderItemStatus(orderItemId, status)
+            res.status(200).json({
+                message: "success",
+            })
+        } catch (err) {
+            return next(createError(404, err))
+        }
+    }
+}
+
 function getUnreviewedOrderItems(orderService: OrderService) {
     return async function (req, res, next) {
         const carId = parseInt(req.params.carId)
@@ -230,6 +260,7 @@ function orderRouter() {
     router.get("/", getOrders(orderService))
     router.get("/all", checkRole([userRoles.ADMIN, userRoles.ProductManager, userRoles.ProductManager]), getAllOrders(orderService))
     router.post("/new", addNewOrder(orderService))
+    router.patch("/item/:orderId", updateOrderItemStatus(orderService))
     router.patch("/:orderId", updateOrderStatus(orderService))
     router.get("/unreviewed/:carId", getUnreviewedOrderItems(orderService))
     router.get("/invoice/:orderId", getInvoice(orderService))
