@@ -186,7 +186,19 @@ export default class OrderService {
 
             candidate.total = candidate.subTotal + candidate.shipping - candidate.discount
             const result: Order = await this.repository().save(candidate)
-            const pdf = await this.invoiceService.generatePdf(result, result.user)
+            const order = await this.repository().findOne({
+                where: {
+                    id: result.id
+                },
+                relations: {
+                    orderItems: {
+                        car: {
+                            distributor: true
+                        }
+                    }
+                }
+            })
+            const pdf = await this.invoiceService.generatePdf(order || result, result.user)
 
             await this.repository().update({ id: result.id }, { invoice: pdf })
 

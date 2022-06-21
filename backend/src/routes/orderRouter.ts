@@ -75,7 +75,7 @@ function addNewOrder(orderService: OrderService): RequestHandler {
         }
 
         try {
-            const [_, pdf] = await orderService.newOrder({
+            const [order, pdf] = await orderService.newOrder({
                 shippingOption,
                 promoCode,
                 addressLine1,
@@ -89,7 +89,7 @@ function addNewOrder(orderService: OrderService): RequestHandler {
 
             res.status(200).json({
                 message: "success",
-                pdf
+                orderId: order.id
             })
         } catch (err) {
             if (err instanceof Error) {

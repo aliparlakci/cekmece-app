@@ -225,7 +225,7 @@ export default class CarService {
     }
 
     async deleteCar(id: number) {
-        return this.repository().createQueryBuilder().delete().from(Car).where("id = :id", { id }).execute()
+        return this.repository().createQueryBuilder().softDelete().from(Car).where("id = :id", { id }).execute()
     }
 
     async decreaseStock(carId: number, count: number) {

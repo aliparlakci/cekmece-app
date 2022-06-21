@@ -29,7 +29,7 @@ export default class CategoryService {
     }
 
     async deleteCategory(id: number) {
-        return this.repository().createQueryBuilder().delete().from(Category).where("id = :id", {id}).execute()
+        return this.repository().createQueryBuilder().softDelete().from(Category).where("id = :id", {id}).execute()
     }
 
     async updateCategory(category: Category) {
