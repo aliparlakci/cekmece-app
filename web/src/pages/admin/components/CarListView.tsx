@@ -8,6 +8,7 @@ import ICar from "../../../models/car"
 import fetcher from "../../../utils/fetcher"
 import useConfirmation from "../../../hooks/useConfirmation"
 import useNotification, { NOTIFICATON_TYPES } from "../../../hooks/useNotification"
+import { Link } from "react-router-dom"
 
 const columns = [
     { field: "id", headerName: "ID" },
@@ -36,7 +37,7 @@ export default function CarListView() {
 
     const [selected, setSelected] = useState<any[]>([])
     const [isNewCarModalOpen, setNewCarModalOpen] = useState(false)
-    const [update, setUpdate] = useState<number|undefined>(undefined)
+    const [update, setUpdate] = useState<number | undefined>(undefined)
 
     const handleClose = () => {
         setNewCarModalOpen(false)
@@ -51,11 +52,11 @@ export default function CarListView() {
     const onDelete = (id: number) => {
         confirm({
             title: "Do you want to delete the car?",
-            message: ""
+            message: "",
         }, async () => {
             try {
                 const response = await fetch(`/api/cars/${id}/delete`, {
-                    method: "POST"
+                    method: "POST",
                 })
 
                 if (response.status !== 200) {
@@ -74,16 +75,14 @@ export default function CarListView() {
     return (
         <>
             <NewCarDialog open={isNewCarModalOpen} onClose={handleClose} update={update} />
-            <Box sx={{ display: "flex", minHeight: "100vh" }}>
+            <Box sx={{ display: "flex", minHeight: "calc(100vh - 4rem)" }}>
                 <CssBaseline />
                 <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
                     <Box
                         component="main"
                         sx={{
                             flex: 1,
-                            py: 6,
                             px: 4,
-                            bgcolor: "#eaeff1",
                             display: "flex",
                             flexDirection: "column",
                             alignItems: "end",
@@ -91,23 +90,32 @@ export default function CarListView() {
                         className="h-full"
                     >
                         <Box
-                            sx={{ width: "min-content", display: "flex", flexDirection: "row", gap: "1rem" }}
+                            sx={{ width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-between" }}
                             paddingY={2}
                         >
-                            {selected.length > 0 && (
-                                <Button variant="contained" color="error">
-                                    <span className="whitespace-nowrap" onClick={() => onDelete(selected[0])}>Delete Car</span>
+                            <div>
+                                <Link to="/admin/cars"><Button variant="text">Cars</Button></Link>
+                                <Link to="/admin/categories"><Button variant="text">Categories</Button></Link>
+                                <Link to="/admin/distributors"><Button variant="text">Distributors</Button></Link>
+                                <Link to="/admin/orders"><Button variant="text">Orders</Button></Link>
+                                <Link to="/admin/reviews"><Button variant="text">Reviews</Button></Link>
+                            </div>
+                            <div>
+                                {selected.length > 0 && (
+                                    <Button variant="contained" color="error">
+                                        <span className="whitespace-nowrap" onClick={() => onDelete(selected[0])}>Delete Car</span>
+                                    </Button>
+                                )}
+                                <Button variant="contained" onClick={() => setNewCarModalOpen(true)}>
+                                    <span className="whitespace-nowrap">New Car</span>
                                 </Button>
-                            )}
-                            <Button variant="contained" onClick={() => setNewCarModalOpen(true)}>
-                                <span className="whitespace-nowrap">New Car</span>
-                            </Button>
+                            </div>
                         </Box>
                         <div className="w-full h-full bg-white rounded-lg">
                             <DataGrid
                                 rows={mapData(data || [])}
                                 columns={columns}
-                                rowsPerPageOptions={[5,10,25,50,100]}
+                                rowsPerPageOptions={[5, 10, 25, 50, 100]}
                                 onSelectionModelChange={(model, details) => setSelected(model)}
                                 onCellDoubleClick={(params) => onCarEdit(params.row.id)}
                             />

@@ -13,6 +13,8 @@ import Context from "../utils/context"
 import InvoiceService from "../services/invoiceService"
 import path from "path";
 import * as fs from "fs";
+import {checkRole} from "../middlewares/checkRole";
+import userRoles from "../models/userRoles";
 
 function getOrders(orderService: OrderService) {
     return async function (req, res, next) {
@@ -33,6 +35,29 @@ function getOrders(orderService: OrderService) {
         }
 
         const orders = await orderService.getOrdersByUser(user.id)
+        res.status(StatusCodes.OK).json(orders)
+    }
+}
+
+function getAllOrders(orderService: OrderService) {
+    return async function (req, res, next) {
+        const ctx: Context | null = Context.get(req)
+        if (ctx === null) {
+            res.status(StatusCodes.UNAUTHORIZED).json({
+                message: "You must be logged in to get the list of orders.",
+            })
+            return
+        }
+
+        const user = ctx.user
+        if (user === null) {
+            res.status(StatusCodes.UNAUTHORIZED).json({
+                message: "You must be logged in to get the list of orders.",
+            })
+            return
+        }
+
+        const orders = await orderService.getAllOrders()
         res.status(StatusCodes.OK).json(orders)
     }
 }
@@ -178,6 +203,7 @@ function orderRouter() {
     const orderService = new OrderService(carService, cartService, invoiceService)
 
     router.get("/", getOrders(orderService))
+    router.get("/all", checkRole([userRoles.ADMIN, userRoles.ProductManager, userRoles.ProductManager]), getAllOrders(orderService))
     router.post("/new", addNewOrder(orderService))
     router.patch("/:orderId", updateOrderStatus(orderService))
     router.get("/unreviewed/:carId", getUnreviewedOrderItems(orderService))

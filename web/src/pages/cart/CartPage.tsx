@@ -28,7 +28,6 @@ export default function CartPage() {
         <>
             <ThemeProvider theme={theme}>
                 <div>
-                    <NavBar />
                     <div className="p-3">
                         <div className="flex justify-center text-5xl">Cart</div>
 

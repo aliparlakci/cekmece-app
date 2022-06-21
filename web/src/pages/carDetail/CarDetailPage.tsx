@@ -28,7 +28,6 @@ function CarDetailPage() {
     return (
         <>
             <ThemeProvider theme={theme}>
-                <NavBar />
                 <div className="mt-20">
                     <div className="flex justify-center mobile:flex-col mobile:mt-4 mobile:p-3">
                         <div className="flex-1 flex-col items-center justify-center m-10">

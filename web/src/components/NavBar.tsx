@@ -25,59 +25,17 @@ import useWishlist from "../hooks/useWishlist"
 const theme = createTheme({
     palette: {
         primary: {
-            main: "#1a1a1a",
+            main: "#ffffff",
+            contrastText: "#000000"
         },
     },
 })
 
-const Search = styled("div")(({ theme }) => ({
-    position: "relative",
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: alpha(theme.palette.common.white, 0.15),
-    "&:hover": {
-        backgroundColor: alpha(theme.palette.common.white, 0.25),
-    },
-    marginLeft: 0,
-    width: "100%",
-    [theme.breakpoints.up("sm")]: {
-        marginLeft: theme.spacing(1),
-        width: "auto",
-    },
-}))
-
-const SearchIconWrapper = styled("div")(({ theme }) => ({
-    padding: theme.spacing(0, 2),
-    height: "100%",
-    position: "absolute",
-    pointerEvents: "none",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-}))
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-    color: "inherit",
-    "& .MuiInputBase-input": {
-        padding: theme.spacing(1, 1, 1, 0),
-        // vertical padding + font size from searchIcon
-        paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-        transition: theme.transitions.create("width"),
-        width: "100%",
-        [theme.breakpoints.up("sm")]: {
-            width: "12ch",
-            "&:focus": {
-                width: "20ch",
-            },
-        },
-    },
-}))
-
 interface INavBarProps {
-    search?: string
-    onSearch?: (value: string) => void
+    children?: any
 }
 
-export default function NavBar({ search, onSearch }: INavBarProps) {
+export default function NavBar({ children }: INavBarProps) {
     const history = useHistory()
     const { user, logout } = useAuth()
     const { cart } = useCart()
@@ -138,7 +96,7 @@ export default function NavBar({ search, onSearch }: INavBarProps) {
                                 <Badge
                                     badgeContent={Object.keys(cart).reduce(
                                         (prev, id) => cart[id] && cart[id].amount + prev,
-                                        0
+                                        0,
                                     )}
                                     color="error"
                                 >
@@ -147,7 +105,6 @@ export default function NavBar({ search, onSearch }: INavBarProps) {
                             </IconButton>
                         </Link>
                         {
-                            // user && <Avatar sx={{ bgcolor: deepPurple[500], mr: 2 }}>{user.displayName}</Avatar>
                             user && (
                                 <>
                                     <Button
@@ -157,7 +114,7 @@ export default function NavBar({ search, onSearch }: INavBarProps) {
                                         aria-expanded={open ? "true" : undefined}
                                         onClick={handleClick}
                                     >
-                                        <Typography sx={{ color: "white" }}>{user.displayName}</Typography>
+                                        <Typography sx={{ color: "#000000" }}>{user.displayName}</Typography>
                                     </Button>
                                     <Menu
                                         id="basic-menu"
@@ -188,19 +145,6 @@ export default function NavBar({ search, onSearch }: INavBarProps) {
                                 <Link to="/register">Register</Link>
                                 <Link to="/login">Login</Link>
                             </div>
-                        )}
-                        {search !== undefined && onSearch && (
-                            <Search>
-                                <SearchIconWrapper>
-                                    <SearchIcon />
-                                </SearchIconWrapper>
-                                <StyledInputBase
-                                    placeholder="Search…"
-                                    value={search}
-                                    onChange={(event) => onSearch(event.target.value)}
-                                    inputProps={{ "aria-label": "search" }}
-                                />
-                            </Search>
                         )}
                     </Toolbar>
                 </AppBar>

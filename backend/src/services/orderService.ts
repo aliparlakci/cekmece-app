@@ -19,7 +19,11 @@ export default class OrderService {
     }
 
     async getAllOrders() {
-        return await this.repository().find()
+        return this.repository().find({
+            order: {
+                createdDate: "DESC"
+            }
+        })
     }
 
     async getOrder(id) {

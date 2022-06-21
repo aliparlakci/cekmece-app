@@ -20,21 +20,18 @@ export default function OrdersPage() {
     if (error)
         return (
             <ThemeProvider theme={theme}>
-                <NavBar />
             </ThemeProvider>
         )
 
     if (!data)
         return (
             <ThemeProvider theme={theme}>
-                <NavBar />
             </ThemeProvider>
         )
 
     return (
         <>
             <ThemeProvider theme={theme}>
-                <NavBar />
                 <div className="flex flex-row justify-center mt-20">
                     <div className="max-w-screen-lg flex-nowrap">
                         <Typography variant="h3" sx={{ fontWeight: "light" }}>

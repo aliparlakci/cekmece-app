@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Box, Container, createTheme, Grid } from "@mui/material"
+import { Box, Container, createTheme, Grid, Typography } from "@mui/material"
 import useSWR from "swr"
 
 import ProductsView from "./components/ProductsView"
@@ -10,6 +10,8 @@ import ICar from "../../models/car"
 import fetcher from "../../utils/fetcher"
 import ICategory from "../../models/category"
 import IDistributor from "../../models/distributor"
+import { Link } from "react-router-dom"
+import useAuth from "../../hooks/useAuth"
 
 const theme = createTheme({
     palette: {
@@ -35,39 +37,48 @@ const buildFilterURL = (search: string, filter: IFilterOptions): string => {
 }
 
 export default function HomePage() {
+    const { user } = useAuth()
     const [fetchURL, setFetchURL] = useState("")
 
-    const { data: cars } = useSWR<ICar[]>(fetchURL, fetcher)
+    const { data: cars, isValidating } = useSWR<ICar[]>(fetchURL, fetcher)
     const { data: categories } = useSWR<ICategory[]>("/api/categories", fetcher)
     const { data: distributors } = useSWR<IDistributor[]>("/api/distributors", fetcher)
 
-    const [search, setSearch] = useState("")
     const [filter, setFilter] = useState(defaultFilterOptions)
+    const [search, setSearch] = useState("")
 
     useEffect(() => {
-        setFetchURL(buildFilterURL(search, filter))
+        const id = setTimeout(() => setFetchURL(buildFilterURL(search, filter)), 500)
+        return () => clearTimeout(id)
     }, [search])
 
     return (
         <>
             <ThemeProvider theme={theme}>
-                <NavBar search={search} onSearch={setSearch} />
-                <div className="flex flex-row justify-center mt-20">
+                <div className="flex flex-row justify-between pt-10">
                     <Grid item xs={3} sx={{ display: { xs: "none", lg: "inline" }, zIndex: 10 }}>
                         <Container sx={{ top: 100, justifyContent: "center" }}>
                             <Grid container direction="column" justifyContent="flex-start" alignItems="center">
                                 {categories && distributors && <>
                                     <FilterMenu categories={categories} distributors={distributors}
-                                                filter={filter} setFilter={setFilter} onSearch={() => setFetchURL(buildFilterURL(search, filter))} />
+                                                filter={filter} setFilter={setFilter}
+                                                search={search} setSearch={setSearch}
+                                                onShowCars={() => setFetchURL(buildFilterURL(search, filter))}
+                                                onResetFilter={() => {
+                                                    setFilter(defaultFilterOptions)
+                                                    setSearch("")
+                                                }}
+                                    />
                                 </>}
                             </Grid>
                         </Container>
                     </Grid>
-                    <div className="max-w-screen-lg" >
-                        <ProductsView cars={cars} />
+                    <div className="w-full flex justify-center">
+                        <div className="max-w-screen-lg">
+                            <ProductsView cars={cars} />
+                        </div>
                     </div>
                 </div>
-
             </ThemeProvider>
         </>
     )

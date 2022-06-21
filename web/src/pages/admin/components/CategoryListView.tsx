@@ -6,6 +6,7 @@ import useSWR from "swr"
 import NewCategoryDialog from "./NewCategoryDialog"
 import fetcher from "../../../utils/fetcher"
 import ICategory from "../../../models/category"
+import { Link } from "react-router-dom"
 
 const columns = [
     { field: "id", headerName: "ID" },
@@ -35,16 +36,14 @@ export default function CategoryListView() {
         <>
             <NewCategoryDialog open={isNewCategoryDialogOpen} onClose={handleClose}
                                update={update} />
-            <Box sx={{ display: "flex", minHeight: "100vh" }}>
+            <Box sx={{ display: "flex", minHeight: "calc(100vh - 4rem)" }}>
                 <CssBaseline />
                 <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
                     <Box
                         component="main"
                         sx={{
                             flex: 1,
-                            py: 6,
                             px: 4,
-                            bgcolor: "#eaeff1",
                             display: "flex",
                             flexDirection: "column",
                             alignItems: "end",
@@ -52,12 +51,21 @@ export default function CategoryListView() {
                         className="h-full"
                     >
                         <Box
-                            sx={{ width: "min-content", display: "flex", flexDirection: "row", gap: "1rem" }}
+                            sx={{ width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-between" }}
                             paddingY={2}
                         >
-                            <Button variant="contained">
-                                <span className="whitespace-nowrap" onClick={() => setNewCategoryDialogOpen(true)}>New Category</span>
-                            </Button>
+                            <div>
+                                <Link to="/admin/cars"><Button variant="text">Cars</Button></Link>
+                                <Link to="/admin/categories"><Button variant="text">Categories</Button></Link>
+                                <Link to="/admin/distributors"><Button variant="text">Distributors</Button></Link>
+                                <Link to="/admin/orders"><Button variant="text">Orders</Button></Link>
+                                <Link to="/admin/reviews"><Button variant="text">Reviews</Button></Link>
+                            </div>
+                            <div>
+                                <Button variant="contained">
+                                    <span className="whitespace-nowrap" onClick={() => setNewCategoryDialogOpen(true)}>New Category</span>
+                                </Button>
+                            </div>
                         </Box>
                         <div className="w-full h-full bg-white rounded-lg">
                             <DataGrid

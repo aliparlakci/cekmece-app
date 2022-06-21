@@ -1,5 +1,17 @@
-import React from "react"
-import { Button, Box, Container, createTheme, Paper, Grid, ThemeProvider, Typography, Divider } from "@mui/material"
+import React, { useState } from "react"
+import {
+    Button,
+    Box,
+    Container,
+    createTheme,
+    Paper,
+    Grid,
+    ThemeProvider,
+    Typography,
+    Divider,
+    InputBase,
+    TextField,
+} from "@mui/material"
 import YearSlider from "./YearSlider"
 import PriceSelect from "./PriceSelect"
 import CategorySelect from "./CategorySelect"
@@ -7,11 +19,6 @@ import SortCars, { SortType } from "./SortCars"
 
 import ICategory from "../../../models/category"
 import IDistributor from "../../../models/distributor"
-import FormControl from "@mui/material/FormControl"
-import InputLabel from "@mui/material/InputLabel"
-import Select from "@mui/material/Select"
-import MenuItem from "@mui/material/MenuItem"
-import category from "../../../models/category"
 import DistributorSelect from "./DistributorSelect"
 
 const theme = createTheme({
@@ -51,7 +58,10 @@ interface FilterMenuProps {
     distributors: IDistributor[]
     filter: IFilterOptions
     setFilter: React.Dispatch<React.SetStateAction<IFilterOptions>>
-    onSearch: () => void
+    search: string
+    setSearch: React.Dispatch<React.SetStateAction<string>>
+    onShowCars: () => void
+    onResetFilter: () => void
 }
 
 export const defaultFilterOptions: IFilterOptions = Object.freeze({
@@ -64,7 +74,16 @@ export const defaultFilterOptions: IFilterOptions = Object.freeze({
     sort: "mostPopular",
 })
 
-export default function FilterMenu({ filter, setFilter, categories, distributors, onSearch }: FilterMenuProps) {
+export default function FilterMenu({
+    filter,
+    setFilter,
+    categories,
+    distributors,
+    search,
+    setSearch,
+    onShowCars,
+    onResetFilter
+}: FilterMenuProps) {
     return (
         <>
             <ThemeProvider theme={theme}>
@@ -83,20 +102,21 @@ export default function FilterMenu({ filter, setFilter, categories, distributors
                                     width: { lg: 280, xl: 380 },
                                 }}
                             >
-                                <Box sx={{ paddingX: 2, paddingY: 1 }}>
-                                    <Typography variant="h6" sx={{ fontWeight: "bold", color: "#666" }}>
-                                        Sort Cars
-                                    </Typography>
+                                <Box sx={{ paddingX: 5, paddingY: 2 }}>
+                                    <TextField
+                                        id="outlined-basic"
+                                        label="Search"
+                                        variant="standard"
+                                        onChange={(event) => setSearch(event.target.value)}
+                                        value={search}
+                                    />
                                 </Box>
                                 <Divider variant="middle" />
                                 <Box sx={{ paddingX: 5, paddingY: 2 }}>
-                                    <SortCars sort={filter.sort}
-                                              onChange={(sort) => setFilter(old => ({ ...old, sort }))} />
-                                </Box>
-                                <Box sx={{ paddingX: 2, paddingY: 1 }}>
-                                    <Typography variant="h6" sx={{ fontWeight: "bold", color: "#666" }}>
-                                        Filter Cars
-                                    </Typography>
+                                    <SortCars
+                                        sort={filter.sort}
+                                        onChange={(sort) => setFilter((old) => ({ ...old, sort }))}
+                                    />
                                 </Box>
                                 <Divider variant="middle" />
                                 <Box sx={{ paddingX: 5, paddingY: 2 }}>
@@ -128,12 +148,17 @@ export default function FilterMenu({ filter, setFilter, categories, distributors
                                 <Divider variant="middle" />
                                 <Box sx={{ paddingX: 5, paddingY: 2 }}>
                                     <Typography sx={{ fontWeight: "bold" }}>Between Years:</Typography>
-                                    <YearSlider minYear={filter.minYear} maxYear={filter.maxYear}
-                                                onChange={(minYear, maxYear) => setFilter(old => ({
-                                                    ...old,
-                                                    minYear,
-                                                    maxYear,
-                                                }))} />
+                                    <YearSlider
+                                        minYear={filter.minYear}
+                                        maxYear={filter.maxYear}
+                                        onChange={(minYear, maxYear) =>
+                                            setFilter((old) => ({
+                                                ...old,
+                                                minYear,
+                                                maxYear,
+                                            }))
+                                        }
+                                    />
                                 </Box>
                                 <Divider variant="middle" />
                                 <Box sx={{ paddingX: 5, paddingY: 2 }}>
@@ -155,12 +180,28 @@ export default function FilterMenu({ filter, setFilter, categories, distributors
                                         }
                                     />
                                 </Box>
-                                <Divider variant="middle" />
-                                <Box>
-                                    <Button variant="contained" fullWidth={true} sx={{ borderRadius: 0 }} onClick={onSearch}>
-                                        Show Cars
-                                    </Button>
-                                </Box>
+                                <div className="flex flex-row">
+                                    <div className="w-full">
+                                        <Button
+                                            variant="text"
+                                            fullWidth={true}
+                                            sx={{ borderRadius: 0 }}
+                                            onClick={onResetFilter}
+                                        >
+                                            Reset Filter
+                                        </Button>
+                                    </div>
+                                    <div className="w-full">
+                                        <Button
+                                            variant="contained"
+                                            fullWidth={true}
+                                            sx={{ borderRadius: 0 }}
+                                            onClick={onShowCars}
+                                        >
+                                            Show Cars
+                                        </Button>
+                                    </div>
+                                </div>
                             </Paper>
                         </Box>
                     </Container>

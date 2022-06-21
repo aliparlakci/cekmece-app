@@ -1,5 +1,5 @@
 import React, { useEffect } from "react"
-import { BrowserRouter as Router, Redirect, Route, Switch } from "react-router-dom"
+import { BrowserRouter as Router, Link, Redirect, Route, Switch } from "react-router-dom"
 
 import AdminPage from "./pages/admin/AdminPage"
 import HomePage from "./pages/home/HomePage"
@@ -21,6 +21,8 @@ import UserRoles from "./models/userRoles"
 import "./App.css"
 import WishlistPage from "./pages/wishlist/WishlistPage"
 import ProfilePage from "./pages/profile/ProfilePage"
+import NavBar from "./components/NavBar"
+import { Typography } from "@mui/material"
 
 
 function App() {
@@ -32,7 +34,14 @@ function App() {
                 <ConfirmationProvider>
                     <CartProvider>
                         <WishlistProvider>
-                            <Router>
+                        <Router>
+                            <NavBar>
+                                {user && user.role !== "Customer" &&
+                                    <Typography noWrap sx={{ display: { xs: "none", sm: "block" } }}>
+                                        <Link to="/admin/cars">Moderation</Link>
+                                    </Typography>}
+                            </NavBar>
+                            <div className="mt-16">
                                 <Switch>
                                     <Route path="/admin">
                                         {!loading && (
@@ -73,7 +82,8 @@ function App() {
                                         {user && <WishlistPage />}
                                     </Route>
                                 </Switch>
-                            </Router>
+                            </div>
+                        </Router>
                         </WishlistProvider>
                     </CartProvider>
                 </ConfirmationProvider>
