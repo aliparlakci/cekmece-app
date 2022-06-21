@@ -13,10 +13,10 @@ var nodemailer = require("nodemailer")
 var { google } = require("googleapis")
 
 
-const CLIENT_ID = "1031671042635-2o9nh80hb5ftf73udu11kerq9busm86k.apps.googleusercontent.com"
-const CLIENT_SECRET = "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"
+const CLIENT_ID = "1031671042635-ep4g7o7lhpm74cgp79ldovhojpjbo420.apps.googleusercontent.com"
+const CLIENT_SECRET = "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"
 const REDIRECT_URI = "https://developers.google.com/oauthplayground"
-const REFRESH_TOKEN = "1//04NRrydOL4e0aCgYIARAAGAQSNgF-L9IrzXIzuDmQaZQOkiuGs4aVyfrtbY8K1SUch0b66a1N_CKFiwnWL3ai_UkWlfL4niEsWg"
+const REFRESH_TOKEN = "1//04l5PDLAnQCVqCgYIARAAGAQSNgF-L9IrZ5viWT8ZDczzB6LZG8CptHTaM9wpO_k8lW5dR9j26nNGh2cRbghmlCOD94tuIjUNNQ"
 
 
 const oAuth2Client = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI)
@@ -62,107 +62,88 @@ export interface IInvoiceData {
     quantity: number 
 }
 
-
-async function generatePdf(order: Order, user: User) {
-    
-    var today = new Date()
-    //var date = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate()
-    const html = fs.readFileSync(path.join(__dirname, "../invoiceHtml.html"), "utf-8")
-    invoiceNum = invoiceNum + 1
-    const filename = `${order.id}_${user.id}.pdf`
-
-
-    const data: IInvoiceData[] = []
-    let i = 0
-    for (; i < order.orderItems.length; i++) {
-        data.push({
-            item: order.orderItems[i].car.name,
-            description: order.orderItems[i].car.name,
-            unitCost: order.orderItems[i].car.price,
-            quantity: order.orderItems[i].quantity
-        })
-    }
-
-    
-    const withLineTotal = data.map(item => ({ ...item, lineTotal: item.quantity * item.unitCost}))
-    
-
-    const obj = {
-        prodlist: withLineTotal,
-        subtotal: order.subTotal,
-        invoiceNumber: invoiceNum,
-        name: user.displayName,
-        address: order.addressLine1,
-        region: order.country,
-        email: user.email,
-    }
-
-    const document = {
-        html: html,
-        data: {
-            products: obj,
-        },
-        path: path.join(__dirname, "../invoices/"+filename)
-    }
-
-    await pdf.create(document, options)
-        .then((res) => {
-            console.log("should generate")
-        })
-        .catch((error) => {
-            console.log(error)
-        })
-}
-
-
 export default class InvoiceService {
     constructor(private userService: UserService) {}
-    
 
-    async sendInvoice(order: Order, user: User, ) {
-        
+    async generatePdf(order: Order, user: User) {
 
-        await generatePdf(order, user)
-        try {
-            const accessToken = oAuth2Client.getAccessToken()
+        //var date = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate()
+        const html = fs.readFileSync(path.join(__dirname, "../invoiceHtml.html"), "utf-8")
+        invoiceNum = invoiceNum + 1
+        const filename = `${order.id}_${user.id}.pdf`
 
-            const transport = nodemailer.createTransport({
-                service: "gmail",
-                auth: {
-                    type: "OAuth2",
-                    user: "cs308myaraba@gmail.com",
-                    clientId: CLIENT_ID,
-                    clientSecret: CLIENT_SECRET,
-                    refreshToken: REFRESH_TOKEN,
-                    accessToken: accessToken,
-                },
-                tls: {
-                    rejectUnauthorized: true,
-                },
+
+        const data: IInvoiceData[] = []
+        let i = 0
+        for (; i < order.orderItems.length; i++) {
+            data.push({
+                item: order.orderItems[i].car.name,
+                description: order.orderItems[i].car.name,
+                unitCost: order.orderItems[i].car.price,
+                quantity: order.orderItems[i].quantity
             })
-    
-            const mailOptions = {
-                from: "CarWow <cs308myaraba@gmail.com>",
-                to: user.email,
-                subject: "Purchase Invoice",
-                text: "Please find attached invoice below! Thank you for choosing CarWow!",
-       
-                
-                attachments: [
-                    {
-                        filename: invoiceNum + user.id + "_invoice" + ".pdf" ,
-                        contentType: "application/pdf",
-                        path: path.join(__dirname, "..", "invoices", `${order.id}_${user.id}.pdf`),
-                    },
-                ],
-            }
-    
-            const result = transport.sendMail(mailOptions)
-            console.log("should send")
-            return result
-
-        } catch (error) {
-            return error
         }
+
+        const withLineTotal = data.map(item => ({ ...item, lineTotal: item.quantity * item.unitCost}))
+
+        const obj = {
+            prodlist: withLineTotal,
+            subtotal: order.subTotal,
+            invoiceNumber: invoiceNum,
+            name: user.displayName,
+            address: order.addressLine1,
+            region: order.country,
+            email: user.email,
+        }
+
+        const document = {
+            html: html,
+            data: {
+                products: obj,
+            },
+            path: path.join(__dirname, "../invoices/"+filename)
+        }
+
+        await pdf.create(document, options)
+        return fs.readFileSync(path.join(__dirname, "../invoices/"+filename))
+    }
+
+    async sendInvoice(order: Order, user: User, buffer: Buffer) {
+        const pdf = await this.generatePdf(order, user)
+        const accessToken = oAuth2Client.getAccessToken()
+
+        const transport = nodemailer.createTransport({
+            service: "gmail",
+            auth: {
+                type: "OAuth2",
+                user: "cs308myaraba@gmail.com",
+                clientId: CLIENT_ID,
+                clientSecret: CLIENT_SECRET,
+                refreshToken: REFRESH_TOKEN,
+                accessToken: accessToken,
+            },
+            tls: {
+                rejectUnauthorized: true,
+            },
+        })
+
+        const mailOptions = {
+            from: "CarWow <cs308myaraba@gmail.com>",
+            to: user.email,
+            subject: "Purchase Invoice",
+            text: "Please find attached invoice below! Thank you for choosing CarWow!",
+
+
+            attachments: [
+                {
+                    filename: invoiceNum + user.id + "_invoice" + ".pdf" ,
+                    contentType: "application/pdf",
+                    content: buffer
+                },
+            ],
+        }
+
+        const result = transport.sendMail(mailOptions)
+        return result
     }
 }

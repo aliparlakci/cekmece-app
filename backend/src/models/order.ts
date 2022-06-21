@@ -105,4 +105,9 @@ export class Order {
 
     @OneToMany(() => OrderItem, (orderItem) => orderItem.order, { cascade: true, onDelete: "CASCADE" })
     orderItems: OrderItem[]
+
+    @Column({
+        nullable: true
+    })
+    invoice: Buffer
 }

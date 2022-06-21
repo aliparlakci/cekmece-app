@@ -22,6 +22,14 @@ export default class OrderService {
         return await this.repository().find()
     }
 
+    async getOrder(id) {
+        return await this.repository().findOne({
+            where: {
+                id: id
+            }
+        })
+    }
+
     async getOrdersByUser(userId: string) {
         return await this.repository().find({
             relations: [
@@ -59,6 +67,7 @@ export default class OrderService {
                 order: {
                     id: true,
                     status: true,
+                    invoice: true
                 },
             },
 
@@ -177,12 +186,14 @@ export default class OrderService {
 
             candidate.total = candidate.subTotal + candidate.shipping - candidate.discount
             const result: Order = await this.repository().save(candidate)
-          
-            await this.invoiceService.sendInvoice(result, result.user)
-            const pdfLocation = `${result.id}_${candidate.user.id}.pdf`
+            const pdf = await this.invoiceService.generatePdf(result, result.user)
+
+            await this.repository().update({ id: result.id }, { invoice: pdf })
 
             await this.cartService.deleteUserCart(candidate.user.id)
-            return [result, pdfLocation]
+
+            //await this.invoiceService.sendInvoice(result, result.user, pdf)
+            return [result, pdf]
         } catch (err) {
             for (let j = i - 1; j >= 0; j--) {
                 await this.carService.increaseStock(cartItems[j].item.id, cartItems[j].quantity)

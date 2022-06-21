@@ -101,8 +101,6 @@ function addNewOrder(orderService: OrderService): RequestHandler {
                     return next(createError(404, err))
                 }
             }
-
-            next(createError(404, err))
         }
     }
 }
@@ -162,11 +160,11 @@ function getUnreviewedOrderItems(orderService: OrderService) {
     }
 }
 
-function getInvoice(): RequestHandler {
-    return function (req, res, next) {
-        const filename = req.params.file
-        const file = fs.readFileSync(path.join(__dirname, "..", "invoices", filename))
-        res.contentType("application/pdf").send(file)
+function getInvoice(orderService: OrderService): RequestHandler {
+    return async function (req, res, next) {
+        const orderId = req.params.orderId
+        const order = await orderService.getOrder(orderId)
+        res.contentType("application/pdf").send(order?.invoice)
     }
 }
 
@@ -183,7 +181,7 @@ function orderRouter() {
     router.post("/new", addNewOrder(orderService))
     router.patch("/:orderId", updateOrderStatus(orderService))
     router.get("/unreviewed/:carId", getUnreviewedOrderItems(orderService))
-    router.get("/invoice/:file", getInvoice())
+    router.get("/invoice/:orderId", getInvoice(orderService))
 
     return router
 }
