@@ -77,7 +77,7 @@ export default function ReviewList({ carId }: Car) {
                             rating={review.rating}
                             comment={review.comment}
                             createdDate={review.createdDate}
-                            isApproved={review.isApproved}
+                            approvalStatus={review.approvalStatus}
                             isYourReview={false}
                             del={del}
                             response={response}

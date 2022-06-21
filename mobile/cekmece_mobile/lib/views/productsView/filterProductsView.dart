@@ -742,7 +742,7 @@ class _FilterProductsViewState extends State<FilterProductsView> {
                   color: Colors.white,
                   height: MediaQuery.of(context).size.height / 12.5,
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(5, 5, 2.5, 5),
+                    padding: const EdgeInsets.fromLTRB(5, 5, 0, 5),
                     child: TextButton(
                       onPressed: () {
                         setState(() {
@@ -786,7 +786,7 @@ class _FilterProductsViewState extends State<FilterProductsView> {
                 color: Colors.white,
                 height: MediaQuery.of(context).size.height / 12.5,
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(2.5, 5, 5, 5),
+                  padding: const EdgeInsets.all(5),
                   child: TextButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {

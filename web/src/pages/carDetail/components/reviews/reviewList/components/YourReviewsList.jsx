@@ -36,7 +36,7 @@ function YourReviewsList({ carId, yourReviews, del, response }) {
                             rating={review.rating}
                             comment={review.comment}
                             createdDate={review.createdDate}
-                            isApproved={review.isApproved}
+                            approvalStatus={review.approvalStatus}
                             isYourReview={true}
                             del={del}
                             response={response}

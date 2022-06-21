@@ -8,7 +8,18 @@ import useNotification, { NOTIFICATON_TYPES } from "../../../../../../hooks/useN
 
 const pattern = date.compile("MMM D, YYYY")
 
-function ReviewItem({ key, reviewId, carId, rating, comment, createdDate, isApproved, isYourReview, del, response }) {
+function ReviewItem({
+    key,
+    reviewId,
+    carId,
+    rating,
+    comment,
+    createdDate,
+    approvalStatus,
+    isYourReview,
+    del,
+    response,
+}) {
     const notification = useNotification()
 
     const handleOnClick = async (event) => {
@@ -66,7 +77,7 @@ function ReviewItem({ key, reviewId, carId, rating, comment, createdDate, isAppr
                     secondary={
                         comment != null ? (
                             <Box paddingTop={!isYourReview ? 1 : 0}>
-                                <ReadMore isApproved={isApproved}>{comment}</ReadMore>
+                                <ReadMore approvalStatus={approvalStatus}>{comment}</ReadMore>
                             </Box>
                         ) : null
                     }

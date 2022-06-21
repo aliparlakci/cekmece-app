@@ -1,14 +1,15 @@
 import { useState, Fragment } from "react"
 import { Typography } from "@mui/material"
+import { ApprovalStatus } from "../../../../../../models/review"
 
-const ReadMore = ({ isApproved, children }) => {
+const ReadMore = ({ approvalStatus, children }) => {
     const text = children
     const [isReadMore, setIsReadMore] = useState(true)
     const toggleReadMore = () => {
         setIsReadMore(!isReadMore)
     }
 
-    if (!isApproved) {
+    if (approvalStatus === ApprovalStatus.IN_PROGRESS) {
         return (
             <Typography
                 variant="body2"
