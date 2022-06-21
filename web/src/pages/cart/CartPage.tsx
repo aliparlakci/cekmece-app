@@ -66,7 +66,7 @@ export default function CartPage() {
                                 <div className={SummaryItemStyle + " text-3xl font-bold"}>
 
                                     <p>Total:</p>
-                                    <p>${Object.keys(cart).reduce((prev, id) => cart[id]&& cart[id].item.price * cart[id].amount + prev, 0)}</p>
+                                    <p>${Object.keys(cart).reduce((prev, id) => cart[id] && cart[id].item.price * cart[id].amount * (100 - cart[id].item.discount) / 100 + prev, 0)}</p>
                                 </div>
                                 
                                     {user && <Button variant="contained" fullWidth={true} sx={{ borderRadius: 0 }}

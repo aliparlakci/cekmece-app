@@ -31,7 +31,7 @@ export default function Review({ address, payment, items, onConfirm, loading }: 
                         {[...Array(amount).keys()].map((i) => (
                             <ListItem key={item.id || 0} sx={{ py: 1, px: 0 }}>
                                 <ListItemText primary={item.name} secondary={item.distributor?.name || ""} />
-                                <Typography variant="body2">${item.price}</Typography>
+                                <Typography variant="body2">${item.price * (100 - item.discount) / 100}</Typography>
                             </ListItem>
                         ))}
                     </>
@@ -39,7 +39,7 @@ export default function Review({ address, payment, items, onConfirm, loading }: 
                 <ListItem sx={{ py: 1, px: 0 }}>
                     <ListItemText primary="Total" />
                     <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
-                        ${items.reduce((prev, { item, amount }) => prev + amount * item.price, 0)}
+                        ${items.reduce((prev, { item, amount }) => prev + amount * item.price * (100 - item.discount) / 100, 0)}
                     </Typography>
                 </ListItem>
             </List>

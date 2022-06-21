@@ -182,6 +182,7 @@ function CartProvider({ children }: { children: any }) {
 
     useEffect(() => {
         localStorage.setItem("cart", JSON.stringify(Object.keys(cart).map(id => ({ id, amount: cart[id].amount }))))
+        replaceCart(cart)
     }, [cart])
 
     return <context.Provider value={{ add, cart, remove, decrease, pushCart: () => replaceCart(cart), reset: () => setCart({}) }}>

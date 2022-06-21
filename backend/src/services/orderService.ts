@@ -177,7 +177,7 @@ export default class OrderService {
             for (; i < cartItems.length; i++) {
                 await this.carService.decreaseStock(cartItems[i].item.id, cartItems[i].quantity)
                 orderItems.push({
-                    total: cartItems[i].total * (100 - cartItems[i].item.discount),
+                    total: cartItems[i].quantity * cartItems[i].item.price * (100 - cartItems[i].item.discount) / 100,
                     quantity: cartItems[i].quantity,
                     car: cartItems[i].item,
                     order: candidate,
@@ -185,26 +185,10 @@ export default class OrderService {
                 } as OrderItem)
             }
 
-            const subTotal = orderItems.map((item) => item.total).reduce((acc, next) => acc + next)
-            const discountTotal = orderItems.map((item) => item.car.discount * item.quantity).reduce((acc, next) => acc + next)
-
-            candidate.subTotal = subTotal
+            candidate.total = orderItems.reduce((acc, next) => acc + next.total, 0)
+            candidate.subTotal = candidate.total
             candidate.orderItems = orderItems
 
-            if (candidate.shippingOption === ShippingOption.ONEDAY) {
-                candidate.shipping = 15
-            } else {
-                candidate.shipping = 0
-            }
-
-            if (candidate.promoCode === "ADMIN") {
-                candidate.discount = candidate.shipping + candidate.subTotal
-            }
-            else {
-                candidate.discount = discountTotal
-            }
-
-            candidate.total = candidate.subTotal + candidate.shipping
             const result: Order = await this.repository().save(candidate)
             const order = await this.repository().findOne({
                 where: {

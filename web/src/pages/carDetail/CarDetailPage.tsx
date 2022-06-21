@@ -73,7 +73,7 @@ function CarDetailPage() {
                                 }
                                 {car.discount !== 0 &&
                                     <p className="mt-4 text-3xl">
-                                    Your Deal: <b> ${car.price-car.discount}</b> 
+                                    Your Deal: <b> ${car.price * (100 - car.discount) / 100}</b>
                                     </p>
                                     
                                 }

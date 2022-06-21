@@ -79,7 +79,7 @@ export default class InvoiceService {
             data.push({
                 item: order.orderItems[i].car.distributor.name,
                 description: order.orderItems[i].car.name,
-                unitCost: order.orderItems[i].car.price,
+                unitCost: order.orderItems[i].car.price * (100 - order.orderItems[i].car.discount) / 100,
                 quantity: order.orderItems[i].quantity
             })
         }

@@ -150,7 +150,7 @@ export default function ProductCard({ car }: IProductCardProps) {
                                         
                                         {car.discount !== 0 &&
                                             <Typography variant="h5" fontWeight="bold" textAlign="right" color="green">
-                                                ${car.price - car.discount}
+                                                ${car.price * (100 - car.discount) / 100}
                                             </Typography>
                                     }
 

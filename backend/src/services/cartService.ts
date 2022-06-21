@@ -35,7 +35,7 @@ export default class CartService {
 
         if (cart.length < 1) {
             return await this.repository().save({
-                total: (product.price - product.discount) * quantity,
+                total: (product.price * (100 - product.discount) / 100) * quantity,
                 quantity,
                 user,
                 item: product,
@@ -46,7 +46,7 @@ export default class CartService {
             }
 
             const quantity = (cart[0].quantity += 1)
-            const total = (cart[0].item.price - cart[0].item.discount) * quantity
+            const total = (cart[0].item.price * (100 - cart[0].item.discount) / 100) * quantity
 
             await this.repository().update(cart[0].id, {quantity, total})
 
