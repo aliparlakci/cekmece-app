@@ -67,16 +67,23 @@ export default class WishlistService {
     }
 
     async getWishlist(user: string): Promise<WishlistItem[]> {
-        const userWishlist = await this.repository().find({
+        return await this.repository().find({
             relations: {
                 user: true,
                 item: {
                     distributor: true,
                     category: true
                 }
+            },
+            where: {
+                item: {
+                    isDeleted: false
+                },
+                user: {
+                    id: user
+                }
             }
         })
-        return (await userWishlist).filter((item) => item.user.id === user)
     }
 
 

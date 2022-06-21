@@ -22,6 +22,15 @@ export default class OrderService {
         return this.repository().find({
             order: {
                 createdDate: "DESC"
+            },
+            relations: {
+                orderItems: {
+                    car: {
+                        distributor: true,
+                        category: true
+                    },
+                    order: true
+                }
             }
         })
     }
@@ -30,6 +39,14 @@ export default class OrderService {
         return await this.repository().findOne({
             where: {
                 id: id
+            },
+            relations: {
+                orderItems: {
+                    car: {
+                        distributor: true,
+                        category: true
+                    }
+                }
             }
         })
     }

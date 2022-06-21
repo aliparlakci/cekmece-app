@@ -162,10 +162,12 @@ export default class CarService {
             query = query.andWhere(`MATCH(cars.name) AGAINST ('${options.q}' IN NATURAL LANGUAGE MODE)`)
         }
 
+        query = query.andWhere("cars.isDeleted = :isDeleted", { isDeleted: false })
+
         query = query.leftJoinAndSelect("cars.category", "category")
         query = query.leftJoinAndSelect("cars.distributor", "distributor")
 
-        return query.getMany()
+        return await query.getMany()
     }
 
     async getAllCars(sortBy: string) {
@@ -225,7 +227,7 @@ export default class CarService {
     }
 
     async deleteCar(id: number) {
-        return this.repository().createQueryBuilder().softDelete().from(Car).where("id = :id", { id }).execute()
+        return this.repository().update({ id: id }, { isDeleted: true })
     }
 
     async decreaseStock(carId: number, count: number) {

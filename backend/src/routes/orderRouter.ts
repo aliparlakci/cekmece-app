@@ -39,6 +39,31 @@ function getOrders(orderService: OrderService) {
     }
 }
 
+function getOrder(orderService: OrderService) {
+    return async function (req, res, next) {
+        const orderId = parseInt(req.params.orderId)
+
+        const ctx: Context | null = Context.get(req)
+        if (ctx === null) {
+            res.status(StatusCodes.UNAUTHORIZED).json({
+                message: "You must be logged in to get the list of orders.",
+            })
+            return
+        }
+
+        const user = ctx.user
+        if (user === null) {
+            res.status(StatusCodes.UNAUTHORIZED).json({
+                message: "You must be logged in to get the list of orders.",
+            })
+            return
+        }
+
+        const order = await orderService.getOrder(orderId)
+        res.status(StatusCodes.OK).json(order)
+    }
+}
+
 function getAllOrders(orderService: OrderService) {
     return async function (req, res, next) {
         const ctx: Context | null = Context.get(req)
@@ -208,6 +233,7 @@ function orderRouter() {
     router.patch("/:orderId", updateOrderStatus(orderService))
     router.get("/unreviewed/:carId", getUnreviewedOrderItems(orderService))
     router.get("/invoice/:orderId", getInvoice(orderService))
+    router.get("/:orderId", getOrder(orderService))
 
     return router
 }

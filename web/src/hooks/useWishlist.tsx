@@ -10,6 +10,7 @@ interface IUseWishlist {
     wishlist: IWishlist
     toggle: (id: number) => Promise<void>
     exists: (carId: number) => boolean
+    refresh: () => Promise<void>
 }
 
 const context = createContext<IUseWishlist>({
@@ -18,6 +19,7 @@ const context = createContext<IUseWishlist>({
     remove: () => null,
     toggle: () => new Promise(() => null),
     exists: () => false,
+    refresh: () => new Promise(() => null),
 })
 
 type IWishlist = IWishlistItem[]
@@ -41,8 +43,8 @@ function WishlistProvider({ children }: { children: any }) {
 
     const refreshWishlist = async () => {
         try {
-            const reponse = await fetch(`/api/wishlist/${user?.id}`)
-            const data: { wishlist: IWishlistItem[] } = await reponse.json()
+            const response = await fetch(`/api/wishlist/${user?.id}`)
+            const data: { wishlist: IWishlistItem[] } = await response.json()
 
             setWishlist(data.wishlist.map((item) => {
                 return {
@@ -117,7 +119,7 @@ function WishlistProvider({ children }: { children: any }) {
         return wishlist.reduce((prev, item) => prev || item.item.id === carId, false)
     }
 
-    return <context.Provider value={{ add, remove, wishlist, toggle, exists }}>
+    return <context.Provider value={{ add, remove, wishlist, toggle, exists, refresh: refreshWishlist }}>
         {children}
     </context.Provider>
 }

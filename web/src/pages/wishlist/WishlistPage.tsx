@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { useHistory } from "react-router-dom"
 import NavBar from "../../components/NavBar"
 import { Box, Button, createTheme, ThemeProvider, Typography } from "@mui/material"
@@ -18,9 +18,13 @@ const theme = createTheme({
 })
 
 export default function WishlistPage() {
-    const { wishlist } = useWishlist()
+    const { wishlist, refresh } = useWishlist()
     const { user } = useAuth()
     const history = useHistory()
+
+    useEffect(() => {
+        refresh()
+    }, [])
 
     return (
         <>

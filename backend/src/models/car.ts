@@ -7,7 +7,7 @@ import {
     ManyToOne,
     OneToMany,
     Index,
-    JoinColumn,
+    JoinColumn, DeleteDateColumn,
 } from "typeorm"
 import { Cart } from "./cart"
 import { Category } from "./category"
@@ -77,4 +77,12 @@ export class Car {
         default: "https://i.imgur.com/awxaf0x.png",
     })
     photoUrl: string
+
+    @DeleteDateColumn()
+    deletedAt?: Date
+
+    @Column({
+        default: false
+    })
+    isDeleted: boolean
 }

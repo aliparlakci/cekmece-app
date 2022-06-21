@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react"
 import { DataGrid } from "@mui/x-data-grid"
 import { Box, Button, CssBaseline } from "@mui/material"
-import useSWR from "swr"
+import useSWR, { mutate } from "swr"
 
 import NewCategoryDialog from "./NewCategoryDialog"
 import fetcher from "../../../utils/fetcher"
 import ICategory from "../../../models/category"
 import { Link } from "react-router-dom"
+import useNotification, { NOTIFICATON_TYPES } from "../../../hooks/useNotification"
+import useConfirmation from "../../../hooks/useConfirmation"
 
 const columns = [
     { field: "id", headerName: "ID" },
@@ -15,6 +17,9 @@ const columns = [
 
 export default function CategoryListView() {
     const { data, error } = useSWR<ICategory[]>("/api/categories", fetcher)
+
+    const confirm = useConfirmation()
+    const notification = useNotification()
 
     const [isNewCategoryDialogOpen, setNewCategoryDialogOpen] = useState(false)
     const [selected, setSelected] = useState<any[]>([])
@@ -28,6 +33,27 @@ export default function CategoryListView() {
     const onCategoryEdit = (id: number) => {
         setUpdate(id)
         setNewCategoryDialogOpen(true)
+    }
+
+    const onDelete = (id: number) => {
+        confirm({
+            title: "Do you want to delete the category?",
+            message: "",
+        }, async () => {
+            try {
+                const response = await fetch(`/api/categories/${id}/delete`, {
+                    method: "POST",
+                })
+
+                if (response.status !== 200) {
+                    throw `Couldn't delete the car, server responded with ${response.status}`
+                }
+
+                mutate("/api/categories")
+            } catch (err) {
+                notification(NOTIFICATON_TYPES.ERROR, JSON.stringify(err))
+            }
+        })
     }
 
     if (!data) return <></>
@@ -62,6 +88,11 @@ export default function CategoryListView() {
                                 <Link to="/admin/reviews"><Button variant="text">Reviews</Button></Link>
                             </div>
                             <div>
+                                {selected.length > 0 && (
+                                    <Button variant="contained" color="error">
+                                        <span className="whitespace-nowrap" onClick={() => onDelete(selected[0])}>Delete Category</span>
+                                    </Button>
+                                )}
                                 <Button variant="contained">
                                     <span className="whitespace-nowrap" onClick={() => setNewCategoryDialogOpen(true)}>New Category</span>
                                 </Button>

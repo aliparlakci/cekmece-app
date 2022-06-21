@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { DataGrid } from "@mui/x-data-grid"
 import { Box, Button, CssBaseline } from "@mui/material"
 import useSWR, { mutate } from "swr"
@@ -10,62 +10,56 @@ import useConfirmation from "../../../hooks/useConfirmation"
 import useNotification, { NOTIFICATON_TYPES } from "../../../hooks/useNotification"
 import { Link } from "react-router-dom"
 import IOrder from "../../../models/order"
+import OrderDetailsModal from "./OrderDetailsModal"
+import IOrderItem from "../../../models/orderItem"
 
 const columns = [
-    { field: "id", headerName: "ID", flex: 1 },
+    { field: "brand", headerName: "Brand", flex: 1 },
+    { field: "name", headerName: "Name", flex: 1 },
     { field: "status", headerName: "Status", flex: 1 },
-    { field: "discount", headerName: "Discount" },
-    { field: "total", headerName: "Amount" },
-    { field: "createdDate", headerName: "Created At", flex: 1 },
-    { field: "updatedDate", headerName: "Last Updated", flex: 1 },
+    { field: "total", headerName: "Price" },
+    { field: "puchasedAt", headerName: "Purchased At", flex: 1 },
+    { field: "updatedAt", headerName: "Last Updated", flex: 1 },
 ]
 
 export default function OrdersListView() {
     const { data, error } = useSWR<IOrder[]>("/api/orders/all", fetcher)
 
-    const confirm = useConfirmation()
-    const notification = useNotification()
-
     const [selected, setSelected] = useState<any[]>([])
-    const [isNewCarModalOpen, setNewCarModalOpen] = useState(false)
-    const [update, setUpdate] = useState<number | undefined>(undefined)
+    const [isOrderDetailsModalOpen, setOrderDetailsModalOpen] = useState(false)
+    const [orderId, setOrderId] = useState<number | undefined>(undefined)
+    const [orderItems, setOrderItems] = useState<any[]>([])
+
+    useEffect(() => {
+        if (data)
+            setOrderItems(data.map(order => order.orderItems.map(item => {
+                return {
+                    brand: item.car.distributor?.name,
+                    name: item.car.name,
+                    puchasedAt: (new Date(item.order.createdDate)).toLocaleDateString(),
+                    updatedAt: (new Date(item.order.updatedDate)).toLocaleDateString(),
+                    price: item.total,
+                    status: item.order.status,
+                    ...item
+                }
+            })).flat())
+    }, [data])
 
     const handleClose = () => {
-        setNewCarModalOpen(false)
-        setUpdate(undefined)
+        setOrderDetailsModalOpen(false)
+        setOrderId(undefined)
     }
 
-    const onCarEdit = (id: number) => {
-        setUpdate(id)
-        setNewCarModalOpen(true)
+    const onOrderDetails = (id: number) => {
+        setOrderId(id)
+        setOrderDetailsModalOpen(true)
     }
-    //
-    // const onDelete = (id: number) => {
-    //     confirm({
-    //         title: "Do you want to delete the car?",
-    //         message: "",
-    //     }, async () => {
-    //         try {
-    //             const response = await fetch(`/api/cars/${id}/delete`, {
-    //                 method: "POST",
-    //             })
-    //
-    //             if (response.status !== 200) {
-    //                 throw `Couldn't delete the car, server responded with ${response.status}`
-    //             }
-    //
-    //             mutate("/api/cars")
-    //         } catch (err) {
-    //             notification(NOTIFICATON_TYPES.ERROR, JSON.stringify(err))
-    //         }
-    //     })
-    // }
 
     if (!data) return <></>
 
     return (
         <>
-            <NewCarDialog open={isNewCarModalOpen} onClose={handleClose} update={update} />
+            {/*<OrderDetailsModal open={isOrderDetailsModalOpen} onClose={handleClose} orderId={orderId} />*/}
             <Box sx={{ display: "flex", minHeight: "calc(100vh - 4rem)" }}>
                 <CssBaseline />
                 <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
@@ -95,11 +89,11 @@ export default function OrdersListView() {
                         </Box>
                         <div className="w-full h-full bg-white rounded-lg">
                             <DataGrid
-                                rows={data || []}
+                                rows={orderItems || []}
                                 columns={columns}
                                 rowsPerPageOptions={[5, 10, 25, 50, 100]}
                                 onSelectionModelChange={(model, details) => setSelected(model)}
-                                onCellDoubleClick={(params) => onCarEdit(params.row.id)}
+                                onCellDoubleClick={(params) => onOrderDetails(params.row.id)}
                             />
                         </div>
                     </Box>

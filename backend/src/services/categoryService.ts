@@ -18,18 +18,24 @@ export default class CategoryService {
         return this.repository().find({
             order: {
                 name: "ASC"
+            },
+            where: {
+                isDeleted: false
             }
         })
     }
 
     async getCategory(id: number) {
         return this.repository().findOne({
-            where: {id}
+            where: {
+                id: id,
+                isDeleted: false
+            }
         })
     }
 
     async deleteCategory(id: number) {
-        return this.repository().createQueryBuilder().softDelete().from(Category).where("id = :id", {id}).execute()
+        return this.repository().update({ id: id }, { isDeleted: true })
     }
 
     async updateCategory(category: Category) {
