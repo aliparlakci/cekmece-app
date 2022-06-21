@@ -18,6 +18,7 @@ interface ICar {
     photoUrl: string
     averageRating: string
     userCanReviewCar: boolean
+    discount: number
 }
 
 export default ICar

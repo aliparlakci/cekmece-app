@@ -2,7 +2,7 @@ import React, { useState, createContext } from "react"
 import { Redirect, useParams } from "react-router-dom"
 import useSWR from "swr"
 import { ThemeProvider } from "@emotion/react"
-import { Button, TextField, Box } from "@mui/material"
+import { Button, TextField, Box, Typography } from "@mui/material"
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart"
 
 import theme from "./theme"
@@ -65,9 +65,25 @@ function CarDetailPage() {
                                 {car.description}
                             </p>
                             <div className="flex flex-col place-self-start">
-                                <p className="mt-4 text-2xl">
+                                {car.discount !== 0 &&
+                                    <p className="mt-4 text-xl">
+                                    Old Price: <s>${car.price}</s> 
+                                    </p>
+                                    
+                                }
+                                {car.discount !== 0 &&
+                                    <p className="mt-4 text-3xl">
+                                    Your Deal: <b> ${car.price-car.discount}</b> 
+                                    </p>
+                                    
+                                }
+
+                                {car.discount === 0 &&
+                                <p className="mt-4 text-3xl">
                                     Price: <b>${car.price}</b>
                                 </p>
+                                
+                                }
                                 <p className="mt-2 text-2xl">
                                     Year: <b>{car.model}</b>
                                 </p>

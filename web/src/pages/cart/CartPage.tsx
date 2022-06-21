@@ -60,12 +60,15 @@ export default function CartPage() {
                                 {/*    <p>Discount:</p>*/}
                                 {/*    <p>-$10</p>*/}
                                 {/*</div>*/}
-                                <div className={SummaryItemStyle + " text-3xl font-bold"}>
-                                    <p>Total:</p>
-                                    <p>${Object.keys(cart).reduce((prev, id) => cart[id] && cart[id].item.price * cart[id].amount + prev, 0)}</p>
-                                </div>
 
                                 <Box className="w-[100%] mt-[30%]">
+                               
+                                <div className={SummaryItemStyle + " text-3xl font-bold"}>
+
+                                    <p>Total:</p>
+                                    <p>${Object.keys(cart).reduce((prev, id) => cart[id]&& cart[id].item.price * cart[id].amount + prev, 0)}</p>
+                                </div>
+                                
                                     {user && <Button variant="contained" fullWidth={true} sx={{ borderRadius: 0 }}
                                                      onClick={() => history.push("/checkout")} disabled={!Object.keys(cart).length}>
                                         Checkout

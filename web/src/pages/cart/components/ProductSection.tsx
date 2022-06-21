@@ -54,9 +54,20 @@ export default function ProductSection({ item }: IProductSelectionProps) {
                             </div>
                         </div>
                     </div>
-                    <p className="flex items-center justify-center text-4xl mt-3">
-                        <b>${item.item.price * item.amount}</b>
-                    </p>
+
+                    {item.item.discount !== 0 &&
+
+                            <p className="flex items-center justify-center text-4xl mt-3">
+                            <b>${(item.item.price - item.item.discount) * item.amount}</b>
+                            </p>
+                    
+                    }
+                    {item.item.discount === 0 &&
+                        <p className="flex items-center justify-center text-4xl mt-3">
+                            <b>${item.item.price * item.amount}</b>
+                        </p>
+                    }    
+
                 </div>
 
                 <div className="grid grid-cols-2">
