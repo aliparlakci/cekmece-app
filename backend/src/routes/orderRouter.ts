@@ -273,6 +273,105 @@ function getInvoice(orderService: OrderService): RequestHandler {
     }
 }
 
+function getRefundRequests(orderService: OrderService): RequestHandler {
+    return async function (req, res, next) {
+        try {
+            const refundRequests = await orderService.getRefundRequests()
+            res.status(200).json(refundRequests)
+        } catch (e) {
+            res.status(400).json(JSON.stringify(e))
+        }
+    }
+}
+
+function newRefundRequest(orderService: OrderService): RequestHandler {
+    return async function (req, res, next) {
+        const orderItemId = parseInt(req.params.orderItemId)
+
+        const ctx: Context | null = Context.get(req)
+        if (ctx === null) {
+            res.status(StatusCodes.UNAUTHORIZED).json({
+                message: "You must be logged in.",
+            })
+            return
+        }
+
+        const user = ctx.user
+        if (user === null) {
+            res.status(StatusCodes.UNAUTHORIZED).json({
+                message: "You must be logged in to get the list of unreviewed order items.",
+            })
+            return
+        }
+
+        try {
+            await orderService.newRefundRequest(orderItemId)
+            res.status(201).json({})
+        } catch (err) {
+            res.status(400).json(JSON.stringify(err))
+        }
+    }
+}
+
+function approveRefundRequest(orderService: OrderService): RequestHandler {
+    return async function (req, res, next) {
+        const refundRequestId = parseInt(req.params.refundRequestId)
+
+        const ctx: Context | null = Context.get(req)
+        if (ctx === null) {
+            res.status(StatusCodes.UNAUTHORIZED).json({
+                message: "You must be logged in to get the list of unreviewed order items.",
+            })
+            return
+        }
+
+        const user = ctx.user
+        if (user === null) {
+            res.status(StatusCodes.UNAUTHORIZED).json({
+                message: "You must be logged in to get the list of unreviewed order items.",
+            })
+            return
+        }
+
+        try {
+            await orderService.approveRefundRequest(refundRequestId)
+            res.status(200).json({})
+        } catch (err) {
+            res.status(400).json(JSON.stringify(err))
+        }
+    }
+}
+
+
+function disapproveRefundRequest(orderService: OrderService): RequestHandler {
+    return async function (req, res, next) {
+        const refundRequestId = parseInt(req.params.refundRequestId)
+
+        const ctx: Context | null = Context.get(req)
+        if (ctx === null) {
+            res.status(StatusCodes.UNAUTHORIZED).json({
+                message: "You must be logged in to get the list of unreviewed order items.",
+            })
+            return
+        }
+
+        const user = ctx.user
+        if (user === null) {
+            res.status(StatusCodes.UNAUTHORIZED).json({
+                message: "You must be logged in to get the list of unreviewed order items.",
+            })
+            return
+        }
+
+        try {
+            await orderService.disapproveRefundRequest(refundRequestId)
+            res.status(200).json({})
+        } catch (err) {
+            res.status(400).json(JSON.stringify(err))
+        }
+    }
+}
+
 function orderRouter() {
     const router = Router()
     const userService = new UserService()
@@ -282,14 +381,19 @@ function orderRouter() {
     const invoiceService = new InvoiceService(userService)
     const orderService = new OrderService(carService, cartService, invoiceService)
 
+    router.get("/refundRequests", getRefundRequests(orderService))
+    router.post("/newRefund/:orderItemId", newRefundRequest(orderService))
+    router.post("/approveRefund/:refundRequestId", approveRefundRequest(orderService))
+    router.post("/disapproveRefund/:refundRequestId", disapproveRefundRequest(orderService))
+
     router.get("/", getOrders(orderService))
     router.get("/all", getAllOrders(orderService))
     router.post("/new", addNewOrder(orderService))
     router.patch("/item/:itemId", updateOrderItemStatus(orderService))
     router.get("/item/:itemId", getOrderItem(orderService))
-    router.patch("/:orderId", updateOrderStatus(orderService))
     router.get("/unreviewed/:carId", getUnreviewedOrderItems(orderService))
     router.get("/invoice/:orderId", getInvoice(orderService))
+    router.patch("/:orderId", updateOrderStatus(orderService))
     router.get("/:orderId", getOrder(orderService))
 
     return router
