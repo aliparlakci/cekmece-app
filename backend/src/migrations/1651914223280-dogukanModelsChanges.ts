@@ -5,8 +5,8 @@ export class dogukanModelsChanges1651914223280 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`CREATE TABLE \`order\` (\`id\` int NOT NULL AUTO_INCREMENT, \`subTotal\` int NOT NULL, \`shipping\` int NOT NULL DEFAULT '0', \`discount\` int NOT NULL DEFAULT '0', \`total\` int NOT NULL, \`status\` enum ('processing', 'in-transit', 'delivered') NOT NULL DEFAULT 'processing', \`promoCode\` varchar(50) NULL, \`createdDate\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`updatedDate\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6), \`addressLine1\` varchar(50) NOT NULL, \`addressLine2\` varchar(50) NULL, \`city\` varchar(50) NOT NULL, \`province\` varchar(50) NULL, \`zipCode\` int NOT NULL, \`country\` varchar(50) NOT NULL, \`shippingOption\` enum ('free', 'one-day') NOT NULL DEFAULT 'free', \`userId\` varchar(36) NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`);
-        await queryRunner.query(`CREATE TABLE \`order_item\` (\`id\` varchar(36) NOT NULL, \`total\` int NOT NULL, \`quantity\` int NOT NULL, \`carId\` int NULL, \`orderId\` int NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`);
-        await queryRunner.query(`ALTER TABLE \`review\` ADD \`orderItemId\` varchar(36) NULL`);
+        await queryRunner.query(`CREATE TABLE \`order_item\` (\`id\` int NOT NULL AUTO_INCREMENT, \`total\` int NOT NULL, \`quantity\` int NOT NULL, \`carId\` int NULL, \`orderId\` int NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`);
+        await queryRunner.query(`ALTER TABLE \`review\` ADD \`orderItemId\` int NOT NULL`);
         await queryRunner.query(`ALTER TABLE \`review\` ADD UNIQUE INDEX \`IDX_548db341fcb171a46726b5d041\` (\`orderItemId\`)`);
         await queryRunner.query(`ALTER TABLE \`car\` ADD \`reviewCount\` int NOT NULL DEFAULT '0'`);
         await queryRunner.query(`ALTER TABLE \`car\` ADD \`averageRating\` decimal(3,2) NOT NULL DEFAULT '0.00'`);

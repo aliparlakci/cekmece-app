@@ -12,7 +12,7 @@ export enum OrderStatus {
 @Entity()
 export class OrderItem {
     @PrimaryGeneratedColumn()
-    id: string
+    id: number
 
     @Column()
     total: number
