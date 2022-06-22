@@ -42,8 +42,8 @@ function App() {
                                         {!loading && (
                                             <>
                                                 {user === null && <Redirect to="/login" />}
-                                                {user?.role === UserRoles.ADMIN && <AdminPage />}
-                                                {user?.role !== UserRoles.ADMIN && <Redirect to="/" />}
+                                                {user?.role !== UserRoles.Customer && <AdminPage />}
+                                                {user?.role === UserRoles.Customer && <Redirect to="/" />}
                                             </>
                                         )}
                                     </Route>

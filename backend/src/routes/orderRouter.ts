@@ -283,7 +283,7 @@ function orderRouter() {
     const orderService = new OrderService(carService, cartService, invoiceService)
 
     router.get("/", getOrders(orderService))
-    router.get("/all", checkRole([userRoles.ADMIN, userRoles.ProductManager, userRoles.ProductManager]), getAllOrders(orderService))
+    router.get("/all", getAllOrders(orderService))
     router.post("/new", addNewOrder(orderService))
     router.patch("/item/:itemId", updateOrderItemStatus(orderService))
     router.get("/item/:itemId", getOrderItem(orderService))

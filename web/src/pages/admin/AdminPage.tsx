@@ -8,31 +8,38 @@ import OrdersListView from "./components/OrdersListView"
 import ReviewListView from "./components/ReviewListView"
 import DiscountsListView from "./components/DiscountsListView"
 import InvoicesListView from "./components/InvoicesListView"
+import useAuth from "../../hooks/useAuth"
+import UserRoles from "../../models/userRoles"
+import Links from "./components/Links"
 
 export default function AdminPage() {
+    const {user} = useAuth()
     return (
         <>
             <Switch>
                 <Route path="/admin/cars">
-                    <CarListView />
+                    {user && (user.role === "ADMIN" || user.role === "ProductManager") && <CarListView />}
                 </Route>
                 <Route path="/admin/categories">
-                    <CategoryListView />
+                    {user && (user.role === "ADMIN" || user.role === "ProductManager") && <CategoryListView />}
                 </Route>
                 <Route path="/admin/distributors">
-                    <DistributorListView />
+                    {user && (user.role === "ADMIN" || user.role === "ProductManager") && <DistributorListView />}
                 </Route>
                 <Route path="/admin/orders">
-                    <OrdersListView />
+                    {user && (user.role === "ADMIN" || user.role === "ProductManager") && <OrdersListView />}
                 </Route>
                 <Route path="/admin/reviews">
-                    <ReviewListView />
+                    {user && (user.role === "ADMIN" || user.role === "ProductManager") && <ReviewListView />}
                 </Route>
                 <Route path="/admin/discounts">
-                    <DiscountsListView />
+                    {user && (user.role === "ADMIN" || user.role === "SalesManager") && <DiscountsListView />}
                 </Route>
                 <Route path="/admin/invoices">
-                    <InvoicesListView />
+                    {user && (user.role === "ADMIN" || user.role === "SalesManager") && <InvoicesListView />}
+                </Route>
+                <Route path="/admin">
+                    {user && (user.role !== UserRoles.Customer) && <div className="p-6"><Links /></div>}
                 </Route>
             </Switch>
         </>

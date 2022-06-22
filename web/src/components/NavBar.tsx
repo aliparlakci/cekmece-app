@@ -71,7 +71,7 @@ export default function NavBar({ children }: INavBarProps) {
                         <Box sx={{ flexGrow: 1 }} />
                         {user && user.role !== "Customer" &&
                             <Typography noWrap sx={{ display: { xs: "none", sm: "block" } }}>
-                                <Link to="/admin/cars">Moderation</Link>
+                                <Link to="/admin">Moderation</Link>
                             </Typography>}
                         <Box sx={{ flexGrow: 1 }} />
                         {user && <Link to="/wishlist">
