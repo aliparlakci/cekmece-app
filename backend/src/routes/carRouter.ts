@@ -89,7 +89,7 @@ export function setPrice(carService: CarService) {
 
         try{
             await carService.setPrice(carId,price);
-            res.status(StatusCodes.OK);
+            res.status(StatusCodes.OK).json();
             return
         }
         catch(err){

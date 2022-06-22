@@ -7,6 +7,7 @@ import DistributorListView from "./components/DistributorListView"
 import OrdersListView from "./components/OrdersListView"
 import ReviewListView from "./components/ReviewListView"
 import DiscountsListView from "./components/DiscountsListView"
+import InvoicesListView from "./components/InvoicesListView"
 
 export default function AdminPage() {
     return (
@@ -29,6 +30,9 @@ export default function AdminPage() {
                 </Route>
                 <Route path="/admin/discounts">
                     <DiscountsListView />
+                </Route>
+                <Route path="/admin/invoices">
+                    <InvoicesListView />
                 </Route>
             </Switch>
         </>

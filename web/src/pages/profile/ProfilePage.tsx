@@ -20,16 +20,14 @@ function ProfilePage(){
     return(
         <>
         <NavBar></NavBar>
-           <ThemeProvider theme={theme}>
                <Grid container spacing={2} sx={{pt:10,px:5}}>
                    <Grid item md={12} xs={12} >
                        <Paper variant="outlined">
                           <UserInfo></UserInfo>
                        </Paper>
                    </Grid>
-                   
+
                </Grid>
-           </ThemeProvider>
 
         </>
     );

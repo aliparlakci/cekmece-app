@@ -18,18 +18,14 @@ import SetDeliveryDialog from "./SetDeliveryDialog"
 
 const columns = [
     { field: "id", headerName: "ID"},
-    { field: "carId", headerName: "Car ID"},
-    { field: "userId", headerName: "Customer ID", flex: 1},
-    { field: "name", headerName: "Name" },
+    { field: "username", headerName: "Customer"},
     { field: "price", headerName: "Price" },
-    { field: "quantity", headerName: "Quantity" },
-    { field: "address", headerName: "Address", flex: 1 },
-    { field: "status", headerName: "Status" },
+    { field: "address", headerName: "Address" },
     { field: "puchasedAt", headerName: "Purchased At" },
     { field: "updatedAt", headerName: "Last Updated" },
 ]
 
-export default function OrdersListView() {
+export default function InvoicesListView() {
     const { data, error } = useSWR<IOrder[]>("/api/orders/all", fetcher)
 
     const [selected, setSelected] = useState<any[]>([])
@@ -40,27 +36,15 @@ export default function OrdersListView() {
 
     useEffect(() => {
         if (data)
-            setOrderItems(data.map(order => order.orderItems.map(item => {
-                return {
-                    id: item.id,
-                    orderId: item.order.id,
-                    carId: item.car.id,
-                    userId: item.order.user.id,
-                    puchasedAt: (new Date(item.order.createdDate)).toLocaleDateString(),
-                    updatedAt: (new Date(item.order.updatedDate)).toLocaleDateString(),
-                    price: item.total,
-                    quantity: item.quantity,
-                    address: order.addressLine1,
-                    status: item.status,
-                    name: item.car.name
-                }
-            })).flat())
+            setOrderItems(data.map(order => ({
+                id: order.id,
+                username: order.user.displayName,
+                price: order.total,
+                address: order.addressLine1,
+                puchasedAt: (new Date(order.createdDate)).toLocaleDateString(),
+                updatedAt: (new Date(order.updatedDate)).toLocaleDateString(),
+            })))
     }, [data])
-
-    const handleClose = () => {
-        setIsDeliveryDialogOpen(false)
-        setOrderId(undefined)
-    }
 
     const onOrderDetails = (id: number) => {
         setOrderId(id)
@@ -69,8 +53,6 @@ export default function OrdersListView() {
 
     return (
         <>
-            {isDeliveryDialogOpen && <SetDeliveryDialog open={isDeliveryDialogOpen} onClose={handleClose}
-                                update={selected.length > 0 ? selected[0] : ""} />}
             <Box sx={{ display: "flex", minHeight: "calc(100vh - 4rem)" }}>
                 <CssBaseline />
                 <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
@@ -91,9 +73,6 @@ export default function OrdersListView() {
                         >
                             <Links />
                             <div>
-                                {selected.length > 0 && <Button variant="contained" onClick={() => setIsDeliveryDialogOpen(true)}>
-                                    <span className="whitespace-nowrap">Set Delivery Status</span>
-                                </Button>}
                             </div>
                         </Box>
                         <div className="w-full h-full bg-white rounded-lg">
@@ -102,7 +81,7 @@ export default function OrdersListView() {
                                 columns={columns}
                                 rowsPerPageOptions={[5, 10, 25, 50, 100]}
                                 onSelectionModelChange={(model, details) => setSelected(model)}
-                                onCellDoubleClick={(params) => onOrderDetails(params.row.orderId)}
+                                onCellDoubleClick={(params) => onOrderDetails(params.row.id)}
                             />
                         </div>
                     </Box>

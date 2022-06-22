@@ -70,8 +70,8 @@ function App() {
                                         <OrdersPage />
                                     </Route>
                                     <Route path="/profile">
-                                    <ProfilePage />
-                                  </Route>
+                                        <ProfilePage />
+                                    </Route>
                                     <Route path="/wishlist">
                                         {user === null && <Redirect to="/login" />}
                                         {user && <WishlistPage />}

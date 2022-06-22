@@ -13,5 +13,6 @@ export default function Links() {
         <Link to="/admin/orders"><Button variant="text">Orders</Button></Link>
         <Link to="/admin/reviews"><Button variant="text">Reviews</Button></Link>
         <Link to="/admin/discounts"><Button variant="text">Discounts</Button></Link>
+        <Link to="/admin/invoices"><Button variant="text">Invoices</Button></Link>
     </div>
 }

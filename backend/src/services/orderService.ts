@@ -30,7 +30,8 @@ export default class OrderService {
                     order: {
                         user: true
                     }
-                }
+                },
+                user: true
             }
         })
     }
@@ -232,8 +233,8 @@ export default class OrderService {
         return await this.repository().save(order)
     }
 
-    async changeOrderItemStatus(id: number, status: OrderStatus) {
-        return await this.repository().update({id: id}, {status: status})
+    async changeOrderItemStatus(id, status) {
+        return await this.orderItemRepository().update({id: id}, {status: status})
     }
 
     /*

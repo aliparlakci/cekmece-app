@@ -64,6 +64,31 @@ function getOrder(orderService: OrderService) {
     }
 }
 
+function getOrderItem(orderService: OrderService) {
+    return async function (req, res, next) {
+        const itemId = req.params.itemId
+
+        const ctx: Context | null = Context.get(req)
+        if (ctx === null) {
+            res.status(StatusCodes.UNAUTHORIZED).json({
+                message: "You must be logged in to get the list of orders.",
+            })
+            return
+        }
+
+        const user = ctx.user
+        if (user === null) {
+            res.status(StatusCodes.UNAUTHORIZED).json({
+                message: "You must be logged in to get the list of orders.",
+            })
+            return
+        }
+
+        const order = await orderService.getOrderItem(itemId)
+        res.status(StatusCodes.OK).json(order)
+    }
+}
+
 function getAllOrders(orderService: OrderService) {
     return async function (req, res, next) {
         const ctx: Context | null = Context.get(req)
@@ -187,7 +212,7 @@ function updateOrderStatus(orderService: OrderService) {
 
 function updateOrderItemStatus(orderService: OrderService) {
     return async function (req, res, next) {
-        const orderItemId = parseInt(req.params.orderItemId)
+        const orderItemId = req.params.itemId
         const { status } = req.body
 
         const orderStatusFormat = Joi.object()
@@ -260,7 +285,8 @@ function orderRouter() {
     router.get("/", getOrders(orderService))
     router.get("/all", checkRole([userRoles.ADMIN, userRoles.ProductManager, userRoles.ProductManager]), getAllOrders(orderService))
     router.post("/new", addNewOrder(orderService))
-    router.patch("/item/:orderId", updateOrderItemStatus(orderService))
+    router.patch("/item/:itemId", updateOrderItemStatus(orderService))
+    router.get("/item/:itemId", getOrderItem(orderService))
     router.patch("/:orderId", updateOrderStatus(orderService))
     router.get("/unreviewed/:carId", getUnreviewedOrderItems(orderService))
     router.get("/invoice/:orderId", getInvoice(orderService))

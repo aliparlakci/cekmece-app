@@ -11,7 +11,7 @@ export enum OrderStatus {
 
 @Entity()
 export class OrderItem {
-    @PrimaryGeneratedColumn("uuid")
+    @PrimaryGeneratedColumn()
     id: string
 
     @Column()
