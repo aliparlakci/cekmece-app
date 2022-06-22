@@ -117,11 +117,11 @@ export default class CarService {
         const where: FindOptionsWhere<Car> = {}
 
         if (options.minPrice) {
-            query = query.andWhere("cars.price >= :minPrice", { minPrice: options.minPrice })
+            query = query.andWhere("(cars.price * (100 - cars.discount) / 100) >= :minPrice", { minPrice: options.minPrice })
         }
 
         if (options.maxPrice) {
-            query = query.andWhere("cars.price <= :minPrice", { maxPrice: options.maxPrice })
+            query = query.andWhere("(cars.price * (100 - cars.discount) / 100) <= :maxPrice", { maxPrice: options.maxPrice })
         }
 
         if (options.minYear) {

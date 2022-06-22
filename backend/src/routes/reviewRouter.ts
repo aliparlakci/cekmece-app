@@ -120,20 +120,6 @@ function updateApprovalStatus(reviewService: ReviewService) {
         const reviewId = parseInt(req.params.reviewId)
         const { approvalStatus } = req.body
 
-        const approvedStatusFormat = Joi.object()
-            .keys({
-                approvalStatus: Joi.string()
-                    .valid(...Object.values(ApprovalStatus))
-                    .required(),
-            })
-            .required()
-
-        const { error } = approvedStatusFormat.validate(req.body)
-
-        if (error) {
-            return next(createError(400, error))
-        }
-
         try {
             await reviewService.updateApprovalStatus(reviewId, approvalStatus)
             res.status(200).json({
@@ -142,6 +128,29 @@ function updateApprovalStatus(reviewService: ReviewService) {
         } catch (err) {
             return next(createError(404, err))
         }
+    }
+}
+
+function getAllUnapproved(reviewService: ReviewService): RequestHandler {
+    return async function (req, res, next) {
+        const ctx: Context | null = Context.get(req)
+        if (ctx === null) {
+            res.status(StatusCodes.UNAUTHORIZED).json({
+                message: "You must be logged in to be able to delete reviews.",
+            })
+            return
+        }
+
+        const user = ctx.user
+        if (user === null) {
+            res.status(StatusCodes.UNAUTHORIZED).json({
+                message: "You must be logged in to be able to delete reviews.",
+            })
+            return
+        }
+
+        const reviews = await reviewService.getAllUnapprovedReviews()
+        res.status(200).json(reviews)
     }
 }
 
@@ -157,6 +166,7 @@ function reviewRouter() {
 
     router.get("/", getReviews(reviewService))
     router.post("/new", addNewReview(reviewService))
+    router.get("/unapproved", getAllUnapproved(reviewService))
     router.delete("/:reviewId", deleteReview(reviewService))
     router.patch("/:reviewId", updateApprovalStatus(reviewService))
 

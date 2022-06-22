@@ -74,7 +74,7 @@ export default class ReviewService {
             throw error
         }
 
-        if (review.user.id !== userId) {
+        if (review.user.id !== userId && review.user.role.toLowerCase() === "customer") {
             const error = new Error(`Unauthorized attempt to delete another user's review.`)
             error.name = "AuthError"
             throw error
@@ -168,13 +168,6 @@ export default class ReviewService {
     }
 
     async updateApprovalStatus(id: number, status: ApprovalStatus) {
-        const review = await this.repository().findOne({
-            where: { id: id },
-        })
-
-        if (review === null) throw `Review with id ${id} does not exist.`
-        review.approvalStatus = status
-
-        return await this.repository().save(review)
+        return await this.repository().update({id: id}, {approvalStatus: ApprovalStatus.APPROVED})
     }
 }

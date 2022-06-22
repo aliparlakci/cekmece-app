@@ -14,12 +14,15 @@ import OrderDetailsModal from "./OrderDetailsModal"
 import IOrderItem from "../../../models/orderItem"
 
 const columns = [
-    { field: "brand", headerName: "Brand", flex: 1 },
-    { field: "name", headerName: "Name", flex: 1 },
-    { field: "status", headerName: "Status", flex: 1 },
-    { field: "total", headerName: "Price" },
-    { field: "puchasedAt", headerName: "Purchased At", flex: 1 },
-    { field: "updatedAt", headerName: "Last Updated", flex: 1 },
+    { field: "id", headerName: "ID", flex: 1},
+    { field: "carId", headerName: "Car ID"},
+    { field: "userId", headerName: "Customer ID", flex: 1},
+    { field: "price", headerName: "Price" },
+    { field: "quantity", headerName: "Quantity" },
+    { field: "address", headerName: "Address", flex: 1 },
+    { field: "status", headerName: "Status" },
+    { field: "puchasedAt", headerName: "Purchased At" },
+    { field: "updatedAt", headerName: "Last Updated" },
 ]
 
 export default function OrdersListView() {
@@ -34,13 +37,15 @@ export default function OrdersListView() {
         if (data)
             setOrderItems(data.map(order => order.orderItems.map(item => {
                 return {
-                    brand: item.car.distributor?.name,
-                    name: item.car.name,
+                    id: item.id,
+                    carId: item.car.id,
+                    userId: item.order.user.id,
                     puchasedAt: (new Date(item.order.createdDate)).toLocaleDateString(),
                     updatedAt: (new Date(item.order.updatedDate)).toLocaleDateString(),
                     price: item.total,
+                    quantity: item.quantity,
+                    address: order.addressLine1,
                     status: item.order.status,
-                    ...item
                 }
             })).flat())
     }, [data])

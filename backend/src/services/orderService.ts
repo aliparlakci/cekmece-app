@@ -27,7 +27,9 @@ export default class OrderService {
                         distributor: true,
                         category: true
                     },
-                    order: true
+                    order: {
+                        user: true
+                    }
                 }
             }
         })

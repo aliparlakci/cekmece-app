@@ -35,12 +35,7 @@ function App() {
                     <CartProvider>
                         <WishlistProvider>
                         <Router>
-                            <NavBar>
-                                {user && user.role !== "Customer" &&
-                                    <Typography noWrap sx={{ display: { xs: "none", sm: "block" } }}>
-                                        <Link to="/admin/cars">Moderation</Link>
-                                    </Typography>}
-                            </NavBar>
+                            <NavBar></NavBar>
                             <div className="mt-16">
                                 <Switch>
                                     <Route path="/admin">

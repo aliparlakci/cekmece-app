@@ -56,7 +56,6 @@ export default class CartService {
     }
 
     async removeFromCart(cartEntityId: string) {
-        console.log(cartEntityId)
         return this.repository()
             .createQueryBuilder()
             .delete()
@@ -115,7 +114,15 @@ export default class CartService {
     }
 
     async getItemsInCard(user: string): Promise<Cart[]> {
-        const userCart = await this.repository().find({relations: ["item", "user"]})
-        return (await userCart).filter((item) => item.user.id === user)
+        const userCart = await this.repository().find({
+            relations: {
+                item: {
+                    category: true,
+                    distributor: true,
+                },
+                user: true
+            }
+        })
+        return userCart.filter((item) => item.user.id === user && !item.item.isDeleted)
     }
 }

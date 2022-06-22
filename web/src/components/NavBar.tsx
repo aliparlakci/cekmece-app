@@ -69,6 +69,11 @@ export default function NavBar({ children }: INavBarProps) {
                             CarWow
                         </Typography>
                         <Box sx={{ flexGrow: 1 }} />
+                        {user && user.role !== "Customer" &&
+                            <Typography noWrap sx={{ display: { xs: "none", sm: "block" } }}>
+                                <Link to="/admin/cars">Moderation</Link>
+                            </Typography>}
+                        <Box sx={{ flexGrow: 1 }} />
                         {user && <Link to="/wishlist">
                             <IconButton
                                 size="large"

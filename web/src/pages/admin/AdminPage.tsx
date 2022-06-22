@@ -5,6 +5,7 @@ import CarListView from "./components/CarListView"
 import CategoryListView from "./components/CategoryListView"
 import DistributorListView from "./components/DistributorListView"
 import OrdersListView from "./components/OrdersListView"
+import ReviewListView from "./components/ReviewListView"
 
 export default function AdminPage() {
     return (
@@ -23,7 +24,7 @@ export default function AdminPage() {
                     <OrdersListView />
                 </Route>
                 <Route path="/admin/reviews">
-                    Reviews
+                    <ReviewListView />
                 </Route>
             </Switch>
         </>
