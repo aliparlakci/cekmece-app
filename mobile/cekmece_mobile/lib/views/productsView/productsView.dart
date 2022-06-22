@@ -18,9 +18,11 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:badges/badges.dart';
 
 class ProductsView extends StatefulWidget {
-  const ProductsView({Key? key, this.carouselSortOption}) : super(key: key);
+  const ProductsView({Key? key, this.carouselSortOption, required this.appBarTitle}) : super(key: key);
 
   final SortOptions? carouselSortOption;
+  final String appBarTitle;
+
   @override
   State<ProductsView> createState() => _ProductsViewState();
 }
@@ -203,7 +205,7 @@ class _ProductsViewState extends State<ProductsView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Products"),
+        title: Text(widget.appBarTitle),
         leading: IconButton(
           onPressed: () {Navigator.of(context).pop();},
           icon: const Icon(CupertinoIcons.back),

@@ -21,8 +21,9 @@ import 'product_images.dart';
 class Body extends StatefulWidget {
   final Product product;
   final UserBloc userBloc;
+  final Function(bool, String)? refreshProductCard;
 
-  Body({Key? key, required this.product, required this.userBloc})
+  Body({Key? key, required this.product, required this.userBloc, this.refreshProductCard})
       : super(key: key);
 
   @override
@@ -77,9 +78,19 @@ class _BodyState extends State<Body> {
       }
     } catch (err) {
       print(err);
+
+      if (widget.refreshProductCard != null) {
+        widget.refreshProductCard!(_isOnWishlist, wlID);
+      }
+
       return false;
     }
     setState(() {});
+
+    if (widget.refreshProductCard != null) {
+      widget.refreshProductCard!(_isOnWishlist, wlID);
+    }
+
     return true;
   }
 

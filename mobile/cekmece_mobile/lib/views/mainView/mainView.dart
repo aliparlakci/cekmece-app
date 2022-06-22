@@ -38,7 +38,7 @@ class _MainViewState extends State<MainView> {
             padding: const EdgeInsets.all(8.0),
             child: InkWell(
               onTap: () {
-                pushNewScreen(context, screen: const ProductsView(carouselSortOption: SortOptions.POP_DESC,));
+                pushNewScreen(context, screen: const ProductsView(appBarTitle: "Popular Cars", carouselSortOption: SortOptions.POP_DESC,));
               },
               child: Stack(
                 alignment: Alignment.bottomCenter,
@@ -64,7 +64,7 @@ class _MainViewState extends State<MainView> {
             padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
             child: InkWell(
               onTap: () {
-                pushNewScreen(context, screen: const ProductsView(carouselSortOption: SortOptions.PRICE_DESC,));
+                pushNewScreen(context, screen: const ProductsView(appBarTitle: "Luxurious Cars", carouselSortOption: SortOptions.PRICE_DESC,));
               },
               child: Stack(
                 alignment: Alignment.topLeft,
@@ -91,7 +91,7 @@ class _MainViewState extends State<MainView> {
             padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
             child: InkWell(
               onTap: () {
-                pushNewScreen(context, screen: const ProductsView(carouselSortOption: SortOptions.PRICE_ASC,));
+                pushNewScreen(context, screen: const ProductsView(appBarTitle: "Affordable Cars", carouselSortOption: SortOptions.PRICE_ASC,));
               },
               child: Stack(
                 alignment: Alignment.topCenter,
@@ -118,7 +118,7 @@ class _MainViewState extends State<MainView> {
             padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
             child: InkWell(
               onTap: () {
-                pushNewScreen(context, screen: const ProductsView());
+                pushNewScreen(context, screen: const ProductsView(appBarTitle: "Full Collection",));
               },
               child: Stack(
                 alignment: Alignment.topRight,
