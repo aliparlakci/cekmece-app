@@ -50,6 +50,10 @@ export default class CarService {
         })
     }
 
+    async setPrice(carId, price) {
+        await this.repository().update({id: carId}, {price: price})
+    }
+
     async setDiscount(carId: number, discount:number){
         if (discount < 0) throw "Discount amount can not be smaller than 0";
 
@@ -58,7 +62,7 @@ export default class CarService {
         if (car === null) throw `Car does not exists: id=${carId}`
 
         if (discount > car.price) throw `Discount can not be more than the price. Price:${car.price}, Discount:${discount}`
-        
+
         if(car.discount !== null && discount > car.discount){
             try{
                 // a bigger discount was made, send mail
@@ -69,36 +73,35 @@ export default class CarService {
                 let userMails = wishlist.map((item) => item.user.email);
 
 
-                /*
-                const accessToken = oAuth2Client.getAccessToken()
 
-                const transport = nodemailer.createTransport({
-                    service: "gmail",
-                    auth: {
-                        type: "OAuth2",
-                        user: "cs308myaraba@gmail.com",
-                        clientId: CLIENT_ID,
-                        clientSecret: CLIENT_SECRET,
-                        refreshToken: REFRESH_TOKEN,
-                        accessToken: accessToken,
-                    },
-                    tls: {
-                        rejectUnauthorized: true,
-                    },
-                })
-
-                userMails.forEach((email) => {
-                    console.log(email);
-                    const mailOptions = {
-                        from: "CarWow <cs308myaraba@gmail.com>",
-                        to: email,
-                        subject: "A car in your wishlist is now on sale!",
-                        text: `A car on your wishlist, ${car?.model} model ${car?.distributor.name} ${car?.name} is now on sale on CarWow! The price was \$${car?.price}, it's now \$${car?.price! - discount}! Check it out!`,
-
-                    }
-                    const result = transport.sendMail(mailOptions)
-                })
-                */
+                // const accessToken = oAuth2Client.getAccessToken()
+                //
+                // const transport = nodemailer.createTransport({
+                //     service: "gmail",
+                //     auth: {
+                //         type: "OAuth2",
+                //         user: "cs308myaraba@gmail.com",
+                //         clientId: CLIENT_ID,
+                //         clientSecret: CLIENT_SECRET,
+                //         refreshToken: REFRESH_TOKEN,
+                //         accessToken: accessToken,
+                //     },
+                //     tls: {
+                //         rejectUnauthorized: true,
+                //     },
+                // })
+                //
+                // userMails.forEach((email) => {
+                //     console.log(email);
+                //     const mailOptions = {
+                //         from: "CarWow <cs308myaraba@gmail.com>",
+                //         to: email,
+                //         subject: "A car in your wishlist is now on sale!",
+                //         text: `A car on your wishlist, ${car?.model} model ${car?.distributor.name} ${car?.name} is now on sale on CarWow! The price was $${car?.price}, it's now $${car?.price! - discount}! Check it out!`,
+                //
+                //     }
+                //     const result = transport.sendMail(mailOptions)
+                // })
 
             }
             catch(err){
@@ -160,16 +163,21 @@ export default class CarService {
             }
         }
 
-        if (options.q) {
-            query = query.andWhere(`MATCH(cars.name) AGAINST ('${options.q}' IN NATURAL LANGUAGE MODE)`)
-        }
-
         query = query.andWhere("cars.isDeleted = :isDeleted", { isDeleted: false })
 
         query = query.leftJoinAndSelect("cars.category", "category")
         query = query.leftJoinAndSelect("cars.distributor", "distributor")
 
-        return await query.getMany()
+        const cars = await query.getMany()
+        return cars.filter(car =>
+            {
+                let flag = !car.category.isDeleted
+                if (options.q && options.q !== "") {
+                    flag = flag && (car.name.toLowerCase().includes(options.q.toLowerCase()) || car.distributor.name.toLowerCase().includes(options.q.toLowerCase()) || car.description.toLowerCase().includes(options.q.toLowerCase()))
+                }
+                return flag
+            }
+        )
     }
 
     async getAllCars(sortBy: string) {

@@ -82,6 +82,23 @@ export function setDiscount(carService: CarService) {
     }
 }
 
+export function setPrice(carService: CarService) {
+    return async function (req, res, next) {
+        const carId = parseInt(req.params.carId)
+        const price = parseInt(req.params.amount)
+
+        try{
+            await carService.setPrice(carId,price);
+            res.status(StatusCodes.OK);
+            return
+        }
+        catch(err){
+            res.status(500).json(err)
+            return
+        }
+    }
+}
+
 export function addNewCar(carService: CarService): RequestHandler {
     return async function (req, res, next) {
         const carFormat = Joi.object().keys({
@@ -239,6 +256,7 @@ function carRouter() {
 
     //discount routes
     router.post("/:carId/setDiscount/:amount", setDiscount(carService))
+    router.post("/:carId/setPrice/:amount", setPrice(carService))
 
 
     router.use("/:carId/reviews", reviewRouter())

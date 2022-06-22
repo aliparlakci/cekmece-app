@@ -149,11 +149,11 @@ export default class OrderService {
                     user: {
                         id: userId,
                     },
-                    status: OrderStatus.DELIVERED,
                 },
                 car: {
                     id: carId,
                 },
+                status: OrderStatus.DELIVERED,
             },
         })
 
@@ -210,7 +210,7 @@ export default class OrderService {
 
             await this.cartService.deleteUserCart(candidate.user.id)
 
-            //await this.invoiceService.sendInvoice(result, result.user, pdf)
+            // await this.invoiceService.sendInvoice(result, result.user, pdf)
             return [result, pdf]
         } catch (err) {
             for (let j = i - 1; j >= 0; j--) {

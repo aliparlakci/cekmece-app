@@ -9,6 +9,7 @@ import ICategory from "../../../models/category"
 import { Link } from "react-router-dom"
 import useNotification, { NOTIFICATON_TYPES } from "../../../hooks/useNotification"
 import useConfirmation from "../../../hooks/useConfirmation"
+import Links from "./Links"
 
 const columns = [
     { field: "id", headerName: "ID" },
@@ -80,13 +81,7 @@ export default function CategoryListView() {
                             sx={{ width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-between" }}
                             paddingY={2}
                         >
-                            <div>
-                                <Link to="/admin/cars"><Button variant="text">Cars</Button></Link>
-                                <Link to="/admin/categories"><Button variant="text">Categories</Button></Link>
-                                <Link to="/admin/distributors"><Button variant="text">Distributors</Button></Link>
-                                <Link to="/admin/orders"><Button variant="text">Orders</Button></Link>
-                                <Link to="/admin/reviews"><Button variant="text">Reviews</Button></Link>
-                            </div>
+                            <Links />
                             <div>
                                 {selected.length > 0 && (
                                     <Button variant="contained" color="error">

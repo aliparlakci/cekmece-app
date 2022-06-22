@@ -12,11 +12,13 @@ import { Link } from "react-router-dom"
 import IOrder from "../../../models/order"
 import OrderDetailsModal from "./OrderDetailsModal"
 import IOrderItem from "../../../models/orderItem"
+import Links from "./Links"
 
 const columns = [
     { field: "id", headerName: "ID", flex: 1},
     { field: "carId", headerName: "Car ID"},
     { field: "userId", headerName: "Customer ID", flex: 1},
+    { field: "name", headerName: "Name" },
     { field: "price", headerName: "Price" },
     { field: "quantity", headerName: "Quantity" },
     { field: "address", headerName: "Address", flex: 1 },
@@ -38,6 +40,7 @@ export default function OrdersListView() {
             setOrderItems(data.map(order => order.orderItems.map(item => {
                 return {
                     id: item.id,
+                    orderId: item.order.id,
                     carId: item.car.id,
                     userId: item.order.user.id,
                     puchasedAt: (new Date(item.order.createdDate)).toLocaleDateString(),
@@ -46,6 +49,7 @@ export default function OrdersListView() {
                     quantity: item.quantity,
                     address: order.addressLine1,
                     status: item.order.status,
+                    name: item.car.name
                 }
             })).flat())
     }, [data])
@@ -57,14 +61,13 @@ export default function OrdersListView() {
 
     const onOrderDetails = (id: number) => {
         setOrderId(id)
-        setOrderDetailsModalOpen(true)
+        window.open(`http://localhost:5001/api/orders/invoice/${id}`,'_newtab');
     }
 
     if (!data) return <></>
 
     return (
         <>
-            {/*<OrderDetailsModal open={isOrderDetailsModalOpen} onClose={handleClose} orderId={orderId} />*/}
             <Box sx={{ display: "flex", minHeight: "calc(100vh - 4rem)" }}>
                 <CssBaseline />
                 <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
@@ -83,13 +86,7 @@ export default function OrdersListView() {
                             sx={{ width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-between" }}
                             paddingY={2}
                         >
-                            <div>
-                                <Link to="/admin/cars"><Button variant="text">Cars</Button></Link>
-                                <Link to="/admin/categories"><Button variant="text">Categories</Button></Link>
-                                <Link to="/admin/distributors"><Button variant="text">Distributors</Button></Link>
-                                <Link to="/admin/orders"><Button variant="text">Orders</Button></Link>
-                                <Link to="/admin/reviews"><Button variant="text">Reviews</Button></Link>
-                            </div>
+                            <Links />
                             <div></div>
                         </Box>
                         <div className="w-full h-full bg-white rounded-lg">
@@ -98,7 +95,7 @@ export default function OrdersListView() {
                                 columns={columns}
                                 rowsPerPageOptions={[5, 10, 25, 50, 100]}
                                 onSelectionModelChange={(model, details) => setSelected(model)}
-                                onCellDoubleClick={(params) => onOrderDetails(params.row.id)}
+                                onCellDoubleClick={(params) => onOrderDetails(params.row.orderId)}
                             />
                         </div>
                     </Box>

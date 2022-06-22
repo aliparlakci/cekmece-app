@@ -1,42 +1,59 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { DataGrid } from "@mui/x-data-grid"
 import { Box, Button, CssBaseline } from "@mui/material"
-import useSWR from "swr"
+import useSWR, { mutate } from "swr"
 
-import NewDistributorDialog from "./NewDistributorDialog"
-import IDistributor from "../../../models/distributor"
+import NewCarDialog from "./NewCarDialog"
+import ICar from "../../../models/car"
 import fetcher from "../../../utils/fetcher"
+import useConfirmation from "../../../hooks/useConfirmation"
+import useNotification, { NOTIFICATON_TYPES } from "../../../hooks/useNotification"
 import { Link } from "react-router-dom"
+import SetDiscountsDialog from "./SetDiscountsDialog"
 import Links from "./Links"
 
 const columns = [
     { field: "id", headerName: "ID" },
+    { field: "distributor", headerName: "Brand", flex: 1 },
     { field: "name", headerName: "Name", flex: 1 },
+    { field: "price", headerName: "Price" },
+    { field: "discount", headerName: "Discount" },
+    { field: "total", headerName: "Total" },
 ]
 
-export default function DistributorListView() {
-    const { data, error } = useSWR<IDistributor[]>("/api/distributors", fetcher)
+const mapData = (data: ICar[]) =>
+    data.map((car) => ({
+        ...car,
+        distributor: car.distributor?.name,
+        category: car.category?.name,
+        total: car.price * (100 - car.discount) / 100
+    }))
 
-    const [isNewDistributorDialogOpen, setNewDistributorDialogOpen] = useState(false)
+export default function DiscountsListView() {
+    const { data, error } = useSWR<ICar[]>("/api/cars", fetcher)
+
+    const confirm = useConfirmation()
+    const notification = useNotification()
+
     const [selected, setSelected] = useState<any[]>([])
+    const [isDiscountModalOpen, setIsDiscountModalOpenOpen] = useState(false)
     const [update, setUpdate] = useState<number | undefined>(undefined)
 
     const handleClose = () => {
+        setIsDiscountModalOpenOpen(false)
         setUpdate(undefined)
-        setNewDistributorDialogOpen(false)
     }
 
-    const onCategoryEdit = (id: number) => {
+    const onDoubleClick = (id: number) => {
         setUpdate(id)
-        setNewDistributorDialogOpen(true)
+        setIsDiscountModalOpenOpen(true)
     }
 
     if (!data) return <></>
 
     return (
         <>
-            <NewDistributorDialog open={isNewDistributorDialogOpen} onClose={() => setNewDistributorDialogOpen(false)}
-                                  update={update} />
+            <SetDiscountsDialog open={isDiscountModalOpen} onClose={handleClose} update={update} />
             <Box sx={{ display: "flex", minHeight: "calc(100vh - 4rem)" }}>
                 <CssBaseline />
                 <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
@@ -56,20 +73,14 @@ export default function DistributorListView() {
                             paddingY={2}
                         >
                             <Links />
-                            <div>
-                                <Button variant="contained">
-                                    <span className="whitespace-nowrap" onClick={() => setNewDistributorDialogOpen(true)}>New Distributor</span>
-                                </Button>
-                            </div>
                         </Box>
                         <div className="w-full h-full bg-white rounded-lg">
                             <DataGrid
-                                rows={data || []}
+                                rows={mapData(data || [])}
                                 columns={columns}
-                                pageSize={5}
-                                rowsPerPageOptions={[5]}
+                                rowsPerPageOptions={[5, 10, 25, 50, 100]}
                                 onSelectionModelChange={(model, details) => setSelected(model)}
-                                onCellDoubleClick={(params) => onCategoryEdit(params.row.id)}
+                                onCellDoubleClick={(params) => onDoubleClick(params.row.id)}
                             />
                         </div>
                     </Box>
