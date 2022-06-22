@@ -233,8 +233,7 @@ class _ProductBottomBarState extends State<ProductBottomBar> {
                                   fontSize: getProportionateScreenWidth(12)),
                             ),
                             Text(
-                              numberFormat.format(widget.product.price -
-                                  widget.product.discount),
+                              numberFormat.format(widget.product.price * (100 - widget.product.discount) / 100),
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.green,

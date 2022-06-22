@@ -36,10 +36,15 @@ class _BodyState extends State<Body> {
   bool _isOnWishlist = false;
   String wlID = "";
 
+  int reviewCount = 0;
+  String averageRating = "";
+
   @override
   void initState() {
     // TODO: implement initState
     checkWishlist();
+    reviewCount = widget.product.reviewCount;
+    averageRating = widget.product.averageRating;
     super.initState();
   }
 
@@ -94,6 +99,13 @@ class _BodyState extends State<Body> {
     return true;
   }
 
+  void updateReviewCountAndAverageRating(int updatedReviewCount, String updatedAverageRating) {
+    setState(() {
+      reviewCount = updatedReviewCount;
+      averageRating = updatedAverageRating;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(children: [
@@ -129,8 +141,10 @@ class _BodyState extends State<Body> {
           ReviewsButton(
               userId: widget.userBloc.user.uid,
               carId: widget.product.id,
-              reviewCount: widget.product.reviewCount,
-              reviewAverage: double.parse(widget.product.averageRating)),
+              reviewCount: reviewCount,
+              reviewAverage: double.parse(averageRating),
+            updateReviewCountAndAverageRating: updateReviewCountAndAverageRating,
+          ),
           const SizedBox(
             height: 5,
           ),

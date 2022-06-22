@@ -9,7 +9,7 @@ part of 'UnreviewedOrderItem.dart';
 _$_UnreviewedOrderItem _$$_UnreviewedOrderItemFromJson(
         Map<String, dynamic> json) =>
     _$_UnreviewedOrderItem(
-      id: json['id'] as String,
+      id: json['id'] as int,
       order: OrderSummary.fromJson(json['order'] as Map<String, dynamic>),
     );
 

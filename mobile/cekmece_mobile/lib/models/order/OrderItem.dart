@@ -1,3 +1,4 @@
+import 'package:cekmece_mobile/models/actualOrderItem/ActualOrderItem.dart';
 import 'package:cekmece_mobile/models/cartItem/CartItem.dart';
 import 'package:cekmece_mobile/models/product/Product.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -23,7 +24,7 @@ class OrderItem with _$OrderItem {
     required int zipCode,
     required String country,
     required String shippingOption,
-    required List<CartItem> orderItems,
+    required List<ActualOrderItem> orderItems,
   }) = _OrderItem;
 
   factory OrderItem.fromJson(Map<String, dynamic> json) =>

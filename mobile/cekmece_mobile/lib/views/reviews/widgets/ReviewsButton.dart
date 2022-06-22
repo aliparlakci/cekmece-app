@@ -5,11 +5,12 @@ import '../../../constants/font_constants.dart';
 import '../ReviewsView.dart';
 
 class ReviewsButton extends StatelessWidget {
-  const ReviewsButton({Key? key, required this.userId, required this.carId, required this.reviewCount, this.reviewAverage}) : super(key: key);
+  const ReviewsButton({Key? key, required this.userId, required this.carId, required this.reviewCount, this.reviewAverage, required this.updateReviewCountAndAverageRating}) : super(key: key);
   final String userId;
   final int carId;
   final int reviewCount;
   final double? reviewAverage;
+  final Function(int, String) updateReviewCountAndAverageRating;
 
   double roundReviewAverage(double reviewAverage) {
     if (reviewAverage % 1 == 0) {return reviewAverage;}
@@ -28,7 +29,7 @@ class ReviewsButton extends StatelessWidget {
         onPressed: () {
           pushNewScreen(
             context,
-            screen: ReviewsView(userId: userId, carId: carId),
+            screen: ReviewsView(userId: userId, carId: carId, updateReviewCountAndAverageRating: updateReviewCountAndAverageRating),
             withNavBar: false,
             pageTransitionAnimation: PageTransitionAnimation.cupertino,
           );

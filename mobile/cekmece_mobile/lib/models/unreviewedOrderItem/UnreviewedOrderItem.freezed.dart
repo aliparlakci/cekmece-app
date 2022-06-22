@@ -22,7 +22,7 @@ UnreviewedOrderItem _$UnreviewedOrderItemFromJson(Map<String, dynamic> json) {
 class _$UnreviewedOrderItemTearOff {
   const _$UnreviewedOrderItemTearOff();
 
-  _UnreviewedOrderItem call({required String id, required OrderSummary order}) {
+  _UnreviewedOrderItem call({required int id, required OrderSummary order}) {
     return _UnreviewedOrderItem(
       id: id,
       order: order,
@@ -39,7 +39,7 @@ const $UnreviewedOrderItem = _$UnreviewedOrderItemTearOff();
 
 /// @nodoc
 mixin _$UnreviewedOrderItem {
-  String get id => throw _privateConstructorUsedError;
+  int get id => throw _privateConstructorUsedError;
   OrderSummary get order => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -53,7 +53,7 @@ abstract class $UnreviewedOrderItemCopyWith<$Res> {
   factory $UnreviewedOrderItemCopyWith(
           UnreviewedOrderItem value, $Res Function(UnreviewedOrderItem) then) =
       _$UnreviewedOrderItemCopyWithImpl<$Res>;
-  $Res call({String id, OrderSummary order});
+  $Res call({int id, OrderSummary order});
 
   $OrderSummaryCopyWith<$Res> get order;
 }
@@ -76,7 +76,7 @@ class _$UnreviewedOrderItemCopyWithImpl<$Res>
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
+              as int,
       order: order == freezed
           ? _value.order
           : order // ignore: cast_nullable_to_non_nullable
@@ -99,7 +99,7 @@ abstract class _$UnreviewedOrderItemCopyWith<$Res>
           $Res Function(_UnreviewedOrderItem) then) =
       __$UnreviewedOrderItemCopyWithImpl<$Res>;
   @override
-  $Res call({String id, OrderSummary order});
+  $Res call({int id, OrderSummary order});
 
   @override
   $OrderSummaryCopyWith<$Res> get order;
@@ -125,7 +125,7 @@ class __$UnreviewedOrderItemCopyWithImpl<$Res>
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
+              as int,
       order: order == freezed
           ? _value.order
           : order // ignore: cast_nullable_to_non_nullable
@@ -143,7 +143,7 @@ class _$_UnreviewedOrderItem implements _UnreviewedOrderItem {
       _$$_UnreviewedOrderItemFromJson(json);
 
   @override
-  final String id;
+  final int id;
   @override
   final OrderSummary order;
 
@@ -181,14 +181,13 @@ class _$_UnreviewedOrderItem implements _UnreviewedOrderItem {
 
 abstract class _UnreviewedOrderItem implements UnreviewedOrderItem {
   const factory _UnreviewedOrderItem(
-      {required String id,
-      required OrderSummary order}) = _$_UnreviewedOrderItem;
+      {required int id, required OrderSummary order}) = _$_UnreviewedOrderItem;
 
   factory _UnreviewedOrderItem.fromJson(Map<String, dynamic> json) =
       _$_UnreviewedOrderItem.fromJson;
 
   @override
-  String get id;
+  int get id;
   @override
   OrderSummary get order;
   @override
