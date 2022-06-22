@@ -1,17 +1,20 @@
-import {Repository} from "typeorm"
+import { Repository } from "typeorm"
 import db from "../dataSource"
-import {Order, OrderStatus, ShippingOption} from "../models/order"
+import { Order, OrderStatus, ShippingOption } from "../models/order"
 import CarService from "./carService"
 import CartService from "./cartService"
-import {OrderItem} from "../models/orderItem"
+import { OrderItem } from "../models/orderItem"
 import InvoiceService from "./invoiceService"
 
 export default class OrderService {
     private repository: () => Repository<Order>
     private orderItemRepository: () => Repository<OrderItem>
 
-
-    constructor(private carService: CarService, private cartService: CartService, private invoiceService: InvoiceService) {
+    constructor(
+        private carService: CarService,
+        private cartService: CartService,
+        private invoiceService: InvoiceService
+    ) {
         this.repository = () => db.getRepository(Order)
         this.orderItemRepository = () => db.getRepository(OrderItem)
     }
@@ -19,36 +22,36 @@ export default class OrderService {
     async getAllOrders() {
         return this.repository().find({
             order: {
-                createdDate: "DESC"
+                createdDate: "DESC",
             },
             relations: {
                 orderItems: {
                     car: {
                         distributor: true,
-                        category: true
+                        category: true,
                     },
                     order: {
-                        user: true
-                    }
+                        user: true,
+                    },
                 },
-                user: true
-            }
+                user: true,
+            },
         })
     }
 
     async getOrder(id) {
         return await this.repository().findOne({
             where: {
-                id: id
+                id: id,
             },
             relations: {
                 orderItems: {
                     car: {
                         distributor: true,
-                        category: true
-                    }
-                }
-            }
+                        category: true,
+                    },
+                },
+            },
         })
     }
 
@@ -89,7 +92,7 @@ export default class OrderService {
                 order: {
                     id: true,
                     status: true,
-                    invoice: true
+                    invoice: true,
                 },
             },
 
@@ -158,6 +161,8 @@ export default class OrderService {
             },
         })
 
+        console.log(orderItems)
+
         const unreviewedOrderItems = orderItems.filter((orderItem) => {
             return orderItem.review === null
         })
@@ -180,11 +185,11 @@ export default class OrderService {
             for (; i < cartItems.length; i++) {
                 await this.carService.decreaseStock(cartItems[i].item.id, cartItems[i].quantity)
                 orderItems.push({
-                    total: cartItems[i].quantity * cartItems[i].item.price * (100 - cartItems[i].item.discount) / 100,
+                    total: (cartItems[i].quantity * cartItems[i].item.price * (100 - cartItems[i].item.discount)) / 100,
                     quantity: cartItems[i].quantity,
                     car: cartItems[i].item,
                     order: candidate,
-                    status: OrderStatus.PROCESSING
+                    status: OrderStatus.PROCESSING,
                 } as OrderItem)
             }
 
@@ -195,15 +200,15 @@ export default class OrderService {
             const result: Order = await this.repository().save(candidate)
             const order = await this.repository().findOne({
                 where: {
-                    id: result.id
+                    id: result.id,
                 },
                 relations: {
                     orderItems: {
                         car: {
-                            distributor: true
-                        }
-                    }
-                }
+                            distributor: true,
+                        },
+                    },
+                },
             })
             const pdf = await this.invoiceService.generatePdf(order || result, result.user)
 
@@ -234,7 +239,7 @@ export default class OrderService {
     }
 
     async changeOrderItemStatus(id, status) {
-        return await this.orderItemRepository().update({id: id}, {status: status})
+        return await this.orderItemRepository().update({ id: id }, { status: status })
     }
 
     /*

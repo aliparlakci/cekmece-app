@@ -7,7 +7,7 @@ part 'UnreviewedOrderItem.g.dart';
 @freezed
 class UnreviewedOrderItem with _$UnreviewedOrderItem {
   const factory UnreviewedOrderItem({
-    required String id,
+    required int id,
     required OrderSummary order,
   }) = _UnreviewedOrderItem;
 

@@ -7,7 +7,7 @@ part 'CartItem.g.dart';
 @freezed
 class CartItem with _$CartItem {
   const factory CartItem(
-      {required String id,
+      {required dynamic id,
       required int total,
       required int quantity,
       required Product item}) = _CartItem;

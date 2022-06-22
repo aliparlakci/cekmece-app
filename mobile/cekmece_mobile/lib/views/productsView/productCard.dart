@@ -141,8 +141,7 @@ class _ProductCardState extends State<ProductCard> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  numberFormat.format(widget.product.price -
-                                      widget.product.discount),
+                                  numberFormat.format(widget.product.price * (100 - widget.product.discount) / 100),
                                   style: productCardDiscountedPriceTextStyle,
                                 ),
                                 Text(

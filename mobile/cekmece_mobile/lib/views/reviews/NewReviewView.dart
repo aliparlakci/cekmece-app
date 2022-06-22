@@ -35,7 +35,7 @@ class _NewReviewViewState extends State<NewReviewView> {
   bool isLoading = false;
   List<UnreviewedOrderItem> unreviewedOrderItems = [];
 
-  String orderItemId = "";
+  int orderItemId = 0;
 
   double rating = 3;
   String comment = "";
@@ -122,7 +122,7 @@ class _NewReviewViewState extends State<NewReviewView> {
             padding: const EdgeInsets.all(5.0),
             child: TextButton(
               onPressed: isUploading ||
-                      orderItemId == "" ||
+                      orderItemId == 0 ||
                       !_formKey.currentState!.validate()
                   ? null
                   : () {
@@ -183,7 +183,7 @@ class _NewReviewViewState extends State<NewReviewView> {
                             color: Colors.white,
                           ),
                         ),
-                        onChanged: (String? newValue) {
+                        onChanged: (int? newValue) {
                           print(newValue);
                           setState(() {
                             orderItemId = newValue!;
@@ -191,8 +191,8 @@ class _NewReviewViewState extends State<NewReviewView> {
                         },
                         selectedItemBuilder: (BuildContext ctx) {
                           return [
-                                DropdownMenuItem<String>(
-                                  value: "",
+                                DropdownMenuItem<int>(
+                                  value: 0,
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 15.0),
@@ -203,9 +203,9 @@ class _NewReviewViewState extends State<NewReviewView> {
                                 )
                               ] +
                               unreviewedOrderItems.map<
-                                      DropdownMenuItem<String>>(
+                                      DropdownMenuItem<int>>(
                                   (UnreviewedOrderItem unreviewedOrderItem) {
-                                return DropdownMenuItem<String>(
+                                return DropdownMenuItem<int>(
                                   value: unreviewedOrderItem.id,
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(
@@ -218,8 +218,8 @@ class _NewReviewViewState extends State<NewReviewView> {
                               }).toList();
                         },
                         items: [
-                              DropdownMenuItem<String>(
-                                value: "",
+                              DropdownMenuItem<int>(
+                                value: 0,
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 15.0),
@@ -229,9 +229,9 @@ class _NewReviewViewState extends State<NewReviewView> {
                                 enabled: false,
                               )
                             ] +
-                            unreviewedOrderItems.map<DropdownMenuItem<String>>(
+                            unreviewedOrderItems.map<DropdownMenuItem<int>>(
                                 (UnreviewedOrderItem unreviewedOrderItem) {
-                              return DropdownMenuItem<String>(
+                              return DropdownMenuItem<int>(
                                 value: unreviewedOrderItem.id,
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(
