@@ -46,7 +46,7 @@ function addNewReview(reviewService: ReviewService): RequestHandler {
         const reviewFormat = Joi.object().keys({
             rating: Joi.number().valid(1, 2, 3, 4, 5).required(),
             comment: Joi.string().min(3).max(1000).optional(),
-            orderItemId: Joi.string().required(),
+            orderItemId: Joi.number().required(),
         })
 
         const { error } = reviewFormat.validate(req.body)

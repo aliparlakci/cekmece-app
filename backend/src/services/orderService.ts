@@ -117,11 +117,11 @@ export default class OrderService {
                     user: {
                         id: userId,
                     },
-                    status: OrderStatus.DELIVERED,
                 },
                 car: {
                     id: carId,
                 },
+                status: OrderStatus.DELIVERED,
             },
         })
 

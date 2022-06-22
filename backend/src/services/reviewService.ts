@@ -28,12 +28,11 @@ export default class ReviewService {
             throw `Order item's car id ${orderItem.car.id} does not match with the provided car id ${carId}.`
         }
 
-        if (orderItem.order.status !== OrderStatus.DELIVERED) {
+        if (orderItem.status !== OrderStatus.DELIVERED) {
             throw `Attempt to review a not yet delivered car.`
         }
 
         if (orderItem.review) {
-            console.log(orderItem)
             throw `Attempt to review an already reviewed order.`
         }
 

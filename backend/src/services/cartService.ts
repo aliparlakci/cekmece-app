@@ -113,6 +113,26 @@ export default class CartService {
         return 404
     }
 
+    async removeItem(productId: number, user: string) {
+        const cartItems = await this.repository().find({relations: ["item", "user"]})
+        const product = await this.carService.getCar(productId)
+        const authUser = await this.userService.getUser(user)
+
+        //Confirm the product exists.
+
+        if (product && authUser) {
+            //confirm if user has item in cart
+            const cart = cartItems.filter((item) => item.item.id === productId && item.user.id === user)
+            if (cart.length < 1) {
+                return 404
+            } else {
+                this.removeFromCart(cart[0].id.toString())
+                return
+            }
+        }
+        return 404
+    }
+
     async getItemsInCard(user: string): Promise<Cart[]> {
         const userCart = await this.repository().find({
             relations: {

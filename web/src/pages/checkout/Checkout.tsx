@@ -67,7 +67,6 @@ export default function Checkout() {
     const handleOrderSubmit = async () => {
         setLoading(true)
         try {
-            await pushCart()
             const response = await fetch("/api/orders/new", {
                 method: "POST",
                 headers: {
@@ -139,7 +138,7 @@ export default function Checkout() {
                             Your order is received. We have emailed your receipt, and will
                             send you an update when your order has shipped.
                         </Typography>
-                        <Button variant="contained" sx={{ mt: 3, ml: 1 }} onClick={() => window.location.href = `http://localhost:5001/api/orders/invoice/${orderId}`}>
+                        <Button variant="contained" sx={{ mt: 3, ml: 1 }} onClick={() => window.open(`http://localhost:5001/api/orders/invoice/${orderId}`,'_newtab')}>
                             View invoice
                         </Button>
                         <Button variant="outlined" sx={{ mt: 3, ml: 1 }} onClick={() => history.push("/")}>

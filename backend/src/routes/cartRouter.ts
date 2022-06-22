@@ -27,6 +27,7 @@ function addToCart(userService: UserService, cartService: CartService) {
     return async function (req, res, next) {
         const carId = parseInt(req.params.carId)
         const userId = req.params.userId
+        const amount = req.query.amount ? parseInt(req.query.amount) : null
 
         const ctx: Context | null = Context.get(req)
         if (ctx === null) {
@@ -45,7 +46,7 @@ function addToCart(userService: UserService, cartService: CartService) {
             return
         }
 
-        const cartItem = await cartService.addToCart(carId, 1, user)
+        const cartItem = await cartService.addToCart(carId, amount || 1, user)
 
         if (cartItem === 404) {
             res.status(404).json({ cartItem: {}, message: "An error happened" })
@@ -114,6 +115,21 @@ function decreaseItemQuantity(userService: UserService, cartService: CartService
     }
 }
 
+function removeItem(userService: UserService, cartService: CartService) {
+    return async function (req, res, next) {
+        const carId = parseInt(req.params.carId)
+        const userId = req.params.userId
+
+        const cartItem = await cartService.removeItem(carId, userId)
+
+        if (cartItem === 404) {
+            res.status(404).json({ cartItem: {}, message: "Wrong parameters" })
+        } else {
+            res.status(200).json({ cartItem, message: "Success" })
+        }
+    }
+}
+
 function replaceCart(cartService: CartService): RequestHandler {
     return async function (req, res, next) {
         const ctx: Context | null = Context.get(req)
@@ -164,6 +180,7 @@ function cartRouter() {
     router.get("/:userId", getCart(userService, cartService))
     router.post("/replace", replaceCart(cartService))
     router.post("/:userId/add/:carId", addToCart(userService, cartService))
+    router.post("/:userId/remove/:carId/all", removeItem(userService, cartService))
     router.post("/:userId/remove/:carId", decreaseItemQuantity(userService, cartService))
     router.post("/remove/:cartEntityId", removeFromCart(userService, cartService))
 
