@@ -66,7 +66,7 @@ function getOrder(orderService: OrderService) {
 
 function getOrderItem(orderService: OrderService) {
     return async function (req, res, next) {
-        const itemId = req.params.itemId
+        const itemId = parseInt(req.params.itemId)
 
         const ctx: Context | null = Context.get(req)
         if (ctx === null) {

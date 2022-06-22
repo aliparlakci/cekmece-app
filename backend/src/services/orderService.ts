@@ -79,7 +79,7 @@ export default class OrderService {
         })
     }
 
-    async getOrderItem(orderItemId: string) {
+    async getOrderItem(orderItemId: number) {
         return await this.orderItemRepository().findOne({
             relations: ["order", "car"],
             select: {

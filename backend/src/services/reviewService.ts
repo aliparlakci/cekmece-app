@@ -21,7 +21,7 @@ export default class ReviewService {
         const car = await this.carService.getCar(carId)
         if (car === null) throw `Car with id ${carId} does not exist.`
 
-        const orderItem = await this.orderService.getOrderItem(orderItemId)
+        const orderItem = await this.orderService.getOrderItem(parseInt(orderItemId))
         if (orderItem === null) throw `Order item with id ${orderItemId} does not exist.`
 
         if (orderItem.car.id !== carId) {

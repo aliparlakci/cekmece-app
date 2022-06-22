@@ -107,7 +107,7 @@ export function addNewCar(carService: CarService): RequestHandler {
             number: Joi.number().positive().required(),
             quantity: Joi.number().greater(-1).required(),
             price: Joi.number().positive().required(),
-            warranty: Joi.number().positive().required(),
+            warranty: Joi.required(),
             distributor: Joi.number().required(),
             category: Joi.number().required(),
             description: Joi.string().optional(),

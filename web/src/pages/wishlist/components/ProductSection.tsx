@@ -56,7 +56,7 @@ export default function ProductSection({ item }: IProductSelectionProps) {
                             <b className="mr-2">Year:</b>{item.item.model}
                         </p>
                         <p>
-                            <b className="mr-2">Price:</b>${item.item.price}
+                            <b className="mr-2">Price:</b>${item.item.price * (100 - item.item.discount) / 100}
                         </p>
                         {item.item.quantity === 0 && <p>
                             Out of stock
