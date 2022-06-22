@@ -10,7 +10,9 @@ class NetworkService extends ChangeNotifier {
   final JsonEncoder _encoder = const JsonEncoder();
   final prefs = SharedPreferences.getInstance();
 
-  Map<String, String> headers = {"content-type": "application/json; charset=UTF-8"};
+  Map<String, String> headers = {
+    "content-type": "application/json; charset=UTF-8"
+  };
   Map<String, String> cookies = {};
 
   void _updateCookie(http.Response response) {
@@ -150,7 +152,8 @@ class NetworkService extends ChangeNotifier {
     body ??= {};
     return http
         .post(Uri.parse(url),
-            body: _encoder.convert(body), headers: headers, encoding: encoding).timeout(const Duration(seconds: 5))
+            body: _encoder.convert(body), headers: headers, encoding: encoding)
+        .timeout(const Duration(seconds: 15))
         .then((http.Response response) {
       final String res = response.body;
       final int statusCode = response.statusCode;
@@ -172,7 +175,8 @@ class NetworkService extends ChangeNotifier {
     body ??= {};
     return http
         .delete(Uri.parse(url),
-            body: _encoder.convert(body), headers: headers, encoding: encoding).timeout(const Duration(seconds: 5))
+            body: _encoder.convert(body), headers: headers, encoding: encoding)
+        .timeout(const Duration(seconds: 15))
         .then((http.Response response) {
       final String res = response.body;
       final int statusCode = response.statusCode;
