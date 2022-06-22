@@ -121,6 +121,20 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     return localUser;
   }
 
+  Future<UserClass> updateUserWithoutLoading(dynamic me) async {
+    List<CartItem> cartList = await getCart(me["id"]);
+    UserClass localUser = UserClass(
+        displayName: me["displayName"],
+        isAnonymous: false,
+        email: me["email"],
+        cart: cartList,
+        wishlist: await getWishlist(me["id"]),
+        uid: me["id"],
+        photoUrl:
+        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
+    return localUser;
+  }
+
   Future<UserClass> updateLocalUser() async {
     BlocProvider.of<LoadingBloc>(context)
         .add(LoadingStart(loadingReason: "User fetch"));
@@ -284,6 +298,21 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       }
 
       BlocProvider.of<LoadingBloc>(context).add(LoadingEnd());
+    });
+
+    on<UserUpdateNoLoading>((event, emit) async {
+      try {
+        final prefs = await SharedPreferences.getInstance();
+        final String? userId = prefs.getString('id');
+        final List<String>? cookie = prefs.getStringList('cookies');
+
+        var me = await networkService.get('${localIPAddress}/api/auth/me');
+        user = await updateUserWithoutLoading(me);
+        emit(LoggedIn(user: user));
+
+      } catch (err) {
+        print(err);
+      }
     });
 
     on<SetUser>((event, emit) async {

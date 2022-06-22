@@ -30,8 +30,9 @@ class DetailsScreen extends StatefulWidget {
   static String routeName = "/details";
   int carId;
   UserBloc userBloc;
+  final Function(bool, String)? refreshProductCard;
 
-  DetailsScreen({required this.carId, required this.userBloc});
+  DetailsScreen({required this.carId, required this.userBloc, this.refreshProductCard});
 
   @override
   State<DetailsScreen> createState() => _DetailsScreenState();
@@ -85,7 +86,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
         } else {
           child = Scaffold(
             backgroundColor: Color(0xFFF5F6F9),
-            body: Body(product: product, userBloc: widget.userBloc),
+            body: Body(product: product, userBloc: widget.userBloc, refreshProductCard: widget.refreshProductCard),
             bottomNavigationBar: ProductBottomBar(
               userBloc: widget.userBloc,
               product: product,
