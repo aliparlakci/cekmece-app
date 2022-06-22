@@ -86,7 +86,8 @@ class _ProductCardState extends State<ProductCard> {
     });
   }
 
-  void refreshProductCard(bool updatedIsOnWishlist, String updatedWishlistItemID) {
+  void refreshProductCard(
+      bool updatedIsOnWishlist, String updatedWishlistItemID) {
     setState(() {
       isOnWishlist = updatedIsOnWishlist;
       wishlistItemID = updatedWishlistItemID;
@@ -135,27 +136,46 @@ class _ProductCardState extends State<ProductCard> {
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                       ),
-                      Text(
-                          numberFormat.format(
-                              widget.product.price - widget.product.discount),
-                          style: productCardPriceTextStyle),
+                      widget.product.discount != 0
+                          ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  numberFormat.format(widget.product.price -
+                                      widget.product.discount),
+                                  style: productCardDiscountedPriceTextStyle,
+                                ),
+                                Text(
+                                  numberFormat.format(widget.product.price),
+                                  style:
+                                      productCardPriceBeforeDiscountTextStyle,
+                                )
+                              ],
+                            )
+                          : Column(
+                              children: [
+                                Text(numberFormat.format(widget.product.price),
+                                    style: productCardPriceTextStyle),
+                              ],
+                            )
                     ],
                   ),
                 ),
-                Align(
-                  alignment: Alignment.topRight,
-                  child: IconButton(
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                    onPressed: () {
-                      toggleWishlist();
-                    },
-                    icon: !isOnWishlist
-                        ? const Icon(CupertinoIcons.heart)
-                        : const Icon(CupertinoIcons.heart_fill,
-                            color: Colors.red),
-                  ),
-                )
+                if (!BlocProvider.of<UserBloc>(context).user.isAnonymous)
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: IconButton(
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
+                      onPressed: () {
+                        toggleWishlist();
+                      },
+                      icon: !isOnWishlist
+                          ? const Icon(CupertinoIcons.heart)
+                          : const Icon(CupertinoIcons.heart_fill,
+                              color: Colors.red),
+                    ),
+                  )
               ],
             ),
           )

@@ -245,6 +245,19 @@ final productCardPriceTextStyle = GoogleFonts.raleway(
   color: Colors.black,
 );
 
+final productCardDiscountedPriceTextStyle = GoogleFonts.raleway(
+  fontSize: 15,
+  fontWeight: FontWeight.w700,
+  color: Colors.red,
+);
+
+final productCardPriceBeforeDiscountTextStyle = GoogleFonts.raleway(
+  fontSize: 11,
+  fontWeight: FontWeight.w700,
+  color: Colors.black,
+  decoration: TextDecoration.lineThrough,
+);
+
 /* Filter Products View */
 
 final filterProductsTitlesTextStyle = GoogleFonts.raleway(

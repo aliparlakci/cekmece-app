@@ -156,7 +156,7 @@ class _ProductsViewState extends State<ProductsView> {
           );
         }
 
-        return MasonryGridView.count(
+        return AlignedGridView.count(
             crossAxisCount: 2,
             itemCount: sortedAndFilteredProducts.length,
             crossAxisSpacing: 4,
