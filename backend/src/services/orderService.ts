@@ -1,16 +1,9 @@
 import { Repository } from "typeorm"
 import db from "../dataSource"
-<<<<<<< HEAD
-import { Order, OrderStatus, ShippingOption } from "../models/order"
-import CarService from "./carService"
-import CartService from "./cartService"
-import { OrderItem } from "../models/orderItem"
-=======
-import {Order, OrderStatus} from "../models/order"
+import {Order, OrderStatus, ShippingOption} from "../models/order"
 import CarService from "./carService"
 import CartService from "./cartService"
 import {OrderItem, OrderStatus as ItemOrderStatus} from "../models/orderItem"
->>>>>>> 3334d336feaf1bc7959df700edf9bae118b0efff
 import InvoiceService from "./invoiceService"
 import {RefundRequest} from "../models/refundRequest";
 import MailingService from "./mailingService";
@@ -18,19 +11,10 @@ import MailingService from "./mailingService";
 export default class OrderService {
     private repository: () => Repository<Order>
     private orderItemRepository: () => Repository<OrderItem>
-<<<<<<< HEAD
-
-    constructor(
-        private carService: CarService,
-        private cartService: CartService,
-        private invoiceService: InvoiceService
-    ) {
-=======
     private refundRequestRepository: () => Repository<RefundRequest>
     private mailingService: MailingService
 
     constructor(private carService: CarService, private cartService: CartService, private invoiceService: InvoiceService) {
->>>>>>> 3334d336feaf1bc7959df700edf9bae118b0efff
         this.repository = () => db.getRepository(Order)
         this.orderItemRepository = () => db.getRepository(OrderItem)
         this.refundRequestRepository = () => db.getRepository(RefundRequest)
