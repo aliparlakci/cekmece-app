@@ -2,6 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, Jo
 import { Car } from "./car"
 import { Order } from "./order"
 import { Review } from "./review"
+import {RefundRequest} from "./refundRequest";
 
 export enum OrderStatus {
     PROCESSING = "processing",
@@ -37,4 +38,7 @@ export class OrderItem {
         default: OrderStatus.PROCESSING,
     })
     status: OrderStatus
+
+    @OneToOne(() => RefundRequest, refundRequest => refundRequest.orderItem, { cascade: true })
+    refund: RefundRequest
 }

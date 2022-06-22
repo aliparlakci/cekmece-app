@@ -51,7 +51,7 @@ function CarDetailPage() {
                            
                             <Button variant="outlined" color="error"  startIcon={<FavoriteBorderTwoTone /> }>
                                 Add to Wishlist
-                                </Button>
+                            </Button>
                         </div>
                         <div
                             className="flex-[1.3] flex flex-col items-start w-32 justify-items-center mt-10 mobile:items-center">

@@ -6,7 +6,7 @@ export class RefundRequest {
     @PrimaryGeneratedColumn()
     id: number
 
-    @OneToOne(() => OrderItem, orderItem => orderItem.id)
+    @OneToOne(() => OrderItem, orderItem => orderItem.refund)
     @JoinColumn()
     orderItem: OrderItem
 
@@ -14,4 +14,9 @@ export class RefundRequest {
         default: false
     })
     isApproved: boolean
+
+    @Column({
+        default: false
+    })
+    isRejected: boolean
 }

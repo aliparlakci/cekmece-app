@@ -11,6 +11,7 @@ import InvoicesListView from "./components/InvoicesListView"
 import useAuth from "../../hooks/useAuth"
 import UserRoles from "../../models/userRoles"
 import Links from "./components/Links"
+import RefundsListView from "./components/RefundsListView"
 
 export default function AdminPage() {
     const {user} = useAuth()
@@ -37,6 +38,9 @@ export default function AdminPage() {
                 </Route>
                 <Route path="/admin/invoices">
                     {user && (user.role === "ADMIN" || user.role === "SalesManager") && <InvoicesListView />}
+                </Route>
+                <Route path="/admin/refunds">
+                    {user && (user.role === "ADMIN" || user.role === "SalesManager") && <RefundsListView />}
                 </Route>
                 <Route path="/admin">
                     {user && (user.role !== UserRoles.Customer) && <div className="p-6"><Links /></div>}

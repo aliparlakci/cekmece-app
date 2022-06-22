@@ -21,6 +21,7 @@ export default function Links() {
             <>
                 <Link to="/admin/discounts"><Button variant="text">Discounts</Button></Link>
                 <Link to="/admin/invoices"><Button variant="text">Invoices</Button></Link>
+                <Link to="/admin/refunds"><Button variant="text">Refunds</Button></Link>
             </>
         }
     </div>

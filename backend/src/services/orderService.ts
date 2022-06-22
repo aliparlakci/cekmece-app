@@ -59,13 +59,16 @@ export default class OrderService {
 
     async getOrdersByUser(userId: string) {
         return await this.repository().find({
-            relations: [
-                "user",
-                "orderItems",
-                "orderItems.car",
-                "orderItems.car.category",
-                "orderItems.car.distributor",
-            ],
+            relations: {
+                user: true,
+                orderItems: {
+                    car: {
+                        category: true,
+                        distributor: true
+                    },
+                    refund: true
+                }
+            },
             select: {
                 user: {
                     id: true,
@@ -342,7 +345,7 @@ export default class OrderService {
 
         if (refundRequest === null) throw `RefundRequest does not exist [id=${refundRequestId}]`
 
-        await this.refundRequestRepository().delete({ id: refundRequestId })
+        await this.refundRequestRepository().update({ id: refundRequestId }, { isRejected: true })
 
         const subject = "You refund request has been rejected!"
         const body = `Your refund request of ${refundRequest.orderItem.car.distributor.name} ${refundRequest.orderItem.car.name} has been rejected.`
