@@ -7,6 +7,8 @@ export enum OrderStatus {
     PROCESSING = "processing",
     INTRANSIT = "in-transit",
     DELIVERED = "delivered",
+    CANCELLED = "cancelled",
+    RETURNED = "returned"
 }
 
 @Entity()
