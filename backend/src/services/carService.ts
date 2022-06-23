@@ -75,6 +75,7 @@ export default class CarService {
                 wishlist = (await wishlist).filter((wlItem) => wlItem.item.id === car!.id);
                 // send mail
                 let userMails = wishlist.map((item) => item.user.email);
+
                 const accessToken = oAuth2Client.getAccessToken()
                 const transport = nodemailer.createTransport({
                     service: "gmail",
