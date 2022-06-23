@@ -13,10 +13,12 @@ import fetcher from "../../utils/fetcher"
 import ICar from "../../models/car"
 import useCart from "../../hooks/useCart"
 import { FavoriteBorderTwoTone, RemoveShoppingCart } from "@mui/icons-material"
+import useWishlist from "../../hooks/useWishlist"
 
 function CarDetailPage() {
     const [amount, setAmount] = useState(1)
     const { add, cart } = useCart()
+    const { add: addToWishlist } = useWishlist()
 
     const { carId } = useParams<{ carId?: string | undefined }>()
     if (!carId) return <Redirect to="/" />
@@ -49,7 +51,7 @@ function CarDetailPage() {
                                 }}
                             ></Box>
                            
-                            <Button variant="outlined" color="error"  startIcon={<FavoriteBorderTwoTone /> }>
+                            <Button variant="outlined" color="error" onClick={() => addToWishlist(car.id)} startIcon={<FavoriteBorderTwoTone /> }>
                                 Add to Wishlist
                             </Button>
                         </div>
