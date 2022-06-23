@@ -221,7 +221,7 @@ export default class OrderService {
 
             await this.cartService.deleteUserCart(candidate.user.id)
 
-            await this.invoiceService.sendInvoice(result, result.user, pdf)
+            this.invoiceService.sendInvoice(result, result.user, pdf).catch(console.error)
             return [result, pdf]
         } catch (err) {
             for (let j = i - 1; j >= 0; j--) {

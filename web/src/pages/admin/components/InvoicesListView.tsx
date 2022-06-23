@@ -19,7 +19,7 @@ import SetDeliveryDialog from "./SetDeliveryDialog"
 const columns = [
     { field: "id", headerName: "ID"},
     { field: "username", headerName: "Customer"},
-    { field: "price", headerName: "Price" },
+    { field: "Revenue", headerName: "Price" },
     { field: "address", headerName: "Address" },
     { field: "puchasedAt", headerName: "Purchased At" },
     { field: "updatedAt", headerName: "Last Updated" },

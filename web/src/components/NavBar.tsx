@@ -131,15 +131,15 @@ export default function NavBar({ children }: INavBarProps) {
                                         }}
                                     >
                                         <MenuItem onClick={handleClose}>
-                                        <Link to={`/profile`}>Profile</Link>
-                                            </MenuItem>
-                                        <MenuItem onClick={handleClose}>
                                             <Link to={`/orderHistory`}>My Orders</Link>
                                         </MenuItem>
                                     </Menu>
 
                                     <hr />
-                                    <Button variant="text" color="inherit" onClick={() => logout()}>
+                                    <Button variant="text" color="inherit" onClick={async () => {
+                                        await logout()
+                                        history.push("/login")
+                                    }}>
                                         Logout
                                     </Button>
                                 </>

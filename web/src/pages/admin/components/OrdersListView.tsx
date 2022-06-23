@@ -18,8 +18,9 @@ import SetDeliveryDialog from "./SetDeliveryDialog"
 
 const columns = [
     { field: "id", headerName: "ID"},
+    { field: "orderId", headerName: "Order #"},
     { field: "carId", headerName: "Car ID"},
-    { field: "userId", headerName: "Customer ID", flex: 1},
+    { field: "user", headerName: "Customer"},
     { field: "name", headerName: "Name" },
     { field: "price", headerName: "Price" },
     { field: "quantity", headerName: "Quantity" },
@@ -45,7 +46,7 @@ export default function OrdersListView() {
                     id: item.id,
                     orderId: item.order.id,
                     carId: item.car.id,
-                    userId: item.order.user.id,
+                    user: item.order.user.displayName,
                     puchasedAt: (new Date(item.order.createdDate)).toLocaleDateString(),
                     updatedAt: (new Date(item.order.updatedDate)).toLocaleDateString(),
                     price: item.total,

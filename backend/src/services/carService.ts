@@ -5,6 +5,8 @@ import { Car } from "../models/car"
 import { WishlistItem } from "../models/wishlist"
 import CategoryService from "./categoryService"
 import WishlistService from "./wishlistService"
+import CartService from "./cartService";
+import {Cart} from "../models/cart";
 var nodemailer = require("nodemailer")
 var { google } = require("googleapis")
 
@@ -30,10 +32,12 @@ export interface FilterOptions {
 export default class CarService {
     private repository: () => Repository<Car>
     private wishlistRepo: () => Repository<WishlistItem>
+    private cartRepo: () => Repository<Cart>
 
     constructor(private categoryService: CategoryService) {
         this.repository = () => db.getRepository(Car)
         this.wishlistRepo = () => db.getRepository(WishlistItem)
+        this.cartRepo = () => db.getRepository(Cart)
     }
 
     async insertCar(candidate: Car) {
@@ -57,11 +61,11 @@ export default class CarService {
     async setDiscount(carId: number, discount:number){
         if (discount < 0) throw "Discount amount can not be smaller than 0";
 
-        let car = await this.getCar(carId);
+        const car = await this.getCar(carId);
 
         if (car === null) throw `Car does not exists: id=${carId}`
 
-        if (discount > car.price) throw `Discount can not be more than the price. Price:${car.price}, Discount:${discount}`
+        //if (discount > car.price) throw `Discount can not be more than the price. Price:${car.price}, Discount:${discount}`
 
         if(car.discount !== null && discount > car.discount){
             try{
@@ -71,11 +75,7 @@ export default class CarService {
                 wishlist = (await wishlist).filter((wlItem) => wlItem.item.id === car!.id);
                 // send mail
                 let userMails = wishlist.map((item) => item.user.email);
-
-
-
                 const accessToken = oAuth2Client.getAccessToken()
-
                 const transport = nodemailer.createTransport({
                     service: "gmail",
                     auth: {
@@ -97,22 +97,25 @@ export default class CarService {
                         from: "CarWow <cs308myaraba@gmail.com>",
                         to: email,
                         subject: "A car in your wishlist is now on sale!",
-                        text: `A car on your wishlist, ${car?.model} model ${car?.distributor.name} ${car?.name} is now on sale on CarWow! The price was $${car?.price}, it's now $${car?.price! - discount}! Check it out!`,
+                        text: `A car on your wishlist, ${car.model} model ${car.distributor.name} ${car.name} is now on sale on CarWow! The price was $${car.price * (100 - car.discount) / 100}, it's now $${car.price * (100 - discount) / 100}! Check it out!`,
 
                     }
-                    const result = transport.sendMail(mailOptions)
+                    transport.sendMail(mailOptions)
                 })
 
             }
             catch(err){
                 console.log(err);
-            throw "Could not send discount emails";
-        }
+            }
         }
 
-        car.discount = discount;
+        try {
+            await this.applyDiscountToCartItem(car.id, car.price * (100 - discount) / 100)
+        } catch (e) {
+            console.error(e)
+        }
 
-        return this.insertCar(car);
+        return this.repository().update({ id: car.id }, { discount });
     }
 
     async filterCars(options: FilterOptions) {
@@ -273,5 +276,15 @@ export default class CarService {
         car.reviewCount = reviewCount
         car.averageRating = averageRating ? averageRating : 0
         return await this.repository().save(car)
+    }
+
+    async applyDiscountToCartItem(carId: number, newUnitPrice: number) {
+        const cartItems = await this.cartRepo().find({ where: { item: { id: carId } } } )
+        const promises = cartItems.map(async item => {
+            item.total = item.quantity * newUnitPrice
+            return await this.cartRepo().save(item)
+        })
+
+        await Promise.all(promises)
     }
 }
