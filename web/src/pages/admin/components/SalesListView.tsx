@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { DataGrid } from "@mui/x-data-grid"
 import { Box, Button, CssBaseline, Typography } from "@mui/material"
-import useSWR, { mutate } from "swr"
+import useSWR from "swr"
 import Grid from "@mui/material/Grid"
 import { Paper } from "@material-ui/core"
 
@@ -9,25 +9,16 @@ import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker"
 import TextField from "@mui/material/TextField"
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider"
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns"
-
-import NewCarDialog from "./NewCarDialog"
-import ICar from "../../../models/car"
 import fetcher from "../../../utils/fetcher"
-import useConfirmation from "../../../hooks/useConfirmation"
-import useNotification, { NOTIFICATON_TYPES } from "../../../hooks/useNotification"
-import { Link } from "react-router-dom"
 import IOrder from "../../../models/order"
-import OrderDetailsModal from "./OrderDetailsModal"
-import IOrderItem from "../../../models/orderItem"
+import { ItemOrderStatus } from "../../../models/orderItem"
 import Links from "./Links"
-import SetDiscountsDialog from "./SetDiscountsDialog"
-import SetDeliveryDialog from "./SetDeliveryDialog"
 
 const columns = [
     { field: "id", headerName: "ID" },
     { field: "carId", headerName: "Car ID" },
     { field: "name", headerName: "Name" },
-    { field: "price", headerName: "Price" },
+    { field: "price", headerName: "Revenue" },
     { field: "quantity", headerName: "Quantity" },
     { field: "status", headerName: "Status" },
     { field: "puchasedAt", headerName: "Purchased At" },
@@ -38,6 +29,7 @@ export default function SalesListView() {
 
     const [selected, setSelected] = useState<any[]>([])
     const [totalRevenue, setTotalRevenue] = useState(0)
+    const [loss, setLoss] = useState(0)
     const [startDateValue, setStartDateValue] = React.useState<Date | null>(new Date("2022-06-01T00:00:00"))
     const [endDateValue, setEndDateValue] = React.useState<Date | null>(new Date("2022-06-30T00:00:00"))
 
@@ -48,18 +40,24 @@ export default function SalesListView() {
 
     useEffect(() => {
         let rev = 0
+        let newLoss = 0
         if (data)
             setOrderItems(
                 data
                     .map((order) =>
                         order.orderItems.map((item) => {
-                            rev = rev + item.total
+                            if (item.status !== ItemOrderStatus.CANCELLED && item.status !== ItemOrderStatus.RETURNED) {
+                                rev = rev + item.total
+                            } else {
+                                newLoss += item.total
+                            }
+
                             return {
                                 id: item.id,
                                 orderId: item.order.id,
                                 carId: item.car.id,
                                 puchasedAt: new Date(item.order.createdDate).toLocaleDateString(),
-                                price: item.total,
+                                price: `$${item.total}`,
                                 quantity: item.quantity,
                                 status: item.status,
                                 name: item.car.name,
@@ -69,6 +67,7 @@ export default function SalesListView() {
                     .flat()
             )
         setTotalRevenue(rev)
+        setLoss(newLoss)
     }, [data])
 
     const handleStartDateChange = (newValue: Date | null) => {
@@ -86,11 +85,16 @@ export default function SalesListView() {
                 return orderDate >= startDateValue! && orderDate <= endDateValue!
             })
             let rev = 0
+            let newLoss = 0
             setOrderItems(
                 filteredOrders
                     .map((order) =>
                         order.orderItems.map((item) => {
-                            rev = rev + item.total
+                            if (item.status !== ItemOrderStatus.CANCELLED && item.status !== ItemOrderStatus.RETURNED) {
+                                rev = rev + item.total
+                            } else {
+                                newLoss += item.total
+                            }
                             return {
                                 id: item.id,
                                 orderId: item.order.id,
@@ -105,7 +109,7 @@ export default function SalesListView() {
                     )
                     .flat()
             )
-
+            setLoss(newLoss)
             setTotalRevenue(rev)
         }
     }
@@ -173,6 +177,14 @@ export default function SalesListView() {
                                         </Typography>
                                         <Typography variant="h3" component="div" gutterBottom sx={{ align: "center" }}>
                                             ${totalRevenue}
+                                        </Typography>
+                                    </Box>
+                                    <Box sx={{ height: 150, justifyContent: "center" }}>
+                                        <Typography variant="h4" component="div" gutterBottom sx={{ align: "center" }}>
+                                            Loss
+                                        </Typography>
+                                        <Typography variant="h3" component="div" gutterBottom sx={{ align: "center" }}>
+                                            ${loss}
                                         </Typography>
                                     </Box>
                                 </Paper>
