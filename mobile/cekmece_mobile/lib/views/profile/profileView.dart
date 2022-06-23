@@ -53,7 +53,10 @@ class _ProfileViewState extends State<ProfileView> {
       var ordersJson = await networkService.get('${localIPAddress}/api/orders');
       for (dynamic singleOrder in ordersJson) {
         singleOrder["orderItems"] = processCart(singleOrder["orderItems"]);
+        singleOrder["refund"] = singleOrder["orderItems"][0]['refund'];
+        singleOrder["status"] = singleOrder["orderItems"][0]["status"];
         orders.add(OrderItem.fromJson(singleOrder));
+        print(orders);
       }
     } catch (err) {
       print(err);
@@ -284,6 +287,19 @@ class OrderStatus extends StatelessWidget {
   OrderStatus({Key? key, required this.order}) : super(key: key);
   OrderItem order;
 
+  String refundMessage() {
+    if (order.refund == null) {
+      return "";
+    }
+    if (order.refund!["isApproved"]) {
+      return "Approved";
+    }
+    if (!order.refund!["isApproved"] && !order.refund!["isRejected"]) {
+      return "In Progress";
+    }
+    return "Rejected";
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -301,6 +317,11 @@ class OrderStatus extends StatelessWidget {
               left: "Delivery Address:",
               right: toBeginningOfSentenceCase(
                   "${order.province}, ${order.country}")!),
+          order.refund != null
+              ? OrderDetailRow(
+                  left: "Refund:",
+                  right: toBeginningOfSentenceCase(refundMessage())!)
+              : Container(),
           Text(
             "Ordered Items:",
             style: GoogleFonts.raleway(
