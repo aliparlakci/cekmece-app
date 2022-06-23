@@ -72,8 +72,6 @@ export default class CarService {
                 // send mail
                 let userMails = wishlist.map((item) => item.user.email);
 
-
-
                 const accessToken = oAuth2Client.getAccessToken()
 
                 const transport = nodemailer.createTransport({
@@ -97,7 +95,7 @@ export default class CarService {
                         from: "CarWow <cs308myaraba@gmail.com>",
                         to: email,
                         subject: "A car in your wishlist is now on sale!",
-                        text: `A car on your wishlist, ${car?.model} model ${car?.distributor.name} ${car?.name} is now on sale on CarWow! The price was $${car?.price}, it's now $${car?.price! - discount}! Check it out!`,
+                        text: `A car on your wishlist, ${car?.model} model ${car?.distributor.name} ${car?.name} is now on sale on CarWow! The price was $${car?.price}, it's now $${car?.price! * ((100.0 - discount)/100.0)}! Check it out!`,
 
                     }
                     const result = transport.sendMail(mailOptions)
