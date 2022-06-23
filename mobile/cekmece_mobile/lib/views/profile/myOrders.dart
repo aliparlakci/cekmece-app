@@ -155,13 +155,13 @@ class OrderDetail extends StatelessWidget {
 
     if (refundMsg == "Approved") {
       clr = Colors.green.shade300;
-      msg = "Your refund is approved";
+      msg = "Your refund request is approved";
     } else if (refundMsg == "In Progress") {
       clr = Colors.grey.shade300;
       msg = "Your refund is in progress";
     } else {
       clr = Colors.red.shade300;
-      msg = "Your refund is rejected";
+      msg = "Your refund request is rejected";
     }
     return Padding(
       padding: const EdgeInsets.only(bottom: 5),
@@ -286,8 +286,10 @@ class OrderDetail extends StatelessWidget {
                           Provider.of<NetworkService>(context, listen: false);
 
                       try {
-                        await networkService.post(
-                            '${localIPAddress}/api/orders/newRefund/${order.id}');
+                        for (var i = 0; i < order.orderItems.length; i++) {
+                          await networkService.post(
+                              '${localIPAddress}/api/orders/newRefund/${order.orderItems[i].id}');
+                        }
                         showSnackBar(
                           context: context,
                           message: "Refund request succesfully created",

@@ -55,8 +55,8 @@ class _ProfileViewState extends State<ProfileView> {
         singleOrder["orderItems"] = processCart(singleOrder["orderItems"]);
         singleOrder["refund"] = singleOrder["orderItems"][0]['refund'];
         singleOrder["status"] = singleOrder["orderItems"][0]["status"];
-        print(singleOrder["refund"]);
         orders.add(OrderItem.fromJson(singleOrder));
+        print(orders);
       }
     } catch (err) {
       print(err);
