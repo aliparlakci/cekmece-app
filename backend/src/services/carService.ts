@@ -8,10 +8,10 @@ import WishlistService from "./wishlistService"
 var nodemailer = require("nodemailer")
 var { google } = require("googleapis")
 
-const CLIENT_ID = "1031671042635-2o9nh80hb5ftf73udu11kerq9busm86k.apps.googleusercontent.com"
-const CLIENT_SECRET = "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"
+const CLIENT_ID = "80688403213-ev4ru35h4dff7pc7qdk2ic1637upjkpb.apps.googleusercontent.com"
+const CLIENT_SECRET = "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"
 const REDIRECT_URI = "https://developers.google.com/oauthplayground"
-const REFRESH_TOKEN = "1//04NRrydOL4e0aCgYIARAAGAQSNgF-L9IrzXIzuDmQaZQOkiuGs4aVyfrtbY8K1SUch0b66a1N_CKFiwnWL3ai_UkWlfL4niEsWg"
+const REFRESH_TOKEN = "1//04_fGX48ChlHKCgYIARAAGAQSNgF-L9Ir6sVygmnMEE6P7CD_vRuiQKrG7PSs0HKxitDDL_axktynNZUqR6xbfis4LjgcbWcsOA"
 
 const oAuth2Client = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI)
 oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN })
@@ -72,36 +72,34 @@ export default class CarService {
                 // send mail
                 let userMails = wishlist.map((item) => item.user.email);
 
+                const accessToken = oAuth2Client.getAccessToken()
 
+                const transport = nodemailer.createTransport({
+                    service: "gmail",
+                    auth: {
+                        type: "OAuth2",
+                        user: "cs308myaraba@gmail.com",
+                        clientId: CLIENT_ID,
+                        clientSecret: CLIENT_SECRET,
+                        refreshToken: REFRESH_TOKEN,
+                        accessToken: accessToken,
+                    },
+                    tls: {
+                        rejectUnauthorized: true,
+                    },
+                })
 
-                // const accessToken = oAuth2Client.getAccessToken()
-                //
-                // const transport = nodemailer.createTransport({
-                //     service: "gmail",
-                //     auth: {
-                //         type: "OAuth2",
-                //         user: "cs308myaraba@gmail.com",
-                //         clientId: CLIENT_ID,
-                //         clientSecret: CLIENT_SECRET,
-                //         refreshToken: REFRESH_TOKEN,
-                //         accessToken: accessToken,
-                //     },
-                //     tls: {
-                //         rejectUnauthorized: true,
-                //     },
-                // })
-                //
-                // userMails.forEach((email) => {
-                //     console.log(email);
-                //     const mailOptions = {
-                //         from: "CarWow <cs308myaraba@gmail.com>",
-                //         to: email,
-                //         subject: "A car in your wishlist is now on sale!",
-                //         text: `A car on your wishlist, ${car?.model} model ${car?.distributor.name} ${car?.name} is now on sale on CarWow! The price was $${car?.price}, it's now $${car?.price! - discount}! Check it out!`,
-                //
-                //     }
-                //     const result = transport.sendMail(mailOptions)
-                // })
+                userMails.forEach((email) => {
+                    console.log(email);
+                    const mailOptions = {
+                        from: "CarWow <cs308myaraba@gmail.com>",
+                        to: email,
+                        subject: "A car in your wishlist is now on sale!",
+                        text: `A car on your wishlist, ${car?.model} model ${car?.distributor.name} ${car?.name} is now on sale on CarWow! The price was $${car?.price}, it's now $${car?.price! * ((100.0 - discount)/100.0)}! Check it out!`,
+
+                    }
+                    const result = transport.sendMail(mailOptions)
+                })
 
             }
             catch(err){

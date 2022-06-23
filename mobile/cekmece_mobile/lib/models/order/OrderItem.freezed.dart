@@ -38,7 +38,7 @@ class _$OrderItemTearOff {
       required int zipCode,
       required String country,
       required String shippingOption,
-      required List<CartItem> orderItems}) {
+      required List<ActualOrderItem> orderItems}) {
     return _OrderItem(
       id: id,
       subTotal: subTotal,
@@ -84,7 +84,7 @@ mixin _$OrderItem {
   int get zipCode => throw _privateConstructorUsedError;
   String get country => throw _privateConstructorUsedError;
   String get shippingOption => throw _privateConstructorUsedError;
-  List<CartItem> get orderItems => throw _privateConstructorUsedError;
+  List<ActualOrderItem> get orderItems => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -112,7 +112,7 @@ abstract class $OrderItemCopyWith<$Res> {
       int zipCode,
       String country,
       String shippingOption,
-      List<CartItem> orderItems});
+      List<ActualOrderItem> orderItems});
 }
 
 /// @nodoc
@@ -206,7 +206,7 @@ class _$OrderItemCopyWithImpl<$Res> implements $OrderItemCopyWith<$Res> {
       orderItems: orderItems == freezed
           ? _value.orderItems
           : orderItems // ignore: cast_nullable_to_non_nullable
-              as List<CartItem>,
+              as List<ActualOrderItem>,
     ));
   }
 }
@@ -233,7 +233,7 @@ abstract class _$OrderItemCopyWith<$Res> implements $OrderItemCopyWith<$Res> {
       int zipCode,
       String country,
       String shippingOption,
-      List<CartItem> orderItems});
+      List<ActualOrderItem> orderItems});
 }
 
 /// @nodoc
@@ -328,7 +328,7 @@ class __$OrderItemCopyWithImpl<$Res> extends _$OrderItemCopyWithImpl<$Res>
       orderItems: orderItems == freezed
           ? _value.orderItems
           : orderItems // ignore: cast_nullable_to_non_nullable
-              as List<CartItem>,
+              as List<ActualOrderItem>,
     ));
   }
 }
@@ -388,7 +388,7 @@ class _$_OrderItem implements _OrderItem {
   @override
   final String shippingOption;
   @override
-  final List<CartItem> orderItems;
+  final List<ActualOrderItem> orderItems;
 
   @override
   String toString() {
@@ -472,7 +472,7 @@ abstract class _OrderItem implements OrderItem {
       required int zipCode,
       required String country,
       required String shippingOption,
-      required List<CartItem> orderItems}) = _$_OrderItem;
+      required List<ActualOrderItem> orderItems}) = _$_OrderItem;
 
   factory _OrderItem.fromJson(Map<String, dynamic> json) =
       _$_OrderItem.fromJson;
@@ -508,7 +508,7 @@ abstract class _OrderItem implements OrderItem {
   @override
   String get shippingOption;
   @override
-  List<CartItem> get orderItems;
+  List<ActualOrderItem> get orderItems;
   @override
   @JsonKey(ignore: true)
   _$OrderItemCopyWith<_OrderItem> get copyWith =>

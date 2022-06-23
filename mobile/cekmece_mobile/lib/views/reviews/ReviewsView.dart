@@ -15,9 +15,10 @@ import '../../util/bloc/userBloc/user_bloc.dart';
 import '../misc/loadingOverlay.dart';
 
 class ReviewsView extends StatefulWidget {
-  const ReviewsView({Key? key, required this.userId, required this.carId}) : super(key: key);
+  const ReviewsView({Key? key, required this.userId, required this.carId, required this.updateReviewCountAndAverageRating}) : super(key: key);
   final String userId;
   final int carId;
+  final Function(int, String) updateReviewCountAndAverageRating;
 
   @override
   State<ReviewsView> createState() => _ReviewsViewState();
@@ -53,6 +54,7 @@ class _ReviewsViewState extends State<ReviewsView> {
         reviewCount = reviewsDetails["reviewCount"];
         averageRating = double.parse(reviewsDetails["averageRating"]);
         reviewRatioByRating = reviewsDetails["reviewRatioByRating"];
+        widget.updateReviewCountAndAverageRating(reviewCount, reviewsDetails["averageRating"]);
 
         if (widget.userId != "0") {
           List<ReviewClass> tempYourReviews = [];

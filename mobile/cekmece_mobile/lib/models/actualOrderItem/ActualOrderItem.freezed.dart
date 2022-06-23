@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
-part of 'CartItem.dart';
+part of 'ActualOrderItem.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -14,20 +14,20 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-CartItem _$CartItemFromJson(Map<String, dynamic> json) {
-  return _CartItem.fromJson(json);
+ActualOrderItem _$ActualOrderItemFromJson(Map<String, dynamic> json) {
+  return _ActualOrderItem.fromJson(json);
 }
 
 /// @nodoc
-class _$CartItemTearOff {
-  const _$CartItemTearOff();
+class _$ActualOrderItemTearOff {
+  const _$ActualOrderItemTearOff();
 
-  _CartItem call(
-      {required dynamic id,
+  _ActualOrderItem call(
+      {required int id,
       required int total,
       required int quantity,
       required Product item}) {
-    return _CartItem(
+    return _ActualOrderItem(
       id: id,
       total: total,
       quantity: quantity,
@@ -35,43 +35,45 @@ class _$CartItemTearOff {
     );
   }
 
-  CartItem fromJson(Map<String, Object?> json) {
-    return CartItem.fromJson(json);
+  ActualOrderItem fromJson(Map<String, Object?> json) {
+    return ActualOrderItem.fromJson(json);
   }
 }
 
 /// @nodoc
-const $CartItem = _$CartItemTearOff();
+const $ActualOrderItem = _$ActualOrderItemTearOff();
 
 /// @nodoc
-mixin _$CartItem {
-  dynamic get id => throw _privateConstructorUsedError;
+mixin _$ActualOrderItem {
+  int get id => throw _privateConstructorUsedError;
   int get total => throw _privateConstructorUsedError;
   int get quantity => throw _privateConstructorUsedError;
   Product get item => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $CartItemCopyWith<CartItem> get copyWith =>
+  $ActualOrderItemCopyWith<ActualOrderItem> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $CartItemCopyWith<$Res> {
-  factory $CartItemCopyWith(CartItem value, $Res Function(CartItem) then) =
-      _$CartItemCopyWithImpl<$Res>;
-  $Res call({dynamic id, int total, int quantity, Product item});
+abstract class $ActualOrderItemCopyWith<$Res> {
+  factory $ActualOrderItemCopyWith(
+          ActualOrderItem value, $Res Function(ActualOrderItem) then) =
+      _$ActualOrderItemCopyWithImpl<$Res>;
+  $Res call({int id, int total, int quantity, Product item});
 
   $ProductCopyWith<$Res> get item;
 }
 
 /// @nodoc
-class _$CartItemCopyWithImpl<$Res> implements $CartItemCopyWith<$Res> {
-  _$CartItemCopyWithImpl(this._value, this._then);
+class _$ActualOrderItemCopyWithImpl<$Res>
+    implements $ActualOrderItemCopyWith<$Res> {
+  _$ActualOrderItemCopyWithImpl(this._value, this._then);
 
-  final CartItem _value;
+  final ActualOrderItem _value;
   // ignore: unused_field
-  final $Res Function(CartItem) _then;
+  final $Res Function(ActualOrderItem) _then;
 
   @override
   $Res call({
@@ -84,7 +86,7 @@ class _$CartItemCopyWithImpl<$Res> implements $CartItemCopyWith<$Res> {
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as int,
       total: total == freezed
           ? _value.total
           : total // ignore: cast_nullable_to_non_nullable
@@ -109,24 +111,28 @@ class _$CartItemCopyWithImpl<$Res> implements $CartItemCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class _$CartItemCopyWith<$Res> implements $CartItemCopyWith<$Res> {
-  factory _$CartItemCopyWith(_CartItem value, $Res Function(_CartItem) then) =
-      __$CartItemCopyWithImpl<$Res>;
+abstract class _$ActualOrderItemCopyWith<$Res>
+    implements $ActualOrderItemCopyWith<$Res> {
+  factory _$ActualOrderItemCopyWith(
+          _ActualOrderItem value, $Res Function(_ActualOrderItem) then) =
+      __$ActualOrderItemCopyWithImpl<$Res>;
   @override
-  $Res call({dynamic id, int total, int quantity, Product item});
+  $Res call({int id, int total, int quantity, Product item});
 
   @override
   $ProductCopyWith<$Res> get item;
 }
 
 /// @nodoc
-class __$CartItemCopyWithImpl<$Res> extends _$CartItemCopyWithImpl<$Res>
-    implements _$CartItemCopyWith<$Res> {
-  __$CartItemCopyWithImpl(_CartItem _value, $Res Function(_CartItem) _then)
-      : super(_value, (v) => _then(v as _CartItem));
+class __$ActualOrderItemCopyWithImpl<$Res>
+    extends _$ActualOrderItemCopyWithImpl<$Res>
+    implements _$ActualOrderItemCopyWith<$Res> {
+  __$ActualOrderItemCopyWithImpl(
+      _ActualOrderItem _value, $Res Function(_ActualOrderItem) _then)
+      : super(_value, (v) => _then(v as _ActualOrderItem));
 
   @override
-  _CartItem get _value => super._value as _CartItem;
+  _ActualOrderItem get _value => super._value as _ActualOrderItem;
 
   @override
   $Res call({
@@ -135,11 +141,11 @@ class __$CartItemCopyWithImpl<$Res> extends _$CartItemCopyWithImpl<$Res>
     Object? quantity = freezed,
     Object? item = freezed,
   }) {
-    return _then(_CartItem(
+    return _then(_ActualOrderItem(
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as int,
       total: total == freezed
           ? _value.total
           : total // ignore: cast_nullable_to_non_nullable
@@ -158,18 +164,18 @@ class __$CartItemCopyWithImpl<$Res> extends _$CartItemCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_CartItem implements _CartItem {
-  const _$_CartItem(
+class _$_ActualOrderItem implements _ActualOrderItem {
+  const _$_ActualOrderItem(
       {required this.id,
       required this.total,
       required this.quantity,
       required this.item});
 
-  factory _$_CartItem.fromJson(Map<String, dynamic> json) =>
-      _$$_CartItemFromJson(json);
+  factory _$_ActualOrderItem.fromJson(Map<String, dynamic> json) =>
+      _$$_ActualOrderItemFromJson(json);
 
   @override
-  final dynamic id;
+  final int id;
   @override
   final int total;
   @override
@@ -179,14 +185,14 @@ class _$_CartItem implements _CartItem {
 
   @override
   String toString() {
-    return 'CartItem(id: $id, total: $total, quantity: $quantity, item: $item)';
+    return 'ActualOrderItem(id: $id, total: $total, quantity: $quantity, item: $item)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _CartItem &&
+            other is _ActualOrderItem &&
             const DeepCollectionEquality().equals(other.id, id) &&
             const DeepCollectionEquality().equals(other.total, total) &&
             const DeepCollectionEquality().equals(other.quantity, quantity) &&
@@ -203,26 +209,27 @@ class _$_CartItem implements _CartItem {
 
   @JsonKey(ignore: true)
   @override
-  _$CartItemCopyWith<_CartItem> get copyWith =>
-      __$CartItemCopyWithImpl<_CartItem>(this, _$identity);
+  _$ActualOrderItemCopyWith<_ActualOrderItem> get copyWith =>
+      __$ActualOrderItemCopyWithImpl<_ActualOrderItem>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_CartItemToJson(this);
+    return _$$_ActualOrderItemToJson(this);
   }
 }
 
-abstract class _CartItem implements CartItem {
-  const factory _CartItem(
-      {required dynamic id,
+abstract class _ActualOrderItem implements ActualOrderItem {
+  const factory _ActualOrderItem(
+      {required int id,
       required int total,
       required int quantity,
-      required Product item}) = _$_CartItem;
+      required Product item}) = _$_ActualOrderItem;
 
-  factory _CartItem.fromJson(Map<String, dynamic> json) = _$_CartItem.fromJson;
+  factory _ActualOrderItem.fromJson(Map<String, dynamic> json) =
+      _$_ActualOrderItem.fromJson;
 
   @override
-  dynamic get id;
+  int get id;
   @override
   int get total;
   @override
@@ -231,6 +238,6 @@ abstract class _CartItem implements CartItem {
   Product get item;
   @override
   @JsonKey(ignore: true)
-  _$CartItemCopyWith<_CartItem> get copyWith =>
+  _$ActualOrderItemCopyWith<_ActualOrderItem> get copyWith =>
       throw _privateConstructorUsedError;
 }

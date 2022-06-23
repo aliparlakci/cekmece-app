@@ -56,11 +56,6 @@ export default function OrdersPage() {
                                 </Box>
                                 <Box>
                                     <Typography variant="h6" sx={{ fontWeight: "light" }}>
-                                        Address
-                                    </Typography>
-                                </Box>
-                                <Box>
-                                    <Typography variant="h6" sx={{ fontWeight: "light" }}>
                                         Total
                                     </Typography>
                                 </Box>

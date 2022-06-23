@@ -1,10 +1,13 @@
 import ICar from "./car"
 import IOrder from "./order"
+import IRefundRequest from "./refundRequest"
 
-enum OrderStatus {
+export enum ItemOrderStatus {
     PROCESSING = "processing",
     INTRANSIT = "in-transit",
     DELIVERED = "delivered",
+    CANCELLED = "cancelled",
+    RETURNED = "returned"
 }
 
 interface IOrderItem {
@@ -13,7 +16,8 @@ interface IOrderItem {
     quantity: number
     car: ICar
     order: IOrder
-    status: OrderStatus
+    status: ItemOrderStatus
+    refund?: IRefundRequest
 }
 
 export default IOrderItem

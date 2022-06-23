@@ -107,6 +107,7 @@ class OrderDetail extends StatelessWidget {
       NumberFormat.simpleCurrency(locale: "en-US", decimalDigits: 0);
   OrderDetail({Key? key, required this.order}) : super(key: key);
   OrderItem order;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -118,7 +119,7 @@ class OrderDetail extends StatelessWidget {
           padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
           child: Column(
             children: [
-              OrderSummary(
+              OrderSummaryWithOrderItems(
                 deliveryAddress: order.addressLine1 +
                     (order.addressLine2 ?? "") +
                     ', ' +

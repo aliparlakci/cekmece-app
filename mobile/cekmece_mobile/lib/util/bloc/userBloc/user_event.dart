@@ -17,6 +17,11 @@ class UserUpdate extends UserEvent {
   String toString() => 'User data update event.';
 }
 
+class UserUpdateNoLoading extends UserEvent {
+  @override
+  String toString() => 'User data update no loading event.';
+}
+
 class SetUser extends UserEvent {
   SetUser();
   @override

@@ -1,66 +1,74 @@
-import {Repository} from "typeorm"
+import { Repository } from "typeorm"
 import db from "../dataSource"
 import {Order, OrderStatus, ShippingOption} from "../models/order"
 import CarService from "./carService"
 import CartService from "./cartService"
-import {OrderItem} from "../models/orderItem"
+import {OrderItem, OrderStatus as ItemOrderStatus} from "../models/orderItem"
 import InvoiceService from "./invoiceService"
+import {RefundRequest} from "../models/refundRequest";
+import MailingService from "./mailingService";
 
 export default class OrderService {
     private repository: () => Repository<Order>
     private orderItemRepository: () => Repository<OrderItem>
-
+    private refundRequestRepository: () => Repository<RefundRequest>
+    private mailingService: MailingService
 
     constructor(private carService: CarService, private cartService: CartService, private invoiceService: InvoiceService) {
         this.repository = () => db.getRepository(Order)
         this.orderItemRepository = () => db.getRepository(OrderItem)
+        this.refundRequestRepository = () => db.getRepository(RefundRequest)
+        this.mailingService = new MailingService()
     }
 
     async getAllOrders() {
         return this.repository().find({
             order: {
-                createdDate: "DESC"
+                createdDate: "DESC",
             },
             relations: {
                 orderItems: {
                     car: {
                         distributor: true,
-                        category: true
+                        category: true,
                     },
                     order: {
-                        user: true
-                    }
+                        user: true,
+                    },
                 },
-                user: true
-            }
+                user: true,
+            },
         })
     }
 
     async getOrder(id) {
         return await this.repository().findOne({
             where: {
-                id: id
+                id: id,
             },
             relations: {
                 orderItems: {
                     car: {
                         distributor: true,
-                        category: true
-                    }
-                }
-            }
+                        category: true,
+                    },
+                },
+            },
         })
     }
 
     async getOrdersByUser(userId: string) {
         return await this.repository().find({
-            relations: [
-                "user",
-                "orderItems",
-                "orderItems.car",
-                "orderItems.car.category",
-                "orderItems.car.distributor",
-            ],
+            relations: {
+                user: true,
+                orderItems: {
+                    car: {
+                        category: true,
+                        distributor: true
+                    },
+                    refund: true
+                }
+            },
             select: {
                 user: {
                     id: true,
@@ -89,7 +97,7 @@ export default class OrderService {
                 order: {
                     id: true,
                     status: true,
-                    invoice: true
+                    invoice: true,
                 },
             },
 
@@ -158,6 +166,8 @@ export default class OrderService {
             },
         })
 
+        console.log(orderItems)
+
         const unreviewedOrderItems = orderItems.filter((orderItem) => {
             return orderItem.review === null
         })
@@ -180,11 +190,11 @@ export default class OrderService {
             for (; i < cartItems.length; i++) {
                 await this.carService.decreaseStock(cartItems[i].item.id, cartItems[i].quantity)
                 orderItems.push({
-                    total: cartItems[i].quantity * cartItems[i].item.price * (100 - cartItems[i].item.discount) / 100,
+                    total: (cartItems[i].quantity * cartItems[i].item.price * (100 - cartItems[i].item.discount)) / 100,
                     quantity: cartItems[i].quantity,
                     car: cartItems[i].item,
                     order: candidate,
-                    status: OrderStatus.PROCESSING
+                    status: OrderStatus.PROCESSING,
                 } as OrderItem)
             }
 
@@ -195,15 +205,15 @@ export default class OrderService {
             const result: Order = await this.repository().save(candidate)
             const order = await this.repository().findOne({
                 where: {
-                    id: result.id
+                    id: result.id,
                 },
                 relations: {
                     orderItems: {
                         car: {
-                            distributor: true
-                        }
-                    }
-                }
+                            distributor: true,
+                        },
+                    },
+                },
             })
             const pdf = await this.invoiceService.generatePdf(order || result, result.user)
 
@@ -211,7 +221,7 @@ export default class OrderService {
 
             await this.cartService.deleteUserCart(candidate.user.id)
 
-            // await this.invoiceService.sendInvoice(result, result.user, pdf)
+            await this.invoiceService.sendInvoice(result, result.user, pdf)
             return [result, pdf]
         } catch (err) {
             for (let j = i - 1; j >= 0; j--) {
@@ -234,20 +244,113 @@ export default class OrderService {
     }
 
     async changeOrderItemStatus(id, status) {
-        return await this.orderItemRepository().update({id: id}, {status: status})
+        return await this.orderItemRepository().update({ id: id }, { status: status })
     }
 
-    /*
-    async saveReviewIdToOrderItem(id: string, reviewId: number) {
+    async getRefundRequests() {
+        return await this.refundRequestRepository().find({
+            relations: {
+                orderItem: {
+                    order: {
+                        user: true
+                    },
+                    car: {
+                        distributor: true,
+                        category: true,
+                    },
+                },
+            }
+        })
+    }
+
+    async newRefundRequest(orderItemId: number) {
         const orderItem = await this.orderItemRepository().findOne({
-            where: { id: id },
+            where: {
+                id: orderItemId
+            },
+            relations: {
+                order: true
+            }
+        })
+        if (orderItem === null) throw `Order item does not exist [id=${orderItemId}]`
+
+        const today = new Date()
+        const days = (today.getTime() - orderItem?.order.createdDate.getTime()) / (1000 * 3600 * 24)
+        if (days > 30) {
+            throw `Order is registered more than 30 days ago!`
+        }
+
+        if (orderItem.status === ItemOrderStatus.CANCELLED || orderItem.status === ItemOrderStatus.RETURNED) {
+            throw `Order is already refunded`
+        }
+
+        return await this.refundRequestRepository().insert({ orderItem } as RefundRequest)
+    }
+
+    async approveRefundRequest(refundRequestId: number) {
+        const refundRequest = await this.refundRequestRepository().findOne({
+            where: {
+                id: refundRequestId
+            },
+            relations: {
+                orderItem: {
+                    car: {
+                        distributor: true
+                    },
+                    order: {
+                        user: true
+                    }
+                }
+            }
         })
 
-        if (orderItem == null) throw `Order item with id ${id} does not exist.`
+        if (refundRequest === null) throw `RefundRequest does not exist [id=${refundRequestId}]`
 
-        orderItem.reviewId = reviewId
+        const orderItemStatus = refundRequest.orderItem.status
+        if (orderItemStatus === ItemOrderStatus.PROCESSING || orderItemStatus === ItemOrderStatus.INTRANSIT) {
+            this.orderItemRepository().update({ id: refundRequest.orderItem.id }, { status: ItemOrderStatus.CANCELLED })
+        } else if (orderItemStatus === ItemOrderStatus.DELIVERED) {
+            this.orderItemRepository().update({ id: refundRequest.orderItem.id }, { status: ItemOrderStatus.RETURNED })
+        }
 
-        return await this.repository().save(order)
+        try {
+            await this.carService.increaseStock(refundRequest.orderItem.car.id, refundRequest.orderItem.quantity)
+        } catch (err) {
+            await this.orderItemRepository().update({ id: refundRequest.orderItem.id }, { status: orderItemStatus })
+            throw err
+        }
+
+        await this.refundRequestRepository().update({ id: refundRequestId }, { isApproved: true })
+
+        const subject = "You refund request has been approved!"
+        const body = `Your refund request of ${refundRequest.orderItem.car.distributor.name} ${refundRequest.orderItem.car.name} has been approved.
+        Total of $${refundRequest.orderItem.total} is refunded to your credit card.`
+        this.mailingService.sendMail(refundRequest.orderItem.order.user.email, subject, body).catch(console.error)
     }
-    */
+
+    async disapproveRefundRequest(refundRequestId: number) {
+        const refundRequest = await this.refundRequestRepository().findOne({
+            where: {
+                id: refundRequestId
+            },
+            relations: {
+                orderItem: {
+                    car: {
+                        distributor: true
+                    },
+                    order: {
+                        user: true
+                    }
+                }
+            }
+        })
+
+        if (refundRequest === null) throw `RefundRequest does not exist [id=${refundRequestId}]`
+
+        await this.refundRequestRepository().update({ id: refundRequestId }, { isRejected: true })
+
+        const subject = "You refund request has been rejected!"
+        const body = `Your refund request of ${refundRequest.orderItem.car.distributor.name} ${refundRequest.orderItem.car.name} has been rejected.`
+        this.mailingService.sendMail(refundRequest.orderItem.order.user.email, subject, body).catch(console.error)
+    }
 }

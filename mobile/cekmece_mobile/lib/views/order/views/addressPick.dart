@@ -17,6 +17,8 @@ import 'package:place_picker/entities/entities.dart';
 import 'package:place_picker/place_picker.dart';
 import 'package:provider/provider.dart';
 
+import '../../../models/actualOrderItem/ActualOrderItem.dart';
+
 class AddressPicker extends StatefulWidget {
   AddressPicker(
       {Key? key, required this.prevContext, required this.returnAddress})
@@ -158,7 +160,7 @@ class _AddressPickerState extends State<AddressPicker> {
         padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
         child: Column(
           children: [
-            OrderSummary(
+            OrderSummaryWithCartItems(
               deliveryAddress: result.formattedAddress!,
               resetAddress: showPlacePicker,
               showResetAddress: true,
@@ -211,8 +213,156 @@ class _AddressPickerState extends State<AddressPicker> {
   }
 }
 
-class OrderSummary extends StatelessWidget {
-  OrderSummary(
+class OrderSummaryWithCartItems extends StatelessWidget {
+  OrderSummaryWithCartItems(
+      {Key? key,
+        required this.deliveryAddress,
+        required this.showResetAddress,
+        required this.resetAddress,
+        required this.items})
+      : super(key: key);
+  String deliveryAddress;
+  bool showResetAddress;
+  VoidCallback resetAddress;
+  List<CartItem> items;
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SizedBox(
+            width: double.infinity,
+          ),
+          Text(
+            "Order Summary",
+            style: GoogleFonts.raleway(
+                fontSize: getProportionateScreenHeight(35),
+                fontWeight: FontWeight.w600),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          DeliverAddress(
+            address: deliveryAddress,
+            onPressed: resetAddress,
+            showResetButton: showResetAddress,
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          CartItems(
+            items: items,
+          ),
+          SizedBox(
+            height: 10,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class CartItems extends StatelessWidget {
+  CartItems({Key? key, required this.items}) : super(key: key);
+  List<CartItem> items;
+  NumberFormat numberFormat =
+  NumberFormat.simpleCurrency(locale: "en-US", decimalDigits: 0);
+
+  int getTotal() {
+    int sum = 0;
+    for (CartItem item in items) {
+      sum += item.total - (item.item.discount * item.quantity);
+    }
+    return sum;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 8,
+      child: Container(
+        padding: EdgeInsets.fromLTRB(15, 15, 15, 5),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text("Your items:",
+                style: GoogleFonts.raleway(
+                    fontSize: getProportionateScreenHeight(18),
+                    fontWeight: FontWeight.w400)),
+            SizedBox(
+              height: 10,
+            ),
+            ListView.builder(
+                padding: const EdgeInsets.all(0),
+                shrinkWrap: true,
+                itemCount: items.length,
+                itemBuilder: ((context, index) {
+                  return CartItemSummary(item: items[index]);
+                })),
+            Divider(
+              thickness: 1,
+              color: Colors.black,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text("Total:",
+                    style: GoogleFonts.raleway(
+                        fontSize: getProportionateScreenHeight(15),
+                        fontWeight: FontWeight.w600)),
+                Text(numberFormat.format(getTotal()),
+                    style: GoogleFonts.raleway(
+                        fontSize: getProportionateScreenHeight(16),
+                        fontWeight: FontWeight.w800)),
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class CartItemSummary extends StatelessWidget {
+  CartItemSummary({Key? key, required this.item}) : super(key: key);
+  CartItem item;
+  NumberFormat numberFormat =
+  NumberFormat.simpleCurrency(locale: "en-US", decimalDigits: 0);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            "${item.item.model} ${item.item.distributor["name"]} ${item.item.name} x ${item.quantity}",
+            style: GoogleFonts.raleway(
+                fontSize: getProportionateScreenHeight(15),
+                fontWeight: FontWeight.w600),
+            maxLines: 2,
+          ),
+          Text(
+              numberFormat
+                  .format(item.total - (item.quantity * item.item.discount)),
+              style: GoogleFonts.raleway(
+                  fontSize: getProportionateScreenHeight(16),
+                  fontWeight: FontWeight.w800))
+        ],
+      ),
+    );
+  }
+}
+
+class OrderSummaryWithOrderItems extends StatelessWidget {
+  OrderSummaryWithOrderItems(
       {Key? key,
       required this.deliveryAddress,
       required this.showResetAddress,
@@ -222,7 +372,7 @@ class OrderSummary extends StatelessWidget {
   String deliveryAddress;
   bool showResetAddress;
   VoidCallback resetAddress;
-  List<CartItem> items;
+  List<ActualOrderItem> items;
 
   @override
   Widget build(BuildContext context) {
@@ -264,13 +414,13 @@ class OrderSummary extends StatelessWidget {
 
 class OrderItems extends StatelessWidget {
   OrderItems({Key? key, required this.items}) : super(key: key);
-  List<CartItem> items;
+  List<ActualOrderItem> items;
   NumberFormat numberFormat =
       NumberFormat.simpleCurrency(locale: "en-US", decimalDigits: 0);
 
   int getTotal() {
     int sum = 0;
-    for (CartItem item in items) {
+    for (ActualOrderItem item in items) {
       sum += item.total - (item.item.discount * item.quantity);
     }
     return sum;
@@ -329,9 +479,9 @@ class OrderItems extends StatelessWidget {
 
 class OrderItemSummary extends StatelessWidget {
   OrderItemSummary({Key? key, required this.item}) : super(key: key);
-  CartItem item;
+  ActualOrderItem item;
   NumberFormat numberFormat =
-      NumberFormat.simpleCurrency(locale: "en-US", decimalDigits: 0);
+  NumberFormat.simpleCurrency(locale: "en-US", decimalDigits: 0);
 
   @override
   Widget build(BuildContext context) {

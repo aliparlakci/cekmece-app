@@ -23,7 +23,7 @@ _$_OrderItem _$$_OrderItemFromJson(Map<String, dynamic> json) => _$_OrderItem(
       country: json['country'] as String,
       shippingOption: json['shippingOption'] as String,
       orderItems: (json['orderItems'] as List<dynamic>)
-          .map((e) => CartItem.fromJson(e as Map<String, dynamic>))
+          .map((e) => ActualOrderItem.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 

@@ -21,8 +21,9 @@ import 'product_images.dart';
 class Body extends StatefulWidget {
   final Product product;
   final UserBloc userBloc;
+  final Function(bool, String)? refreshProductCard;
 
-  Body({Key? key, required this.product, required this.userBloc})
+  Body({Key? key, required this.product, required this.userBloc, this.refreshProductCard})
       : super(key: key);
 
   @override
@@ -35,10 +36,15 @@ class _BodyState extends State<Body> {
   bool _isOnWishlist = false;
   String wlID = "";
 
+  int reviewCount = 0;
+  String averageRating = "";
+
   @override
   void initState() {
     // TODO: implement initState
     checkWishlist();
+    reviewCount = widget.product.reviewCount;
+    averageRating = widget.product.averageRating;
     super.initState();
   }
 
@@ -77,10 +83,27 @@ class _BodyState extends State<Body> {
       }
     } catch (err) {
       print(err);
+
+      if (widget.refreshProductCard != null) {
+        widget.refreshProductCard!(_isOnWishlist, wlID);
+      }
+
       return false;
     }
     setState(() {});
+
+    if (widget.refreshProductCard != null) {
+      widget.refreshProductCard!(_isOnWishlist, wlID);
+    }
+
     return true;
+  }
+
+  void updateReviewCountAndAverageRating(int updatedReviewCount, String updatedAverageRating) {
+    setState(() {
+      reviewCount = updatedReviewCount;
+      averageRating = updatedAverageRating;
+    });
   }
 
   @override
@@ -118,8 +141,10 @@ class _BodyState extends State<Body> {
           ReviewsButton(
               userId: widget.userBloc.user.uid,
               carId: widget.product.id,
-              reviewCount: widget.product.reviewCount,
-              reviewAverage: double.parse(widget.product.averageRating)),
+              reviewCount: reviewCount,
+              reviewAverage: double.parse(averageRating),
+            updateReviewCountAndAverageRating: updateReviewCountAndAverageRating,
+          ),
           const SizedBox(
             height: 5,
           ),
