@@ -1,4 +1,5 @@
 import 'package:cekmece_mobile/models/order/OrderItem.dart';
+import 'package:cekmece_mobile/util/network/networkProvider.dart';
 import 'package:cekmece_mobile/views/order/views/addressPick.dart';
 import 'package:cekmece_mobile/views/order/views/succesfulOrder.dart';
 import 'package:cekmece_mobile/views/productView/components/size.dart';
@@ -10,6 +11,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:place_picker/entities/entities.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MyOrders extends StatelessWidget {
@@ -37,15 +39,33 @@ class OrderTile extends StatelessWidget {
   OrderTile({Key? key, required this.order}) : super(key: key);
   OrderItem order;
 
+  String refundMessage() {
+    if (order.refund == null) {
+      return "";
+    }
+    if (order.refund!["isApproved"]) {
+      return "Approved";
+    }
+    if (!order.refund!["isApproved"] && !order.refund!["isRejected"]) {
+      return "In Progress";
+    }
+    return "Rejected";
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => pushNewScreen(
-        context,
-        screen: OrderDetail(order: order),
-        withNavBar: false, // OPTIONAL VALUE. True by default.
-        pageTransitionAnimation: PageTransitionAnimation.cupertino,
-      ),
+      onTap: () async {
+        var res = await pushNewScreen(
+          context,
+          screen: OrderDetail(order: order),
+          withNavBar: false, // OPTIONAL VALUE. True by default.
+          pageTransitionAnimation: PageTransitionAnimation.cupertino,
+        );
+        if (res != null && res == "refreq") {
+          Navigator.pop(context);
+        }
+      },
       child: Card(
           elevation: 8,
           margin: EdgeInsets.symmetric(vertical: 10),
@@ -65,6 +85,11 @@ class OrderTile extends StatelessWidget {
                     left: "Delivery Address:",
                     right: toBeginningOfSentenceCase(
                         "${order.province}, ${order.country}")!),
+                order.refund != null
+                    ? OrderDetailRow(
+                        left: "Refund:",
+                        right: toBeginningOfSentenceCase(refundMessage())!)
+                    : Container()
               ],
             ),
           )),
@@ -107,6 +132,57 @@ class OrderDetail extends StatelessWidget {
       NumberFormat.simpleCurrency(locale: "en-US", decimalDigits: 0);
   OrderDetail({Key? key, required this.order}) : super(key: key);
   OrderItem order;
+  String localIPAddress = dotenv.env['LOCALADDRESS']!;
+
+  String refundMessage() {
+    if (order.refund == null) {
+      return "";
+    }
+    if (order.refund!["isApproved"]) {
+      return "Approved";
+    }
+    if (!order.refund!["isApproved"] && !order.refund!["isRejected"]) {
+      return "In Progress";
+    }
+    return "Rejected";
+  }
+
+  Widget refundStatusWidget() {
+    Color clr;
+    String msg;
+
+    String refundMsg = refundMessage();
+
+    if (refundMsg == "Approved") {
+      clr = Colors.green.shade300;
+      msg = "Your refund is approved";
+    } else if (refundMsg == "In Progress") {
+      clr = Colors.grey.shade300;
+      msg = "Your refund is in progress";
+    } else {
+      clr = Colors.red.shade300;
+      msg = "Your refund is rejected";
+    }
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 5),
+      child: Card(
+        child: Container(
+            width: double.infinity,
+            height: 50,
+            color: clr,
+            child: Center(
+              child: Text(
+                msg,
+                style: GoogleFonts.raleway(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black,
+                    letterSpacing: 2),
+              ),
+            )),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -119,6 +195,7 @@ class OrderDetail extends StatelessWidget {
           padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
           child: Column(
             children: [
+              refundMessage() != "" ? refundStatusWidget() : Container(),
               OrderSummaryWithOrderItems(
                 deliveryAddress: order.addressLine1 +
                     (order.addressLine2 ?? "") +
@@ -186,12 +263,43 @@ class OrderDetail extends StatelessWidget {
                   ProfileButton(
                     text: "Review Items",
                     icon: Icons.star,
-                    onPressed: () {},
+                    onPressed: () {
+                      print(order);
+                    },
                   ),
                   ProfileButton(
-                    text: "Cancel Order",
+                    text: order.status == "delivered"
+                        ? "Ask for refund"
+                        : "Cancel Order",
                     icon: Icons.close,
-                    onPressed: () async {},
+                    onPressed: () async {
+                      if (refundMessage() != "") {
+                        showSnackBar(
+                            context: context,
+                            message:
+                                "You already have an ongoing refund process",
+                            error: true);
+                        return;
+                      }
+
+                      var networkService =
+                          Provider.of<NetworkService>(context, listen: false);
+
+                      try {
+                        await networkService.post(
+                            '${localIPAddress}/api/orders/newRefund/${order.id}');
+                        showSnackBar(
+                          context: context,
+                          message: "Refund request succesfully created",
+                        );
+                        Navigator.pop(context, "refreq");
+                      } catch (err) {
+                        showSnackBar(
+                            context: context,
+                            message: "Refund request failed",
+                            error: true);
+                      }
+                    },
                   ),
                   ProfileButton(
                     text: "Get Invoice",

@@ -25,6 +25,7 @@ _$_OrderItem _$$_OrderItemFromJson(Map<String, dynamic> json) => _$_OrderItem(
       orderItems: (json['orderItems'] as List<dynamic>)
           .map((e) => ActualOrderItem.fromJson(e as Map<String, dynamic>))
           .toList(),
+      refund: json['refund'] as Map<String, dynamic>?,
     );
 
 Map<String, dynamic> _$$_OrderItemToJson(_$_OrderItem instance) =>
@@ -45,4 +46,5 @@ Map<String, dynamic> _$$_OrderItemToJson(_$_OrderItem instance) =>
       'country': instance.country,
       'shippingOption': instance.shippingOption,
       'orderItems': instance.orderItems,
+      'refund': instance.refund,
     };

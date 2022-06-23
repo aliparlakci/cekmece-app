@@ -38,7 +38,8 @@ class _$OrderItemTearOff {
       required int zipCode,
       required String country,
       required String shippingOption,
-      required List<ActualOrderItem> orderItems}) {
+      required List<ActualOrderItem> orderItems,
+      Map<dynamic, dynamic>? refund}) {
     return _OrderItem(
       id: id,
       subTotal: subTotal,
@@ -56,6 +57,7 @@ class _$OrderItemTearOff {
       country: country,
       shippingOption: shippingOption,
       orderItems: orderItems,
+      refund: refund,
     );
   }
 
@@ -85,6 +87,7 @@ mixin _$OrderItem {
   String get country => throw _privateConstructorUsedError;
   String get shippingOption => throw _privateConstructorUsedError;
   List<ActualOrderItem> get orderItems => throw _privateConstructorUsedError;
+  Map<dynamic, dynamic>? get refund => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -112,7 +115,8 @@ abstract class $OrderItemCopyWith<$Res> {
       int zipCode,
       String country,
       String shippingOption,
-      List<ActualOrderItem> orderItems});
+      List<ActualOrderItem> orderItems,
+      Map<dynamic, dynamic>? refund});
 }
 
 /// @nodoc
@@ -141,6 +145,7 @@ class _$OrderItemCopyWithImpl<$Res> implements $OrderItemCopyWith<$Res> {
     Object? country = freezed,
     Object? shippingOption = freezed,
     Object? orderItems = freezed,
+    Object? refund = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed
@@ -207,6 +212,10 @@ class _$OrderItemCopyWithImpl<$Res> implements $OrderItemCopyWith<$Res> {
           ? _value.orderItems
           : orderItems // ignore: cast_nullable_to_non_nullable
               as List<ActualOrderItem>,
+      refund: refund == freezed
+          ? _value.refund
+          : refund // ignore: cast_nullable_to_non_nullable
+              as Map<dynamic, dynamic>?,
     ));
   }
 }
@@ -233,7 +242,8 @@ abstract class _$OrderItemCopyWith<$Res> implements $OrderItemCopyWith<$Res> {
       int zipCode,
       String country,
       String shippingOption,
-      List<ActualOrderItem> orderItems});
+      List<ActualOrderItem> orderItems,
+      Map<dynamic, dynamic>? refund});
 }
 
 /// @nodoc
@@ -263,6 +273,7 @@ class __$OrderItemCopyWithImpl<$Res> extends _$OrderItemCopyWithImpl<$Res>
     Object? country = freezed,
     Object? shippingOption = freezed,
     Object? orderItems = freezed,
+    Object? refund = freezed,
   }) {
     return _then(_OrderItem(
       id: id == freezed
@@ -329,6 +340,10 @@ class __$OrderItemCopyWithImpl<$Res> extends _$OrderItemCopyWithImpl<$Res>
           ? _value.orderItems
           : orderItems // ignore: cast_nullable_to_non_nullable
               as List<ActualOrderItem>,
+      refund: refund == freezed
+          ? _value.refund
+          : refund // ignore: cast_nullable_to_non_nullable
+              as Map<dynamic, dynamic>?,
     ));
   }
 }
@@ -352,7 +367,8 @@ class _$_OrderItem implements _OrderItem {
       required this.zipCode,
       required this.country,
       required this.shippingOption,
-      required this.orderItems});
+      required this.orderItems,
+      this.refund});
 
   factory _$_OrderItem.fromJson(Map<String, dynamic> json) =>
       _$$_OrderItemFromJson(json);
@@ -389,10 +405,12 @@ class _$_OrderItem implements _OrderItem {
   final String shippingOption;
   @override
   final List<ActualOrderItem> orderItems;
+  @override
+  final Map<dynamic, dynamic>? refund;
 
   @override
   String toString() {
-    return 'OrderItem(id: $id, subTotal: $subTotal, shipping: $shipping, discount: $discount, total: $total, status: $status, promoCode: $promoCode, createdDate: $createdDate, updatedDate: $updatedDate, addressLine1: $addressLine1, addressLine2: $addressLine2, province: $province, zipCode: $zipCode, country: $country, shippingOption: $shippingOption, orderItems: $orderItems)';
+    return 'OrderItem(id: $id, subTotal: $subTotal, shipping: $shipping, discount: $discount, total: $total, status: $status, promoCode: $promoCode, createdDate: $createdDate, updatedDate: $updatedDate, addressLine1: $addressLine1, addressLine2: $addressLine2, province: $province, zipCode: $zipCode, country: $country, shippingOption: $shippingOption, orderItems: $orderItems, refund: $refund)';
   }
 
   @override
@@ -421,7 +439,8 @@ class _$_OrderItem implements _OrderItem {
             const DeepCollectionEquality()
                 .equals(other.shippingOption, shippingOption) &&
             const DeepCollectionEquality()
-                .equals(other.orderItems, orderItems));
+                .equals(other.orderItems, orderItems) &&
+            const DeepCollectionEquality().equals(other.refund, refund));
   }
 
   @override
@@ -442,7 +461,8 @@ class _$_OrderItem implements _OrderItem {
       const DeepCollectionEquality().hash(zipCode),
       const DeepCollectionEquality().hash(country),
       const DeepCollectionEquality().hash(shippingOption),
-      const DeepCollectionEquality().hash(orderItems));
+      const DeepCollectionEquality().hash(orderItems),
+      const DeepCollectionEquality().hash(refund));
 
   @JsonKey(ignore: true)
   @override
@@ -472,7 +492,8 @@ abstract class _OrderItem implements OrderItem {
       required int zipCode,
       required String country,
       required String shippingOption,
-      required List<ActualOrderItem> orderItems}) = _$_OrderItem;
+      required List<ActualOrderItem> orderItems,
+      Map<dynamic, dynamic>? refund}) = _$_OrderItem;
 
   factory _OrderItem.fromJson(Map<String, dynamic> json) =
       _$_OrderItem.fromJson;
@@ -509,6 +530,8 @@ abstract class _OrderItem implements OrderItem {
   String get shippingOption;
   @override
   List<ActualOrderItem> get orderItems;
+  @override
+  Map<dynamic, dynamic>? get refund;
   @override
   @JsonKey(ignore: true)
   _$OrderItemCopyWith<_OrderItem> get copyWith =>
