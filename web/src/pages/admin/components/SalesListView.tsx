@@ -38,8 +38,8 @@ export default function SalesListView() {
 
     const [selected, setSelected] = useState<any[]>([])
     const [totalRevenue, setTotalRevenue] = useState(0)
-    const [startDateValue, setStartDateValue] = React.useState<Date | null>(new Date("2021-08-18T21:11:54"))
-    const [endDateValue, setEndDateValue] = React.useState<Date | null>(new Date("2022-08-18T21:11:54"))
+    const [startDateValue, setStartDateValue] = React.useState<Date | null>(new Date("2022-06-01T00:00:00"))
+    const [endDateValue, setEndDateValue] = React.useState<Date | null>(new Date("2022-06-30T00:00:00"))
 
     const [isDeliveryDialogOpen, setIsDeliveryDialogOpen] = useState(false)
     const [orderId, setOrderId] = useState<number | undefined>(undefined)
@@ -47,12 +47,13 @@ export default function SalesListView() {
     const [orderItems, setOrderItems] = useState<any[]>([])
 
     useEffect(() => {
+        let rev = 0
         if (data)
             setOrderItems(
                 data
                     .map((order) =>
                         order.orderItems.map((item) => {
-                            setTotalRevenue(totalRevenue + item.total)
+                            rev = rev + item.total
                             return {
                                 id: item.id,
                                 orderId: item.order.id,
@@ -67,6 +68,7 @@ export default function SalesListView() {
                     )
                     .flat()
             )
+        setTotalRevenue(rev)
     }, [data])
 
     const handleStartDateChange = (newValue: Date | null) => {
@@ -79,12 +81,10 @@ export default function SalesListView() {
     const handleFilterButton = () => {
         event?.preventDefault()
         if (data) {
-            //setOrderItems([])
             const filteredOrders = data.filter((order) => {
                 const orderDate = new Date(order.createdDate)
                 return orderDate >= startDateValue! && orderDate <= endDateValue!
             })
-            console.log(filteredOrders)
             let rev = 0
             setOrderItems(
                 filteredOrders
