@@ -32,6 +32,11 @@ export function getAllCars(carService: CarService): RequestHandler {
 export function getCar(carService: CarService, orderService: OrderService) {
     return async function (req, res, next) {
         const carId = parseInt(req.params.carId)
+        if (isNaN(carId)) {
+            res.status(404).json({})
+            return
+        }
+
         const car = await carService.getCar(carId)
         const ctx: Context | null = Context.get(req)
         if (ctx !== null && ctx.user !== null) {

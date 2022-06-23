@@ -14,7 +14,6 @@ export default function Links() {
                 <Link to="/admin/distributors"><Button variant="text">Distributors</Button></Link>
                 <Link to="/admin/orders"><Button variant="text">Orders</Button></Link>
                 <Link to="/admin/reviews"><Button variant="text">Reviews</Button></Link>
-                <Link to="/admin/sales"><Button variant="text">Sales & Revenue</Button></Link>
             </>
         }
 
@@ -23,6 +22,7 @@ export default function Links() {
                 <Link to="/admin/discounts"><Button variant="text">Discounts</Button></Link>
                 <Link to="/admin/invoices"><Button variant="text">Invoices</Button></Link>
                 <Link to="/admin/refunds"><Button variant="text">Refunds</Button></Link>
+                <Link to="/admin/sales"><Button variant="text">Sales & Revenue</Button></Link>
             </>
         }
     </div>

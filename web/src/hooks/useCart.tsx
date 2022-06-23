@@ -69,12 +69,12 @@ function CartProvider({ children }: { children: any }) {
 
     const retreiveCartFromBackend = async () => {
         try {
-            const reponse = await fetch(`/api/cart/${user?.id}`)
-            const data: { cart: ICart[] } = await reponse.json()
+            const response = await fetch(`/api/cart/${user?.id}`)
+            const data: { cart: ICart[] } = await response.json()
 
             const newCart: ILocalCart = {}
             data.cart.forEach((item) => {
-                newCart[item.id] = {
+                newCart[item.item.id] = {
                     item: item.item,
                     amount: item.quantity
                 }
@@ -93,7 +93,9 @@ function CartProvider({ children }: { children: any }) {
             if (oldCart) {
                 const newCart = oldCart.map(async ({ id, amount }): Promise<ICartItem> => {
                     const response = await fetch(`/api/cars/${id}`)
-                    if (response.status !== 200) throw ``
+                    if (response.status !== 200) {
+                        throw ``
+                    }
                     const data: ICar = await response.json()
                     return { item: data, amount: amount as number }
                 })
